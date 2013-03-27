@@ -1,0 +1,26 @@
+{
+    "name": "asm89/Rx.PHP",
+    "description": "Reactive extensions for php.",
+    "keywords": ["reactive", "extensions", "rx"],
+    "homepage": "https://github.com/asm89/Rx.PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander",
+            "email": "iam.asm89@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "require-dev": {
+        "react/event-loop": "0.3.*@dev"
+    },
+    "suggest": {
+        "react/event-loop": "For using event-loop based scheduling."
+    },
+    "autoload": {
+        "psr-0": { "Rx\\": "lib/" }
+    }
+}
