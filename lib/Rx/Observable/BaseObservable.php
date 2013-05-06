@@ -2,6 +2,8 @@
 
 namespace Rx\Observable;
 
+use Exception;
+use InvalidArgumentException;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
@@ -43,4 +45,36 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     abstract protected function doStart($scheduler);
+
+    public function select($selector)
+    {
+        if ( ! is_callable($selector)) {
+            throw new InvalidArgumentException('Selector should be a callable.');
+        }
+
+        $currentObservable = $this;
+
+        // todo: add scheduler
+        return new AnonymousObservable(function($observer) use ($currentObservable, $selector) {
+            $selectObserver = new CallbackObserver(
+                function($nextValue) use ($observer, $selector) {
+                    $value = null;
+                    try {
+                        $value = $selector($nextValue);
+                    } catch (Exception $e) {
+                        $observer->onError($e);
+                    }
+                    $observer->onNext($value);
+                },
+                function($error) use ($observer) {
+                    $observer->onError($error);
+                },
+                function() use ($observer) {
+                    $observer->onCompleted();
+                }
+            );
+
+            $currentObservable->subscribe($selectObserver);
+        });
+    }
 }
