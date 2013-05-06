@@ -20,17 +20,20 @@ class CallbackObserver implements ObserverInterface
 
     public function onCompleted()
     {
-        $this->onCompleted->__invoke();
+        $onCompleted= $this->onCompleted;
+        $onCompleted();
     }
 
     public function onError(Exception $error)
     {
-        $this->onError->__invoke($error);
+        $onError = $this->onError;
+        $onError($error);
     }
 
     public function onNext($value)
     {
-        $this->onNext->__invoke($value);
+        $onNext = $this->onNext;
+        $onNext($value);
     }
 
     private function getOrDefault($callback)

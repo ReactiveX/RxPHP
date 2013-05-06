@@ -23,7 +23,8 @@ class AnonymousObservable extends BaseObservable
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         // todo: add scheduler
-        $this->subscribeAction->__invoke($observer);
+        $subscribeAction = $this->subscribeAction;
+        $subscribeAction($observer);
 
         // todo: add disposable
     }
