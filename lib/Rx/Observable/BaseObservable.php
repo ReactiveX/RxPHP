@@ -77,4 +77,39 @@ abstract class BaseObservable implements ObservableInterface
             $currentObservable->subscribe($selectObserver);
         });
     }
+
+    public function where($predicate)
+    {
+        if ( ! is_callable($predicate)) {
+            throw new InvalidArgumentException('Predicate should be a callable.');
+        }
+
+        $currentObservable = $this;
+
+        // todo: add scheduler
+        return new AnonymousObservable(function($observer) use ($currentObservable, $predicate) {
+            $selectObserver = new CallbackObserver(
+                function($nextValue) use ($observer, $predicate) {
+                    $shouldFire = false;
+                    try {
+                        $shouldFire = $predicate($nextValue);
+                    } catch (Exception $e) {
+                        $observer->onError($e);
+                    }
+
+                    if ($shouldFire) {
+                        $observer->onNext($nextValue);
+                    }
+                },
+                function($error) use ($observer) {
+                    $observer->onError($error);
+                },
+                function() use ($observer) {
+                    $observer->onCompleted();
+                }
+            );
+
+            $currentObservable->subscribe($selectObserver);
+        });
+    }
 }
