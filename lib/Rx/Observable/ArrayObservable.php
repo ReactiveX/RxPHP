@@ -2,6 +2,7 @@
 
 namespace Rx\Observable;
 
+use Rx\Disposable\EmptyDisposable;
 use Rx\ObserverInterface;
 
 class ArrayObservable extends BaseObservable
@@ -28,5 +29,8 @@ class ArrayObservable extends BaseObservable
                 $observer->onCompleted();
             }
         });
+
+        //todo: add "real" disposable
+        return new EmptyDisposable();
     }
 }

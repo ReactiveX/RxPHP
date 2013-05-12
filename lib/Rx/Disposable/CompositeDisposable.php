@@ -35,4 +35,9 @@ class CompositeDisposable implements DisposableInterface
             }
         }
     }
+
+    public function count()
+    {
+        return count($this->disposables);
+    }
 }

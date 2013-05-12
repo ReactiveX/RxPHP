@@ -24,9 +24,8 @@ class AnonymousObservable extends BaseObservable
     {
         // todo: add scheduler
         $subscribeAction = $this->subscribeAction;
-        $subscribeAction($observer);
 
-        // todo: add disposable
+        return $subscribeAction($observer, $scheduler);
     }
 
     protected function doStart($scheduler)

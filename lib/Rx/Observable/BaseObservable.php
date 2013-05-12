@@ -8,6 +8,8 @@ use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\Scheduler\ImmediateScheduler;
+use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\SingleAssignmentDisposable;
 
 abstract class BaseObservable implements ObservableInterface
 {
@@ -110,6 +112,93 @@ abstract class BaseObservable implements ObservableInterface
             );
 
             $currentObservable->subscribe($selectObserver);
+        });
+    }
+
+    public function merge(ObservableInterface $otherObservable, $scheduler = null)
+    {
+        return self::mergeAll(
+            self::fromArray(array($this, $otherObservable), $scheduler)
+        );
+    }
+
+    /**
+     * Merges an observable sequence of observables into an observable sequence.
+     *
+     * @param ObservableInterface $observables
+     *
+     * @return ObserverInterface
+     */
+    public static function mergeAll(ObservableInterface $sources)
+    {
+        // todo: add scheduler
+        return new AnonymousObservable(function($observer, $scheduler) use ($sources) {
+            $group              = new CompositeDisposable();
+            $isStopped          = false;
+            $sourceSubscription = new SingleAssignmentDisposable();
+
+            $group->add($sourceSubscription);
+
+            $sourceSubscription->setDisposable(
+                $sources->subscribeCallback(
+                    function($innerSource) use (&$group, &$isStopped, $observer, &$scheduler) {
+                        $innerSubscription = new SingleAssignmentDisposable();
+                        $group->add($innerSubscription);
+
+                        $innerSubscription->setDisposable(
+                            $innerSource->subscribeCallback(
+                                function($nextValue) use ($observer) {
+                                    $observer->onNext($nextValue);
+                                },
+                                function($error) use ($observer) {
+                                    $observer->onError($error);
+                                },
+                                function() use (&$group, &$innerSubscription, &$isStopped, $observer) {
+                                    $group->remove($innerSubscription);
+
+                                    if ($isStopped && $group->count() === 1) {
+                                        $observer->onCompleted();
+                                    }
+                                },
+                                $scheduler
+                            )
+                        );
+                    },
+                    function($error) use ($observer) {
+                        $observer->onError($error);
+                    },
+                    function() use (&$group, &$isStopped, $observer) {
+                        $isStopped = true;
+                        if ($group->count() === 1) {
+                            $observer->onCompleted();
+                        }
+                    },
+                    $scheduler
+                )
+            );
+
+            return $group;
+        });
+    }
+
+    public static function fromArray(array $array, $scheduler = null)
+    {
+        if (null === $scheduler) {
+            $scheduler = new ImmediateScheduler();
+        }
+
+        return new AnonymousObservable(function ($observer) use ($array, &$scheduler) {
+            $count = 0;
+
+            return $scheduler->scheduleRecursive(function($reschedule) use (&$count, $array, $observer) {
+                if ($count < count($array)) {
+                    $observer->onNext($array[$count]);
+                    $count++;
+                    $reschedule();
+                } else {
+                    $observer->onCompleted();
+                }
+            });
         });
     }
 }
