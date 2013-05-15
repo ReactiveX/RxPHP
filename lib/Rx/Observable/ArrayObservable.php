@@ -16,15 +16,23 @@ class ArrayObservable extends BaseObservable
     {
         $observers = $this->observers;
 
-        foreach ($this->data as $value) {
-            $scheduler->schedule(function() use ($observers, $value) {
+        $values     = $this->data;
+
+        $observers = &$this->observers;
+
+        return $scheduler->scheduleRecursive(function($reschedule) use (&$observers, &$values) {
+            if (count($values) > 0) {
+                $value = array_shift($values);
+
                 foreach ($observers as $observer) {
                     $observer->onNext($value);
                 }
-            });
-        }
 
-        $scheduler->schedule(function() use ($observers) {
+                $reschedule();
+
+                return;
+            }
+
             foreach ($observers as $observer) {
                 $observer->onCompleted();
             }
