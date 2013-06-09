@@ -2,6 +2,8 @@
 
 namespace Rx\Observable;
 
+use Rx\Disposable\EmptyDisposable;
+
 class ReturnObservable extends BaseObservable
 {
     private $value;
@@ -31,5 +33,8 @@ class ReturnObservable extends BaseObservable
                 $observer->onCompleted();
             }
         });
+
+        // todo: real disposable
+        return new EmptyDisposable();
     }
 }

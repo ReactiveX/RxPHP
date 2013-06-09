@@ -57,7 +57,7 @@ abstract class BaseObservable implements ObservableInterface
         $currentObservable = $this;
 
         // todo: add scheduler
-        return new AnonymousObservable(function($observer) use ($currentObservable, $selector) {
+        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $selector) {
             $selectObserver = new CallbackObserver(
                 function($nextValue) use ($observer, $selector) {
                     $value = null;
@@ -76,7 +76,7 @@ abstract class BaseObservable implements ObservableInterface
                 }
             );
 
-            $currentObservable->subscribe($selectObserver);
+            return $currentObservable->subscribe($selectObserver, $scheduler);
         });
     }
 
@@ -89,7 +89,7 @@ abstract class BaseObservable implements ObservableInterface
         $currentObservable = $this;
 
         // todo: add scheduler
-        return new AnonymousObservable(function($observer) use ($currentObservable, $predicate) {
+        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $predicate) {
             $selectObserver = new CallbackObserver(
                 function($nextValue) use ($observer, $predicate) {
                     $shouldFire = false;
@@ -111,7 +111,7 @@ abstract class BaseObservable implements ObservableInterface
                 }
             );
 
-            $currentObservable->subscribe($selectObserver);
+            $currentObservable->subscribe($selectObserver, $scheduler);
         });
     }
 
@@ -120,6 +120,15 @@ abstract class BaseObservable implements ObservableInterface
         return self::mergeAll(
             self::fromArray(array($this, $otherObservable), $scheduler)
         );
+    }
+
+    public function selectMany($selector)
+    {
+        if ( ! is_callable($selector)) {
+            throw new InvalidArgumentException('Selector should be a callable.');
+        }
+
+        return self::mergeAll($this->select($selector));
     }
 
     /**
