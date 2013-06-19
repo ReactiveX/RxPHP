@@ -2,6 +2,7 @@
 
 namespace Rx\Disposable;
 
+use InvalidArgumentException;
 use Rx\DisposableInterface;
 
 class CallbackDisposable implements DisposableInterface

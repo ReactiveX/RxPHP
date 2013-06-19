@@ -7,6 +7,7 @@ use Rx\DisposableInterface;
 class CompositeDisposable implements DisposableInterface
 {
     private $disposables;
+    private $isDisposed = false;
 
     public function __construct(array $disposables = array())
     {
@@ -15,29 +16,65 @@ class CompositeDisposable implements DisposableInterface
 
     public function dispose()
     {
-        foreach ($this->disposables as $disposable) {
-            $disposable->dispose();
+        if ($this->isDisposed) {
+            return;
         }
 
+        $this->isDisposed = true;
+
+        $disposables = $this->disposables;
         $this->disposables = array();
+
+        foreach ($disposables as $disposable) {
+            $disposable->dispose();
+        }
     }
 
     public function add(DisposableInterface $disposable)
     {
-        $this->disposables[] = $disposable;
+        if ($this->isDisposed) {
+            $disposable->dispose();
+        } else {
+            $this->disposables[] = $disposable;
+        }
     }
 
     public function remove(DisposableInterface $disposable)
     {
-        foreach ($this->disposables as $i => $otherDisposable) {
-            if ($otherDisposable === $disposable) {
-                unset($this->disposables[$i]);
-            }
+        if ($this->isDisposed) {
+            return false;
         }
+
+        $key = array_search($disposable, $this->disposables);
+
+        if (false === $key) {
+            return false;
+        }
+
+        $removedDisposable = $this->disposables[$key];
+        unset($this->disposables[$key]);
+        $removedDisposable->dispose();
+
+        return true;
+    }
+
+    public function contains(DisposableInterface $disposable)
+    {
+        return false !== array_search($disposable, $this->disposables);
     }
 
     public function count()
     {
         return count($this->disposables);
+    }
+
+    public function clear()
+    {
+        $disposables = $this->disposables;
+        $this->disposables = array();
+
+        foreach ($disposables as $disposable) {
+            $disposable->dispose();
+        }
     }
 }
