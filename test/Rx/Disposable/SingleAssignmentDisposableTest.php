@@ -43,4 +43,27 @@ class SingleAssignmentDisposableTest extends TestCase
         $this->assertEquals($d1, $disposable->getDisposable());
     }
 
+    /**
+     * @test
+     * @expectedException RuntimeException
+     */
+    public function it_cannot_be_assignmed_multiple_times()
+    {
+        $d1         = new CallbackDisposable(function(){});
+        $d2         = new CallbackDisposable(function(){});
+        $disposable = new SingleAssignmentDisposable();
+
+        $disposable->setDisposable($d1);
+        $disposable->setDisposable($d2);
+    }
+
+    /**
+     * @test
+     * @expectedException RuntimeException
+     */
+    public function it_cannot_be_disposed_when_not_assigned()
+    {
+        $disposable = new SingleAssignmentDisposable();
+        $disposable->dispose();
+    }
 }

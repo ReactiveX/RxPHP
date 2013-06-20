@@ -166,4 +166,17 @@ class CompositeDisposableTest extends TestCase
         $disposable->add($d3);
         $this->assertFalse($disposed3);
     }
+
+    /**
+     * @test
+     */
+    public function it_can_be_disposed_multiple_times()
+    {
+        $d1 = new CallbackDisposable(function(){});
+        $d2 = new CallbackDisposable(function(){});
+        $disposable = new CompositeDisposable(array($d1, $d2));
+
+        $disposable->dispose();
+        $disposable->dispose();
+    }
 }
