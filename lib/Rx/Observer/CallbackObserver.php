@@ -13,9 +13,9 @@ class CallbackObserver implements ObserverInterface
 
     public function __construct($onNext = null, $onError = null, $onCompleted = null)
     {
-        $this->onNext      = $this->getOrDefault($onNext);
-        $this->onError     = $this->getOrDefault($onError);
-        $this->onCompleted = $this->getOrDefault($onCompleted);
+        $this->onNext      = $this->getOrDefault($onNext, function(){});
+        $this->onError     = $this->getOrDefault($onError, function($e){ throw $e; });
+        $this->onCompleted = $this->getOrDefault($onCompleted, function(){});
     }
 
     public function onCompleted()
@@ -36,10 +36,10 @@ class CallbackObserver implements ObserverInterface
         $onNext($value);
     }
 
-    private function getOrDefault($callback)
+    private function getOrDefault($callback, $default)
     {
         if (null === $callback) {
-            return function() {};
+            return $default;
         }
 
         return $callback;
