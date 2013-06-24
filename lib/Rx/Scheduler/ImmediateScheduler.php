@@ -53,7 +53,7 @@ class ImmediateScheduler
             );
         };
 
-        $group->add($this->schedule($recursiveAction()));
+        $group->add($this->schedule($recursiveAction));
 
         return $group;
     }

@@ -21,16 +21,20 @@ class ArrayObservable extends BaseObservable
         $observers = &$this->observers;
 
         return $scheduler->scheduleRecursive(function($reschedule) use (&$observers, &$values) {
-            if (count($values) > 0) {
+            $count = count($values);
+
+            if ($count > 0) {
                 $value = array_shift($values);
 
                 foreach ($observers as $observer) {
                     $observer->onNext($value);
                 }
 
-                $reschedule();
+                if ($count > 1) {
+                    $reschedule();
 
-                return;
+                    return;
+                }
             }
 
             foreach ($observers as $observer) {
