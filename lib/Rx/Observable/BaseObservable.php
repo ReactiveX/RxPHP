@@ -10,6 +10,9 @@ use Rx\Observer\CallbackObserver;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
+use Rx\Subject\Subject;
+use Rx\Disposable\RefCountDisposable;
+use Rx\Disposable\EmptyDisposable;
 
 abstract class BaseObservable implements ObservableInterface
 {
@@ -242,4 +245,234 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
+    public function groupBy($keySelector, $elementSelector = null, $keySerializer = null)
+    {
+        return $this->groupByUntil($keySelector, $elementSelector, function() {
+
+            // observable that never calls
+            return new AnonymousObservable(function() {
+                // todo?
+                return new EmptyDisposable();
+            });
+        }, $keySerializer);
+    }
+
+    public function groupByUntil($keySelector, $elementSelector = null, $durationSelector = null, $keySerializer = null)
+    {
+        $currentObservable = $this;
+
+        if (null === $elementSelector) {
+            $elementSelector = function($elem) { return $elem; };
+        } else if ( ! is_callable($elementSelector)) {
+            throw new InvalidArgumentException('Element selector should be a callable.');
+        }
+
+        if (null === $keySerializer) {
+            $keySerializer = function($elem) { return $elem->__toString(); };
+        } else if ( ! is_callable($keySerializer)) {
+            throw new InvalidArgumentException('Key serializer should be a callable.');
+        }
+
+        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $keySelector, $elementSelector, $durationSelector, $keySerializer) {
+            $map = array();
+            $groupDisposable = new CompositeDisposable();
+            $refCountDisposable = new RefCountDisposable($groupDisposable);
+
+            $groupDisposable->add($currentObservable->subscribeCallback(
+                function($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable){
+                    try {
+                        $key = $keySelector($value);
+                        $serializedKey = $keySerializer($key);
+                    } catch (Exception $e) {
+                        foreach ($map as $groupObserver) {
+                            $groupObserver->onError($e);
+                        }
+                        $observer->onError($e);
+
+                        return;
+                    }
+
+                    $fireNewMapEntry = false;
+
+                    try {
+                        if ( ! isset($map[$serializedKey])) {
+                            $map[$serializedKey] = new Subject();
+                            $fireNewMapEntry = true;
+                        }
+                        $writer = $map[$serializedKey];
+
+                    } catch (Exception $e) {
+                        foreach ($map as $groupObserver) {
+                            $groupObserver->onError($e);
+                        }
+                        $observer->onError($e);
+
+                        return;
+                    }
+
+                    if ($fireNewMapEntry) {
+                        $group = new GroupedObservable($key, $writer, $refCountDisposable);
+                        $durationGroup = new GroupedObservable($key, $writer);
+
+                        try {
+                            $duration = $durationSelector($durationGroup);
+                        } catch (Exception $e) {
+                            foreach ($map as $groupObserver) {
+                                $groupObserver->onError($e);
+                            }
+                            $observer->onError($e);
+
+                            return;
+                        }
+
+                        $observer->onNext($group);
+                        $md = new SingleAssignmentDisposable();
+                        $groupDisposable->add($md);
+                        $expire = function() use (&$map, &$md, $serializedKey, &$writer) {
+                            if (isset($map[$serializedKey])) {
+                                unset($map[$serializedKey]);
+                                $writer->onCompleted();
+                            }
+                            $groupDisposable->remove($md);
+                        };
+
+                        $md->setDisposable(
+                            $duration->take(1)->subscribeCallback(
+                                function(){},
+                                function(Exception $exception) use ($map, $observer){
+                                    foreach ($map as $writer) {
+                                        $writer->onError($exception);
+                                    }
+
+                                    $observer->onError($exception);
+                                },
+                                function() use ($expire) {
+                                    $expire();
+                                }
+                            )
+                        );
+                    }
+
+                    try {
+                        $element = $elementSelector($value);
+                    } catch (Exception $exception) {
+                        foreach ($map as $writer) {
+                            $writer->onError($exception);
+                        }
+
+                        $observer->onError($exception);
+                        return;
+                    }
+                    $writer->onNext($element);
+                },
+                function(Exception $error) use (&$map, $observer) {
+                    foreach ($map as $writer) {
+                        $writer->onError($exception);
+                    }
+
+                    $observer->onError($exception);
+                },
+                function() use (&$map, $observer) {
+                    foreach ($map as $writer) {
+                        $writer->onCompleted();
+                    }
+
+                    $observer->onCompleted();
+                }
+            ));
+
+            return $refCountDisposable;
+        });
+    }
+
+    /*
+    observableProto.groupByUntil = function (keySelector, elementSelector, durationSelector, keySerializer) {
+        return new AnonymousObservable(
+        function (observer) {
+            var map = {},
+                groupDisposable = new CompositeDisposable(),
+                refCountDisposable = new RefCountDisposable(groupDisposable);
+            groupDisposable.add(source.subscribe(function (x) {
+                var duration, durationGroup, element, expire, fireNewMapEntry, group, key, serializedKey, md, writer, w;
+                try {
+                    key = keySelector(x);
+                    serializedKey = keySerializer(key);
+                } catch (e) {
+                    for (w in map) {
+                        map[w].onError(e);
+                    }
+                    observer.onError(e);
+                    return;
+                }
+                fireNewMapEntry = false;
+                try {
+                    writer = map[serializedKey];
+                    if (!writer) {
+                        writer = new Subject();
+                        map[serializedKey] = writer;
+                        fireNewMapEntry = true;
+                    }
+                } catch (e) {
+                    for (w in map) {
+                        map[w].onError(e);
+                    }
+                    observer.onError(e);
+                    return;
+                }
+                if (fireNewMapEntry) {
+                    group = new GroupedObservable(key, writer, refCountDisposable);
+                    durationGroup = new GroupedObservable(key, writer);
+                    try {
+                        duration = durationSelector(durationGroup);
+                    } catch (e) {
+                        for (w in map) {
+                            map[w].onError(e);
+                        }
+                        observer.onError(e);
+                        return;
+                    }
+                    observer.onNext(group);
+                    md = new SingleAssignmentDisposable();
+                    groupDisposable.add(md);
+                    expire = function () {
+                        if (serializedKey in map) {
+                            delete map[serializedKey];
+                            writer.onCompleted();
+                        }
+                        groupDisposable.remove(md);
+                    };
+                    md.setDisposable(duration.take(1).subscribe(noop, function (exn) {
+                        for (w in map) {
+                            map[w].onError(exn);
+                        }
+                        observer.onError(exn);
+                    }, function () {
+                        expire();
+                    }));
+                }
+                try {
+                    element = elementSelector(x);
+                } catch (e) {
+                    for (w in map) {
+                        map[w].onError(e);
+                    }
+                    observer.onError(e);
+                    return;
+                }
+                writer.onNext(element);
+            }, function (ex) {
+                for (var w in map) {
+                    map[w].onError(ex);
+                }
+                observer.onError(ex);
+            }, function () {
+                for (var w in map) {
+                    map[w].onCompleted();
+                }
+                observer.onCompleted();
+            }));
+            return refCountDisposable;
+        });
+    };
+     */
 }

@@ -15,8 +15,13 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
     throw new RuntimeException('Install dependencies to run test suite.');
 }
 
-$stdoutObserver = new Rx\Observer\CallbackObserver(
-    function ($value) { echo "Next value: " . $value . "\n"; },
-    function ($error) { echo "Exception: " . $error->getMessage() . "\n"; },
-    function ()       { echo "Complete!\n"; }
-);
+$createStdoutObserver = function ($prefix = '') {
+    return new Rx\Observer\CallbackObserver(
+        function ($value) use ($prefix) { echo $prefix . "Next value: " . $value . "\n"; },
+        function ($error) use ($prefix) { echo $prefix . "Exception: " . $error->getMessage() . "\n"; },
+        function ()       use ($prefix) { echo $prefix . "Complete!\n"; }
+    );
+};
+
+
+$stdoutObserver = $createStdoutObserver();
