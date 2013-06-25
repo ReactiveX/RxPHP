@@ -41,4 +41,15 @@ class GroupedObservableTest extends TestCase
         $disposable = $groupedObservable->subscribe(new CallbackObserver());
         $this->assertInstanceOf('Rx\Disposable\CompositeDisposable', $disposable);
     }
+
+    /**
+     * @test
+     */
+    public function it_exposes_its_key()
+    {
+        $observable = new AnonymousObservable(function(){});
+
+        $groupedObservable = new GroupedObservable('key', $observable);
+        $this->assertEquals('key', $groupedObservable->getKey());
+    }
 }
