@@ -268,7 +268,7 @@ abstract class BaseObservable implements ObservableInterface
         }
 
         if (null === $keySerializer) {
-            $keySerializer = function($elem) { return $elem->__toString(); };
+            $keySerializer = function($elem) { return $elem; };
         } else if ( ! is_callable($keySerializer)) {
             throw new InvalidArgumentException('Key serializer should be a callable.');
         }
