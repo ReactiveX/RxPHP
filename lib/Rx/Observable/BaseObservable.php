@@ -114,7 +114,7 @@ abstract class BaseObservable implements ObservableInterface
                 }
             );
 
-            $currentObservable->subscribe($selectObserver, $scheduler);
+            return $currentObservable->subscribe($selectObserver, $scheduler);
         });
     }
 
