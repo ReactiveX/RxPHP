@@ -5,7 +5,7 @@ namespace Rx\Observer;
 use Exception;
 use Rx\ObserverInterface;
 
-class CallbackObserver implements ObserverInterface
+class CallbackObserver extends AbstractObserver
 {
     private $onNext;
     private $onError;
@@ -18,19 +18,19 @@ class CallbackObserver implements ObserverInterface
         $this->onCompleted = $this->getOrDefault($onCompleted, function(){});
     }
 
-    public function onCompleted()
+    protected function completed()
     {
         $onCompleted= $this->onCompleted;
         $onCompleted();
     }
 
-    public function onError(Exception $error)
+    protected function error(Exception $error)
     {
         $onError = $this->onError;
         $onError($error);
     }
 
-    public function onNext($value)
+    protected function next($value)
     {
         $onNext = $this->onNext;
         $onNext($value);
