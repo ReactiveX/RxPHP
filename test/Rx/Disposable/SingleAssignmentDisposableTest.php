@@ -27,9 +27,10 @@ class SingleAssignmentDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_can_be_reassigned_after_disposing()
+    public function it_can_disposes_newly_set_disposable_if_already_disposed()
     {
-        $d1         = new CallbackDisposable(function(){});
+        $disposed1   = false;
+        $d1         = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
         $d2         = new CallbackDisposable(function(){});
         $disposable = new SingleAssignmentDisposable();
 
@@ -40,7 +41,7 @@ class SingleAssignmentDisposableTest extends TestCase
 
         $disposable->setDisposable($d1);
 
-        $this->assertEquals($d1, $disposable->getDisposable());
+        $this->assertTrue($disposed1);
     }
 
     /**

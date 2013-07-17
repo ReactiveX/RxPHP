@@ -4,9 +4,10 @@ namespace Rx\Scheduler;
 
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\CompositeDisposable;
+use Rx\SchedulerInterface;
 use InvalidArgumentException;
 
-class ImmediateScheduler
+class ImmediateScheduler implements SchedulerInterface
 {
     public function schedule($action)
     {

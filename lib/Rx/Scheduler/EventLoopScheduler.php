@@ -6,9 +6,10 @@ use React\EventLoop\LoopInterface;
 use React\EventLoop\Timer\Timers;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
+use Rx\SchedulerInterface;
 use InvalidArgumentException;
 
-class EventLoopScheduler
+class EventLoopScheduler implements SchedulerInterface
 {
     private $loop;
 
