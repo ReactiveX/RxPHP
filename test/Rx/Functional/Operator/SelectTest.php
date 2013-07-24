@@ -15,7 +15,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function exception_thrown_in_callable_is_not_catched()
+    public function calls_on_error_if_selector_throws_an_exception()
     {
         $observable = new ReturnObservable(1);
 

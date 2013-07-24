@@ -6,6 +6,7 @@ use Exception;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Testing\HotObservable;
 use Rx\Testing\TestScheduler;
+use Rx\Observable\ReturnObservable;
 
 class WhereTest extends FunctionalTestCase
 {
@@ -69,6 +70,30 @@ class WhereTest extends FunctionalTestCase
             onNext(500, 42),
             onError(820, $exception),
         ), $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function calls_on_error_if_predicate_throws_an_exception()
+    {
+        $observable = new ReturnObservable(1);
+
+        $called = false;
+        $observable->where(function() { throw new Exception(); })
+            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; });
+
+        $this->assertTrue($called);
+    }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function it_throws_an_exception_if_predicate_is_not_a_callable()
+    {
+        $observable = new ReturnObservable(1);
+        $observable->where(42);
     }
 
     protected function createHotObservableWithData($scheduler)
