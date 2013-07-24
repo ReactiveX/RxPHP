@@ -6,15 +6,11 @@ use PHPUnit_Framework_ExpectationFailedException;
 use Rx\Scheduler\VirtualTimeScheduler;
 use Rx\TestCase;
 use Rx\Testing\HotObservable;
-use Rx\Testing\Recorded;
 use Rx\Testing\Subscription;
-use Rx\Notification\OnCompletedNotification;
-use Rx\Notification\OnErrorNotification;
-use Rx\Notification\OnNextNotification;
+use Rx\Testing\TestScheduler;
 
 abstract class FunctionalTestCase extends TestCase
 {
-
     public function assertMessages(array $expected, array $recorded)
     {
         if (count($expected) !== count($recorded)) {
@@ -50,16 +46,9 @@ abstract class FunctionalTestCase extends TestCase
 
         $this->assertTrue(true); // success
     }
-}
 
-function onError($dueTime, $error) {
-    return new Recorded($dueTime, new OnErrorNotification($error));
-}
-
-function onNext($dueTime, $value) {
-    return new Recorded($dueTime, new OnNextNotification($value));
-}
-
-function onCompleted($dueTime) {
-    return new Recorded($dueTime, new OnCompletedNotification());
+    protected function createTestScheduler()
+    {
+        return new TestScheduler();
+    }
 }

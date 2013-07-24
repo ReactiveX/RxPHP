@@ -12,6 +12,8 @@
 if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
     $loader = require_once $file;
     $loader->add('Rx', __DIR__);
+    require_once __DIR__ . '/helper-functions.php';
 } else {
     throw new RuntimeException('Install dependencies to run test suite.');
 }
+

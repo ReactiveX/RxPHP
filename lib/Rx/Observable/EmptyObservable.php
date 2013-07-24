@@ -2,6 +2,8 @@
 
 namespace Rx\Observable;
 
+use Rx\Disposable\EmptyDisposable;
+
 class EmptyObservable extends BaseObservable
 {
     protected function doStart($scheduler)
@@ -13,5 +15,8 @@ class EmptyObservable extends BaseObservable
                 $observer->onCompleted();
             }
         });
+
+        //todo: add "real" disposable
+        return new EmptyDisposable();
     }
 }

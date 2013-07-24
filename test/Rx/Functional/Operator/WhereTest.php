@@ -1,15 +1,13 @@
 <?php
 
-namespace Rx\Functional;
+namespace Rx\Functional\Operator;
 
 use Exception;
-use Rx\TestCase;
+use Rx\Functional\FunctionalTestCase;
 use Rx\Testing\HotObservable;
-use Rx\Testing\Recorded;
-use Rx\Testing\Subscription;
 use Rx\Testing\TestScheduler;
 
-class WhereOperatorTest extends FunctionalTestCase
+class WhereTest extends FunctionalTestCase
 {
     /**
      * @test
@@ -82,10 +80,5 @@ class WhereOperatorTest extends FunctionalTestCase
             onNext(800, 84),
             onCompleted(820),
         ));
-    }
-
-    protected function createTestScheduler()
-    {
-        return new TestScheduler();
     }
 }

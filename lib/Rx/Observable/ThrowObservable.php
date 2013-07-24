@@ -3,6 +3,7 @@
 namespace Rx\Observable;
 
 use Exception;
+use Rx\Disposable\EmptyDisposable;
 
 class ThrowObservable extends BaseObservable
 {
@@ -24,5 +25,8 @@ class ThrowObservable extends BaseObservable
                 $observer->onError($exception);
             }
         });
+
+        // todo: real disposable
+        return new EmptyDisposable();
     }
 }
