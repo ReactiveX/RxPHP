@@ -27,7 +27,7 @@ class SingleAssignmentDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_can_disposes_newly_set_disposable_if_already_disposed()
+    public function it_disposes_newly_set_disposable_if_already_disposed()
     {
         $disposed1   = false;
         $d1         = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
@@ -56,15 +56,5 @@ class SingleAssignmentDisposableTest extends TestCase
 
         $disposable->setDisposable($d1);
         $disposable->setDisposable($d2);
-    }
-
-    /**
-     * @test
-     * @expectedException RuntimeException
-     */
-    public function it_cannot_be_disposed_when_not_assigned()
-    {
-        $disposable = new SingleAssignmentDisposable();
-        $disposable->dispose();
     }
 }

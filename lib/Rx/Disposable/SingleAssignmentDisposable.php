@@ -12,10 +12,6 @@ class SingleAssignmentDisposable implements DisposableInterface
 
     public function dispose()
     {
-        if (! $this->current) {
-            throw new RuntimeException('No disposable set to dispose.');
-        }
-
         $old = null;
 
         if ( ! $this->isDisposed) {

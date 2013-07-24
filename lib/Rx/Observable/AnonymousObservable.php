@@ -29,7 +29,7 @@ class AnonymousObservable extends BaseObservable
 
         $autoDetachObserver = new AutoDetachObserver($observer);
 
-        $autoDetachObserver->setDisposable($subscribeAction($observer, $scheduler));
+        $autoDetachObserver->setDisposable($subscribeAction($autoDetachObserver, $scheduler));
 
         return new CallbackDisposable(function() use ($autoDetachObserver) {
             $autoDetachObserver->dispose();

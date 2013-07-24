@@ -37,8 +37,12 @@ class VirtualTimeScheduler implements SchedulerInterface
             throw new InvalidArgumentException("Action should be a callable.");
         }
 
+        $invokeAction = function($scheduler, $action) {
+            $action();
+            return new EmptyDisposable();
+        };
 
-        return new EmptyDisposable();
+        return $this->scheduleAbsoluteWithState($action, $this->clock, $invokeAction);
     }
 
     public function scheduleRecursive($action)

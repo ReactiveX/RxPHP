@@ -47,7 +47,7 @@ class AutoDetachObserver extends AbstractObserver
     protected function next($value)
     {
         try {
-            $this->observer->onNext();
+            $this->observer->onNext($value);
         } catch(Exception $e) {
             $this->dispose(); // todo: should be in finally?
             throw $e;

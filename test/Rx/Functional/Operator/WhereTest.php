@@ -77,11 +77,14 @@ class WhereTest extends FunctionalTestCase
      */
     public function calls_on_error_if_predicate_throws_an_exception()
     {
+        $scheduler  = $this->createTestScheduler();
         $observable = new ReturnObservable(1);
 
         $called = false;
         $observable->where(function() { throw new Exception(); })
-            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; });
+            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; }, function() {}, $scheduler);
+
+        $scheduler->start();
 
         $this->assertTrue($called);
     }

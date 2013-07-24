@@ -13,6 +13,7 @@ use Rx\Disposable\SingleAssignmentDisposable;
 use Rx\Subject\Subject;
 use Rx\Disposable\RefCountDisposable;
 use Rx\Disposable\EmptyDisposable;
+use Rx\Disposable\CallbackDisposable;
 
 abstract class BaseObservable implements ObservableInterface
 {
@@ -25,10 +26,28 @@ abstract class BaseObservable implements ObservableInterface
         $this->observers[] = $observer;
 
         if ( ! $this->started) {
-            $this->disposable = $this->start($scheduler);
+            $this->start($scheduler);
         }
 
-        return $this->disposable;
+        return new CallbackDisposable(function() use ($observer) {
+            $this->removeObserver($observer);
+        });
+    }
+
+    /**
+     * @internal
+     */
+    public function removeObserver(ObserverInterface $observer)
+    {
+        $key = array_search($observer, $this->observers);
+
+        if (false === $key) {
+            return false;
+        }
+
+        unset($this->observers[$key]);
+
+        return true;
     }
 
     public function subscribeCallback($onNext = null, $onError = null, $onCompleted = null, $scheduler = null)
@@ -46,7 +65,7 @@ abstract class BaseObservable implements ObservableInterface
 
         $this->started = true;
 
-        return $this->doStart($scheduler);
+        $this->doStart($scheduler);
     }
 
     abstract protected function doStart($scheduler);

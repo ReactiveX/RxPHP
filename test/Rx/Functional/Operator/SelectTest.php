@@ -17,12 +17,14 @@ class SelectTest extends FunctionalTestCase
      */
     public function calls_on_error_if_selector_throws_an_exception()
     {
+        $scheduler  = $this->createTestScheduler();
         $observable = new ReturnObservable(1);
 
         $called = false;
         $observable->select(function() { throw new Exception(); })
-            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; });
+            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; }, function() {}, $scheduler);
 
+        $scheduler->start();
         $this->assertTrue($called);
     }
 
@@ -31,11 +33,14 @@ class SelectTest extends FunctionalTestCase
      */
     public function select_calls_on_completed()
     {
+        $scheduler  = $this->createTestScheduler();
         $observable = new EmptyObservable();
 
         $called = false;
         $observable->select('RxIdentity')
-            ->subscribeCallback(function() {}, function() {}, function() use (&$called) { $called = true; });
+            ->subscribeCallback(function() {}, function() {}, function() use (&$called) { $called = true; }, $scheduler);
+
+        $scheduler->start();
 
         $this->assertTrue($called);
     }
@@ -45,11 +50,14 @@ class SelectTest extends FunctionalTestCase
      */
     public function select_calls_on_error()
     {
+        $scheduler  = $this->createTestScheduler();
         $observable = new ThrowObservable(new Exception);
 
         $called = false;
         $observable->select('RxIdentity')
-            ->subscribeCallback(function() {}, function() use (&$called) { $called = true; });
+            ->subscribeCallback(function() {}, function() use (&$called) { $called = true; }, function () {}, $scheduler);
+
+        $scheduler->start();
 
         $this->assertTrue($called);
     }

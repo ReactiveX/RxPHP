@@ -20,21 +20,18 @@ class ReturnObservable extends BaseObservable
     {
         $value     = $this->value;
 
-        $observers = $this->observers;
+        $observers = &$this->observers;
 
-        $scheduler->schedule(function() use ($observers, $value) {
+        $scheduler->schedule(function() use (&$observers, $value) {
             foreach ($observers as $observer) {
                 $observer->onNext($value);
             }
         });
 
-        $scheduler->schedule(function() use ($observers) {
+        $scheduler->schedule(function() use (&$observers) {
             foreach ($observers as $observer) {
                 $observer->onCompleted();
             }
         });
-
-        // todo: real disposable
-        return new EmptyDisposable();
     }
 }
