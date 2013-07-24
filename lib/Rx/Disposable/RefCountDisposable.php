@@ -76,24 +76,3 @@ class RefCountDisposable implements DisposableInterface
         });
     }
 }
-/*
-        function InnerDisposable(disposable) {
-            this.disposable = disposable;
-            this.disposable.count++;
-            this.isInnerDisposed = false;
-        }
-
-        InnerDisposable.prototype.dispose = function () {
-            if (!this.disposable.isDisposed) {
-                if (!this.isInnerDisposed) {
-                    this.isInnerDisposed = true;
-                    this.disposable.count--;
-                    if (this.disposable.count === 0 && this.disposable.isPrimaryDisposed) {
-                        this.disposable.isDisposed = true;
-                        this.disposable.underlyingDisposable.dispose();
-                    }
-                }
-            }
-        };
-
- */
