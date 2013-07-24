@@ -54,7 +54,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    private function dispose()
+    public function dispose()
     {
         $this->disposable->dispose();
     }

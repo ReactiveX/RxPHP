@@ -2,7 +2,9 @@
 
 namespace Rx\Observable;
 
+use Rx\Disposable\CallbackDisposable;
 use Rx\ObserverInterface;
+use Rx\Observer\AutoDetachObserver;
 
 class AnonymousObservable extends BaseObservable
 {
@@ -25,7 +27,13 @@ class AnonymousObservable extends BaseObservable
         // todo: add scheduler
         $subscribeAction = $this->subscribeAction;
 
-        return $subscribeAction($observer, $scheduler);
+        $autoDetachObserver = new AutoDetachObserver($observer);
+
+        $autoDetachObserver->setDisposable($subscribeAction($observer, $scheduler));
+
+        return new CallbackDisposable(function() use ($autoDetachObserver) {
+            $autoDetachObserver->dispose();
+        });
     }
 
     protected function doStart($scheduler)
