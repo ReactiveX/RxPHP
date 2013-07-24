@@ -5,6 +5,8 @@ Reactive extensions for PHP. The reactive extensions for PHP are a set of
 libraries to compose asynchronous and event-based programs using observable
 collections and LINQ-style query operators in PHP.
 
+[![Build Status](https://secure.travis-ci.org/asm89/Rx.PHP.png?branch=master)](http://travis-ci.org/asm89/Rx.PHP)
+
 ## Quick start for demos
 
 Install dependencies using [composer](https://getcomposer.org).
