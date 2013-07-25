@@ -17,15 +17,15 @@ class SelectTest extends FunctionalTestCase
      */
     public function calls_on_error_if_selector_throws_an_exception()
     {
-        $scheduler  = $this->createTestScheduler();
-        $observable = new ReturnObservable(1);
+        $xs = $this->createHotObservable(array(
+            onNext(500, 42),
+        ));
 
-        $called = false;
-        $observable->select(function() { throw new Exception(); })
-            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; }, function() {}, $scheduler);
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+            return $xs->select(function() { throw new Exception(); });
+        });
 
-        $scheduler->start();
-        $this->assertTrue($called);
+        $this->assertMessages(array(onError(500, new Exception())), $results->getMessages());
     }
 
     /**
@@ -33,16 +33,15 @@ class SelectTest extends FunctionalTestCase
      */
     public function select_calls_on_completed()
     {
-        $scheduler  = $this->createTestScheduler();
-        $observable = new EmptyObservable();
+        $xs = $this->createHotObservable(array(
+            onCompleted(500),
+        ));
 
-        $called = false;
-        $observable->select('RxIdentity')
-            ->subscribeCallback(function() {}, function() {}, function() use (&$called) { $called = true; }, $scheduler);
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+            return $xs->select('RxIdentity');
+        });
 
-        $scheduler->start();
-
-        $this->assertTrue($called);
+        $this->assertMessages(array(onCompleted(500)), $results->getMessages());
     }
 
     /**
@@ -50,16 +49,15 @@ class SelectTest extends FunctionalTestCase
      */
     public function select_calls_on_error()
     {
-        $scheduler  = $this->createTestScheduler();
-        $observable = new ThrowObservable(new Exception);
+        $xs = $this->createHotObservable(array(
+            onError(500, new Exception()),
+        ));
 
-        $called = false;
-        $observable->select('RxIdentity')
-            ->subscribeCallback(function() {}, function() use (&$called) { $called = true; }, function () {}, $scheduler);
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+            return $xs->select('RxIdentity');
+        });
 
-        $scheduler->start();
-
-        $this->assertTrue($called);
+        $this->assertMessages(array(onError(500, new Exception())), $results->getMessages());
     }
 
     /**
@@ -77,8 +75,7 @@ class SelectTest extends FunctionalTestCase
      */
     public function select_calls_selector()
     {
-        $scheduler = $this->createTestScheduler();
-        $xs        = new HotObservable($scheduler, array(
+        $xs = $this->createHotObservable(array(
             onNext(100,  2),
             onNext(300, 21),
             onNext(500, 42),
@@ -86,7 +83,7 @@ class SelectTest extends FunctionalTestCase
             onCompleted(820),
         ));
 
-        $results = $scheduler->startWithCreate(function() use ($xs) {
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->select(function($elem) { return $elem * 2; });
         });
 

@@ -11,6 +11,13 @@ use Rx\Testing\TestScheduler;
 
 abstract class FunctionalTestCase extends TestCase
 {
+    protected $scheduler;
+
+    public function setup()
+    {
+        $this->scheduler = $this->createTestScheduler();
+    }
+
     public function assertMessages(array $expected, array $recorded)
     {
         if (count($expected) !== count($recorded)) {
@@ -45,6 +52,11 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         $this->assertTrue(true); // success
+    }
+
+    protected function createHotObservable(array $events)
+    {
+        return new HotObservable($this->scheduler, $events);
     }
 
     protected function createTestScheduler()

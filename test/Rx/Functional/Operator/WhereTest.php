@@ -15,10 +15,9 @@ class WhereTest extends FunctionalTestCase
      */
     public function it_filters_all_on_false()
     {
-        $scheduler = $this->createTestScheduler();
-        $xs        = $this->createHotObservableWithData($scheduler);
+        $xs = $this->createHotObservableWithData();
 
-        $results = $scheduler->startWithCreate(function() use ($xs) {
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->where(function($elem) { return false; });
         });
 
@@ -33,10 +32,9 @@ class WhereTest extends FunctionalTestCase
      */
     public function it_passes_all_on_true() 
     {
-        $scheduler = $this->createTestScheduler();
-        $xs        = $this->createHotObservableWithData($scheduler);
+        $xs = $this->createHotObservableWithData();
 
-        $results = $scheduler->startWithCreate(function() use ($xs) {
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->where(function($elem) { return true; });
         });
 
@@ -55,16 +53,14 @@ class WhereTest extends FunctionalTestCase
     public function it_passes_on_error()
     {
         $exception = new Exception();
-        $scheduler  = new TestScheduler();
-        $xs = new HotObservable($scheduler, array(
+        $xs = $this->createHotObservable(array(
             onNext(500, 42),
             onError(820, $exception),
         ));
 
-        $results = $scheduler->startWithCreate(function() use ($xs) {
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->where(function($elem) { return $elem === 42; });
         });
-
 
         $this->assertMessages(array(
             onNext(500, 42),
@@ -77,16 +73,15 @@ class WhereTest extends FunctionalTestCase
      */
     public function calls_on_error_if_predicate_throws_an_exception()
     {
-        $scheduler  = $this->createTestScheduler();
-        $observable = new ReturnObservable(1);
+        $xs = $this->createHotObservable(array(
+            onNext(500, 42),
+        ));
 
-        $called = false;
-        $observable->where(function() { throw new Exception(); })
-            ->subscribeCallback(function() {}, function($ex) use (&$called) { $called = true; }, function() {}, $scheduler);
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+            return $xs->where(function() { throw new Exception(); });
+        });
 
-        $scheduler->start();
-
-        $this->assertTrue($called);
+        $this->assertMessages(array(onError(500, new Exception())), $results->getMessages());
     }
 
     /**
@@ -99,9 +94,9 @@ class WhereTest extends FunctionalTestCase
         $observable->where(42);
     }
 
-    protected function createHotObservableWithData($scheduler)
+    protected function createHotObservableWithData()
     {
-        return new HotObservable($scheduler, array(
+        return $this->createHotObservable(array(
             onNext(100,  2),
             onNext(300, 21),
             onNext(500, 42),
