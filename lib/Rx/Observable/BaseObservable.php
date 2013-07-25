@@ -29,8 +29,10 @@ abstract class BaseObservable implements ObservableInterface
             $this->start($scheduler);
         }
 
-        return new CallbackDisposable(function() use ($observer) {
-            $this->removeObserver($observer);
+        $observable = $this;
+
+        return new CallbackDisposable(function() use ($observer, $observable) {
+            $observable->removeObserver($observer);
         });
     }
 
