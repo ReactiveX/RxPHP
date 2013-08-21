@@ -235,6 +235,31 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
+    public function skip($count)
+    {
+        if ($count < 0) {
+            throw new InvalidArgumentException('Count must be >= 0');
+        }
+
+        $currentObservable = $this;
+
+        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $count) {
+            $remaining = $count;
+
+            return $currentObservable->subscribeCallback(
+                function($nextValue) use ($observer, &$remaining) {
+                    if ($remaining <= 0) {
+                        $observer->onNext($nextValue);
+                    } else {
+                        $remaining--;
+                    }
+                },
+                array($observer, 'onError'),
+                array($observer, 'onCompleted')
+            );
+        });
+    }
+
     public function take($count)
     {
         if ($count < 0) {
