@@ -122,6 +122,13 @@ class VirtualTimeScheduler implements SchedulerInterface
         return $scheduledItem->getDisposable();
     }
 
+    public function scheduleRelativeWithState($state, $dueTime, $action)
+    {
+        $runAt = $this->clock + $dueTime;
+
+        return $this->scheduleAbsoluteWithState($state, $runAt, $action);
+    }
+
     public function start()
     {
         if ( ! $this->isEnabled) {

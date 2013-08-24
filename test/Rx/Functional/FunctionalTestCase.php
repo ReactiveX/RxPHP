@@ -5,6 +5,7 @@ namespace Rx\Functional;
 use PHPUnit_Framework_ExpectationFailedException;
 use Rx\Scheduler\VirtualTimeScheduler;
 use Rx\TestCase;
+use Rx\Testing\ColdObservable;
 use Rx\Testing\HotObservable;
 use Rx\Testing\Subscription;
 use Rx\Testing\TestScheduler;
@@ -52,6 +53,11 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         $this->assertTrue(true); // success
+    }
+
+    protected function createColdObservable(array $events)
+    {
+        return new ColdObservable($this->scheduler, $events);
     }
 
     protected function createHotObservable(array $events)

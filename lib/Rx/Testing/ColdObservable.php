@@ -2,19 +2,55 @@
 
 namespace Rx\Testing;
 
+use Rx\Disposable\CallbackDisposable;
+use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\EmptyDisposable;
 use Rx\Observable\BaseObservable;
+use Rx\ObserverInterface;
 
 class ColdObservable extends BaseObservable
 {
     private $scheduler;
     private $messages;
-    private $subscriptions;
+    private $subscriptions = array();
 
     public function __construct($scheduler, $messages = array())
     {
         $this->scheduler     = $scheduler;
         $this->messages      = $messages ;
-        $this->subscriptions = $subscriptions;
     }
-}
 
+    public function subscribe(ObserverInterface $observer)
+    {
+        $this->subscriptions[] = new Subscription($this->scheduler->getClock());
+        $index                 = count($this->subscriptions) - 1;
+
+        $currentObservable = $this;
+        $disposable        = new CompositeDisposable();
+        $scheduler         = $this->scheduler;
+
+        foreach ($this->messages as $message) {
+            $notification = $message->getValue();
+            $time         = $message->getTime();
+
+            $schedule = function($innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time) {
+                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function() use ($observer, $innerNotification) {
+                    $innerNotification->accept($observer);
+                    return new EmptyDisposable();
+                }));
+            };
+
+            $schedule($notification);
+        }
+
+        $subscriptions = &$this->subscriptions;
+
+        return new CallbackDisposable(function() use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
+            $currentObservable->removeObserver($observer);
+            $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
+        });
+
+    }
+
+    public function doStart($scheduler){} // todo: remove from base?
+}

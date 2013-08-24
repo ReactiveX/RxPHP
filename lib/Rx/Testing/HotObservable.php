@@ -52,7 +52,7 @@ class HotObservable extends BaseObservable
         $scheduler = $this->scheduler;
 
         return new CallbackDisposable(function() use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
-            $x = $currentObservable->removeObserver($observer);
+            $currentObservable->removeObserver($observer);
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });
     }
