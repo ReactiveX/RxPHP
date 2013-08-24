@@ -374,7 +374,7 @@ abstract class BaseObservable implements ObservableInterface
                         $observer->onNext($group);
                         $md = new SingleAssignmentDisposable();
                         $groupDisposable->add($md);
-                        $expire = function() use (&$map, &$md, $serializedKey, &$writer) {
+                        $expire = function() use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
                             if (isset($map[$serializedKey])) {
                                 unset($map[$serializedKey]);
                                 $writer->onCompleted();
@@ -413,10 +413,10 @@ abstract class BaseObservable implements ObservableInterface
                 },
                 function(Exception $error) use (&$map, $observer) {
                     foreach ($map as $writer) {
-                        $writer->onError($exception);
+                        $writer->onError($error);
                     }
 
-                    $observer->onError($exception);
+                    $observer->onError($error);
                 },
                 function() use (&$map, $observer) {
                     foreach ($map as $writer) {

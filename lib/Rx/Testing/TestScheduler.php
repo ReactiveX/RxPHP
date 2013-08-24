@@ -30,6 +30,11 @@ class TestScheduler extends VirtualTimeScheduler
         return $this->startWithTiming($create);
     }
 
+    public function startWithDispose($create, $disposed)
+    {
+        return $this->startWithTiming($create, self::CREATED, self::SUBSCRIBED, $disposed);
+    }
+
     public function startWithTiming($create, $created = self::CREATED, $subscribed = self::SUBSCRIBED, $disposed = self::DISPOSED)
     {
         $observer     = new MockObserver($this);
