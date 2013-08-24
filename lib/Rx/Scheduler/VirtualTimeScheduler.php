@@ -118,6 +118,8 @@ class VirtualTimeScheduler implements SchedulerInterface
         $scheduledItem = new ScheduledItem($this, $state, $run, $dueTime);
 
         $this->queue->enqueue($scheduledItem);
+
+        return $scheduledItem->getDisposable();
     }
 
     public function start()

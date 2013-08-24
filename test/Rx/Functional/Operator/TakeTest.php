@@ -88,7 +88,7 @@ class TakeTest extends FunctionalTestCase
         });
 
         $this->assertMessages(array(
-            onCompleted(200),
+            onCompleted(201),
         ), $results->getMessages());
     }
 }

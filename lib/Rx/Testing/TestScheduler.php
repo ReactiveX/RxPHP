@@ -39,6 +39,7 @@ class TestScheduler extends VirtualTimeScheduler
     {
         $observer     = new MockObserver($this);
         $source       = null;
+        $scheduler    = $this;
         $subscription = null;
 
         $this->scheduleAbsoluteWithState(null, $created, function() use ($create, &$source) {
@@ -47,8 +48,8 @@ class TestScheduler extends VirtualTimeScheduler
             return new EmptyDisposable();
         });
 
-        $this->scheduleAbsoluteWithState(null, $subscribed, function() use (&$observer, &$source, &$subscription) {
-            $subscription = $source->subscribe($observer);
+        $this->scheduleAbsoluteWithState(null, $subscribed, function() use (&$observer, &$source, &$subscription, $scheduler) {
+            $subscription = $source->subscribe($observer, $scheduler);
 
             return new EmptyDisposable();
         });

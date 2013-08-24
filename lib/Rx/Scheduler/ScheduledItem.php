@@ -48,4 +48,9 @@ class ScheduledItem
     {
         return $this->dueTime;
     }
+
+    public function getDisposable()
+    {
+        return $this->disposable;
+    }
 }
