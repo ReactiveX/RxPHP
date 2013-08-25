@@ -24,8 +24,8 @@ class PriorityQueueTest extends TestCase
         $queue->remove($scheduledItem);
         $this->assertEquals(2, $queue->count());
 
-        $this->assertSame($scheduledItem3, $queue->dequeue());
         $this->assertSame($scheduledItem2, $queue->dequeue());
+        $this->assertSame($scheduledItem3, $queue->dequeue());
     }
 
     private function createScheduledItem($dueTime)
@@ -84,10 +84,29 @@ class PriorityQueueTest extends TestCase
         $queue->enqueue($scheduledItem3);
 
         $this->assertEquals(3, $queue->count());
-        $queue->dequeue();
+        $this->assertSame($scheduledItem, $queue->dequeue());
         $this->assertEquals(2, $queue->count());
 
-        $queue->enqueue($scheduledItem2);
+        $this->assertSame($scheduledItem2, $queue->dequeue());
+        $this->assertSame($scheduledItem3, $queue->dequeue());
+    }
+
+    /**
+     * @test
+     */
+    public function first_scheduled_item_with_same_priority_comes_first()
+    {
+        $queue          = new PriorityQueue();
+        $scheduledItem  = $this->createScheduledItem(1);
+        $scheduledItem2 = $this->createScheduledItem(1);
+        $scheduledItem3 = $this->createScheduledItem(1);
+
         $queue->enqueue($scheduledItem);
+        $queue->enqueue($scheduledItem2);
+        $queue->enqueue($scheduledItem3);
+
+        $this->assertSame($scheduledItem, $queue->dequeue());
+        $this->assertSame($scheduledItem2, $queue->dequeue());
+        $this->assertSame($scheduledItem3, $queue->dequeue());
     }
 }

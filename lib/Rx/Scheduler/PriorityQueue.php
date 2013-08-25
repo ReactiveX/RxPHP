@@ -58,8 +58,22 @@ class PriorityQueue
  */
 class InternalPriorityQueue extends SplPriorityQueue
 {
+    // use this value to "stabilize" the priority queue
+    private $serial = PHP_INT_MAX;
+
+    public function insert($item, $priority)
+    {
+        parent::insert($item, array($priority, $this->serial--));
+    }
+
     public function compare($a, $b)
     {
-        return $b->compareTo($a);
+        $value = $b[0]->compareTo($a[0]);
+
+        if (0 === $value) {
+            return $a[1] < $b[1] ? -1 : 1;
+        }
+
+        return $value;
     }
 }
