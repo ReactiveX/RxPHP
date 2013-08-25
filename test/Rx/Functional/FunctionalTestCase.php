@@ -55,6 +55,21 @@ abstract class FunctionalTestCase extends TestCase
         $this->assertTrue(true); // success
     }
 
+    public function assertSubscriptions(array $expected, array $recorded)
+    {
+        if (count($expected) !== count($recorded)) {
+            $this->fail(sprintf('Expected subscription count %d does not match actual count %d.', count($expected), count($recorded)));
+        }
+
+        for ($i = 0, $count = count($expected); $i < $count; $i++) {
+            if (! $expected[$i]->equals($recorded[$i])) {
+                $this->fail($expected[$i] . ' does not equal ' . $recorded[$i]);
+            }
+        }
+
+        $this->assertTrue(true); // success
+    }
+
     protected function createColdObservable(array $events)
     {
         return new ColdObservable($this->scheduler, $events);

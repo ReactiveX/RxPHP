@@ -28,14 +28,17 @@ class ColdObservable extends BaseObservable
         $currentObservable = $this;
         $disposable        = new CompositeDisposable();
         $scheduler         = $this->scheduler;
+        $isDisposed = false;
 
         foreach ($this->messages as $message) {
             $notification = $message->getValue();
             $time         = $message->getTime();
 
-            $schedule = function($innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time) {
-                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function() use ($observer, $innerNotification) {
-                    $innerNotification->accept($observer);
+            $schedule = function($innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed) {
+                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function() use ($observer, $innerNotification, &$isDisposed) {
+                    if ( ! $isDisposed) {
+                        $innerNotification->accept($observer);
+                    }
                     return new EmptyDisposable();
                 }));
             };
@@ -45,11 +48,16 @@ class ColdObservable extends BaseObservable
 
         $subscriptions = &$this->subscriptions;
 
-        return new CallbackDisposable(function() use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
-            $currentObservable->removeObserver($observer);
+        return new CallbackDisposable(function() use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
+            $isDisposed = true;
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });
 
+    }
+
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 
     public function doStart($scheduler){} // todo: remove from base?
