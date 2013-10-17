@@ -283,7 +283,8 @@ abstract class BaseObservable implements ObservableInterface
                     }
                 },
                 array($observer, 'onError'),
-                array($observer, 'onCompleted')
+                array($observer, 'onCompleted'),
+                $scheduler
             );
         });
     }
@@ -421,7 +422,8 @@ abstract class BaseObservable implements ObservableInterface
                     }
 
                     $observer->onCompleted();
-                }
+                },
+                $scheduler
             ));
 
             return $refCountDisposable;
