@@ -22,3 +22,8 @@ Have fun running the demos in `/demo`.
 [rxphp-chat], a demo chat application using Rx.PHP.
 
 [rxphp-chat]: https://github.com/asm89/rxphp-chat
+
+## License
+
+- Rx.PHP is licensed under the MIT License - see the LICENSE file for details
+- I am providing code in this repository to you under an open source license. Because this is my personal repository, the license you receive to my code is from me and not from my employer (Facebook).
