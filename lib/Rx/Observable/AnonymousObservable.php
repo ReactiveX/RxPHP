@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Rx\Disposable\CallbackDisposable;
 use Rx\ObserverInterface;
 use Rx\Observer\AutoDetachObserver;
+use Rx\Scheduler\ImmediateScheduler;
 
 class AnonymousObservable extends BaseObservable
 {
@@ -25,6 +26,10 @@ class AnonymousObservable extends BaseObservable
      */
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
+        if (null === $scheduler) {
+            $scheduler = new ImmediateScheduler();
+        }
+
         $subscribeAction = $this->subscribeAction;
 
         $autoDetachObserver = new AutoDetachObserver($observer);
