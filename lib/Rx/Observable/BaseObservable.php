@@ -429,4 +429,54 @@ abstract class BaseObservable implements ObservableInterface
             return $refCountDisposable;
         });
     }
+
+    /**
+     * Applies an accumulator function over an observable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
+     *
+     * @param callable $accumulator - An accumulator function to be invoked on each element.
+     * @param mixed $seed [optional] - The initial accumulator value.
+     * @return \Rx\Observable\AnonymousObservable - An observable sequence containing a single element with the final accumulator value.
+     */
+    public function reduce($accumulator, $seed = null)
+    {
+        if (!is_callable($accumulator)) {
+            throw new InvalidArgumentException('Accumulator should be a callable.');
+        }
+
+        $hasSeed = $seed ? true : false;
+
+        return new AnonymousObservable(function (ObserverInterface $o) use ($accumulator, $hasSeed, $seed) {
+            $hasAccumulation = false;
+            $accumulation    = null;
+            $hasValue        = false;
+
+            return $this->subscribeCallback(
+              function ($x) use ($accumulator, $o, $hasSeed, $seed, &$hasAccumulation, &$accumulation, &$hasValue) {
+
+                  !$hasValue && ($hasValue = true);
+
+                  try {
+                      if ($hasAccumulation) {
+                          $accumulation = call_user_func($accumulator, $accumulation, $x);
+                      } else {
+                          $accumulation    = $hasSeed ? call_user_func($accumulator, $seed, $x) : $x;
+                          $hasAccumulation = true;
+                      }
+                  } catch (Exception $e) {
+                      $o->onError($e);
+                  }
+              },
+              function ($e) use ($o) {
+                  $o->onError($e);
+              },
+              function () use ($accumulator, $o, $hasSeed, $seed, &$hasAccumulation, &$accumulation, &$hasValue) {
+                  $hasValue && $o->onNext($accumulation);
+                  !$hasValue && $hasSeed && $o->onNext($seed);
+                  !$hasValue && !$hasSeed && $o->onError(new Exception("Missing Seed and or Value"));
+                  $o->onCompleted();
+              }
+            );
+
+        });
+    }
 }
