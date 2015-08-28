@@ -479,4 +479,71 @@ abstract class BaseObservable implements ObservableInterface
 
         });
     }
+
+
+    /**
+     * Returns an observable sequence that contains only distinct contiguous elements according to the keySelector and the comparer.
+     *
+     * @param null $keySelector
+     * @param null $comparer
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function distinctUntilChanged($keySelector = null, $comparer = null)
+    {
+
+        $comparer = $comparer ?: function ($x, $y) {
+            return $x == $y;
+        };
+
+        return new AnonymousObservable(function (ObserverInterface $o) use ($keySelector, $comparer) {
+            $hasCurrentKey = false;
+            $currentKey    = null;
+
+            return $this->subscribeCallback(
+              function ($value) use ($o, $keySelector, $comparer, &$hasCurrentKey, &$currentKey) {
+                  $key = $value;
+                  if ($keySelector) {
+                      try {
+                          $key = call_user_func($keySelector, $value);
+                      } catch (\Exception $e) {
+                          return $o->onError($e);
+                      }
+                  }
+
+                  $comparerEquals = null;
+                  if ($hasCurrentKey) {
+                      try {
+                          $comparerEquals = call_user_func($comparer, $currentKey, $key);
+                      } catch (\Exception $e) {
+                          return $o->onError($e);
+                      }
+                  }
+
+                  if (!$hasCurrentKey || !$comparerEquals) {
+                      $hasCurrentKey = true;
+                      $currentKey    = $key;
+                      $o->onNext($value);
+                  }
+
+              },
+              function ($e) use ($o) {
+                  $o->onError($e);
+              },
+              function () use ($o) {
+                  $o->onCompleted();
+              });
+
+        });
+
+    }
+
+    /**
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function never(){
+        return new AnonymousObservable(function ()  {
+           return new EmptyDisposable();
+        });
+    }
+
 }
