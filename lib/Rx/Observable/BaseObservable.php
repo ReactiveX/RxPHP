@@ -7,9 +7,11 @@ use InvalidArgumentException;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
+use Rx\Operator\OperatorInterface;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
+use Rx\SchedulerInterface;
 use Rx\Subject\Subject;
 use Rx\Disposable\RefCountDisposable;
 use Rx\Disposable\EmptyDisposable;
@@ -480,6 +482,20 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
+
+    /**
+     * Lifts a function to the current Observable and returns a new Observable that when subscribed to will pass
+     * the values of the current Observable through the Operator function.
+     *
+     * @param \Rx\Operator\OperatorInterface $operator
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function lift(OperatorInterface $operator)
+    {
+        return new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($operator) {
+            return $operator->call($this, $observer, $schedule);
+        });
+    }
 
     /**
      * Returns an observable sequence that contains only distinct contiguous elements according to the keySelector and the comparer.
