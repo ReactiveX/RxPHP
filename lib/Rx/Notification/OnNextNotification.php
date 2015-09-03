@@ -28,6 +28,6 @@ class OnNextNotification extends Notification
 
     public function __toString()
     {
-        return 'OnNext(' . $this->value . ')';
+        return 'OnNext(' . json_encode($this->value) . ')';
     }
 }

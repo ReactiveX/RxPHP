@@ -10,6 +10,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
+use Rx\Operator\ScanOperator;
 use Rx\Operator\TapOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
@@ -532,6 +533,19 @@ abstract class BaseObservable implements ObservableInterface
     public function tap($observerOrOnNext, $onError = null, $onCompleted = null)
     {
         return $this->lift(new TapOperator($observerOrOnNext, $onError, $onCompleted));
+    }
+
+    /**
+     *  Applies an accumulator function over an observable sequence and returns each intermediate result. The optional seed value is used as the initial accumulator value.
+     *  For aggregation behavior with no intermediate results, see Observable.aggregate.
+     *
+     * @param $accumulator
+     * @param null $seed
+     * @return AnonymousObservable
+     */
+    public function scan($accumulator, $seed = null)
+    {
+        return $this->lift(new ScanOperator($accumulator, $seed));
     }
 
 
