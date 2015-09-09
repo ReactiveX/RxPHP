@@ -12,6 +12,7 @@ use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\TapOperator;
+use Rx\Operator\ToArrayOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
@@ -548,5 +549,13 @@ abstract class BaseObservable implements ObservableInterface
         return $this->lift(new ScanOperator($accumulator, $seed));
     }
 
+    /**
+     * Creates an array from an observable sequence.
+     * @return AnonymousObservable An observable sequence containing a single element with a list containing all the elements of the source sequence.
+     */
+    public function toArray()
+    {
+        return $this->lift(new ToArrayOperator());
+    }
 
 }
