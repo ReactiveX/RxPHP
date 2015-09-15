@@ -318,8 +318,14 @@ abstract class BaseObservable implements ObservableInterface
             throw new InvalidArgumentException('Element selector should be a callable.');
         }
 
+        if (null === $durationSelector) {
+            $durationSelector = function($x) { return $x; };
+        } else if ( ! is_callable($durationSelector)) {
+            throw new InvalidArgumentException('Duration selector should be a callable.');
+        }
+
         if (null === $keySerializer) {
-            $keySerializer = function($elem) { return $elem; };
+            $keySerializer = function($x) { return $x; };
         } else if ( ! is_callable($keySerializer)) {
             throw new InvalidArgumentException('Key serializer should be a callable.');
         }
