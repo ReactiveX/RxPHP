@@ -12,6 +12,7 @@ use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
+use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\TapOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Scheduler\ImmediateScheduler;
@@ -557,7 +558,7 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Creates an array from an observable sequence.
+     *  Creates an array from an observable sequence.
      * @return AnonymousObservable An observable sequence containing a single element with a list containing all the elements of the source sequence.
      */
     public function toArray()
@@ -577,4 +578,16 @@ abstract class BaseObservable implements ObservableInterface
     {
         return $this->lift(new SkipLastOperator($count));
     }
+
+    /**
+     * Returns the values from the source observable sequence only after the other observable sequence produces a value.
+     *
+     * @param mixed $other The observable sequence or Promise that triggers propagation of elements of the source sequence.
+     * @return AnonymousObservable An observable sequence containing the elements of the source sequence starting from the point the other sequence triggered propagation.
+     */
+    public function skipUntil($other)
+    {
+        return $this->lift(new SkipUntilOperator($other));
+    }
+
 }
