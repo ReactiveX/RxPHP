@@ -524,9 +524,9 @@ abstract class BaseObservable implements ObservableInterface
     /**
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function never()
+    public static function never()
     {
-        return $this->lift(new NeverOperator());
+        return (new EmptyObservable())->lift(new NeverOperator());
     }
 
     /**
