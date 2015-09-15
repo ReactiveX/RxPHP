@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
+use Rx\Operator\AsObservableOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
@@ -550,6 +551,15 @@ abstract class BaseObservable implements ObservableInterface
     public function skipUntil($other)
     {
         return $this->lift(new SkipUntilOperator($other));
+    }
+
+    /**
+     *  Hides the identity of an observable sequence.
+     * @return AnonymousObservable An observable sequence that hides the identity of the source sequence.
+     */
+    public function asObservable()
+    {
+        return $this->lift(new AsObservableOperator());
     }
 
 }
