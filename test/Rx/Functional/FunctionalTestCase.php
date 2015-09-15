@@ -12,6 +12,7 @@ use Rx\Testing\TestScheduler;
 
 abstract class FunctionalTestCase extends TestCase
 {
+    /** @var  TestScheduler */
     protected $scheduler;
 
     public function setup()
