@@ -47,7 +47,11 @@ class EventLoopScheduler implements SchedulerInterface
 
                     $d = null;
                     $d = $scheduler->schedule(function() use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
-                        $recursiveAction();
+                        if (is_callable($recursiveAction)) {
+                            $recursiveAction();
+                        } else {
+                            throw new \Exception("recursiveAction is not callable");
+                        }
 
                         if ($isAdded) {
                             $group->remove($d);
@@ -68,4 +72,14 @@ class EventLoopScheduler implements SchedulerInterface
 
         return $group;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function now()
+    {
+        return new \DateTime();
+    }
+
+
 }

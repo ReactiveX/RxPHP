@@ -52,16 +52,18 @@ class VirtualTimeScheduler implements SchedulerInterface
         }
 
         $group = new CompositeDisposable();
-        $scheduler = $this;
 
-        $recursiveAction = null;
-        $recursiveAction = function() use ($action, &$scheduler, &$group, &$recursiveAction) {
+        $recursiveAction = function() use ($action, $group, &$recursiveAction) {
             $action(
-                function() use (&$scheduler, &$group, &$recursiveAction) {
+                function() use ($group, &$recursiveAction) {
                     $isAdded = false;
                     $isDone  = true;
 
-                    $d = $scheduler->schedule(function() use (&$isAdded, &$isDone, &$group, &$recursiveAction) {
+                    $d = $this->schedule(function() use (&$isAdded, &$isDone, $group, &$recursiveAction, &$d) {
+                        if (!is_callable($recursiveAction)) {
+                            throw new \Exception("recursiveAction is not callable");
+                        }
+
                         $recursiveAction();
 
                         if ($isAdded) {
@@ -165,5 +167,13 @@ class VirtualTimeScheduler implements SchedulerInterface
         }
 
         return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function now()
+    {
+        return $this->clock;
     }
 }

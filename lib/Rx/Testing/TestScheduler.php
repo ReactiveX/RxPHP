@@ -63,4 +63,8 @@ class TestScheduler extends VirtualTimeScheduler
 
         return $observer;
     }
+
+    public function createObserver() {
+        return new MockObserver($this);
+    }
 }

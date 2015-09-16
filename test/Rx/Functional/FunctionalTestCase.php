@@ -27,7 +27,7 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         for ($i = 0, $count = count($expected); $i < $count; $i++) {
-            if (! $expected[$i]->equals($recorded[$i])) {
+            if (!$expected[$i]->equals($recorded[$i])) {
                 $this->fail($expected[$i] . ' does not equal ' . $recorded[$i]);
             }
         }
@@ -49,7 +49,7 @@ abstract class FunctionalTestCase extends TestCase
 
         list($actual) = $observable->getSubscriptions();
 
-        if ( ! $expected->equals($actual)) {
+        if (!$expected->equals($actual)) {
             $this->fail(sprintf("Expected subscription '%s' does not match actual subscription '%s'", $expected, $actual));
         }
 
@@ -63,13 +63,27 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         for ($i = 0, $count = count($expected); $i < $count; $i++) {
-            if (! $expected[$i]->equals($recorded[$i])) {
+            if (!$expected[$i]->equals($recorded[$i])) {
                 $this->fail($expected[$i] . ' does not equal ' . $recorded[$i]);
             }
         }
 
         $this->assertTrue(true); // success
     }
+
+    /**
+     * @param callable $callback
+     */
+    protected function assertException(callable $callback)
+    {
+        try {
+            $callback();
+        } catch (\Exception $e) {
+            return;
+        }
+        $this->fail('Expected the callback to throw an exception.');
+    }
+
 
     protected function createColdObservable(array $events)
     {
