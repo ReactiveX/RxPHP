@@ -468,7 +468,7 @@ abstract class BaseObservable implements ObservableInterface
           function ($error) use ($d) {
               $d->reject($error);
           },
-          function () use ($d, $value) {
+          function () use ($d, &$value) {
               $d->resolve($value);
           }
 
