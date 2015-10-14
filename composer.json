@@ -18,7 +18,8 @@
         "react/event-loop": "0.3.*@dev"
     },
     "suggest": {
-        "react/event-loop": "For using event-loop based scheduling."
+        "react/event-loop": "For using event-loop based scheduling.",
+        "react/promise": "For converting promises to and from observables."
     },
     "autoload": {
         "psr-0": { "Rx\\": "lib/" }
