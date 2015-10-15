@@ -3,6 +3,7 @@
 namespace Rx\Functional\Subject;
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observer\CallbackObserver;
 use Rx\Subject\ReplaySubject;
 
 class ReplaySubjectTest extends FunctionalTestCase
@@ -457,7 +458,7 @@ class ReplaySubjectTest extends FunctionalTestCase
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subject) {
             $this->assertException(function () use (&$subject) {
-                $subject->subscribe();
+                $subject->subscribe(new CallbackObserver());
             });
         });
 
