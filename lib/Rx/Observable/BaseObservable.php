@@ -10,6 +10,8 @@ use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
+use Rx\Operator\ConcatOperator;
+use Rx\Operator\CountOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
@@ -600,6 +602,14 @@ abstract class BaseObservable implements ObservableInterface
     public function asObservable()
     {
         return $this->lift(new AsObservableOperator());
+    }
+
+    public function concat(ObservableInterface $observable) {
+        return $this->lift(new ConcatOperator($observable));
+    }
+
+    public function count(\Closure $predicate = null) {
+        return $this->lift(new CountOperator($predicate));
     }
 
 }
