@@ -19,7 +19,7 @@ class NeverOperator implements OperatorInterface
      * @param \Rx\SchedulerInterface $scheduler
      * @return \Rx\DisposableInterface
      */
-    public function call(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         return new EmptyDisposable();
     }

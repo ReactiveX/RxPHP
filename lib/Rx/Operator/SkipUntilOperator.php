@@ -24,7 +24,7 @@ class SkipUntilOperator implements OperatorInterface
     /**
      * @inheritDoc
      */
-    public function call(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $isOpen = false;
 

@@ -19,7 +19,7 @@ class ToArrayOperator implements OperatorInterface
     /**
      * @inheritDoc
      */
-    public function call(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         return $observable->subscribe(new CallbackObserver(
             function ($x) {

@@ -499,7 +499,7 @@ abstract class BaseObservable implements ObservableInterface
     public function lift(OperatorInterface $operator)
     {
         return new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($operator) {
-            return $operator->call($this, $observer, $schedule);
+            return $operator($this, $observer, $schedule);
         });
     }
 

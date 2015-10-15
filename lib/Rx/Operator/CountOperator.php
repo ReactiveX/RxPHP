@@ -23,7 +23,7 @@ class CountOperator implements OperatorInterface {
     /**
      * @inheritDoc
      */
-    public function call(
+    public function __invoke(
         ObservableInterface $observable,
         ObserverInterface $observer,
         SchedulerInterface $scheduler = null

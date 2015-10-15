@@ -29,7 +29,7 @@ class TapOperator implements OperatorInterface
      * @param \Rx\SchedulerInterface $scheduler
      * @return \Rx\DisposableInterface
      */
-    public function call(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $tapObserver = is_callable($this->observerOrOnNext) ? new CallbackObserver($this->observerOrOnNext, $this->onError, $this->onCompleted) : $this->observerOrOnNext;
 

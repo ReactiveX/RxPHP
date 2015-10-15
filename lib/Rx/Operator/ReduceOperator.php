@@ -36,7 +36,7 @@ class ReduceOperator implements OperatorInterface
      * @param \Rx\SchedulerInterface $scheduler
      * @return \Rx\DisposableInterface
      */
-    public function call(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $hasAccumulation = false;
         $accumulation    = null;
