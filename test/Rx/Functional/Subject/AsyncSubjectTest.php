@@ -4,6 +4,7 @@ namespace Rx\Functional\Subject;
 
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observer\CallbackObserver;
 use Rx\Subject\AsyncSubject;
 
 
@@ -339,7 +340,7 @@ class AsyncSubjectTest extends FunctionalTestCase
         $this->scheduler->scheduleAbsolute(950, function () use (&$subject) {
 
             $this->assertException(function () use (&$subject) {
-                $subject->subscribe();
+                $subject->subscribe(new CallbackObserver());
             });
         });
 
