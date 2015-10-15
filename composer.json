@@ -15,7 +15,8 @@
         "php": "~5.5|~7.0"
     },
     "require-dev": {
-        "react/event-loop": "0.3.*@dev"
+        "react/event-loop": "0.3.*@dev",
+        "react/promise": "~2.2"
     },
     "suggest": {
         "react/event-loop": "For using event-loop based scheduling.",
