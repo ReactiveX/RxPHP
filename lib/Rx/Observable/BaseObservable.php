@@ -5,6 +5,7 @@ namespace Rx\Observable;
 use Exception;
 use InvalidArgumentException;
 use React\Promise\Deferred;
+use React\Promise\Promise;
 use React\Promise\PromisorInterface;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
@@ -12,6 +13,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
 use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
+use Rx\Operator\DeferOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
@@ -26,6 +28,7 @@ use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
 use Rx\SchedulerInterface;
+use Rx\Subject\AsyncSubject;
 use Rx\Subject\Subject;
 use Rx\Disposable\RefCountDisposable;
 use Rx\Disposable\EmptyDisposable;
@@ -482,6 +485,30 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
+     * Converts a Promise to an Observable sequence
+     *
+     * @param \React\Promise\Promise $promise
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function fromPromise(Promise $promise)
+    {
+        return static::defer(
+          function () use ($promise) {
+              $subject = new AsyncSubject();
+
+              $promise->then(
+                function ($value) use ($subject) {
+                    $subject->onNext($value);
+                    $subject->onCompleted();
+                },
+                [$subject, "onError"]
+              );
+
+              return $subject;
+          });
+    }
+
+    /**
      * @param $value
      * @return \Rx\Observable\AnonymousObservable
      */
@@ -615,12 +642,23 @@ abstract class BaseObservable implements ObservableInterface
         return $this->lift(new AsObservableOperator());
     }
 
+
     public function concat(ObservableInterface $observable) {
         return $this->lift(new ConcatOperator($observable));
     }
 
     public function count(\Closure $predicate = null) {
         return $this->lift(new CountOperator($predicate));
+    }
+
+    /**
+     * Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
+     *
+     * @param $factory
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function defer($factory){
+        return (new EmptyObservable())->lift(new DeferOperator($factory));
     }
 
 }
