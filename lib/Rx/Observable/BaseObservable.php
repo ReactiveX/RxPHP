@@ -5,7 +5,7 @@ namespace Rx\Observable;
 use Exception;
 use InvalidArgumentException;
 use React\Promise\Deferred;
-use React\Promise\Promise;
+use React\Promise\PromiseInterface;
 use React\Promise\PromisorInterface;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
@@ -487,10 +487,10 @@ abstract class BaseObservable implements ObservableInterface
     /**
      * Converts a Promise to an Observable sequence
      *
-     * @param \React\Promise\Promise $promise
+     * @param \React\Promise\PromiseInterface $promise
      * @return \Rx\Observable\AnonymousObservable
      */
-    public static function fromPromise(Promise $promise)
+    public static function fromPromise(PromiseInterface $promise)
     {
         return static::defer(
           function () use ($promise) {
