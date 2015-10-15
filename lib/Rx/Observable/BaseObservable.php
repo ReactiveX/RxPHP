@@ -20,6 +20,7 @@ use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\TapOperator;
+use Rx\Operator\ThrowOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
@@ -533,6 +534,16 @@ abstract class BaseObservable implements ObservableInterface
     public static function never()
     {
         return (new EmptyObservable())->lift(new NeverOperator());
+    }
+
+    /**
+     * @param $error
+     * @param SchedulerInterface $scheduler
+     *
+     * @return AnonymousObservable
+     */
+    public static function throwError($error, $scheduler = null) {
+        return (new EmptyObservable())->lift(new ThrowOperator($error, $scheduler));
     }
 
     /**
