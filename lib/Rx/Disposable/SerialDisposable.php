@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: matt
- * Date: 9/15/15
- * Time: 5:22 PM
- */
 
 namespace Rx\Disposable;
 
