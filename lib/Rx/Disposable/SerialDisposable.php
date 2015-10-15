@@ -13,14 +13,16 @@ class SerialDisposable implements DisposableInterface
 
     function dispose()
     {
-        if (!$this->isDisposed) {
-            $this->isDisposed = true;
-            $old = $this->disposable;
-            $this->disposable = null;
+        if ($this->isDisposed) {
+            return;
+        }
 
-            if ($old instanceof DisposableInterface) {
-                $old->dispose();
-            }
+        $this->isDisposed = true;
+        $old = $this->disposable;
+        $this->disposable = null;
+
+        if ($old instanceof DisposableInterface) {
+            $old->dispose();
         }
     }
 
