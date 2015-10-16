@@ -643,6 +643,11 @@ abstract class BaseObservable implements ObservableInterface
     }
 
 
+    /**
+     * Concatenates all the observable sequences.
+     * @param ObservableInterface $observable
+     * @return AnonymousObservable
+     */
     public function concat(ObservableInterface $observable) {
         return $this->lift(new ConcatOperator($observable));
     }
