@@ -7,7 +7,8 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class CountOperator implements OperatorInterface {
+class CountOperator implements OperatorInterface
+{
     private $count = 0;
     private $predicate;
 
@@ -27,17 +28,21 @@ class CountOperator implements OperatorInterface {
         ObservableInterface $observable,
         ObserverInterface $observer,
         SchedulerInterface $scheduler = null
-    ) {
+    )
+    {
         return $observable->subscribe(new CallbackObserver(
-            function ($x) {
+            function ($x) use ($observer) {
                 if ($this->predicate === null) {
                     $this->count++;
                     return;
                 }
-
-                $predicate = $this->predicate;
-                if (call_user_func($predicate, $x)) {
-                    $this->count++;
+                try {
+                    $predicate = $this->predicate;
+                    if (call_user_func($predicate, $x)) {
+                        $this->count++;
+                    }
+                } catch (\Exception $e) {
+                    $observer->onError($e);
                 }
             },
             [$observer, 'onError'],
@@ -45,6 +50,6 @@ class CountOperator implements OperatorInterface {
                 $observer->onNext($this->count);
                 $observer->onCompleted();
             }
-        ));
+        ), $scheduler);
     }
 }
