@@ -21,7 +21,7 @@ class SerialDisposable implements DisposableInterface
         $old = $this->disposable;
         $this->disposable = null;
 
-        if ($old instanceof DisposableInterface) {
+        if ($old) {
             $old->dispose();
         }
     }
@@ -37,18 +37,18 @@ class SerialDisposable implements DisposableInterface
     /**
      * @param DisposableInterface $disposable
      */
-    public function setDisposable($disposable)
+    public function setDisposable(DisposableInterface $disposable)
     {
         $shouldDispose = $this->isDisposed;
         if (!$shouldDispose) {
             $old = $this->disposable;
             $this->disposable = $disposable;
-            if ($old instanceof DisposableInterface) {
+            if ($old) {
                 $old->dispose();
             }
         }
 
-        if ($shouldDispose && $disposable instanceof DisposableInterface) {
+        if ($shouldDispose) {
             $disposable->dispose();
         }
     }
