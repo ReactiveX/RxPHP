@@ -324,6 +324,10 @@ abstract class BaseObservable implements ObservableInterface
     {
         $currentObservable = $this;
 
+        if ( ! is_callable($keySelector)) {
+            throw new InvalidArgumentException('Key selector should be a callable.');
+        }
+
         if (null === $elementSelector) {
             $elementSelector = function($elem) { return $elem; };
         } else if ( ! is_callable($elementSelector)) {
