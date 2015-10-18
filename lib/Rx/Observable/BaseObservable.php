@@ -19,7 +19,6 @@ use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\TapOperator;
-use Rx\Operator\ThrowOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
