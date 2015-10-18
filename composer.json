@@ -22,5 +22,10 @@
     },
     "autoload": {
         "psr-0": { "Rx\\": "lib/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4-dev"
+        }
     }
 }
