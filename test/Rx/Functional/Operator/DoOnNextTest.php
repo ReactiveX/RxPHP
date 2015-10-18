@@ -5,7 +5,7 @@ namespace Rx\Functional\Operator;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observer\CallbackObserver;
 
-class DoOnNextOperatorTest extends FunctionalTestCase
+class DoOnNextTest extends FunctionalTestCase
 {
     /**
      * @test
