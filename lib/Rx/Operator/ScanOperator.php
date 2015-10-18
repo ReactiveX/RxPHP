@@ -18,17 +18,17 @@ class ScanOperator implements OperatorInterface
 
     /**
      * ScanOperator constructor.
-     * @param \Closure $accumulator
+     * @param callable $accumulator
      * @param $seed
      */
-    public function __construct(\Closure $accumulator, $seed = null)
+    public function __construct($accumulator, $seed = null)
     {
+        if (!is_callable($accumulator)) {
+            throw new \InvalidArgumentException('Accumulator should be a callable.');
+        }
+
         $this->accumulator = $accumulator;
         $this->seed = $seed;
-        $this->hasValue = false;
-        $this->hasAccumulation = false;
-        $this->accumulation = $seed;
-        $this->hasSeed = $seed !== null;
     }
 
     /**
@@ -36,26 +36,31 @@ class ScanOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
+        $hasValue        = false;
+        $hasAccumulation = false;
+        $accumulation    = $this->seed;
+        $hasSeed         = $this->seed !== null;
+
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer) {
-                $this->hasValue = true;
-                if ($this->hasAccumulation) {
-                    $this->accumulation = call_user_func($this->tryCatch($this->accumulator), $this->accumulation, $x);
+            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue) {
+                $hasValue = true;
+                if ($hasAccumulation) {
+                    $accumulation = call_user_func($this->tryCatch($this->accumulator), $accumulation, $x);
                 } else {
-                    $this->accumulation = $this->hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
-                    $this->hasAccumulation = true;
+                    $accumulation = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
+                    $hasAccumulation = true;
                 }
-                if ($this->accumulation instanceof \Exception) {
-                    $observer->onError($this->accumulation);
+                if ($accumulation instanceof \Exception) {
+                    $observer->onError($accumulation);
                     return;
                 }
-                $observer->onNext($this->accumulation);
+                $observer->onNext($accumulation);
             },
             function ($e) use ($observer) {
                 $observer->onError($e);
             },
-            function () use ($observer) {
-                if (!$this->hasValue && $this->hasSeed) {
+            function () use ($observer, &$hasValue, &$hasSeed) {
+                if (!$hasValue && $hasSeed) {
                     $observer->onNext($this->seed);
                 }
                 $observer->onCompleted();
