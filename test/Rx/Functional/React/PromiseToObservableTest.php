@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rx\Functional\Operator;
+namespace Rx\Functional\React;
 
 use Exception;
 use React\Promise\Deferred;
@@ -11,9 +11,10 @@ use Rx\Observable\AnonymousObservable;
 use Rx\Observable\BaseObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observer\CallbackObserver;
+use Rx\React\Promise;
 use Rx\Subject\Subject;
 
-class FromPromiseTest extends FunctionalTestCase
+class PromiseToObservableTest extends FunctionalTestCase
 {
     /**
      * @test
@@ -26,7 +27,7 @@ class FromPromiseTest extends FunctionalTestCase
 
         $d->resolve(42);
 
-        $source = BaseObservable::fromPromise($d->promise());
+        $source = Promise::toObservable($d->promise());
 
         $source->subscribe(new CallbackObserver(
           function ($x) {
@@ -52,7 +53,7 @@ class FromPromiseTest extends FunctionalTestCase
 
         $d->reject(new Exception('error'));
 
-        $source = BaseObservable::fromPromise($d->promise());
+        $source = Promise::toObservable($d->promise());
 
         $source->subscribe(new CallbackObserver(
           function ($x) {

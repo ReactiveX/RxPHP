@@ -3,8 +3,11 @@
 namespace Rx\React;
 
 use Rx\ObservableInterface;
+use Rx\Observable\BaseObservable;
 use Rx\Observer\CallbackObserver;
+use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
+use React\Promise\PromiseInterface;
 
 final class Promise
 {
@@ -32,5 +35,29 @@ final class Promise
         ));
 
         return $d->promise();
+    }
+
+    /**
+     * Converts a Promise to an Observable sequence
+     *
+     * @param \React\Promise\PromiseInterface $promise
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function toObservable(PromiseInterface $promise)
+    {
+        return BaseObservable::defer(
+          function () use ($promise) {
+              $subject = new AsyncSubject();
+
+              $promise->then(
+                function ($value) use ($subject) {
+                    $subject->onNext($value);
+                    $subject->onCompleted();
+                },
+                [$subject, "onError"]
+              );
+
+              return $subject;
+          });
     }
 }

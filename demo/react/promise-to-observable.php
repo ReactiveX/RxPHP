@@ -7,7 +7,7 @@ require_once __DIR__.'/../bootstrap.php';
 $q = new \React\Promise\Deferred();
 $q->resolve(42);
 
-$source = \Rx\Observable\BaseObservable::fromPromise($q->promise());
+$source = \Rx\React\Promise::toObservable($q->promise());
 
 $subscription = $source->subscribe($stdoutObserver);
 
@@ -20,7 +20,7 @@ $subscription = $source->subscribe($stdoutObserver);
 $q = new \React\Promise\Deferred();
 $q->reject(new Exception('because'));
 
-$source2 = \Rx\Observable\BaseObservable::fromPromise($q->promise());
+$source2 = \Rx\React\Promise::toObservable($q->promise());
 
 $subscription = $source2->subscribe($createStdoutObserver());
 

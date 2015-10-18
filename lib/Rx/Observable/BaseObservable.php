@@ -460,30 +460,6 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Converts a Promise to an Observable sequence
-     *
-     * @param \React\Promise\PromiseInterface $promise
-     * @return \Rx\Observable\AnonymousObservable
-     */
-    public static function fromPromise(PromiseInterface $promise)
-    {
-        return static::defer(
-          function () use ($promise) {
-              $subject = new AsyncSubject();
-
-              $promise->then(
-                function ($value) use ($subject) {
-                    $subject->onNext($value);
-                    $subject->onCompleted();
-                },
-                [$subject, "onError"]
-              );
-
-              return $subject;
-          });
-    }
-
-    /**
      * @param $value
      * @return \Rx\Observable\AnonymousObservable
      */
