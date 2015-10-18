@@ -533,6 +533,13 @@ abstract class BaseObservable implements ObservableInterface
         return $this->lift(new DoOnEachOperator($observer));
     }
 
+    public function doOnNext($onNext)
+    {
+        return $this->doOnEach(new CallbackObserver(
+            function($v) use ($onNext) { $onNext($v); }
+        ));
+    }
+
     /**
      *  Applies an accumulator function over an observable sequence and returns each intermediate result. The optional seed value is used as the initial accumulator value.
      *  For aggregation behavior with no intermediate results, see Observable.aggregate.
