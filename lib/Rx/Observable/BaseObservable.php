@@ -508,7 +508,7 @@ abstract class BaseObservable implements ObservableInterface
      */
     public static function never()
     {
-        return (new EmptyObservable())->lift(new NeverOperator());
+        return new NeverObservable();
     }
 
     /**
