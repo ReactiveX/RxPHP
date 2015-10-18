@@ -517,8 +517,8 @@ abstract class BaseObservable implements ObservableInterface
      *
      * @return AnonymousObservable
      */
-    public static function throwError($error, $scheduler = null) {
-        return (new EmptyObservable())->lift(new ThrowOperator($error, $scheduler));
+    public static function throwError($error) {
+        return new ErrorObservable($error);
     }
 
     /**
