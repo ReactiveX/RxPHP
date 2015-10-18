@@ -12,6 +12,28 @@ use React\Promise\PromiseInterface;
 final class Promise
 {
     /**
+     * @param mixed $value
+     * @return \React\Promise\Promise A promise resolved to $value
+     */
+    public static function resolved($value)
+    {
+        $d = new Deferred();
+        $d->resolve($value);
+        return $d->promise();
+    }
+
+    /**
+     * @param mixed $exception
+     * @return \React\Promise\Promise A promise rejected with $exception
+     */
+    public static function rejected($exception)
+    {
+        $d = new Deferred();
+        $d->reject($exception);
+        return $d->promise();
+    }
+
+    /**
      * Converts an existing observable sequence to React Promise
      *
      * @param PromisorInterface|null $deferred

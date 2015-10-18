@@ -3,11 +3,8 @@
 require_once __DIR__.'/../bootstrap.php';
 
 
-// Create a promise which resolves 42
-$q = new \React\Promise\Deferred();
-$q->resolve(42);
-
-$source = \Rx\React\Promise::toObservable($q->promise());
+$p = \Rx\React\Promise::resolved(42);
+$source = \Rx\React\Promise::toObservable($p);
 
 $subscription = $source->subscribe($stdoutObserver);
 
@@ -17,10 +14,9 @@ $subscription = $source->subscribe($stdoutObserver);
 
 
 // Create a promise which rejects with an error
-$q = new \React\Promise\Deferred();
-$q->reject(new Exception('because'));
+$p = \Rx\React\Promise::rejected(new Exception('because'));
 
-$source2 = \Rx\React\Promise::toObservable($q->promise());
+$source2 = \Rx\React\Promise::toObservable($p);
 
 $subscription = $source2->subscribe($createStdoutObserver());
 

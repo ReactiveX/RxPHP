@@ -22,12 +22,9 @@ class PromiseToObservableTest extends FunctionalTestCase
      */
     public function from_promise_success()
     {
+        $p = Promise::resolved(42);
 
-        $d = new Deferred();
-
-        $d->resolve(42);
-
-        $source = Promise::toObservable($d->promise());
+        $source = Promise::toObservable($p);
 
         $source->subscribe(new CallbackObserver(
           function ($x) {
@@ -48,12 +45,9 @@ class PromiseToObservableTest extends FunctionalTestCase
      */
     public function from_promise_failure()
     {
+        $p = Promise::rejected(new Exception('error'));
 
-        $d = new Deferred();
-
-        $d->reject(new Exception('error'));
-
-        $source = Promise::toObservable($d->promise());
+        $source = Promise::toObservable($p);
 
         $source->subscribe(new CallbackObserver(
           function ($x) {
