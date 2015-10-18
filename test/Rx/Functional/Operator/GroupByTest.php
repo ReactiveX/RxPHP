@@ -191,35 +191,18 @@ class GroupByTest extends FunctionalTestCase
      */
     public function it_throws_if_keyselector_is_not_callable()
     {
-        $xs             = $this->createHotObservableWithData(true);
+        $xs = $this->createHotObservableWithData(true);
 
-        $this->scheduler->startWithCreate(function() use ($xs) {
-            return $xs->groupByUntil("non-callable",
-                null,
-                function() { throw new Exception(''); }
-            )->select(function(GroupedObservable $observable) {
-                return $observable->getKey();
-            });
+        $xs
+          ->groupByUntil("non-callable", null, function () {
+              throw new Exception('');
+          })
+          ->select(function (GroupedObservable $observable) {
+              return $observable->getKey();
         });
+
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function it_throws_if_element_selector_is_not_callable()
-    {
-        $xs             = $this->createHotObservableWithData(true);
-
-        $this->scheduler->startWithCreate(function() use ($xs) {
-            return $xs->groupByUntil(function($elem) { return $elem; },
-                "non-callable",
-                function () {}
-            )->select(function(GroupedObservable $observable) {
-                return $observable->getKey();
-            });
-        });
-    }
 
     /**
      * @test
@@ -227,16 +210,16 @@ class GroupByTest extends FunctionalTestCase
      */
     public function it_throws_if_durationselector_is_not_callable()
     {
-        $xs             = $this->createHotObservableWithData(true);
+        $xs = $this->createHotObservableWithData(true);
 
-        $results = $this->scheduler->startWithCreate(function() use ($xs) {
-            return $xs->groupByUntil(function($elem) { return $elem; },
-                null,
-                "non-callable"
-            )->select(function(GroupedObservable $observable) {
-                return $observable->getKey();
-            });
-        });
+        $xs
+          ->groupByUntil(function ($elem) {
+              return $elem;
+          }, null, "non-callable")
+          ->select(function (GroupedObservable $observable) {
+              return $observable->getKey();
+          });
+
     }
 
     /**
@@ -245,17 +228,16 @@ class GroupByTest extends FunctionalTestCase
      */
     public function it_throws_if_keyserializer_is_not_callable()
     {
-        $xs             = $this->createHotObservableWithData(true);
+        $xs = $this->createHotObservableWithData(true);
 
-        $results = $this->scheduler->startWithCreate(function() use ($xs) {
-            return $xs->groupByUntil(function($elem) { return $elem; },
-                null,
-                null,
-                "non-callable"
-            )->select(function(GroupedObservable $observable) {
-                return $observable->getKey();
-            });
+        $xs
+          ->groupByUntil(function ($elem) {
+              return $elem;
+          }, null, null, "non-callable")
+          ->select(function (GroupedObservable $observable) {
+            return $observable->getKey();
         });
+
     }
 
     /**
@@ -289,7 +271,7 @@ class GroupByTest extends FunctionalTestCase
      */
     public function it_calls_on_completed_on_inner_subscription_if_subscription_expires_otherwise_it_passes()
     {
-        $xs             = $this->createHotObservableWithData();
+        $xs = $this->createHotObservableWithData();
 
         $observable = $xs->groupByUntil(function($elem) {
                 return trim(strtolower($elem));
