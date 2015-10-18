@@ -4,9 +4,6 @@ namespace Rx\Observable;
 
 use Exception;
 use InvalidArgumentException;
-use React\Promise\Deferred;
-use React\Promise\PromiseInterface;
-use React\Promise\PromisorInterface;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
