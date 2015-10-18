@@ -460,35 +460,6 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Converts an existing observable sequence to React Promise
-     *
-     * @param PromisorInterface|null $deferred
-     * @return \React\Promise\Promise
-     */
-    public function toPromise($deferred = null)
-    {
-
-        $d     = $deferred ?: new Deferred();
-        $value = null;
-
-        $this->subscribe(new CallbackObserver(
-          function ($v) use (&$value) {
-              $value = $v;
-          },
-          function ($error) use ($d) {
-              $d->reject($error);
-          },
-          function () use ($d, &$value) {
-              $d->resolve($value);
-          }
-
-        ));
-
-        return $d->promise();
-
-    }
-
-    /**
      * Converts a Promise to an Observable sequence
      *
      * @param \React\Promise\PromiseInterface $promise

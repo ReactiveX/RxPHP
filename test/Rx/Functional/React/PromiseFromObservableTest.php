@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Rx\Functional\Operator;
+namespace Rx\Functional\React;
 
 use Exception;
 use Rx\Disposable\CallbackDisposable;
@@ -9,9 +9,10 @@ use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\BaseObservable;
 use Rx\Observable\EmptyObservable;
+use Rx\React\Promise;
 use Rx\Subject\Subject;
 
-class ToPromiseTest extends FunctionalTestCase
+class PromiseFromObservableTest extends FunctionalTestCase
 {
     /**
      * @test
@@ -22,7 +23,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $source = BaseObservable::just(42);
 
-        $promise = $source->toPromise();
+        $promise = Promise::fromObservable($source);
 
         $promise->then(
           function ($value) {
@@ -44,7 +45,7 @@ class ToPromiseTest extends FunctionalTestCase
         $source = (new Subject());
         $source->onError(new Exception("some error"));
 
-        $promise = $source->toPromise();
+        $promise = Promise::fromObservable($source);
 
         $promise->then(
           function ($value) {
