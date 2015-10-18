@@ -14,10 +14,14 @@ class CountOperator implements OperatorInterface
 
     /**
      * Count constructor.
-     * @param $predicate
+     * @param callable $predicate
      */
     public function __construct($predicate = null)
     {
+        if ($predicate && !is_callable($predicate)) {
+            throw new \InvalidArgumentException('Predicate should be a callable.');
+        }
+
         $this->predicate = $predicate;
     }
 
@@ -25,31 +29,31 @@ class CountOperator implements OperatorInterface
      * @inheritDoc
      */
     public function __invoke(
-        ObservableInterface $observable,
-        ObserverInterface $observer,
-        SchedulerInterface $scheduler = null
-    )
-    {
+      ObservableInterface $observable,
+      ObserverInterface $observer,
+      SchedulerInterface $scheduler = null
+    ) {
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer) {
-                if ($this->predicate === null) {
-                    $this->count++;
-                    return;
-                }
-                try {
-                    $predicate = $this->predicate;
-                    if (call_user_func($predicate, $x)) {
-                        $this->count++;
-                    }
-                } catch (\Exception $e) {
-                    $observer->onError($e);
-                }
-            },
-            [$observer, 'onError'],
-            function () use ($observer) {
-                $observer->onNext($this->count);
-                $observer->onCompleted();
-            }
+          function ($x) use ($observer) {
+              if ($this->predicate === null) {
+                  $this->count++;
+
+                  return;
+              }
+              try {
+                  $predicate = $this->predicate;
+                  if (call_user_func($predicate, $x)) {
+                      $this->count++;
+                  }
+              } catch (\Exception $e) {
+                  $observer->onError($e);
+              }
+          },
+          [$observer, 'onError'],
+          function () use ($observer) {
+              $observer->onNext($this->count);
+              $observer->onCompleted();
+          }
         ), $scheduler);
     }
 }
