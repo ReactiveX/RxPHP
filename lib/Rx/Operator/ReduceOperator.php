@@ -18,6 +18,10 @@ class ReduceOperator implements OperatorInterface
     protected $seed;
     protected $hasSeed;
 
+    /**
+     * @param callable $accumulator
+     * @param $seed
+     */
     function __construct($accumulator, $seed)
     {
         if (!is_callable($accumulator)) {
@@ -28,7 +32,6 @@ class ReduceOperator implements OperatorInterface
         $this->seed        = $seed;
         $this->hasSeed     = $seed ? true : false;
     }
-
 
     /**
      * @param \Rx\ObservableInterface $observable
@@ -45,7 +48,7 @@ class ReduceOperator implements OperatorInterface
         return $observable->subscribe(new CallbackObserver(
             function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasValue) {
 
-                !$hasValue && ($hasValue = true);
+                $hasValue = true;
 
                 try {
                     if ($hasAccumulation) {
@@ -62,9 +65,16 @@ class ReduceOperator implements OperatorInterface
                 $observer->onError($e);
             },
             function () use ($observer, &$hasAccumulation, &$accumulation, &$hasValue) {
-                $hasValue && $observer->onNext($accumulation);
-                !$hasValue && $this->hasSeed && $observer->onNext($this->seed);
-                !$hasValue && !$this->hasSeed && $observer->onError(new \Exception("Missing Seed and or Value"));
+                if ($hasValue) {
+                    $observer->onNext($accumulation);
+                } else {
+                    $this->hasSeed && $observer->onNext($this->seed);
+                }
+
+                if (!$hasValue && !$this->hasSeed) {
+                    $observer->onError(new \Exception("Missing Seed and or Value"));
+                }
+
                 $observer->onCompleted();
             })
         );
