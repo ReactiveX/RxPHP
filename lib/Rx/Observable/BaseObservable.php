@@ -461,7 +461,7 @@ abstract class BaseObservable implements ObservableInterface
      */
     public static function just($value)
     {
-        return static::fromArray([$value]);
+        return new ReturnObservable($value);
     }
 
     /**
