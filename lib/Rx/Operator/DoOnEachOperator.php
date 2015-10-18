@@ -1,15 +1,13 @@
 <?php
 
-
 namespace Rx\Operator;
-
 
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class TapOperator implements OperatorInterface
+class DoOnEachOperator implements OperatorInterface
 {
 
     protected $observerOrOnNext;

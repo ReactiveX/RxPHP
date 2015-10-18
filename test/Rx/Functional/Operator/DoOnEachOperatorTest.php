@@ -2,17 +2,15 @@
 
 namespace Rx\Functional\Operator;
 
-
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observer\CallbackObserver;
 
-
-class TapTest extends FunctionalTestCase
+class DoOnEachOperatorTest extends FunctionalTestCase
 {
     /**
      * @test
      */
-    public function tap_should_see_all_values()
+    public function doOnEach_should_see_all_values()
     {
 
         $xs = $this->createHotObservable([
@@ -28,7 +26,7 @@ class TapTest extends FunctionalTestCase
         $sum = 2 + 3 + 4 + 5;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum) {
-            return $xs->tap(function ($x) use (&$i, &$sum) {
+            return $xs->doOnEach(function ($x) use (&$i, &$sum) {
                 $i++;
 
                 return $sum -= $x;
@@ -42,7 +40,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_plain_action()
+    public function doOnEach_plain_action()
     {
 
         $xs = $this->createHotObservable([
@@ -57,7 +55,7 @@ class TapTest extends FunctionalTestCase
         $i = 0;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i) {
-            return $xs->tap(function ($x) use (&$i) {
+            return $xs->doOnEach(function ($x) use (&$i) {
                 return $i++;
             });
         });
@@ -68,7 +66,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_completed()
+    public function doOnEach_next_completed()
     {
 
         $xs = $this->createHotObservable([
@@ -85,7 +83,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i, &$sum) {
                   $i++;
 
@@ -107,7 +105,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_completed_never()
+    public function doOnEach_next_completed_never()
     {
         $xs = $this->createHotObservable([
           onNext(150, 1)
@@ -117,7 +115,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i) {
                   $i++;
 
@@ -137,7 +135,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error()
+    public function doOnEach_next_error()
     {
 
         $ex = new \Exception();
@@ -156,7 +154,7 @@ class TapTest extends FunctionalTestCase
         $sawError = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$sawError, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i, &$sum) {
                   $i++;
 
@@ -178,7 +176,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_not()
+    public function doOnEach_next_error_not()
     {
 
         $ex = new \Exception();
@@ -197,7 +195,7 @@ class TapTest extends FunctionalTestCase
         $sawError = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$sawError, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i, &$sum) {
                   $i++;
 
@@ -219,7 +217,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_completed()
+    public function doOnEach_next_error_completed()
     {
 
         $xs = $this->createHotObservable([
@@ -237,7 +235,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i, &$sum) {
                   $i++;
                   $sum -= $x;
@@ -261,7 +259,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_completed_error()
+    public function doOnEach_next_error_completed_error()
     {
         $ex = new \Exception();
 
@@ -280,7 +278,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i, &$sum) {
                   $i++;
                   $sum -= $x;
@@ -305,7 +303,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_completed_never()
+    public function doOnEach_next_error_completed_never()
     {
 
         $xs = $this->createHotObservable([
@@ -317,7 +315,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed, &$sawError) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function ($x) use (&$i, &$sum) {
                   $i++;
               },
@@ -339,7 +337,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_observer_some_data_with_error()
+    public function doOnEach_observer_some_data_with_error()
     {
         $ex = new \Exception();
 
@@ -358,7 +356,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError, $ex) {
-            return $xs->tap(new CallbackObserver(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
                   $sum -= $x;
@@ -382,7 +380,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_observer_some_data_without_error()
+    public function doOnEach_observer_some_data_without_error()
     {
 
 
@@ -401,7 +399,7 @@ class TapTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
-            return $xs->tap(new CallbackObserver(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
                   $sum -= $x;
@@ -425,7 +423,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_next_throws()
+    public function doOnEach_next_next_throws()
     {
         $ex = new \Exception();
 
@@ -436,7 +434,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(function () use ($ex) {
+            return $xs->doOnEach(function () use ($ex) {
                 throw $ex;
             });
         });
@@ -448,7 +446,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_completed_next_throws()
+    public function doOnEach_next_completed_next_throws()
     {
         $ex = new \Exception();
 
@@ -459,7 +457,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function () use ($ex) {
                   throw $ex;
               },
@@ -475,7 +473,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_completed_completed_throws()
+    public function doOnEach_next_completed_completed_throws()
     {
         $ex = new \Exception();
 
@@ -486,7 +484,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function () {
               },
               null,
@@ -502,7 +500,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_next_throws()
+    public function doOnEach_next_error_next_throws()
     {
         $ex = new \Exception();
 
@@ -513,7 +511,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function () use ($ex) {
                   throw $ex;
               },
@@ -529,7 +527,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_error_throws()
+    public function doOnEach_next_error_error_throws()
     {
         $ex1 = new \Exception("error1");
         $ex2 = new \Exception("error2");
@@ -540,7 +538,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function () {
               },
               function () use ($ex2) {
@@ -557,7 +555,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_completed_next_throws()
+    public function doOnEach_next_error_completed_next_throws()
     {
         $ex = new \Exception();
 
@@ -568,7 +566,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function () use ($ex) {
                   throw $ex;
               },
@@ -586,7 +584,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_completed_error_throws()
+    public function doOnEach_next_error_completed_error_throws()
     {
         $ex1 = new \Exception("error1");
         $ex2 = new \Exception("error2");
@@ -597,7 +595,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
-            return $xs->tap(
+            return $xs->doOnEach(
               function () {
               },
               function () use ($ex2) {
@@ -615,7 +613,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_next_error_completed_completed_throws()
+    public function doOnEach_next_error_completed_completed_throws()
     {
         $ex = new \Exception();
 
@@ -626,7 +624,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(
+            return $xs->doOnEach(
 
               function () {
               },
@@ -645,7 +643,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_observer_next_throws()
+    public function doOnEach_observer_next_throws()
     {
         $ex = new \Exception();
 
@@ -656,7 +654,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(new CallbackObserver(
+            return $xs->doOnEach(new CallbackObserver(
 
               function () use ($ex) {
                   throw $ex;
@@ -675,7 +673,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_observer_error_throws()
+    public function doOnEach_observer_error_throws()
     {
         $ex1 = new \Exception("error1");
         $ex2 = new \Exception("error2");
@@ -686,7 +684,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
-            return $xs->tap(new CallbackObserver(
+            return $xs->doOnEach(new CallbackObserver(
               function () {
               },
               function () use ($ex2) {
@@ -704,7 +702,7 @@ class TapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function tap_observer_completed_throws()
+    public function doOnEach_observer_completed_throws()
     {
         $ex = new \Exception();
 
@@ -715,7 +713,7 @@ class TapTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->tap(new CallbackObserver(
+            return $xs->doOnEach(new CallbackObserver(
               function () { //noop
               },
               function () { //noop

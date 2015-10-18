@@ -12,13 +12,13 @@ use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
 use Rx\Operator\DeferOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
+use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipUntilOperator;
-use Rx\Operator\TapOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
@@ -529,9 +529,9 @@ abstract class BaseObservable implements ObservableInterface
      * @param null $onCompleted
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function tap($observerOrOnNext, $onError = null, $onCompleted = null)
+    public function doOnEach($observerOrOnNext, $onError = null, $onCompleted = null)
     {
-        return $this->lift(new TapOperator($observerOrOnNext, $onError, $onCompleted));
+        return $this->lift(new DoOnEachOperator($observerOrOnNext, $onError, $onCompleted));
     }
 
     /**
