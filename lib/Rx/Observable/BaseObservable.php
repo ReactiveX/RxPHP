@@ -524,14 +524,13 @@ abstract class BaseObservable implements ObservableInterface
      *  Invokes an action for each element in the observable sequence and invokes an action upon graceful or exceptional termination of the observable sequence.
      *  This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
      *
-     * @param $observerOrOnNext
-     * @param null $onError
-     * @param null $onCompleted
+     * @param ObserverInterface $observer
+     *
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function doOnEach($observerOrOnNext, $onError = null, $onCompleted = null)
+    public function doOnEach(ObserverInterface $observer)
     {
-        return $this->lift(new DoOnEachOperator($observerOrOnNext, $onError, $onCompleted));
+        return $this->lift(new DoOnEachOperator($observer));
     }
 
     /**

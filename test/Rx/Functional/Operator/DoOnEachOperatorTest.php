@@ -26,11 +26,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $sum = 2 + 3 + 4 + 5;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum) {
-            return $xs->doOnEach(function ($x) use (&$i, &$sum) {
+            return $xs->doOnEach(new CallbackObserver(function ($x) use (&$i, &$sum) {
                 $i++;
 
                 return $sum -= $x;
-            });
+            }));
         });
 
         $this->assertEquals(4, $i);
@@ -55,9 +55,9 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $i = 0;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i) {
-            return $xs->doOnEach(function ($x) use (&$i) {
+            return $xs->doOnEach(new CallbackObserver(function ($x) use (&$i) {
                 return $i++;
-            });
+            }));
         });
 
         $this->assertEquals(4, $i);
@@ -83,7 +83,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
 
@@ -93,7 +93,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function () use (&$completed) {
                   $completed = true;
               }
-            );
+            ));
         });
 
 
@@ -115,7 +115,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i) {
                   $i++;
 
@@ -124,7 +124,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function () use (&$completed) {
                   $completed = true;
               }
-            );
+            ));
         });
 
 
@@ -154,7 +154,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $sawError = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$sawError, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
 
@@ -164,7 +164,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function ($e) use (&$sawError, $ex) {
                   $sawError = $e === $ex;
               }
-            );
+            ));
         });
 
 
@@ -195,7 +195,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $sawError = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$sawError, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
 
@@ -205,7 +205,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function ($e) use (&$sawError, $ex) {
                   $sawError = $e === $ex;
               }
-            );
+            ));
         });
 
 
@@ -235,7 +235,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
                   $sum -= $x;
@@ -246,7 +246,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function () use (&$completed) {
                   $completed = true;
               }
-            );
+            ));
         });
 
 
@@ -278,7 +278,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
                   $sum -= $x;
@@ -289,7 +289,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function () use (&$completed) {
                   $completed = true;
               }
-            );
+            ));
         });
 
 
@@ -315,7 +315,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $completed = false;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed, &$sawError) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function ($x) use (&$i, &$sum) {
                   $i++;
               },
@@ -325,99 +325,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function () use (&$completed) {
                   $completed = true;
               }
-            );
+            ));
         });
 
 
         $this->assertEquals(0, $i);
         $this->assertFalse($sawError);
         $this->assertFalse($completed);
-    }
-
-    /**
-     * @test
-     */
-    public function doOnEach_observer_some_data_with_error()
-    {
-        $ex = new \Exception();
-
-        $xs = $this->createHotObservable([
-          onNext(150, 1),
-          onNext(210, 2),
-          onNext(220, 3),
-          onNext(230, 4),
-          onNext(240, 5),
-          onError(250, $ex)
-        ]);
-
-        $i         = 0;
-        $sum       = 2 + 3 + 4 + 5;
-        $sawError  = false;
-        $completed = false;
-
-        $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError, $ex) {
-            return $xs->doOnEach(new CallbackObserver(
-              function ($x) use (&$i, &$sum) {
-                  $i++;
-                  $sum -= $x;
-              },
-              function ($e) use (&$sawError, $ex) {
-                  $sawError = $e === $ex;
-              },
-              function () use (&$completed) {
-                  $completed = true;
-              }
-            ));
-        });
-
-
-        $this->assertEquals(4, $i);
-        $this->assertEquals(0, $sum);
-        $this->assertTrue($sawError);
-        $this->assertFalse($completed);
-    }
-
-    /**
-     * @test
-     */
-    public function doOnEach_observer_some_data_without_error()
-    {
-
-
-        $xs = $this->createHotObservable([
-          onNext(150, 1),
-          onNext(210, 2),
-          onNext(220, 3),
-          onNext(230, 4),
-          onNext(240, 5),
-          onCompleted(250)
-        ]);
-
-        $i         = 0;
-        $sum       = 2 + 3 + 4 + 5;
-        $sawError  = false;
-        $completed = false;
-
-        $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
-            return $xs->doOnEach(new CallbackObserver(
-              function ($x) use (&$i, &$sum) {
-                  $i++;
-                  $sum -= $x;
-              },
-              function () use (&$sawError) {
-                  $sawError = true;
-              },
-              function () use (&$completed) {
-                  $completed = true;
-              }
-            ));
-        });
-
-
-        $this->assertEquals(4, $i);
-        $this->assertEquals(0, $sum);
-        $this->assertFalse($sawError);
-        $this->assertTrue($completed);
     }
 
     /**
@@ -434,9 +348,9 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->doOnEach(function () use ($ex) {
+            return $xs->doOnEach(new CallbackObserver(function () use ($ex) {
                 throw $ex;
-            });
+            }));
         });
 
         $this->assertMessages([onError(210, $ex)], $results->getMessages());
@@ -457,13 +371,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function () use ($ex) {
                   throw $ex;
               },
               null,
               function () {
-              });
+              }));
         });
 
         $this->assertMessages([onError(210, $ex)], $results->getMessages());
@@ -484,13 +398,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function () {
               },
               null,
               function () use ($ex) {
                   throw $ex;
-              });
+              }));
         });
 
         $this->assertMessages([onNext(210, 2), onError(250, $ex)], $results->getMessages());
@@ -511,13 +425,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function () use ($ex) {
                   throw $ex;
               },
               function () {
               }
-            );
+            ));
         });
 
         $this->assertMessages([onError(210, $ex)], $results->getMessages());
@@ -538,13 +452,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function () {
               },
               function () use ($ex2) {
                   throw $ex2;
               }
-            );
+            ));
         });
 
         $this->assertMessages([onError(210, $ex2)], $results->getMessages());
@@ -566,7 +480,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function () use ($ex) {
                   throw $ex;
               },
@@ -574,7 +488,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               },
               function () {
               }
-            );
+            ));
         });
 
         $this->assertMessages([onError(210, $ex)], $results->getMessages());
@@ -595,7 +509,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
               function () {
               },
               function () use ($ex2) {
@@ -603,7 +517,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               },
               function () {
               }
-            );
+            ));
         });
 
         $this->assertMessages([onError(210, $ex2)], $results->getMessages());
@@ -624,7 +538,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->doOnEach(
+            return $xs->doOnEach(new CallbackObserver(
 
               function () {
               },
@@ -633,7 +547,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
               function () use ($ex) {
                   throw $ex;
               }
-            );
+            ));
         });
 
         $this->assertMessages([onNext(210, 2), onError(250, $ex)], $results->getMessages());

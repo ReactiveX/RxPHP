@@ -3,22 +3,17 @@
 namespace Rx\Operator;
 
 use Rx\ObservableInterface;
-use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
+use Rx\Observer\CallbackObserver;
 use Rx\SchedulerInterface;
 
 class DoOnEachOperator implements OperatorInterface
 {
+    private $onEachObserver;
 
-    protected $observerOrOnNext;
-    protected $onError;
-    protected $onCompleted;
-
-    function __construct($observerOrOnNext, $onError = null, $onCompleted = null)
+    function __construct(ObserverInterface $observer)
     {
-        $this->observerOrOnNext = $observerOrOnNext;
-        $this->onError          = $onError;
-        $this->onCompleted      = $onCompleted;
+        $this->onEachObserver = $observer;
     }
 
     /**
@@ -29,29 +24,27 @@ class DoOnEachOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        $tapObserver = is_callable($this->observerOrOnNext) ? new CallbackObserver($this->observerOrOnNext, $this->onError, $this->onCompleted) : $this->observerOrOnNext;
-
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer, $tapObserver) {
+            function ($x) use ($observer) {
                 try {
-                    $tapObserver->onNext($x);
+                    $this->onEachObserver->onNext($x);
                 } catch (\Exception $e) {
                     return $observer->onError($e);
                 }
                 $observer->onNext($x);
 
             },
-            function ($err) use ($observer, $tapObserver) {
+            function ($err) use ($observer) {
                 try {
-                    $tapObserver->onError($err);
+                    $this->onEachObserver->onError($err);
                 } catch (\Exception $e) {
                     return $observer->onError($e);
                 }
                 $observer->onError($err);
             },
-            function () use ($observer, $tapObserver) {
+            function () use ($observer) {
                 try {
-                    $tapObserver->onCompleted();
+                    $this->onEachObserver->onCompleted();
                 } catch (\Exception $e) {
                     return $observer->onError($e);
                 }
