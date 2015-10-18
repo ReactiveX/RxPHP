@@ -35,7 +35,7 @@ class DeferOperator implements OperatorInterface
 
             return $result->subscribe($observer);
         } catch (\Exception $e) {
-            return BaseObservable::throwError($e)->subscribe($observer);
+            return BaseObservable::error($e)->subscribe($observer);
         }
     }
 }

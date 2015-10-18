@@ -517,7 +517,7 @@ abstract class BaseObservable implements ObservableInterface
      *
      * @return AnonymousObservable
      */
-    public static function throwError($error) {
+    public static function error($error) {
         return new ErrorObservable($error);
     }
 
