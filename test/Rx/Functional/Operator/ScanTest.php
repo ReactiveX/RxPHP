@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Rx\Functional\Operator;
 
-
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable\BaseObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Testing\TestScheduler;
 
@@ -15,7 +14,7 @@ class ScanTest extends FunctionalTestCase
         $seed = 42;
 
         $results = $this->scheduler->startWithCreate(function () use ($seed) {
-            return (new EmptyObservable())->never()->scan(function ($acc, $x) use ($seed) {
+            return BaseObservable::never()->scan(function ($acc, $x) use ($seed) {
                 return $acc + $x;
             }, $seed);
         });
@@ -140,7 +139,7 @@ class ScanTest extends FunctionalTestCase
     public function testScanNoSeedNever()
     {
         $results = $this->scheduler->startWithCreate(function () {
-            return (new EmptyObservable())->never()->scan(function ($acc, $x) {
+            return BaseObservable::never()->scan(function ($acc, $x) {
                 return $acc + $x;
             });
         });
