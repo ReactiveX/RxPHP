@@ -78,7 +78,10 @@ class EventLoopScheduler implements SchedulerInterface
      */
     public function now()
     {
-        return new \DateTime();
+        if (function_exists('microtime')) {
+            return microtime(true);
+        }
+        return time();
     }
 
 
