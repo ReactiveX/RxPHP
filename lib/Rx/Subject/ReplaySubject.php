@@ -6,7 +6,6 @@ use Exception;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observer\ScheduledObserver;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
 /**
@@ -15,10 +14,19 @@ use Rx\SchedulerInterface;
  */
 class ReplaySubject extends Subject
 {
+    /** @var int */
     private $bufferSize;
+
+    /** @var int */
     private $windowSize;
+
+    /** @var array */
     private $queue = [];
-    private $maxSafeInt = 9007199254740991;
+
+    /** @var int */
+    private $maxSafeInt = PHP_INT_MAX;
+
+    /** @var bool */
     private $hasError = false;
 
     /** @var SchedulerInterface */
@@ -30,7 +38,7 @@ class ReplaySubject extends Subject
      * @param int $windowSize
      * @param SchedulerInterface $scheduler
      */
-    public function __construct($bufferSize = null, $windowSize = null, $scheduler = null)
+    public function __construct($bufferSize = null, $windowSize = null, SchedulerInterface $scheduler = null)
     {
         if ($bufferSize === null || !is_int($bufferSize)) {
             $bufferSize = $this->maxSafeInt;
@@ -46,9 +54,7 @@ class ReplaySubject extends Subject
             $this->windowSize = $windowSize;
         }
 
-        if ($scheduler instanceof SchedulerInterface) {
-            $this->scheduler = $scheduler;
-        }
+        $this->scheduler = $scheduler;
     }
 
     public function subscribe(ObserverInterface $observer, $scheduler = null)
@@ -85,21 +91,27 @@ class ReplaySubject extends Subject
 
     public function onNext($value)
     {
-        $now = 0;
-        if ($this->scheduler instanceof SchedulerInterface) {
-            $now = $this->scheduler->now();
+        $this->assertNotDisposed();
+
+        if ($this->isStopped) {
+            return;
         }
+
+        if (null !== $this->scheduler) {
+            $now = $this->scheduler->now();
+        } else {
+            $now = 0;
+        }
+
         $this->queue[] = ["interval" => $now, "value" => $value];
         $this->trim();
 
-        $ret = parent::onNext($value);
-
         /** @var ScheduledObserver $observer */
         foreach ($this->observers as $observer) {
+            $observer->onNext($value);
             $observer->ensureActive();
         }
 
-        return $ret;
     }
 
     public function onCompleted()
@@ -110,10 +122,10 @@ class ReplaySubject extends Subject
             return;
         }
 
-        $observers       = $this->observers;
         $this->isStopped = true;
 
-        foreach ($observers as $observer) {
+        /** @var ScheduledObserver $observer */
+        foreach ($this->observers as $observer) {
             $observer->onCompleted();
             $observer->ensureActive();
         }
@@ -129,14 +141,14 @@ class ReplaySubject extends Subject
             return;
         }
 
-        $observers       = $this->observers;
         $this->isStopped = true;
         $this->exception = $exception;
         $this->hasError  = true;
 
         $this->trim();
 
-        foreach ($observers as $observer) {
+        /** @var ScheduledObserver $observer */
+        foreach ($this->observers as $observer) {
             $observer->onError($exception);
             $observer->ensureActive();
         }
@@ -161,7 +173,7 @@ class ReplaySubject extends Subject
             array_shift($this->queue);
         }
 
-        if ($this->scheduler instanceof SchedulerInterface) {
+        if (null !== $this->scheduler) {
             $now = $this->scheduler->now();
             while (count($this->queue) > 0 && ($now - $this->queue[0]["interval"]) > $this->windowSize) {
                 array_shift($this->queue);
