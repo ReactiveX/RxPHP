@@ -75,33 +75,35 @@ class ScheduledObserver extends AbstractObserver
         }
 
         $this->disposable->setDisposable($this->scheduler->scheduleRecursive(
-            function ($recurse) {
-                $parent = $this;
-                if (count($parent->queue) > 0) {
-                    $work = array_shift($parent->queue);
-                } else {
-                    $parent->isAcquired = false;
-                    return;
-                }
-                try {
-                    if (!is_callable($work)) throw new Exception("work is not callable");
-                    $res = $work();
-                } catch (Exception $e) {
-                    $res = $e;
-                }
-                if ($res instanceof Exception) {
-                    $parent->queue      = [];
-                    $parent->hasFaulted = true;
-                    throw $res;
-                }
-                $recurse($parent);
-            })
+          function ($recurse) {
+              $parent = $this;
+              if (count($parent->queue) > 0) {
+                  $work = array_shift($parent->queue);
+              } else {
+                  $parent->isAcquired = false;
+
+                  return;
+              }
+              try {
+                  if (!is_callable($work)) {
+                      throw new Exception("work is not callable");
+                  }
+                  $res = $work();
+              } catch (Exception $e) {
+                  $res = $e;
+              }
+              if ($res instanceof Exception) {
+                  $parent->queue      = [];
+                  $parent->hasFaulted = true;
+                  throw $res;
+              }
+              $recurse($parent);
+          })
         );
     }
 
-    public function dispose() {
-        if ($this->disposable instanceof DisposableInterface) {
-            $this->disposable->dispose();
-        }
+    public function dispose()
+    {
+        $this->disposable->dispose();
     }
 }
