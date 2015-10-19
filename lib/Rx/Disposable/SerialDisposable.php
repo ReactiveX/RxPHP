@@ -4,8 +4,13 @@ namespace Rx\Disposable;
 
 use Rx\DisposableInterface;
 
+/**
+ * Class SerialDisposable
+ * @package Rx\Disposable
+ */
 class SerialDisposable implements DisposableInterface
 {
+    /** @var bool */
     private $isDisposed = false;
 
     /** @var DisposableInterface */
@@ -18,7 +23,7 @@ class SerialDisposable implements DisposableInterface
         }
 
         $this->isDisposed = true;
-        $old = $this->disposable;
+        $old              = $this->disposable;
         $this->disposable = null;
 
         if ($old) {
@@ -40,9 +45,12 @@ class SerialDisposable implements DisposableInterface
     public function setDisposable(DisposableInterface $disposable)
     {
         $shouldDispose = $this->isDisposed;
+
         if (!$shouldDispose) {
-            $old = $this->disposable;
+
+            $old              = $this->disposable;
             $this->disposable = $disposable;
+
             if ($old) {
                 $old->dispose();
             }
