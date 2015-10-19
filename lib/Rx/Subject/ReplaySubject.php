@@ -6,6 +6,7 @@ use Exception;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observer\ScheduledObserver;
 use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
 /**
@@ -54,14 +55,17 @@ class ReplaySubject extends Subject
             $this->windowSize = $windowSize;
         }
 
+        if (!$scheduler) {
+            $scheduler = new ImmediateScheduler();
+        }
         $this->scheduler = $scheduler;
     }
 
-    public function subscribe(ObserverInterface $observer, $scheduler = null)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $this->assertNotDisposed();
 
-        if (!($scheduler instanceof SchedulerInterface)) {
+        if (!$scheduler) {
             $scheduler = $this->scheduler;
         }
         $so = new ScheduledObserver($scheduler, $observer);
@@ -97,11 +101,7 @@ class ReplaySubject extends Subject
             return;
         }
 
-        if (null !== $this->scheduler) {
-            $now = $this->scheduler->now();
-        } else {
-            $now = 0;
-        }
+        $now = $this->scheduler->now();
 
         $this->queue[] = ["interval" => $now, "value" => $value];
         $this->trim();
