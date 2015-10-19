@@ -218,4 +218,66 @@ class ReduceTest extends FunctionalTestCase
 
         $this->assertMessages([onNext(260, 10), onCompleted(260)], $results->getMessages());
     }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function throws_if_accumulator_is_not_callable()
+    {
+        $xs = $this->createHotObservable(
+          [
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(230, 3),
+            onCompleted(240)
+          ]);
+
+        $xs->reduce("non-callable");
+
+    }
+
+    /**
+     * @test
+     */
+    public function reduce_accumulator_throws()
+    {
+        $xs = $this->createHotObservable(
+          [
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(230, 3),
+            onCompleted(240)
+          ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->reduce(function () {
+                throw new \Exception();
+            });
+        });
+
+        $this->assertMessages([onError(230, new \Exception())], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function reduce_accumulator_throws_with_seed()
+    {
+        $xs = $this->createHotObservable(
+          [
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(230, 3),
+            onCompleted(240)
+          ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->reduce(function () {
+                throw new \Exception();
+            }, 42);
+        });
+
+        $this->assertMessages([onError(210, new \Exception())], $results->getMessages());
+    }
 }
