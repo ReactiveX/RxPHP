@@ -4,7 +4,6 @@ namespace Rx\Observer;
 
 use Exception;
 use Rx\Disposable\SerialDisposable;
-use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
