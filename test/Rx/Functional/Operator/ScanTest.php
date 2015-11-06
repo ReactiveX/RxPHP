@@ -4,8 +4,6 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\BaseObservable;
-use Rx\Observable\EmptyObservable;
-use Rx\Testing\TestScheduler;
 
 class ScanTest extends FunctionalTestCase
 {

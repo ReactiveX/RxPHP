@@ -4,8 +4,6 @@ namespace Rx\Functional\Operator;
 
 use Exception;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Testing\HotObservable;
-use Rx\Testing\TestScheduler;
 use Rx\Observable\ReturnObservable;
 
 class WhereTest extends FunctionalTestCase
@@ -86,7 +84,7 @@ class WhereTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function it_throws_an_exception_if_predicate_is_not_a_callable()
     {

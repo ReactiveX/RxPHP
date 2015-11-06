@@ -4,10 +4,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\AnonymousObservable;
-use Rx\Observable\ArrayObservable;
 use Rx\Observable\BaseObservable;
-use Rx\Observable\EmptyObservable;
 
 class CountTest extends FunctionalTestCase
 {

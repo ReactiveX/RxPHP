@@ -3,7 +3,6 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observer\CallbackObserver;
 
 class DoOnNextTest extends FunctionalTestCase
 {
