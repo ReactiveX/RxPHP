@@ -13,6 +13,7 @@ use Rx\Operator\CountOperator;
 use Rx\Operator\DeferOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
+use Rx\Operator\MapOperator;
 use Rx\Operator\NeverOperator;
 use Rx\Operator\OperatorInterface;
 use Rx\Operator\ReduceOperator;
@@ -87,36 +88,19 @@ abstract class BaseObservable implements ObservableInterface
 
     abstract protected function doStart($scheduler);
 
+    public function map($selector)
+    {
+        return $this->lift(new MapOperator($selector));
+    }
+
+    /**
+     * Alias for Map
+     * @param $selector
+     * @return \Rx\Observable\AnonymousObservable
+     */
     public function select($selector)
     {
-        if ( ! is_callable($selector)) {
-            throw new InvalidArgumentException('Selector should be a callable.');
-        }
-
-        $currentObservable = $this;
-
-        // todo: add scheduler
-        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $selector) {
-            $selectObserver = new CallbackObserver(
-                function($nextValue) use ($observer, $selector) {
-                    $value = null;
-                    try {
-                        $value = $selector($nextValue);
-                    } catch (Exception $e) {
-                        $observer->onError($e);
-                    }
-                    $observer->onNext($value);
-                },
-                function($error) use ($observer) {
-                    $observer->onError($error);
-                },
-                function() use ($observer) {
-                    $observer->onCompleted();
-                }
-            );
-
-            return $currentObservable->subscribe($selectObserver, $scheduler);
-        });
+        return $this->map($selector);
     }
 
     public function where($predicate)
@@ -161,13 +145,24 @@ abstract class BaseObservable implements ObservableInterface
         );
     }
 
-    public function selectMany($selector)
+    public function flatMap($selector)
     {
         if ( ! is_callable($selector)) {
             throw new InvalidArgumentException('Selector should be a callable.');
         }
 
         return self::mergeAll($this->select($selector));
+    }
+
+    /**
+     * Alias for flatMap
+     *
+     * @param $selector
+     * @return \Rx\ObserverInterface
+     */
+    public function selectMany($selector)
+    {
+        return $this->flatMap($selector);
     }
 
     /**

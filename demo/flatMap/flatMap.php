@@ -7,7 +7,7 @@ $scheduler = new Rx\Scheduler\EventLoopScheduler($loop);
 
 $observable = new Rx\Observable\ArrayObservable(range(1, 5), $scheduler);
 
-$selectManyObservable = $observable->selectMany(function($value) {
+$selectManyObservable = $observable->flatMap(function($value) {
     return new Rx\Observable\ArrayObservable(range(1, $value));
 }, $scheduler);
 
