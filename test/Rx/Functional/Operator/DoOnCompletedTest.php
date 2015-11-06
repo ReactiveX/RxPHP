@@ -2,9 +2,7 @@
 
 namespace Rx\Functional\Operator;
 
-use RuntimeException;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observer\CallbackObserver;
 
 class DoOnCompletedTest extends FunctionalTestCase
 {

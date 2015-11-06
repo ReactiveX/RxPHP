@@ -2,13 +2,8 @@
 
 namespace Rx\Functional\Operator;
 
-use Exception;
+
 use Rx\Functional\FunctionalTestCase;
-use Rx\Testing\HotObservable;
-use Rx\Testing\TestScheduler;
-use Rx\Observable\ReturnObservable;
-use Rx\Observable\EmptyObservable;
-use Rx\Observable\ThrowObservable;
 
 class MergeTest extends FunctionalTestCase
 {

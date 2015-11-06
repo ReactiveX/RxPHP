@@ -4,11 +4,8 @@ namespace Rx\Functional\Operator;
 
 use Exception;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Testing\HotObservable;
-use Rx\Testing\TestScheduler;
 use Rx\Observable\ReturnObservable;
-use Rx\Observable\EmptyObservable;
-use Rx\Observable\ThrowObservable;
+
 
 class SelectTest extends FunctionalTestCase
 {
@@ -62,7 +59,7 @@ class SelectTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function select_expects_a_callable()
     {

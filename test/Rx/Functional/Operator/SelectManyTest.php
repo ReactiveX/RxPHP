@@ -4,11 +4,7 @@ namespace Rx\Functional\Operator;
 
 use Exception;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Testing\HotObservable;
-use Rx\Testing\TestScheduler;
-use Rx\Observable\ReturnObservable;
-use Rx\Observable\EmptyObservable;
-use Rx\Observable\ThrowObservable;
+
 
 class SelectManyTest extends FunctionalTestCase
 {
@@ -101,7 +97,7 @@ class SelectManyTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function it_throws_if_selector_is_not_a_callable()
     {
