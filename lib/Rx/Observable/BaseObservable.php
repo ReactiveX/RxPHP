@@ -512,11 +512,10 @@ abstract class BaseObservable implements ObservableInterface
 
     /**
      * @param $error
-     * @param SchedulerInterface $scheduler
-     *
-     * @return AnonymousObservable
+     * @return \Rx\Observable\AnonymousObservable
      */
-    public static function error($error) {
+    public static function error($error)
+    {
         return new ErrorObservable($error);
     }
 
