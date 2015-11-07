@@ -15,6 +15,7 @@ use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\NeverOperator;
+use Rx\Operator\FilterOperator;
 use Rx\Operator\OperatorInterface;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\ScanOperator;
@@ -103,39 +104,26 @@ abstract class BaseObservable implements ObservableInterface
         return $this->map($selector);
     }
 
-    public function where($predicate)
+    /**
+     * Filters the elements of an observable sequence based on a predicate by incorporating the element's index.
+     *
+     * @param callable $predicate
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function filter(callable $predicate)
     {
-        if ( ! is_callable($predicate)) {
-            throw new InvalidArgumentException('Predicate should be a callable.');
-        }
+       return $this->lift(new FilterOperator($predicate));
+    }
 
-        $currentObservable = $this;
-
-        // todo: add scheduler
-        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $predicate) {
-            $selectObserver = new CallbackObserver(
-                function($nextValue) use ($observer, $predicate) {
-                    $shouldFire = false;
-                    try {
-                        $shouldFire = $predicate($nextValue);
-                    } catch (Exception $e) {
-                        $observer->onError($e);
-                    }
-
-                    if ($shouldFire) {
-                        $observer->onNext($nextValue);
-                    }
-                },
-                function($error) use ($observer) {
-                    $observer->onError($error);
-                },
-                function() use ($observer) {
-                    $observer->onCompleted();
-                }
-            );
-
-            return $currentObservable->subscribe($selectObserver, $scheduler);
-        });
+    /**
+     * Alias for filter
+     *
+     * @param callable $predicate
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function where(callable $predicate)
+    {
+        return $this->filter($predicate);
     }
 
     public function merge(ObservableInterface $otherObservable, $scheduler = null)

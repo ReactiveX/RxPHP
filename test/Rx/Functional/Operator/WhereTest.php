@@ -84,7 +84,7 @@ class WhereTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException PHPUnit_Framework_Error
      */
     public function it_throws_an_exception_if_predicate_is_not_a_callable()
     {
