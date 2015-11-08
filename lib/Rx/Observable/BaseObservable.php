@@ -26,6 +26,8 @@ use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
 use Rx\SchedulerInterface;
 use Rx\Subject\AsyncSubject;
+use Rx\Subject\BehaviorSubject;
+use Rx\Subject\ReplaySubject;
 use Rx\Subject\Subject;
 use Rx\Disposable\RefCountDisposable;
 use Rx\Disposable\EmptyDisposable;
@@ -634,6 +636,127 @@ abstract class BaseObservable implements ObservableInterface
      */
     public static function defer($factory){
         return (new EmptyObservable())->lift(new DeferOperator($factory));
+    }
+
+    /**
+     * Multicasts the source sequence notifications through an instantiated subject into all uses of the sequence within a selector function. Each
+     * subscription to the resulting sequence causes a separate multicast invocation, exposing the sequence resulting from the selector function's
+     * invocation. For specializations with fixed subject types, see Publish, PublishLast, and Replay.
+     *
+     * @param $subjectOrSubjectSelector
+     * @param null $selector
+     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     */
+    public function multicast($subjectOrSubjectSelector, $selector = null)
+    {
+        return is_callable($subjectOrSubjectSelector) ?
+          new MulticastObservable($this, $subjectOrSubjectSelector, $selector) :
+          new ConnectableObservable($this, $subjectOrSubjectSelector);
+    }
+
+    /**
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
+     * This operator is a specialization of Multicast using a regular Subject.
+     *
+     * @param callable|null $selector
+     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     */
+    public function publish(callable $selector = null)
+    {
+        return $selector ?
+          new MulticastObservable($this, function () {
+              return new Subject();
+          }, $selector) :
+          $this->multicast(new Subject());
+    }
+
+    /**
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence containing only the last notification.
+     * This operator is a specialization of Multicast using a AsyncSubject.
+     *
+     * @param callable|null $selector
+     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     */
+    public function publishLast(callable $selector = null)
+    {
+        return $selector ?
+          new MulticastObservable($this, function () {
+              return new AsyncSubject();
+          }, $selector) :
+          $this->multicast(new AsyncSubject());
+    }
+
+    /**
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
+     * This operator is a specialization of Multicast using a BehaviorSubject.
+     *
+     * @param $initialValueOrSelector
+     * @param null $initialValue
+     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     */
+    public function publishValue($initialValueOrSelector, $initialValue = null)
+    {
+        return $initialValue ?
+          $this->multicast(function () use ($initialValue) {
+              return new BehaviorSubject($initialValue);
+          }, $initialValueOrSelector) :
+          $this->multicast(new BehaviorSubject($initialValueOrSelector));
+    }
+
+    /**
+     * Returns an observable sequence that shares a single subscription to the underlying sequence.
+     * This operator is a specialization of publish which creates a subscription when the number of observers goes from zero to one, then shares that subscription with all subsequent observers until the number of observers returns to zero, at which point the subscription is disposed.
+     *
+     * @return \Rx\Observable\RefCountObservable An observable sequence that contains the elements of a sequence produced by multicasting the source sequence.,mk
+     */
+    public function share()
+    {
+        return $this->publish()->refCount();
+    }
+
+    /**
+     * Returns an observable sequence that shares a single subscription to the underlying sequence and starts with an initialValue.
+     * This operator is a specialization of publishValue which creates a subscription when the number of observers goes from zero to one, then shares that subscription with all subsequent observers until the number of observers returns to zero, at which point the subscription is disposed.
+     *
+     * @param $initialValue
+     * @return \Rx\Observable\RefCountObservable
+     */
+    public function shareValue($initialValue)
+    {
+        return $this->publish($initialValue)->refCount();
+    }
+
+    /**
+     * Returns an observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
+     * This operator is a specialization of replay which creates a subscription when the number of observers goes from zero to one, then shares that subscription with all subsequent observers until the number of observers returns to zero, at which point the subscription is disposed.
+     *
+     * @param $bufferSize
+     * @param $windowSize
+     * @param $scheduler
+     * @return \Rx\Observable\RefCountObservable
+     */
+    public function shareReplay($bufferSize, $windowSize, $scheduler)
+    {
+        return $this->replay(null, $bufferSize, $windowSize, $scheduler)->refCount();
+    }
+
+    /**
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
+     * This operator is a specialization of Multicast using a ReplaySubject.
+     *
+     * @param callable|null $selector
+     * @param null $bufferSize
+     * @param null $windowSize
+     * @param \Rx\SchedulerInterface|null $scheduler
+     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     */
+    public function replay(callable $selector = null, $bufferSize = null, $windowSize = null, SchedulerInterface $scheduler = null)
+    {
+        return $selector ?
+          $this->multicast(function () use ($bufferSize, $windowSize, $scheduler) {
+              return new ReplaySubject($bufferSize, $windowSize, $scheduler);
+          }, $selector) :
+          $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler));
     }
 
 }
