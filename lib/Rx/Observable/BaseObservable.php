@@ -22,6 +22,7 @@ use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\ToArrayOperator;
+use Rx\Operator\ZipOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
@@ -624,4 +625,17 @@ abstract class BaseObservable implements ObservableInterface
         return (new EmptyObservable())->lift(new DeferOperator($factory));
     }
 
+    /**
+     * Merges the specified observable sequences into one observable sequence by using the selector
+     * function whenever all of the observable sequences have produced an element at a corresponding index. If the
+     * result selector function is omitted, a list with the elements of the observable sequences at corresponding
+     * indexes will be yielded.
+     *
+     * @param array $observables
+     * @param callable $selector
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function zip(array $observables, callable $selector = null){
+        return $this->lift(new ZipOperator($observables, $selector));
+    }
 }

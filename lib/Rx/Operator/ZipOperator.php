@@ -18,10 +18,19 @@ class ZipOperator implements OperatorInterface {
     /** @var \SplQueue[] */
     private $queues = [];
 
-    public function __construct(array $sources, callable $resultSelector)
+    /** @var int */
+    private $completesRemaining = 0;
+
+    public function __construct(array $sources, callable $resultSelector = null)
     {
-        $this->sources= $sources;
-        $this->resultSelector= $resultSelector;
+        $this->sources = $sources;
+
+        if ($resultSelector === null) {
+            $resultSelector = function () {
+                return func_get_args();
+            };
+        }
+        $this->resultSelector = $resultSelector;
     }
 
     /**
@@ -36,6 +45,8 @@ class ZipOperator implements OperatorInterface {
 
         $disposable = new CompositeDisposable();
 
+        $this->completesRemaining = count($this->sources);
+
         for ($i = 0; $i < count($this->sources); $i++) {
             $this->queues[$i] = new \SplQueue();
         }
@@ -45,6 +56,14 @@ class ZipOperator implements OperatorInterface {
 
             $disposable->add($source->subscribe(new CallbackObserver(
                 function ($x) use ($i, $observer) {
+                    // if there is another item in the sequence after one of the other source
+                    // observables completes, we need to complete at this time to match the
+                    // behavior of RxJS
+                    if ($this->completesRemaining < count($this->sources)) {
+                        $observer->onCompleted();
+                        return;
+                    }
+
                     $this->queues[$i]->enqueue($x);
 
                     for ($j = 0; $j < count($this->queues); $j++) {
@@ -52,7 +71,6 @@ class ZipOperator implements OperatorInterface {
                             return;
                         }
                     }
-                    //echo "counts = " . $this->queues[0]->count() . ", " . $this->queues[1]->count() . "\n";
 
                     $params = [];
                     for ($j = 0; $j < count($this->queues); $j++) {
@@ -62,13 +80,18 @@ class ZipOperator implements OperatorInterface {
 
                     $selector = $this->resultSelector;
 
-                    $observer->onNext(call_user_func_array($selector, $params));
+                    try {
+                        $observer->onNext(call_user_func_array($selector, $params));
+                    } catch (\Exception $e) {
+                        $observer->onError($e);
+                    }
                 },
                 function ($e) use ($observer) {
                     $observer->onError($e);
                 },
                 function () use ($i, $observer) {
-                    if ($this->queues[$i]->isEmpty()) {
+                    $this->completesRemaining--;
+                    if ($this->completesRemaining == 0) {
                         $observer->onCompleted();
                     }
                 }
