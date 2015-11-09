@@ -82,16 +82,6 @@ class WhereTest extends FunctionalTestCase
         $this->assertMessages(array(onError(500, new Exception())), $results->getMessages());
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function it_throws_an_exception_if_predicate_is_not_a_callable()
-    {
-        $observable = new ReturnObservable(1);
-        $observable->where(42);
-    }
-
     protected function createHotObservableWithData()
     {
         return $this->createHotObservable(array(
