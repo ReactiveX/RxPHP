@@ -7,6 +7,7 @@ use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\BaseObservable;
 use Rx\Observable\ConnectableObservable;
+use Rx\Observable\MulticastObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\Subject;
 use Rx\Testing\TestSubject;
@@ -393,7 +394,8 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->multicast(
+
+            return new MulticastObservable($xs,
               function () {
                   return new Subject();
               },
@@ -440,7 +442,7 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->multicast(
+            return new MulticastObservable($xs,
               function () {
                   return new Subject();
               },
@@ -485,7 +487,7 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->multicast(
+            return new MulticastObservable($xs,
               function () {
                   return new Subject();
               },
@@ -533,7 +535,7 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->multicast(
+            return new MulticastObservable($xs,
               function () {
                   return new Subject();
               },

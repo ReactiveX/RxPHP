@@ -643,15 +643,17 @@ abstract class BaseObservable implements ObservableInterface
      * subscription to the resulting sequence causes a separate multicast invocation, exposing the sequence resulting from the selector function's
      * invocation. For specializations with fixed subject types, see Publish, PublishLast, and Replay.
      *
-     * @param $subjectOrSubjectSelector
+     * @param \Rx\Subject\Subject $subject
      * @param null $selector
      * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
      */
-    public function multicast($subjectOrSubjectSelector, $selector = null)
+    public function multicast(Subject $subject, $selector = null)
     {
-        return is_callable($subjectOrSubjectSelector) ?
-          new MulticastObservable($this, $subjectOrSubjectSelector, $selector) :
-          new ConnectableObservable($this, $subjectOrSubjectSelector);
+        return $selector ?
+          new MulticastObservable($this, function () use ($subject) {
+              return $subject;
+          }, $selector) :
+          new ConnectableObservable($this, $subject);
     }
 
     /**
@@ -663,11 +665,7 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function publish(callable $selector = null)
     {
-        return $selector ?
-          new MulticastObservable($this, function () {
-              return new Subject();
-          }, $selector) :
-          $this->multicast(new Subject());
+        return $this->multicast(new Subject(), $selector);
     }
 
     /**
@@ -679,28 +677,20 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function publishLast(callable $selector = null)
     {
-        return $selector ?
-          new MulticastObservable($this, function () {
-              return new AsyncSubject();
-          }, $selector) :
-          $this->multicast(new AsyncSubject());
+        return $this->multicast(new AsyncSubject(), $selector);
     }
 
     /**
      * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
      * This operator is a specialization of Multicast using a BehaviorSubject.
      *
-     * @param $initialValueOrSelector
      * @param null $initialValue
+     * @param callable $selector
      * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
      */
-    public function publishValue($initialValueOrSelector, $initialValue = null)
+    public function publishValue($initialValue, callable $selector = null)
     {
-        return $initialValue ?
-          $this->multicast(function () use ($initialValue) {
-              return new BehaviorSubject($initialValue);
-          }, $initialValueOrSelector) :
-          $this->multicast(new BehaviorSubject($initialValueOrSelector));
+        return $this->multicast(new BehaviorSubject($initialValue), $selector);
     }
 
     /**
@@ -752,11 +742,7 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function replay(callable $selector = null, $bufferSize = null, $windowSize = null, SchedulerInterface $scheduler = null)
     {
-        return $selector ?
-          $this->multicast(function () use ($bufferSize, $windowSize, $scheduler) {
-              return new ReplaySubject($bufferSize, $windowSize, $scheduler);
-          }, $selector) :
-          $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler));
+        return $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler), $selector);
     }
 
 }
