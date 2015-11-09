@@ -395,7 +395,7 @@ class MulticastTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
 
-            return new MulticastObservable($xs,
+            return $xs->multicastWithSelector(
               function () {
                   return new Subject();
               },
@@ -442,7 +442,7 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return new MulticastObservable($xs,
+            return $xs->multicastWithSelector(
               function () {
                   return new Subject();
               },
@@ -487,7 +487,7 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return new MulticastObservable($xs,
+            return $xs->multicastWithSelector(
               function () {
                   return new Subject();
               },
@@ -535,7 +535,7 @@ class MulticastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return new MulticastObservable($xs,
+            return $xs->multicastWithSelector(
               function () {
                   return new Subject();
               },

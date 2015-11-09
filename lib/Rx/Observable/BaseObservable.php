@@ -657,6 +657,20 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
+     * Multicasts the source sequence notifications through an instantiated subject from a subject selector factory, into all uses of the sequence within a selector function. Each
+     * subscription to the resulting sequence causes a separate multicast invocation, exposing the sequence resulting from the selector function's
+     * invocation. For specializations with fixed subject types, see Publish, PublishLast, and Replay.
+     *
+     * @param callable $subjectSelector
+     * @param null $selector
+     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     */
+    public function multicastWithSelector(callable $subjectSelector, $selector = null)
+    {
+        return new MulticastObservable($this, $subjectSelector, $selector);
+    }
+
+    /**
      * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
      * This operator is a specialization of Multicast using a regular Subject.
      *
