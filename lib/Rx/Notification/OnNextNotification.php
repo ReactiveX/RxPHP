@@ -30,8 +30,4 @@ class OnNextNotification extends Notification
     {
         return 'OnNext(' . json_encode($this->value) . ')';
     }
-
-    public function getValue() {
-        return $this->value;
-    }
 }

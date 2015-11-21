@@ -4,7 +4,6 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\NeverObservable;
-use Rx\Testing\Recorded;
 
 class ZipTest extends FunctionalTestCase
 {
@@ -36,27 +35,30 @@ class ZipTest extends FunctionalTestCase
         });
 
         $this->assertMessages([
-            onNext(230, [1, 2, 3]),
-            onNext(260, [4, 5, 6]),
-            onCompleted(420)
-        ],
+                onNext(230, [1, 2, 3]),
+                onNext(260, [4, 5, 6]),
+                onCompleted(420)
+            ],
             $result->getMessages()
         );
 
         $this->assertSubscriptions([
-            subscribe(200, 420)
-        ],
-            $e0->getSubscriptions());
+                subscribe(200, 420)
+            ],
+            $e0->getSubscriptions()
+        );
 
         $this->assertSubscriptions([
-            subscribe(200, 420)
-        ],
-            $e0->getSubscriptions());
+                subscribe(200, 420)
+            ],
+            $e0->getSubscriptions()
+        );
 
         $this->assertSubscriptions([
-            subscribe(200, 420)
-        ],
-            $e0->getSubscriptions());
+                subscribe(200, 420)
+            ],
+            $e0->getSubscriptions()
+        );
     }
 
     public function testZipNArySymmetricSelector()
@@ -84,32 +86,35 @@ class ZipTest extends FunctionalTestCase
 
         $result = $this->scheduler->startWithCreate(function () use ($e0, $e1, $e2) {
             return $e0->zip([$e1, $e2], function ($r0, $r1, $r2) {
-                return [$r0, $r1, $r2];
+                return [$r2, $r1, $r0];
             });
         });
 
         $this->assertMessages([
-            onNext(230, [1, 2, 3]),
-            onNext(260, [4, 5, 6]),
+            onNext(230, [3, 2, 1]),
+            onNext(260, [6, 5, 4]),
             onCompleted(420)
         ],
             $result->getMessages()
         );
 
         $this->assertSubscriptions([
-            subscribe(200, 420)
-        ],
-            $e0->getSubscriptions());
+                subscribe(200, 420)
+            ],
+            $e0->getSubscriptions()
+        );
 
         $this->assertSubscriptions([
-            subscribe(200, 420)
-        ],
-            $e0->getSubscriptions());
+                subscribe(200, 420)
+            ],
+            $e0->getSubscriptions()
+        );
 
         $this->assertSubscriptions([
-            subscribe(200, 420)
-        ],
-            $e0->getSubscriptions());
+                subscribe(200, 420)
+            ],
+            $e0->getSubscriptions()
+        );
     }
 
     public function testZipNeverNever()
@@ -223,49 +228,6 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testZipNonEmptyNever()
-    {
-        $e1 = $this->createHotObservable([
-            onNext(150, 1),
-            onNext(215, 2),
-            onCompleted(220)
-        ]);
-        $e2 = new NeverObservable();
-
-        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
-        });
-
-        $this->assertMessages([], $results->getMessages());
-    }
-
-    public function testZipNonEmptyNonEmpty()
-    {
-        $e1 = $this->createHotObservable([
-            onNext(150, 1),
-            onNext(215, 2),
-            onCompleted(230)
-        ]);
-        $e2 = $this->createHotObservable([
-            onNext(150, 1),
-            onNext(220, 3),
-            onCompleted(240)
-        ]);
-
-        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
-        });
-
-        $this->assertMessages([
-            onNext(220, 2 + 3),
-            onCompleted(240)
-        ], $results->getMessages());
-    }
-
     public function testZipEmptyError()
     {
         $error = new \Exception();
@@ -290,52 +252,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipErrorEmpty()
-    {
-        $error = new \Exception();
-
-        $e1 = $this->createHotObservable([
-            onNext(150, 1),
-            onCompleted(230)
-        ]);
-        $e2 = $this->createHotObservable([
-            onNext(150, 1),
-            onError(220, $error)
-        ]);
-
-        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
-        });
-
-        $this->assertMessages([
-            onError(220, $error)
-        ], $results->getMessages());
-    }
-
     public function testZipNeverError()
-    {
-        $error = new \Exception();
-
-        $e1 = new NeverObservable();
-        $e2 = $this->createHotObservable([
-            onNext(150, 1),
-            onError(220, $error)
-        ]);
-
-        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
-        });
-
-        $this->assertMessages([
-            onError(220, $error)
-        ], $results->getMessages());
-    }
-
-    public function testZipErrorNever()
     {
         $error = new \Exception();
 
@@ -406,19 +323,24 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipErrorSome()
+    public function testZipSomeDataAsymmetric()
     {
-        $error = new \Exception();
-
-        $e1 = $this->createHotObservable([
-            onNext(150, 1),
+        $msgs1 = [
+            onNext(205, 0),
+            onNext(210, 1),
             onNext(215, 2),
-            onCompleted(230)
-        ]);
-        $e2 = $this->createHotObservable([
-            onNext(150, 1),
-            onError(220, $error)
-        ]);
+        ];
+
+        $msgs2 = [
+            onNext(205, 0),
+            onNext(213, 1),
+            onNext(221, 2),
+            onNext(229, 3),
+            onNext(237, 4),
+        ];
+
+        $e1 = $this->createHotObservable($msgs1);
+        $e2 = $this->createHotObservable($msgs2);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->zip([$e2], function ($x, $y) {
@@ -427,105 +349,25 @@ class ZipTest extends FunctionalTestCase
         });
 
         $this->assertMessages([
-            onError(220, $error)
+            onNext(205, 0),
+            onNext(213, 2),
+            onNext(221, 4),
         ], $results->getMessages());
-    }
-
-    public function testZipSomeDataAsymmetric1()
-    {
-        $results = [];
-        for ($i = 0; $i < 5; $i++) {
-            $results[] = onNext(205 + $i * 5, $i);
-        }
-
-        /** @var Recorded[] $msgs1 */
-        $msgs1 = $results;
-
-        $results = [];
-        for ($i = 0; $i < 10; $i++) {
-            $results[] = onNext(205 + $i * 8, $i);
-        }
-
-        /** @var Recorded[] $msgs2 */
-        $msgs2 = $results;
-
-        $len = min(count($msgs1), count($msgs2));
-
-        $e1 = $this->createHotObservable($msgs1);
-        $e2 = $this->createHotObservable($msgs2);
-
-        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
-        });
-
-        $this->assertEquals($len, count($results->getMessages()));
-
-        for ($i = 0; $i < $len; $i++) {
-            $sum  = $msgs1[$i]->getValue()->getValue() + $msgs2[$i]->getValue()->getValue();
-            $time = max($msgs1[$i]->getTime(), $msgs2[$i]->getTime());
-            $this->assertEquals($sum, $results->getMessages()[$i]->getValue()->getValue());
-            $this->assertEquals($time, $results->getMessages()[$i]->getTime());
-        }
-    }
-
-    public function testZipSomeDataAsymmetric2()
-    {
-        $results = [];
-        for ($i = 0; $i < 10; $i++) {
-            $results[] = onNext(205 + $i * 8, $i);
-        }
-
-        /** @var Recorded[] $msgs2 */
-        $msgs1 = $results;
-
-        $results = [];
-        for ($i = 0; $i < 5; $i++) {
-            $results[] = onNext(205 + $i * 5, $i);
-        }
-
-        /** @var Recorded[] $msgs1 */
-        $msgs2 = $results;
-
-        $len = min(count($msgs1), count($msgs2));
-
-        $e1 = $this->createHotObservable($msgs1);
-        $e2 = $this->createHotObservable($msgs2);
-
-        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
-        });
-
-        $this->assertEquals($len, count($results->getMessages()));
-
-        for ($i = 0; $i < $len; $i++) {
-            $sum  = $msgs1[$i]->getValue()->getValue() + $msgs2[$i]->getValue()->getValue();
-            $time = max($msgs1[$i]->getTime(), $msgs2[$i]->getTime());
-            $this->assertEquals($sum, $results->getMessages()[$i]->getValue()->getValue());
-            $this->assertEquals($time, $results->getMessages()[$i]->getTime());
-        }
     }
 
     public function testZipSomeDataSymmetric()
     {
-        $results = [];
-        for ($i = 0; $i < 10; $i++) {
-            $results[] = onNext(205 + $i * 5, $i);
-        }
+        $msgs1 = [
+            onNext(205, 0),
+            onNext(210, 1),
+            onNext(215, 2),
+        ];
 
-        $msgs1 = $results;
-
-        $results = [];
-        for ($i = 0; $i < 10; $i++) {
-            $results[] = onNext(205 + $i * 8, $i);
-        }
-
-        $msgs2 = $results;
-
-        $len = min(count($msgs1), count($msgs2));
+        $msgs2 = [
+            onNext(205, 0),
+            onNext(213, 1),
+            onNext(221, 2),
+        ];
 
         $e1 = $this->createHotObservable($msgs1);
         $e2 = $this->createHotObservable($msgs2);
@@ -536,14 +378,11 @@ class ZipTest extends FunctionalTestCase
             });
         });
 
-        $this->assertEquals($len, count($results->getMessages()));
-
-        for ($i = 0; $i < $len; $i++) {
-            $sum  = $msgs1[$i]->getValue()->getValue() + $msgs2[$i]->getValue()->getValue();
-            $time = max($msgs1[$i]->getTime(), $msgs2[$i]->getTime());
-            $this->assertEquals($sum, $results->getMessages()[$i]->getValue()->getValue());
-            $this->assertEquals($time, $results->getMessages()[$i]->getTime());
-        }
+        $this->assertMessages([
+            onNext(205, 0),
+            onNext(213, 2),
+            onNext(221, 4),
+        ], $results->getMessages());
     }
 
     public function testZipSelectorThrows()
