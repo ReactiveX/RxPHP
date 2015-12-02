@@ -34,7 +34,8 @@ class ZipTest extends FunctionalTestCase
             return $e0->zip([$e1, $e2]);
         });
 
-        $this->assertMessages([
+        $this->assertMessages(
+            [
                 onNext(230, [1, 2, 3]),
                 onNext(260, [4, 5, 6]),
                 onCompleted(420)
@@ -42,23 +43,11 @@ class ZipTest extends FunctionalTestCase
             $result->getMessages()
         );
 
-        $this->assertSubscriptions([
-                subscribe(200, 420)
-            ],
-            $e0->getSubscriptions()
-        );
+        $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
 
-        $this->assertSubscriptions([
-                subscribe(200, 420)
-            ],
-            $e0->getSubscriptions()
-        );
+        $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
 
-        $this->assertSubscriptions([
-                subscribe(200, 420)
-            ],
-            $e0->getSubscriptions()
-        );
+        $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
     }
 
     public function testZipNArySymmetricSelector()
@@ -90,31 +79,20 @@ class ZipTest extends FunctionalTestCase
             });
         });
 
-        $this->assertMessages([
-            onNext(230, [3, 2, 1]),
-            onNext(260, [6, 5, 4]),
-            onCompleted(420)
-        ],
+        $this->assertMessages(
+            [
+                onNext(230, [3, 2, 1]),
+                onNext(260, [6, 5, 4]),
+                onCompleted(420)
+            ],
             $result->getMessages()
         );
 
-        $this->assertSubscriptions([
-                subscribe(200, 420)
-            ],
-            $e0->getSubscriptions()
-        );
+        $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
 
-        $this->assertSubscriptions([
-                subscribe(200, 420)
-            ],
-            $e0->getSubscriptions()
-        );
+        $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
 
-        $this->assertSubscriptions([
-                subscribe(200, 420)
-            ],
-            $e0->getSubscriptions()
-        );
+        $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
     }
 
     public function testZipNeverNever()
@@ -123,9 +101,7 @@ class ZipTest extends FunctionalTestCase
         $o2 = new NeverObservable();
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->zip([$o2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $o1->zip([$o2], [$this,'add']);
         });
 
         $this->assertMessages([], $results->getMessages());
@@ -140,9 +116,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->zip([$o2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $o1->zip([$o2], [$this,'add']);
         });
 
         $this->assertMessages([], $results->getMessages());
@@ -160,9 +134,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->zip([$o2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $o1->zip([$o2], [$this,'add']);
         });
 
         $this->assertMessages([onCompleted(210)], $results->getMessages());
@@ -181,9 +153,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->zip([$o2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $o1->zip([$o2], [$this,'add']);
         });
 
         $this->assertMessages([onCompleted(215)], $results->getMessages());
@@ -202,9 +172,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e2->zip([$e1], [$this,'add']);
         });
 
         $this->assertMessages([onCompleted(215)], $results->getMessages());
@@ -220,9 +188,7 @@ class ZipTest extends FunctionalTestCase
         $e2 = new NeverObservable();
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e2->zip([$e1], [$this,'add']);
         });
 
         $this->assertMessages([], $results->getMessages());
@@ -242,9 +208,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e1->zip([$e2], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -263,9 +227,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e1->zip([$e2], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -288,9 +250,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e1->zip([$e2], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -313,9 +273,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e1->zip([$e2], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -343,9 +301,7 @@ class ZipTest extends FunctionalTestCase
         $e2 = $this->createHotObservable($msgs2);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e1->zip([$e2], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -373,9 +329,7 @@ class ZipTest extends FunctionalTestCase
         $e2 = $this->createHotObservable($msgs2);
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->zip([$e2], function ($x, $y) {
-                return $x + $y;
-            });
+            return $e1->zip([$e2], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -433,9 +387,7 @@ class ZipTest extends FunctionalTestCase
         ]);
 
         $res = $this->scheduler->startWithCreate(function () use ($o, $e) {
-            return $o->zip([$e], function ($x, $y) {
-                return $x + $y;
-            });
+            return $o->zip([$e], [$this,'add']);
         });
 
         $this->assertMessages([
@@ -450,5 +402,10 @@ class ZipTest extends FunctionalTestCase
         $this->assertSubscriptions([
             subscribe(200, 225)
         ], $e->getSubscriptions());
+    }
+
+    public function add($x, $y)
+    {
+        return $x + $y;
     }
 }
