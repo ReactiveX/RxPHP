@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Rx\Operator;
-
 
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
@@ -16,7 +14,7 @@ class DistinctUntilChangedOperator implements OperatorInterface
 
     protected $comparer;
 
-    function __construct($keySelector = null, $comparer = null)
+    public function __construct(callable $keySelector = null, callable $comparer = null)
     {
 
         $this->comparer = $comparer ?: function ($x, $y) {

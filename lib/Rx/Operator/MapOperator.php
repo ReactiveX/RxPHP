@@ -16,12 +16,8 @@ class MapOperator implements OperatorInterface
      * MapOperator constructor.
      * @param $selector
      */
-    public function __construct($selector)
+    public function __construct(callable $selector)
     {
-        if ( ! is_callable($selector)) {
-            throw new \InvalidArgumentException('Selector should be a callable.');
-        }
-
         $this->selector = $selector;
     }
 

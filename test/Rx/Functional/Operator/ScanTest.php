@@ -252,23 +252,6 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function throws_if_accumulator_is_not_callable()
-    {
-        $xs = $this->createHotObservable(
-          [
-            onNext(150, 1),
-            onNext(210, 2),
-            onNext(230, 3),
-            onCompleted(240)
-          ]);
-
-        $xs->scan("non-callable");
-
-    }
 
     /**
      * @test

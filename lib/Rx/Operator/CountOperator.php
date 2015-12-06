@@ -16,12 +16,8 @@ class CountOperator implements OperatorInterface
      * Count constructor.
      * @param callable $predicate
      */
-    public function __construct($predicate = null)
+    public function __construct(callable $predicate = null)
     {
-        if ($predicate && !is_callable($predicate)) {
-            throw new \InvalidArgumentException('Predicate should be a callable.');
-        }
-
         $this->predicate = $predicate;
     }
 

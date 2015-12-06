@@ -14,9 +14,7 @@ use Rx\Operator\DeferOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\MapOperator;
-use Rx\Operator\NeverOperator;
 use Rx\Operator\FilterOperator;
-use Rx\Operator\OperatorInterface;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
@@ -26,7 +24,6 @@ use Rx\Scheduler\ImmediateScheduler;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
 use Rx\SchedulerInterface;
-use Rx\Subject\AsyncSubject;
 use Rx\Subject\Subject;
 use Rx\Disposable\RefCountDisposable;
 use Rx\Disposable\EmptyDisposable;
@@ -42,13 +39,13 @@ abstract class BaseObservable implements ObservableInterface
     {
         $this->observers[] = $observer;
 
-        if ( ! $this->started) {
+        if (!$this->started) {
             $this->start($scheduler);
         }
 
         $observable = $this;
 
-        return new CallbackDisposable(function() use ($observer, $observable) {
+        return new CallbackDisposable(function () use ($observer, $observable) {
             $observable->removeObserver($observer);
         });
     }
@@ -89,17 +86,19 @@ abstract class BaseObservable implements ObservableInterface
 
     abstract protected function doStart($scheduler);
 
-    public function map($selector)
+    public function map(callable $selector)
     {
-        return $this->lift(new MapOperator($selector));
+        return $this->lift(function () use ($selector) {
+            return new MapOperator($selector);
+        });
     }
 
     /**
      * Alias for Map
-     * @param $selector
+     * @param callable $selector
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function select($selector)
+    public function select(callable $selector)
     {
         return $this->map($selector);
     }
@@ -112,7 +111,9 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function filter(callable $predicate)
     {
-       return $this->lift(new FilterOperator($predicate));
+        return $this->lift(function () use ($predicate) {
+            return new FilterOperator($predicate);
+        });
     }
 
     /**
@@ -133,12 +134,8 @@ abstract class BaseObservable implements ObservableInterface
         );
     }
 
-    public function flatMap($selector)
+    public function flatMap(callable $selector)
     {
-        if ( ! is_callable($selector)) {
-            throw new InvalidArgumentException('Selector should be a callable.');
-        }
-
         return self::mergeAll($this->select($selector));
     }
 
@@ -287,42 +284,38 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
-    public function groupBy($keySelector, $elementSelector = null, $keySerializer = null)
+    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $keySerializer = null)
     {
-        return $this->groupByUntil($keySelector, $elementSelector, function() {
+        return $this->groupByUntil($keySelector, $elementSelector, function () {
 
             // observable that never calls
-            return new AnonymousObservable(function() {
+            return new AnonymousObservable(function () {
                 // todo?
                 return new EmptyDisposable();
             });
         }, $keySerializer);
     }
 
-    public function groupByUntil($keySelector, $elementSelector = null, $durationSelector = null, $keySerializer = null)
+    public function groupByUntil(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null)
     {
         $currentObservable = $this;
 
-        if ( ! is_callable($keySelector)) {
-            throw new InvalidArgumentException('Key selector should be a callable.');
-        }
-
         if (null === $elementSelector) {
-            $elementSelector = function($elem) { return $elem; };
-        } else if ( ! is_callable($elementSelector)) {
-            throw new InvalidArgumentException('Element selector should be a callable.');
+            $elementSelector = function ($elem) {
+                return $elem;
+            };
         }
 
         if (null === $durationSelector) {
-            $durationSelector = function($x) { return $x; };
-        } else if ( ! is_callable($durationSelector)) {
-            throw new InvalidArgumentException('Duration selector should be a callable.');
+            $durationSelector = function ($x) {
+                return $x;
+            };
         }
 
         if (null === $keySerializer) {
-            $keySerializer = function($x) { return $x; };
-        } else if ( ! is_callable($keySerializer)) {
-            throw new InvalidArgumentException('Key serializer should be a callable.');
+            $keySerializer = function ($x) {
+                return $x;
+            };
         }
 
         return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $keySelector, $elementSelector, $durationSelector, $keySerializer) {
@@ -451,12 +444,13 @@ abstract class BaseObservable implements ObservableInterface
      * Lifts a function to the current Observable and returns a new Observable that when subscribed to will pass
      * the values of the current Observable through the Operator function.
      *
-     * @param \Rx\Operator\OperatorInterface $operator
-     * @return \Rx\Observable\AnonymousObservable
+     * @param callable $operatorFactory
+     * @return AnonymousObservable
      */
-    public function lift(OperatorInterface $operator)
+    public function lift(callable $operatorFactory)
     {
-        return new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($operator) {
+        return new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($operatorFactory) {
+            $operator = $operatorFactory();
             return $operator($this, $observer, $schedule);
         });
     }
@@ -468,9 +462,11 @@ abstract class BaseObservable implements ObservableInterface
      * @param mixed $seed [optional] - The initial accumulator value.
      * @return \Rx\Observable\AnonymousObservable - An observable sequence containing a single element with the final accumulator value.
      */
-    public function reduce($accumulator, $seed = null)
+    public function reduce(callable $accumulator, $seed = null)
     {
-        return $this->lift(new ReduceOperator($accumulator, $seed));
+        return $this->lift(function () use ($accumulator, $seed) {
+            return new ReduceOperator($accumulator, $seed);
+        });
     }
 
     /**
@@ -480,9 +476,11 @@ abstract class BaseObservable implements ObservableInterface
      * @param null $comparer
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function distinctUntilChanged($keySelector = null, $comparer = null)
+    public function distinctUntilChanged(callable $keySelector = null, callable $comparer = null)
     {
-        return $this->lift(new DistinctUntilChangedOperator($keySelector, $comparer));
+        return $this->lift(function () use ($keySelector, $comparer) {
+            return new DistinctUntilChangedOperator($keySelector, $comparer);
+        });
     }
 
     /**
@@ -512,7 +510,9 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function doOnEach(ObserverInterface $observer)
     {
-        return $this->lift(new DoOnEachOperator($observer));
+        return $this->lift(function () use ($observer) {
+            return new DoOnEachOperator($observer);
+        });
     }
 
     public function doOnNext($onNext)
@@ -547,9 +547,11 @@ abstract class BaseObservable implements ObservableInterface
      * @param null $seed
      * @return AnonymousObservable
      */
-    public function scan($accumulator, $seed = null)
+    public function scan(callable $accumulator, $seed = null)
     {
-        return $this->lift(new ScanOperator($accumulator, $seed));
+        return $this->lift(function () use ($accumulator, $seed) {
+            return new ScanOperator($accumulator, $seed);
+        });
     }
 
     /**
@@ -558,7 +560,9 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function toArray()
     {
-        return $this->lift(new ToArrayOperator());
+        return $this->lift(function () {
+            return new ToArrayOperator();
+        });
     }
 
     /**
@@ -571,7 +575,9 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function skipLast($count)
     {
-        return $this->lift(new SkipLastOperator($count));
+        return $this->lift(function () use ($count) {
+            return new SkipLastOperator($count);
+        });
     }
 
     /**
@@ -582,7 +588,9 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function skipUntil($other)
     {
-        return $this->lift(new SkipUntilOperator($other));
+        return $this->lift(function () use ($other) {
+            return new SkipUntilOperator($other);
+        });
     }
 
     /**
@@ -591,17 +599,21 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function asObservable()
     {
-        return $this->lift(new AsObservableOperator());
+        return $this->lift(function () {
+            return new AsObservableOperator();
+        });
     }
-
 
     /**
      * Concatenates all the observable sequences.
      * @param ObservableInterface $observable
      * @return AnonymousObservable
      */
-    public function concat(ObservableInterface $observable) {
-        return $this->lift(new ConcatOperator($observable));
+    public function concat(ObservableInterface $observable)
+    {
+        return $this->lift(function () use ($observable) {
+            return new ConcatOperator($observable);
+        });
     }
 
     /**
@@ -610,18 +622,24 @@ abstract class BaseObservable implements ObservableInterface
      * @param callable $predicate
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function count($predicate = null) {
-        return $this->lift(new CountOperator($predicate));
+    public function count(callable $predicate = null)
+    {
+        return $this->lift(function () use ($predicate) {
+            return new CountOperator($predicate);
+        });
     }
 
     /**
      * Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
      *
-     * @param $factory
+     * @param callable $factory
      * @return \Rx\Observable\AnonymousObservable
      */
-    public static function defer($factory){
-        return (new EmptyObservable())->lift(new DeferOperator($factory));
+    public static function defer(callable $factory)
+    {
+        return (new EmptyObservable())->lift(function () use ($factory) {
+            return new DeferOperator($factory);
+        });
     }
 
 }

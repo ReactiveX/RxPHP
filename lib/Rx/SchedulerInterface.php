@@ -5,18 +5,18 @@ namespace Rx;
 interface SchedulerInterface
 {
     /**
-     * @param mixed $action A callable
+     * @param callable $action
      *
      * @return DisposableInterface
      */
-    public function schedule($action);
+    public function schedule(callable $action);
 
     /**
-     * @param mixed $action A callable
+     * @param callable $action
      *
      * @return DisposableInterface
      */
-    public function scheduleRecursive($action);
+    public function scheduleRecursive(callable $action);
 
     /**
      * Gets the current representation of now for the scheduler

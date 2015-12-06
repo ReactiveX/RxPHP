@@ -2,19 +2,14 @@
 
 namespace Rx\Disposable;
 
-use InvalidArgumentException;
 use Rx\DisposableInterface;
 
 class CallbackDisposable implements DisposableInterface
 {
     private $action;
 
-    public function __construct($action)
+    public function __construct(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException();
-        }
-
         $this->action = $action;
     }
 

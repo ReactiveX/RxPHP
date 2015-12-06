@@ -2,12 +2,9 @@
 
 namespace Rx\Scheduler;
 
-use InvalidArgumentException;
-use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\SchedulerInterface;
-use SplPriorityQueue;
 
 class VirtualTimeScheduler implements SchedulerInterface
 {
@@ -20,24 +17,17 @@ class VirtualTimeScheduler implements SchedulerInterface
      * @param integer  $initialClock Initial value for the clock.
      * @param callable $comparer     Comparer to determine causality of events based on absolute time.
      */
-    public function __construct($initialClock = 0, $comparer)
+    public function __construct($initialClock = 0, callable $comparer)
     {
-        if (! is_callable($comparer)) {
-            throw new RuntimeException('Comparer should be a callable.');
-        }
-
         $this->clock    = $initialClock;
         $this->comparer = $comparer;
         $this->queue    = new PriorityQueue();
     }
 
-    public function schedule($action)
+    public function schedule(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
 
-        $invokeAction = function($scheduler, $action) {
+        $invokeAction = function ($scheduler, $action) {
             $action();
             return new EmptyDisposable();
         };
@@ -45,12 +35,8 @@ class VirtualTimeScheduler implements SchedulerInterface
         return $this->scheduleAbsoluteWithState($action, $this->clock, $invokeAction);
     }
 
-    public function scheduleRecursive($action)
+    public function scheduleRecursive(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $group = new CompositeDisposable();
 
         $recursiveAction = function() use ($action, $group, &$recursiveAction) {
@@ -101,12 +87,8 @@ class VirtualTimeScheduler implements SchedulerInterface
         return $this->scheduleAbsoluteWithState($action, $dueTime, $invokeAction);
     }
 
-    public function scheduleAbsoluteWithState($state, $dueTime, $action)
+    public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $queue = $this->queue;
 
         $currentScheduler = $this;

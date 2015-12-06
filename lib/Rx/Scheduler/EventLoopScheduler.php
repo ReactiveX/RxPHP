@@ -7,7 +7,6 @@ use React\EventLoop\Timer\Timers;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\SchedulerInterface;
-use InvalidArgumentException;
 
 class EventLoopScheduler implements SchedulerInterface
 {
@@ -18,23 +17,18 @@ class EventLoopScheduler implements SchedulerInterface
         $this->loop = $loop;
     }
 
-    public function schedule($action)
+    public function schedule(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
 
         $timer = $this->loop->addTimer(Timers::MIN_RESOLUTION, $action);
 
-        return new CallbackDisposable(function() use ($timer) { $timer->cancel(); });
+        return new CallbackDisposable(function () use ($timer) {
+            $timer->cancel();
+        });
     }
 
-    public function scheduleRecursive($action)
+    public function scheduleRecursive(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $group = new CompositeDisposable();
         $scheduler = $this;
 

@@ -59,16 +59,6 @@ class SelectTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function select_expects_a_callable()
-    {
-        $observable = new ReturnObservable(1);
-        $observable->select(42);
-    }
-
-    /**
-     * @test
      */
     public function select_calls_selector()
     {
