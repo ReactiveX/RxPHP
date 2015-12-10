@@ -26,41 +26,24 @@ class ImmediateScheduler implements SchedulerInterface
             throw new InvalidArgumentException("Action should be a callable.");
         }
 
-        $group = new CompositeDisposable();
-        $scheduler = $this;
+        $goAgain = true;
 
-        $recursiveAction = null;
-        $recursiveAction = function() use ($action, &$scheduler, &$group, &$recursiveAction) {
-            $action(
-                function() use (&$scheduler, &$group, &$recursiveAction) {
-                    $isAdded = false;
-                    $isDone  = true;
+        $disposable = new CompositeDisposable();
 
-                    $d = $scheduler->schedule(function() use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
-                        if (is_callable($recursiveAction)) {
-                            $recursiveAction();
-                        } else {
-                            throw new \Exception("recursiveAction is not callable");
-                        }
-
-                        if ($isAdded) {
-                            $group->remove($d);
-                        } else {
-                            $isDone = true;
-                        }
+        $recursiveAction = function () use ($action, &$goAgain, $disposable) {
+            while ($goAgain) {
+                $goAgain = false;
+                $disposable->add($this->schedule(function () use ($action, &$goAgain, $disposable) {
+                    return $action(function () use (&$goAgain, $action) {
+                        $goAgain = true;
                     });
-
-                    if ( ! $isDone) {
-                        $group->add($d);
-                        $isAdded = true;
-                    }
-                }
-            );
+                }));
+            }
         };
 
-        $group->add($this->schedule($recursiveAction));
+        $disposable->add($this->schedule($recursiveAction));
 
-        return $group;
+        return $disposable;
     }
 
     /**
