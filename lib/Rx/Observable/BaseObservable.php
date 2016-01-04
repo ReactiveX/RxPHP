@@ -16,6 +16,7 @@ use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
 use Rx\Operator\ReduceOperator;
+use Rx\Operator\RetryOperator;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipUntilOperator;
@@ -782,4 +783,16 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
+    /**
+     * Repeats the source observable sequence the specified number of times or until it successfully terminates.
+     * If the retry count is not specified, it retries indefinitely. Note if you encounter an error and want it to
+     * retry once, then you must use ->retry(2).
+     *
+     * @param int $retryCount
+     * @return AnonymousObservable
+     */
+    public function retry($retryCount = -1)
+    {
+        return $this->lift(new RetryOperator($retryCount));
+    }
 }
