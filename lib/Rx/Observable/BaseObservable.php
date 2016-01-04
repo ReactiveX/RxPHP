@@ -22,6 +22,7 @@ use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipOperator;
 use Rx\Operator\SkipUntilOperator;
+use Rx\Operator\TakeOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
 use Rx\Scheduler\ImmediateScheduler;
@@ -197,33 +198,13 @@ abstract class BaseObservable implements ObservableInterface
 
     public function take($count)
     {
-        if ($count < 0) {
-            throw new InvalidArgumentException('Count must be >= 0');
-        }
 
         if ($count === 0) {
             return new EmptyObservable();
         }
 
-        $currentObservable = $this;
-
-        return new AnonymousObservable(function ($observer, $scheduler) use ($currentObservable, $count) {
-            $remaining = $count;
-
-            return $currentObservable->subscribeCallback(
-                function ($nextValue) use ($observer, &$remaining) {
-                    if ($remaining > 0) {
-                        $remaining--;
-                        $observer->onNext($nextValue);
-                        if ($remaining === 0) {
-                            $observer->onCompleted();
-                        }
-                    }
-                },
-                [$observer, 'onError'],
-                [$observer, 'onCompleted'],
-                $scheduler
-            );
+        return $this->lift(function () use ($count) {
+            return new TakeOperator($count);
         });
     }
 

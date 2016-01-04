@@ -5,6 +5,7 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\ReturnObservable;
+use Rx\Observer\CallbackObserver;
 
 
 class TakeTest extends FunctionalTestCase
@@ -13,10 +14,12 @@ class TakeTest extends FunctionalTestCase
      * @test
      * @expectedException \InvalidArgumentException
      */
-    public function it_throws_an_exception_on_negative_amounts() 
+    public function it_throws_an_exception_on_negative_amounts()
     {
         $observable = new ReturnObservable(42);
-        $observable->take(-1);
+        $result     = $observable->take(-1);
+
+        $result->subscribe(new CallbackObserver());
     }
 
     /**
