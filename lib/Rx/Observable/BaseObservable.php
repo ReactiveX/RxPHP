@@ -20,6 +20,7 @@ use Rx\Operator\ReduceOperator;
 use Rx\Operator\RetryOperator;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
+use Rx\Operator\SkipOperator;
 use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
@@ -37,7 +38,7 @@ use Rx\Disposable\CallbackDisposable;
 
 abstract class BaseObservable implements ObservableInterface
 {
-    protected $observers = array();
+    protected $observers = [];
     protected $started = false;
     private $disposable = null;
 
@@ -136,7 +137,7 @@ abstract class BaseObservable implements ObservableInterface
     public function merge(ObservableInterface $otherObservable, $scheduler = null)
     {
         return self::mergeAll(
-            self::fromArray(array($this, $otherObservable))
+            self::fromArray([$this, $otherObservable])
         );
     }
 
@@ -171,11 +172,11 @@ abstract class BaseObservable implements ObservableInterface
 
     public static function fromArray(array $array)
     {
-        $max   = count($array);
+        $max = count($array);
         return new AnonymousObservable(function ($observer, $scheduler) use ($array, $max) {
             $count = 0;
 
-            return $scheduler->scheduleRecursive(function($reschedule) use (&$count, $array, $max, $observer) {
+            return $scheduler->scheduleRecursive(function ($reschedule) use (&$count, $array, $max, $observer) {
                 if ($count < $max) {
                     $observer->onNext($array[$count]);
                     $count++;
@@ -189,26 +190,8 @@ abstract class BaseObservable implements ObservableInterface
 
     public function skip($count)
     {
-        if ($count < 0) {
-            throw new InvalidArgumentException('Count must be >= 0');
-        }
-
-        $currentObservable = $this;
-
-        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $count) {
-            $remaining = $count;
-
-            return $currentObservable->subscribeCallback(
-                function($nextValue) use ($observer, &$remaining) {
-                    if ($remaining <= 0) {
-                        $observer->onNext($nextValue);
-                    } else {
-                        $remaining--;
-                    }
-                },
-                array($observer, 'onError'),
-                array($observer, 'onCompleted')
-            );
+        return $this->lift(function () use ($count) {
+            return new SkipOperator($count);
         });
     }
 
@@ -224,11 +207,11 @@ abstract class BaseObservable implements ObservableInterface
 
         $currentObservable = $this;
 
-        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $count) {
+        return new AnonymousObservable(function ($observer, $scheduler) use ($currentObservable, $count) {
             $remaining = $count;
 
             return $currentObservable->subscribeCallback(
-                function($nextValue) use ($observer, &$remaining) {
+                function ($nextValue) use ($observer, &$remaining) {
                     if ($remaining > 0) {
                         $remaining--;
                         $observer->onNext($nextValue);
@@ -237,8 +220,8 @@ abstract class BaseObservable implements ObservableInterface
                         }
                     }
                 },
-                array($observer, 'onError'),
-                array($observer, 'onCompleted'),
+                [$observer, 'onError'],
+                [$observer, 'onCompleted'],
                 $scheduler
             );
         });
@@ -278,15 +261,15 @@ abstract class BaseObservable implements ObservableInterface
             };
         }
 
-        return new AnonymousObservable(function($observer, $scheduler) use ($currentObservable, $keySelector, $elementSelector, $durationSelector, $keySerializer) {
-            $map = array();
-            $groupDisposable = new CompositeDisposable();
+        return new AnonymousObservable(function ($observer, $scheduler) use ($currentObservable, $keySelector, $elementSelector, $durationSelector, $keySerializer) {
+            $map                = [];
+            $groupDisposable    = new CompositeDisposable();
             $refCountDisposable = new RefCountDisposable($groupDisposable);
 
             $groupDisposable->add($currentObservable->subscribeCallback(
-                function($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable){
+                function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable) {
                     try {
-                        $key = $keySelector($value);
+                        $key           = $keySelector($value);
                         $serializedKey = $keySerializer($key);
                     } catch (Exception $e) {
                         foreach ($map as $groupObserver) {
@@ -300,9 +283,9 @@ abstract class BaseObservable implements ObservableInterface
                     $fireNewMapEntry = false;
 
                     try {
-                        if ( ! isset($map[$serializedKey])) {
+                        if (!isset($map[$serializedKey])) {
                             $map[$serializedKey] = new Subject();
-                            $fireNewMapEntry = true;
+                            $fireNewMapEntry     = true;
                         }
                         $writer = $map[$serializedKey];
 
@@ -316,7 +299,7 @@ abstract class BaseObservable implements ObservableInterface
                     }
 
                     if ($fireNewMapEntry) {
-                        $group = new GroupedObservable($key, $writer, $refCountDisposable);
+                        $group         = new GroupedObservable($key, $writer, $refCountDisposable);
                         $durationGroup = new GroupedObservable($key, $writer);
 
                         try {
@@ -333,7 +316,7 @@ abstract class BaseObservable implements ObservableInterface
                         $observer->onNext($group);
                         $md = new SingleAssignmentDisposable();
                         $groupDisposable->add($md);
-                        $expire = function() use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
+                        $expire = function () use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
                             if (isset($map[$serializedKey])) {
                                 unset($map[$serializedKey]);
                                 $writer->onCompleted();
@@ -343,15 +326,16 @@ abstract class BaseObservable implements ObservableInterface
 
                         $md->setDisposable(
                             $duration->take(1)->subscribeCallback(
-                                function(){},
-                                function(Exception $exception) use ($map, $observer){
+                                function () {
+                                },
+                                function (Exception $exception) use ($map, $observer) {
                                     foreach ($map as $writer) {
                                         $writer->onError($exception);
                                     }
 
                                     $observer->onError($exception);
                                 },
-                                function() use ($expire) {
+                                function () use ($expire) {
                                     $expire();
                                 }
                             )
@@ -370,14 +354,14 @@ abstract class BaseObservable implements ObservableInterface
                     }
                     $writer->onNext($element);
                 },
-                function(Exception $error) use (&$map, $observer) {
+                function (Exception $error) use (&$map, $observer) {
                     foreach ($map as $writer) {
                         $writer->onError($error);
                     }
 
                     $observer->onError($error);
                 },
-                function() use (&$map, $observer) {
+                function () use (&$map, $observer) {
                     foreach ($map as $writer) {
                         $writer->onCompleted();
                     }
@@ -614,10 +598,10 @@ abstract class BaseObservable implements ObservableInterface
     public function multicast(Subject $subject, $selector = null)
     {
         return $selector ?
-          new MulticastObservable($this, function () use ($subject) {
-              return $subject;
-          }, $selector) :
-          new ConnectableObservable($this, $subject);
+            new MulticastObservable($this, function () use ($subject) {
+                return $subject;
+            }, $selector) :
+            new ConnectableObservable($this, $subject);
     }
 
     /**
@@ -733,7 +717,8 @@ abstract class BaseObservable implements ObservableInterface
      * @param callable $selector
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function zip(array $observables, callable $selector = null){
+    public function zip(array $observables, callable $selector = null)
+    {
         return $this->lift(function () use ($observables, $selector) {
             return new ZipOperator($observables, $selector);
         });

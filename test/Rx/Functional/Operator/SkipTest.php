@@ -5,6 +5,7 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\ReturnObservable;
+use Rx\Observer\CallbackObserver;
 
 
 class SkipTest extends FunctionalTestCase
@@ -16,7 +17,9 @@ class SkipTest extends FunctionalTestCase
     public function it_throws_an_exception_on_negative_amounts()
     {
         $observable = new ReturnObservable(42);
-        $observable->skip(-1);
+        $result     = $observable->skip(-1);
+
+        $result->subscribe(new CallbackObserver());
     }
 
     /**
