@@ -98,6 +98,7 @@ abstract class BaseObservable implements ObservableInterface
 
     /**
      * Alias for Map
+     *
      * @param callable $selector
      * @return \Rx\Observable\AnonymousObservable
      */
@@ -247,11 +248,14 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Applies an accumulator function over an observable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
+     * Applies an accumulator function over an observable sequence,
+     * returning the result of the aggregation as a single element in the result sequence.
+     * The specified seed value is used as the initial accumulator value.
      *
      * @param callable $accumulator - An accumulator function to be invoked on each element.
      * @param mixed $seed [optional] - The initial accumulator value.
-     * @return \Rx\Observable\AnonymousObservable - An observable sequence containing a single element with the final accumulator value.
+     * @return \Rx\Observable\AnonymousObservable - An observable sequence containing a single element with the final
+     * accumulator value.
      */
     public function reduce(callable $accumulator, $seed = null)
     {
@@ -261,10 +265,11 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that contains only distinct contiguous elements according to the keySelector and the comparer.
+     * Returns an observable sequence that contains only distinct contiguous elements according to the keySelector
+     * and the comparer.
      *
-     * @param null $keySelector
-     * @param null $comparer
+     * @param callable $keySelector
+     * @param callable $comparer
      * @return \Rx\Observable\AnonymousObservable
      */
     public function distinctUntilChanged(callable $keySelector = null, callable $comparer = null)
@@ -292,8 +297,10 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     *  Invokes an action for each element in the observable sequence and invokes an action upon graceful or exceptional termination of the observable sequence.
-     *  This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
+     *  Invokes an action for each element in the observable sequence and invokes an action upon graceful
+     *  or exceptional termination of the observable sequence.
+     *  This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to
+     *  run arbitrary actions for messages on the pipeline.
      *
      * @param ObserverInterface $observer
      *
@@ -331,8 +338,9 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     *  Applies an accumulator function over an observable sequence and returns each intermediate result. The optional seed value is used as the initial accumulator value.
-     *  For aggregation behavior with no intermediate results, see Observable.aggregate.
+     * Applies an accumulator function over an observable sequence and returns each intermediate result.
+     * The optional seed value is used as the initial accumulator value.
+     * For aggregation behavior with no intermediate results, see Observable.aggregate.
      *
      * @param $accumulator
      * @param null $seed
@@ -346,8 +354,9 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     *  Creates an array from an observable sequence.
-     * @return AnonymousObservable An observable sequence containing a single element with a list containing all the elements of the source sequence.
+     * Creates an array from an observable sequence.
+     * @return AnonymousObservable An observable sequence containing a single element with a list containing all the
+     * elements of the source sequence.
      */
     public function toArray()
     {
@@ -357,12 +366,15 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     *  Bypasses a specified number of elements at the end of an observable sequence.
-     *  This operator accumulates a queue with a length enough to store the first `count` elements. As more elements are
-     *  received, elements are taken from the front of the queue and produced on the result sequence. This causes elements to be delayed.
+     * Bypasses a specified number of elements at the end of an observable sequence.
+     *
+     * This operator accumulates a queue with a length enough to store the first `count` elements. As more elements are
+     * received, elements are taken from the front of the queue and produced on the result sequence. This causes
+     * elements to be delayed.
      *
      * @param $count Number of elements to bypass at the end of the source sequence.
-     * @return AnonymousObservable An observable sequence containing the source sequence elements except for the bypassed ones at the end.
+     * @return AnonymousObservable An observable sequence containing the source sequence elements except for the
+     * bypassed ones at the end.
      */
     public function skipLast($count)
     {
@@ -374,8 +386,9 @@ abstract class BaseObservable implements ObservableInterface
     /**
      * Returns the values from the source observable sequence only after the other observable sequence produces a value.
      *
-     * @param mixed $other The observable sequence or Promise that triggers propagation of elements of the source sequence.
-     * @return AnonymousObservable An observable sequence containing the elements of the source sequence starting from the point the other sequence triggered propagation.
+     * @param mixed $other The observable sequence that triggers propagation of elements of the source sequence.
+     * @return AnonymousObservable An observable sequence containing the elements of the source sequence starting
+     * from the point the other sequence triggered propagation.
      */
     public function skipUntil($other)
     {
@@ -385,7 +398,8 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     *  Hides the identity of an observable sequence.
+     * Hides the identity of an observable sequence.
+     *
      * @return AnonymousObservable An observable sequence that hides the identity of the source sequence.
      */
     public function asObservable()
@@ -397,6 +411,7 @@ abstract class BaseObservable implements ObservableInterface
 
     /**
      * Concatenates all the observable sequences.
+     *
      * @param ObservableInterface $observable
      * @return AnonymousObservable
      */
@@ -408,7 +423,8 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence containing a value that represents how many elements in the specified observable sequence satisfy a condition if provided, else the count of items.
+     * Returns an observable sequence containing a value that represents how many elements in the specified observable
+     * sequence satisfy a condition if provided, else the count of items.
      *
      * @param callable $predicate
      * @return \Rx\Observable\AnonymousObservable
@@ -434,9 +450,10 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Multicasts the source sequence notifications through an instantiated subject into all uses of the sequence within a selector function. Each
-     * subscription to the resulting sequence causes a separate multicast invocation, exposing the sequence resulting from the selector function's
-     * invocation. For specializations with fixed subject types, see Publish, PublishLast, and Replay.
+     * Multicasts the source sequence notifications through an instantiated subject into all uses of the sequence
+     * within a selector function. Each subscription to the resulting sequence causes a separate multicast invocation,
+     * exposing the sequence resulting from the selector function's invocation. For specializations with fixed subject
+     * types, see Publish, PublishLast, and Replay.
      *
      * @param \Rx\Subject\Subject $subject
      * @param null $selector
@@ -452,9 +469,10 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Multicasts the source sequence notifications through an instantiated subject from a subject selector factory, into all uses of the sequence within a selector function. Each
-     * subscription to the resulting sequence causes a separate multicast invocation, exposing the sequence resulting from the selector function's
-     * invocation. For specializations with fixed subject types, see Publish, PublishLast, and Replay.
+     * Multicasts the source sequence notifications through an instantiated subject from a subject selector factory,
+     * into all uses of the sequence within a selector function. Each subscription to the resulting sequence causes a
+     * separate multicast invocation, exposing the sequence resulting from the selector function's invocation.
+     * For specializations with fixed subject types, see Publish, PublishLast, and Replay.
      *
      * @param callable $subjectSelector
      * @param null $selector
@@ -466,7 +484,8 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence
+     * that shares a single subscription to the underlying sequence.
      * This operator is a specialization of Multicast using a regular Subject.
      *
      * @param callable|null $selector
@@ -478,7 +497,8 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence containing only the last notification.
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence
+     * that shares a single subscription to the underlying sequence containing only the last notification.
      * This operator is a specialization of Multicast using a AsyncSubject.
      *
      * @param callable|null $selector
@@ -490,7 +510,8 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence
+     * that shares a single subscription to the underlying sequence and starts with initialValue.
      * This operator is a specialization of Multicast using a BehaviorSubject.
      *
      * @param null $initialValue
@@ -504,9 +525,13 @@ abstract class BaseObservable implements ObservableInterface
 
     /**
      * Returns an observable sequence that shares a single subscription to the underlying sequence.
-     * This operator is a specialization of publish which creates a subscription when the number of observers goes from zero to one, then shares that subscription with all subsequent observers until the number of observers returns to zero, at which point the subscription is disposed.
      *
-     * @return \Rx\Observable\RefCountObservable An observable sequence that contains the elements of a sequence produced by multicasting the source sequence.,mk
+     * This operator is a specialization of publish which creates a subscription when the number of observers goes
+     * from zero to one, then shares that subscription with all subsequent observers until the number of observers
+     * returns to zero, at which point the subscription is disposed.
+     *
+     * @return \Rx\Observable\RefCountObservable An observable sequence that contains the elements of a sequence
+     * produced by multicasting the source sequence.
      */
     public function share()
     {
@@ -514,8 +539,12 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that shares a single subscription to the underlying sequence and starts with an initialValue.
-     * This operator is a specialization of publishValue which creates a subscription when the number of observers goes from zero to one, then shares that subscription with all subsequent observers until the number of observers returns to zero, at which point the subscription is disposed.
+     * Returns an observable sequence that shares a single subscription to the underlying sequence and starts with an
+     * initialValue.
+     *
+     * This operator is a specialization of publishValue which creates a subscription when the number of observers goes
+     * from zero to one, then shares that subscription with all subsequent observers until the number of observers
+     * returns to zero, at which point the subscription is disposed.
      *
      * @param $initialValue
      * @return \Rx\Observable\RefCountObservable
@@ -526,8 +555,12 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-     * This operator is a specialization of replay which creates a subscription when the number of observers goes from zero to one, then shares that subscription with all subsequent observers until the number of observers returns to zero, at which point the subscription is disposed.
+     * Returns an observable sequence that shares a single subscription to the underlying sequence replaying
+     * notifications subject to a maximum time length for the replay buffer.
+     *
+     * This operator is a specialization of  replay which creates a subscription when the number of observers goes from
+     * zero to one, then shares that  subscription with all subsequent observers until the number of observers returns
+     * to zero, at which point the subscription is disposed.
      *
      * @param $bufferSize
      * @param $windowSize
@@ -540,7 +573,10 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
+     * Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence
+     * that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time
+     * length for the replay buffer.
+     *
      * This operator is a specialization of Multicast using a ReplaySubject.
      *
      * @param callable|null $selector
