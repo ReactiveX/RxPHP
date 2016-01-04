@@ -793,6 +793,8 @@ abstract class BaseObservable implements ObservableInterface
      */
     public function retry($retryCount = -1)
     {
-        return $this->lift(new RetryOperator($retryCount));
+        return $this->lift(function () use ($retryCount) {
+            return new RetryOperator($retryCount);
+        });
     }
 }
