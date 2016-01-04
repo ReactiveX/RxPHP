@@ -2,11 +2,10 @@
 
 namespace Rx\Observable;
 
-use Rx\Disposable\EmptyDisposable;
-use Rx\ObserverInterface;
-
 class ArrayObservable extends BaseObservable
 {
+    private $data;
+
     public function __construct(array $data)
     {
         $this->data = $data;
@@ -14,23 +13,22 @@ class ArrayObservable extends BaseObservable
 
     protected function doStart($scheduler)
     {
-        $observers = $this->observers;
-
-        $values     = $this->data;
-
+        $values    = &$this->data;
         $observers = &$this->observers;
+        $max       = count($values);
+        $keys      = array_keys($values);
+        $count     = 0;
 
-        return $scheduler->scheduleRecursive(function($reschedule) use (&$observers, &$values) {
-            $count = count($values);
+        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observers, &$values, $max, &$count, $keys) {
 
-            if ($count > 0) {
-                $value = array_shift($values);
-
+            if ($count < $max) {
                 foreach ($observers as $observer) {
-                    $observer->onNext($value);
+                    $observer->onNext($values[$keys[$count]]);
                 }
 
-                if ($count > 1) {
+                $count++;
+
+                if ($count >= 1) {
                     $reschedule();
 
                     return;
@@ -40,9 +38,7 @@ class ArrayObservable extends BaseObservable
             foreach ($observers as $observer) {
                 $observer->onCompleted();
             }
-        });
 
-        //todo: add "real" disposable
-        return new EmptyDisposable();
+        });
     }
 }
