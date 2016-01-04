@@ -15,6 +15,7 @@ use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
+use Rx\Operator\MergeAllOperator;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\RetryOperator;
 use Rx\Operator\ScanOperator;
@@ -163,53 +164,8 @@ abstract class BaseObservable implements ObservableInterface
      */
     public static function mergeAll(ObservableInterface $sources)
     {
-        // todo: add scheduler
-        return new AnonymousObservable(function($observer, $scheduler) use ($sources) {
-            $group              = new CompositeDisposable();
-            $isStopped          = false;
-            $sourceSubscription = new SingleAssignmentDisposable();
-
-            $group->add($sourceSubscription);
-
-            $sourceSubscription->setDisposable(
-                $sources->subscribeCallback(
-                    function($innerSource) use (&$group, &$isStopped, $observer, &$scheduler) {
-                        $innerSubscription = new SingleAssignmentDisposable();
-                        $group->add($innerSubscription);
-
-                        $innerSubscription->setDisposable(
-                            $innerSource->subscribeCallback(
-                                function($nextValue) use ($observer) {
-                                    $observer->onNext($nextValue);
-                                },
-                                function($error) use ($observer) {
-                                    $observer->onError($error);
-                                },
-                                function() use (&$group, &$innerSubscription, &$isStopped, $observer) {
-                                    $group->remove($innerSubscription);
-
-                                    if ($isStopped && $group->count() === 1) {
-                                        $observer->onCompleted();
-                                    }
-                                },
-                                $scheduler
-                            )
-                        );
-                    },
-                    function($error) use ($observer) {
-                        $observer->onError($error);
-                    },
-                    function() use (&$group, &$isStopped, $observer) {
-                        $isStopped = true;
-                        if ($group->count() === 1) {
-                            $observer->onCompleted();
-                        }
-                    },
-                    $scheduler
-                )
-            );
-
-            return $group;
+        return (new EmptyObservable())->lift(function () use ($sources) {
+            return new MergeAllOperator($sources);
         });
     }
 
