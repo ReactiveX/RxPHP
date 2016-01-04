@@ -2,7 +2,6 @@
 
 namespace Rx\Observable;
 
-use InvalidArgumentException;
 use Rx\Disposable\CallbackDisposable;
 use Rx\ObserverInterface;
 use Rx\Observer\AutoDetachObserver;
@@ -12,12 +11,8 @@ class AnonymousObservable extends BaseObservable
 {
     private $subscribeAction;
 
-    public function __construct($subscribeAction)
+    public function __construct(callable $subscribeAction)
     {
-        if ( ! is_callable($subscribeAction)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $this->subscribeAction = $subscribeAction;
     }
 

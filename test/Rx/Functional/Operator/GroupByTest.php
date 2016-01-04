@@ -180,60 +180,6 @@ class GroupByTest extends FunctionalTestCase
         ), $results->getMessages());
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function it_throws_if_keyselector_is_not_callable()
-    {
-        $xs = $this->createHotObservableWithData(true);
-
-        $xs
-          ->groupByUntil("non-callable", null, function () {
-              throw new Exception('');
-          })
-          ->select(function (GroupedObservable $observable) {
-              return $observable->getKey();
-        });
-
-    }
-
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function it_throws_if_durationselector_is_not_callable()
-    {
-        $xs = $this->createHotObservableWithData(true);
-
-        $xs
-          ->groupByUntil(function ($elem) {
-              return $elem;
-          }, null, "non-callable")
-          ->select(function (GroupedObservable $observable) {
-              return $observable->getKey();
-          });
-
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function it_throws_if_keyserializer_is_not_callable()
-    {
-        $xs = $this->createHotObservableWithData(true);
-
-        $xs
-          ->groupByUntil(function ($elem) {
-              return $elem;
-          }, null, null, "non-callable")
-          ->select(function (GroupedObservable $observable) {
-            return $observable->getKey();
-        });
-
-    }
 
     /**
      * @test
@@ -337,29 +283,6 @@ class GroupByTest extends FunctionalTestCase
             onNext(530, "    fOo    "),
             onCompleted(570),
         ), $innerSubscriptions[5]['observer']->getMessages());
-    }
-
-
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function it_throws_if_elementselector_is_not_a_callable()
-    {
-        $xs = $this->createHotObservable(array());
-
-        $xs->groupBy(function() {}, 'yay');
-    }
-
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function it_throws_if_keyserializer_is_not_a_callable()
-    {
-        $xs = $this->createHotObservable(array());
-
-        $xs->groupBy(function() {}, null, 'yay');
     }
 
     protected function createHotObservableWithData($error = false)

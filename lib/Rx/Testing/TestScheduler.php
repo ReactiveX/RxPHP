@@ -16,7 +16,7 @@ class TestScheduler extends VirtualTimeScheduler
         parent::__construct(0, function($a, $b) { return $a - $b; });
     }
 
-    public function scheduleAbsoluteWithState($state, $dueTime, $action)
+    public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
     {
         if ($dueTime <= $this->clock) {
             $dueTime = $this->clock + 1;

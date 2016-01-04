@@ -9,23 +9,15 @@ use InvalidArgumentException;
 
 class ImmediateScheduler implements SchedulerInterface
 {
-    public function schedule($action)
+    public function schedule(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $action();
 
         return new EmptyDisposable();
     }
 
-    public function scheduleRecursive($action)
+    public function scheduleRecursive(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $group = new CompositeDisposable();
         $scheduler = $this;
 

@@ -15,7 +15,7 @@ class DeferOperator implements OperatorInterface
      */
     private $factory;
 
-    function __construct($factory)
+    public function __construct(callable $factory)
     {
         $this->factory = $factory;
     }

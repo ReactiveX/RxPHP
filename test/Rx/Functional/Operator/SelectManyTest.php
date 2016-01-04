@@ -95,14 +95,4 @@ class SelectManyTest extends FunctionalTestCase
         $this->assertSubscriptions(array(subscribe(300, 510), subscribe(400, 510), subscribe(500, 510)), $ys->getSubscriptions());
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function it_throws_if_selector_is_not_a_callable()
-    {
-        $xs = $this->createHotObservable(array());
-
-        $xs->selectMany('yay');
-    }
 }

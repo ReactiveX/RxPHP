@@ -1,18 +1,14 @@
 <?php
 
-
 namespace Rx\Operator;
-
 
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-
 class ReduceOperator implements OperatorInterface
 {
-
     /** @var  callable */
     protected $accumulator;
     protected $seed;
@@ -22,12 +18,8 @@ class ReduceOperator implements OperatorInterface
      * @param callable $accumulator
      * @param $seed
      */
-    function __construct($accumulator, $seed)
+    public function __construct(callable $accumulator, $seed)
     {
-        if (!is_callable($accumulator)) {
-            throw new \InvalidArgumentException('Accumulator should be a callable.');
-        }
-
         $this->accumulator = $accumulator;
         $this->seed        = $seed;
         $this->hasSeed     = $seed ? true : false;

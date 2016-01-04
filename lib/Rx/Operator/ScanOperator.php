@@ -2,7 +2,6 @@
 
 namespace Rx\Operator;
 
-
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
@@ -21,12 +20,8 @@ class ScanOperator implements OperatorInterface
      * @param callable $accumulator
      * @param $seed
      */
-    public function __construct($accumulator, $seed = null)
+    public function __construct(callable $accumulator, $seed = null)
     {
-        if (!is_callable($accumulator)) {
-            throw new \InvalidArgumentException('Accumulator should be a callable.');
-        }
-
         $this->accumulator = $accumulator;
         $this->seed = $seed;
     }
