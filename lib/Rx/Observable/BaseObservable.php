@@ -134,7 +134,7 @@ abstract class BaseObservable implements ObservableInterface
     public function merge(ObservableInterface $otherObservable, $scheduler = null)
     {
         return self::mergeAll(
-            self::fromArray(array($this, $otherObservable), $scheduler)
+            self::fromArray(array($this, $otherObservable))
         );
     }
 
@@ -147,7 +147,7 @@ abstract class BaseObservable implements ObservableInterface
      * Alias for flatMap
      *
      * @param $selector
-     * @return \Rx\ObserverInterface
+     * @return AnonymousObservable
      */
     public function selectMany($selector)
     {
@@ -157,9 +157,8 @@ abstract class BaseObservable implements ObservableInterface
     /**
      * Merges an observable sequence of observables into an observable sequence.
      *
-     * @param ObservableInterface $observables
-     *
-     * @return ObserverInterface
+     * @param ObservableInterface $sources
+     * @return AnonymousObservable
      */
     public static function mergeAll(ObservableInterface $sources)
     {
