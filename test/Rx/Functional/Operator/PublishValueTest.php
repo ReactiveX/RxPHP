@@ -9,7 +9,7 @@ use Rx\Observable\NeverObservable;
 class PublishValueTest extends FunctionalTestCase
 {
 
-    protected function add($x, $y)
+    public function add($x, $y)
     {
         return $x + $y;
     }
@@ -385,10 +385,6 @@ class PublishValueTest extends FunctionalTestCase
     public function publishValue_zip_complete()
     {
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -407,9 +403,9 @@ class PublishValueTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publishValue(function (BaseObservable $ys) {
-                return $ys->zip($ys->skip(1), [$this, 'add']);
-            }, 1979);
+            return $xs->publishValue(1979, function (BaseObservable $ys) {
+                return $ys->zip([$ys->skip(1)], [$this, 'add']);
+            });
         });
 
         $this->assertMessages([
@@ -440,39 +436,48 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_errorr()
+    public function publishValue_zip_error()
     {
 
         $error = new \Exception();
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
-          onNext(220, 1982),
-          onNext(280, 7),
-          onNext(290, 5),
-          onNext(340, 9),
-          onNext(360, 13),
-          onNext(370, 11),
-          onNext(390, 13),
-          onNext(410, 20),
-          onNext(430, 15),
-          onNext(450, 11),
-          onNext(520, 20),
-          onNext(560, 31),
-          onError(600, $error)
+            onNext(110, 7),
+            onNext(220, 3),
+            onNext(280, 4),
+            onNext(290, 1),
+            onNext(340, 8),
+            onNext(360, 5),
+            onNext(370, 6),
+            onNext(390, 7),
+            onNext(410, 13),
+            onNext(430, 2),
+            onNext(450, 9),
+            onNext(520, 11),
+            onNext(560, 20),
+            onError(600, $error)
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publishValue(function (BaseObservable $ys) {
-                return $ys->zip($ys->skip(1), [$this, 'add']);
-            }, 1979);
+            return $xs->publishValue(1979, function (BaseObservable $ys) {
+                return $ys->zip([$ys->skip(1)], [$this, 'add']);
+            });
         });
 
         $this->assertMessages([
-          onError(600, error)
+            onNext(220, 1982),
+            onNext(280, 7),
+            onNext(290, 5),
+            onNext(340, 9),
+            onNext(360, 13),
+            onNext(370, 11),
+            onNext(390, 13),
+            onNext(410, 20),
+            onNext(430, 15),
+            onNext(450, 11),
+            onNext(520, 20),
+            onNext(560, 31),
+            onError(600, $error)
         ],
           $results->getMessages()
         );
@@ -490,10 +495,6 @@ class PublishValueTest extends FunctionalTestCase
     public function publishValue_zip_dispose()
     {
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -511,11 +512,11 @@ class PublishValueTest extends FunctionalTestCase
           onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publishValue(function (BaseObservable $ys) {
-                return $ys->zip($ys->skip(1), [$this, 'add']);
-            }, 1979);
-        }, ["disposed" => 470]);
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->publishValue(1979, function (BaseObservable $ys) {
+                return $ys->zip([$ys->skip(1)], [$this, 'add']);
+            });
+        }, 470);
 
         $this->assertMessages([
           onNext(220, 1982),

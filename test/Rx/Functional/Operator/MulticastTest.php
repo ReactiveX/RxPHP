@@ -15,11 +15,10 @@ use Rx\Testing\TestSubject;
 class MulticastTest extends FunctionalTestCase
 {
 
-    protected function add($x, $y)
+    public function add($x, $y)
     {
         return $x + $y;
     }
-
 
     /**
      * @test
@@ -518,9 +517,6 @@ class MulticastTest extends FunctionalTestCase
      */
     public function multicast_cold_zip()
     {
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
 
         $xs = $this->createHotObservable([
           onNext(40, 0),
@@ -540,7 +536,7 @@ class MulticastTest extends FunctionalTestCase
                   return new Subject();
               },
               function ($ys) {
-                  return $ys->zip($ys, [$this, 'add']);
+                  return $ys->zip([$ys], [$this, 'add']);
               });
         });
 

@@ -8,6 +8,12 @@ use Rx\Observable\NeverObservable;
 
 class PublishLastTest extends FunctionalTestCase
 {
+
+    public function add($x, $y)
+    {
+        return $x + $y;
+    }
+
     /**
      * @test
      */
@@ -355,10 +361,6 @@ class PublishLastTest extends FunctionalTestCase
     public function publishLast_zip_complete()
     {
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -378,7 +380,7 @@ class PublishLastTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->publishLast(function (BaseObservable $ys) {
-                return $ys->zip($ys, [$this, 'add']);
+                return $ys->zip([$ys], [$this, 'add']);
             });
         });
 
@@ -404,10 +406,6 @@ class PublishLastTest extends FunctionalTestCase
 
         $error = new \Exception();
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -427,7 +425,7 @@ class PublishLastTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->publishLast(function (BaseObservable $ys) {
-                return $ys->zip($ys, [$this, 'add']);
+                return $ys->zip([$ys], [$this, 'add']);
             });
         });
 
@@ -450,32 +448,28 @@ class PublishLastTest extends FunctionalTestCase
     public function publishLast_zip_dispose()
     {
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
-          onNext(110, 7),
-          onNext(220, 3),
-          onNext(280, 4),
-          onNext(290, 1),
-          onNext(340, 8),
-          onNext(360, 5),
-          onNext(370, 6),
-          onNext(390, 7),
-          onNext(410, 13),
-          onNext(430, 2),
-          onNext(450, 9),
-          onNext(520, 11),
-          onNext(560, 20),
-          onCompleted(600)
+            onNext(110, 7),
+            onNext(220, 3),
+            onNext(280, 4),
+            onNext(290, 1),
+            onNext(340, 8),
+            onNext(360, 5),
+            onNext(370, 6),
+            onNext(390, 7),
+            onNext(410, 13),
+            onNext(430, 2),
+            onNext(450, 9),
+            onNext(520, 11),
+            onNext(560, 20),
+            onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publishLast(function (BaseObservable $ys) {
-                return $ys->zip($ys->skip(1), [$this, 'add']);
-            }, ["disposed" => 470]);
-        });
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->publishLast(function (BaseObservable $ys)  {
+                return $ys->zip([$ys], [$this, 'add']);
+            });
+        }, 470);
 
         $this->assertMessages([], $results->getMessages());
 

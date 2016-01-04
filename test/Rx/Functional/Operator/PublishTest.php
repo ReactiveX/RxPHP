@@ -13,7 +13,7 @@ use Rx\Testing\TestSubject;
 class PublishTest extends FunctionalTestCase
 {
 
-    protected function add($x, $y)
+    public function add($x, $y)
     {
         return $x + $y;
     }
@@ -24,31 +24,31 @@ class PublishTest extends FunctionalTestCase
     public function publish_cold_zip()
     {
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
-          onNext(40, 0),
-          onNext(90, 1),
-          onNext(150, 2),
-          onNext(210, 3),
-          onNext(240, 4),
-          onNext(270, 5),
-          onNext(330, 6),
-          onNext(340, 7),
-          onCompleted(390)
+            onNext(40, 0),
+            onNext(90, 1),
+            onNext(150, 2),
+            onNext(210, 3),
+            onNext(240, 4),
+            onNext(270, 5),
+            onNext(330, 6),
+            onNext(340, 7),
+            onCompleted(390)
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->publish(function (BaseObservable $ys) {
-                $ys->zip($ys, [$this, 'add']);
+                return $ys->zip([$ys], [$this, 'add']);
             });
         });
 
         $this->assertMessages([
-          onNext(250, 42),
-          onCompleted(250)
+            onNext(210, 6),
+            onNext(240, 8),
+            onNext(270, 10),
+            onNext(330, 12),
+            onNext(340, 14),
+            onCompleted(390)
         ],
           $results->getMessages()
         );
@@ -498,11 +498,6 @@ class PublishTest extends FunctionalTestCase
      */
     public function publish_lambda_zip_complete()
     {
-
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -522,25 +517,25 @@ class PublishTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->publish(function (BaseObservable $ys) {
-                return $ys->zip($ys, [$this, 'add']);
+                return $ys->zip([$ys->skip(1)], [$this, 'add']);
             });
         });
 
         $this->assertMessages([
-          onNext(280, 7),
-          onNext(290, 5),
-          onNext(340, 9),
-          onNext(360, 13),
-          onNext(370, 11),
-          onNext(390, 13),
-          onNext(410, 20),
-          onNext(430, 15),
-          onNext(450, 11),
-          onNext(520, 20),
-          onNext(560, 31),
-          onCompleted(600)
+            onNext(280, 7),
+            onNext(290, 5),
+            onNext(340, 9),
+            onNext(360, 13),
+            onNext(370, 11),
+            onNext(390, 13),
+            onNext(410, 20),
+            onNext(430, 15),
+            onNext(450, 11),
+            onNext(520, 20),
+            onNext(560, 31),
+            onCompleted(600)
         ],
-          $results->getMessages()
+            $results->getMessages()
         );
 
         $this->assertSubscriptions([
@@ -557,10 +552,6 @@ class PublishTest extends FunctionalTestCase
     {
 
         $error = new \Exception();
-
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
 
         $xs = $this->createHotObservable([
           onNext(110, 7),
@@ -581,7 +572,7 @@ class PublishTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->publish(function (BaseObservable $ys) {
-                return $ys->zip($ys, [$this, 'add']);
+                return $ys->zip([$ys->skip(1)], [$this, 'add']);
             });
         });
 
@@ -615,44 +606,40 @@ class PublishTest extends FunctionalTestCase
     public function publish_lambda_zip_dispose()
     {
 
-        $this->markTestSkipped(
-          'zip operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
-          onNext(110, 7),
-          onNext(220, 3),
-          onNext(280, 4),
-          onNext(290, 1),
-          onNext(340, 8),
-          onNext(360, 5),
-          onNext(370, 6),
-          onNext(390, 7),
-          onNext(410, 13),
-          onNext(430, 2),
-          onNext(450, 9),
-          onNext(520, 11),
-          onNext(560, 20),
-          onCompleted(600)
+            onNext(110, 7),
+            onNext(220, 3),
+            onNext(280, 4),
+            onNext(290, 1),
+            onNext(340, 8),
+            onNext(360, 5),
+            onNext(370, 6),
+            onNext(390, 7),
+            onNext(410, 13),
+            onNext(430, 2),
+            onNext(450, 9),
+            onNext(520, 11),
+            onNext(560, 20),
+            onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->publish(function (BaseObservable $ys) {
-                return $ys->zip($ys->skip(1), [$this, 'add']);
-            }, ["disposed" => 470]);
-        });
+                return $ys->zip([$ys->skip(1)], [$this, 'add']);
+            });
+        }, 470);
 
 
         $this->assertMessages([
-          onNext(280, 7),
-          onNext(290, 5),
-          onNext(340, 9),
-          onNext(360, 13),
-          onNext(370, 11),
-          onNext(390, 13),
-          onNext(410, 20),
-          onNext(430, 15),
-          onNext(450, 11)
+            onNext(280, 7),
+            onNext(290, 5),
+            onNext(340, 9),
+            onNext(360, 13),
+            onNext(370, 11),
+            onNext(390, 13),
+            onNext(410, 20),
+            onNext(430, 15),
+            onNext(450, 11)
         ],
           $results->getMessages()
         );
