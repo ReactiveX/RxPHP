@@ -6,6 +6,7 @@ use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
+use Rx\Operator\CombineLatestOperator;
 use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
 use Rx\Operator\DeferOperator;
@@ -606,6 +607,22 @@ abstract class BaseObservable implements ObservableInterface
     {
         return $this->lift(function () use ($retryCount) {
             return new RetryOperator($retryCount);
+        });
+    }
+
+    /**
+     * Merges the specified observable sequences into one observable sequence by using the selector function whenever
+     * any of the observable sequences produces an element. Observables need to be an array.
+     * If the result selector is omitted, a list with the elements will be yielded.
+     *
+     * @param array $observables
+     * @param callable|null $selector
+     * @return AnonymousObservable
+     */
+    public function combineLatest(array $observables, callable $selector = null)
+    {
+        return $this->lift(function () use ($observables, $selector) {
+            return new CombineLatestOperator($observables, $selector);
         });
     }
 }
