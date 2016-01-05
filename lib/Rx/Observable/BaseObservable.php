@@ -9,6 +9,7 @@ use Rx\Operator\AsObservableOperator;
 use Rx\Operator\CombineLatestOperator;
 use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
+use Rx\Operator\DefaultIfEmptyOperator;
 use Rx\Operator\DeferOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
@@ -623,6 +624,19 @@ abstract class BaseObservable implements ObservableInterface
     {
         return $this->lift(function () use ($observables, $selector) {
             return new CombineLatestOperator($observables, $selector);
+        });
+    }
+
+    /**
+     * Returns the specified value of an observable if the sequence is empty.
+     *
+     * @param ObservableInterface $observable
+     * @return AnonymousObservable
+     */
+    public function defaultIfEmpty(ObservableInterface $observable)
+    {
+        return $this->lift(function () use ($observable) {
+            return new DefaultIfEmptyOperator($observable);
         });
     }
 }
