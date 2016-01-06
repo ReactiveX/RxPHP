@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Rx\Operator;
 
 use Rx\ObservableInterface;
@@ -8,16 +7,13 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-
 class SkipLastOperator implements OperatorInterface
 {
-
     /** @var integer */
     private $count;
 
-    /** @var Array */
+    /** @var array */
     private $q;
-
 
     /**
      * SkipLastOperator constructor.
@@ -37,8 +33,8 @@ class SkipLastOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        $this->q = [];
-        return $observable->subscribe(new CallbackObserver(
+        $this->q    = [];
+        $cbObserver = new CallbackObserver(
             function ($x) use ($observer) {
                 $this->q[] = $x;
                 if (count($this->q) > $this->count) {
@@ -51,6 +47,8 @@ class SkipLastOperator implements OperatorInterface
             function () use ($observer) {
                 $observer->onCompleted();
             }
-        ));
+        );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 }
