@@ -40,11 +40,7 @@ class ZipOperator implements OperatorInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(
-        ObservableInterface $observable,
-        ObserverInterface $observer,
-        SchedulerInterface $scheduler = null
-    )
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         array_unshift($this->sources, $observable);
 

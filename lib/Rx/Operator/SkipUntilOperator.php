@@ -40,7 +40,7 @@ class SkipUntilOperator implements OperatorInterface
             function () use (&$otherDisposable) {
                 $otherDisposable->dispose();
             }
-        ));
+        ), $scheduler);
 
 
         $sourceDisposable = $observable->subscribe(new CallbackObserver(
@@ -57,7 +57,7 @@ class SkipUntilOperator implements OperatorInterface
                     $observer->onCompleted();
                 }
             }
-        ));
+        ), $scheduler);
 
         return new CompositeDisposable([$otherDisposable, $sourceDisposable]);
 

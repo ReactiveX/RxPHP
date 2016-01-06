@@ -71,111 +71,113 @@ class GroupByUntilOperator implements OperatorInterface
         $durationSelector = $this->durationSelector;
         $keySerializer    = $this->keySerializer;
 
-        $groupDisposable->add(
-            $observable->subscribe(new CallbackObserver(
-                function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable) {
-                    try {
-                        $key           = $keySelector($value);
-                        $serializedKey = $keySerializer($key);
-                    } catch (Exception $e) {
-                        foreach ($map as $groupObserver) {
-                            $groupObserver->onError($e);
-                        }
-                        $observer->onError($e);
-
-                        return;
+        $callbackObserver = new CallbackObserver(
+            function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable) {
+                try {
+                    $key           = $keySelector($value);
+                    $serializedKey = $keySerializer($key);
+                } catch (Exception $e) {
+                    foreach ($map as $groupObserver) {
+                        $groupObserver->onError($e);
                     }
+                    $observer->onError($e);
 
-                    $fireNewMapEntry = false;
-
-                    try {
-                        if (!isset($map[$serializedKey])) {
-                            $map[$serializedKey] = new Subject();
-                            $fireNewMapEntry     = true;
-                        }
-                        $writer = $map[$serializedKey];
-
-                    } catch (Exception $e) {
-                        foreach ($map as $groupObserver) {
-                            $groupObserver->onError($e);
-                        }
-                        $observer->onError($e);
-
-                        return;
-                    }
-
-                    if ($fireNewMapEntry) {
-                        $group         = new GroupedObservable($key, $writer, $refCountDisposable);
-                        $durationGroup = new GroupedObservable($key, $writer);
-
-                        try {
-                            $duration = $durationSelector($durationGroup);
-                        } catch (\Exception $e) {
-                            foreach ($map as $groupObserver) {
-                                $groupObserver->onError($e);
-                            }
-                            $observer->onError($e);
-
-                            return;
-                        }
-
-                        $observer->onNext($group);
-                        $md = new SingleAssignmentDisposable();
-                        $groupDisposable->add($md);
-                        $expire = function () use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
-                            if (isset($map[$serializedKey])) {
-                                unset($map[$serializedKey]);
-                                $writer->onCompleted();
-                            }
-                            $groupDisposable->remove($md);
-                        };
-
-                        $md->setDisposable(
-                            $duration->take(1)->subscribeCallback(
-                                function () {
-                                },
-                                function (Exception $exception) use ($map, $observer) {
-                                    foreach ($map as $writer) {
-                                        $writer->onError($exception);
-                                    }
-
-                                    $observer->onError($exception);
-                                },
-                                function () use ($expire) {
-                                    $expire();
-                                }
-                            )
-                        );
-                    }
-
-                    try {
-                        $element = $elementSelector($value);
-                    } catch (Exception $exception) {
-                        foreach ($map as $writer) {
-                            $writer->onError($exception);
-                        }
-
-                        $observer->onError($exception);
-                        return;
-                    }
-                    $writer->onNext($element);
-                },
-                function (Exception $error) use (&$map, $observer) {
-                    foreach ($map as $writer) {
-                        $writer->onError($error);
-                    }
-
-                    $observer->onError($error);
-                },
-                function () use (&$map, $observer) {
-                    foreach ($map as $writer) {
-                        $writer->onCompleted();
-                    }
-
-                    $observer->onCompleted();
+                    return;
                 }
-            ), $scheduler)
+
+                $fireNewMapEntry = false;
+
+                try {
+                    if (!isset($map[$serializedKey])) {
+                        $map[$serializedKey] = new Subject();
+                        $fireNewMapEntry     = true;
+                    }
+                    $writer = $map[$serializedKey];
+
+                } catch (Exception $e) {
+                    foreach ($map as $groupObserver) {
+                        $groupObserver->onError($e);
+                    }
+                    $observer->onError($e);
+
+                    return;
+                }
+
+                if ($fireNewMapEntry) {
+                    $group         = new GroupedObservable($key, $writer, $refCountDisposable);
+                    $durationGroup = new GroupedObservable($key, $writer);
+
+                    try {
+                        $duration = $durationSelector($durationGroup);
+                    } catch (\Exception $e) {
+                        foreach ($map as $groupObserver) {
+                            $groupObserver->onError($e);
+                        }
+                        $observer->onError($e);
+
+                        return;
+                    }
+
+                    $observer->onNext($group);
+                    $md = new SingleAssignmentDisposable();
+                    $groupDisposable->add($md);
+                    $expire = function () use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
+                        if (isset($map[$serializedKey])) {
+                            unset($map[$serializedKey]);
+                            $writer->onCompleted();
+                        }
+                        $groupDisposable->remove($md);
+                    };
+
+                    $md->setDisposable(
+                        $duration->take(1)->subscribeCallback(
+                            function () {
+                            },
+                            function (Exception $exception) use ($map, $observer) {
+                                foreach ($map as $writer) {
+                                    $writer->onError($exception);
+                                }
+
+                                $observer->onError($exception);
+                            },
+                            function () use ($expire) {
+                                $expire();
+                            }
+                        )
+                    );
+                }
+
+                try {
+                    $element = $elementSelector($value);
+                } catch (Exception $exception) {
+                    foreach ($map as $writer) {
+                        $writer->onError($exception);
+                    }
+
+                    $observer->onError($exception);
+                    return;
+                }
+                $writer->onNext($element);
+            },
+            function (Exception $error) use (&$map, $observer) {
+                foreach ($map as $writer) {
+                    $writer->onError($error);
+                }
+
+                $observer->onError($error);
+            },
+            function () use (&$map, $observer) {
+                foreach ($map as $writer) {
+                    $writer->onCompleted();
+                }
+
+                $observer->onCompleted();
+            }
         );
+
+        $subscription = $observable->subscribe($callbackObserver, $scheduler);
+
+        $groupDisposable->add($subscription);
 
         return $refCountDisposable;
     }

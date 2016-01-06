@@ -8,7 +8,7 @@ class Recorded
     {
         $this->time     = $time;
         $this->value    = $value;
-        $this->comparer = $comparer ?: function($a, $b) {
+        $this->comparer = $comparer ?: function ($a, $b) {
             if (method_exists($a, 'equals')) {
                 return $a->equals($b);
             }
@@ -22,7 +22,7 @@ class Recorded
         $comparer = $this->comparer;
 
         return $this->time === $other->time
-            && $comparer($this->value, $other->value);
+        && $comparer($this->value, $other->value);
     }
 
     public function __toString()

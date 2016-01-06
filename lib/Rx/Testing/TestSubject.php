@@ -86,5 +86,4 @@ class TestSubject extends Subject
     {
         return $this->subscribeCount;
     }
-
 }

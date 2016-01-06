@@ -2,8 +2,6 @@
 
 namespace Rx;
 
-use Rx\ObserverInterface;
-
 /**
  * Represents a notification to an observer.
  */
@@ -13,9 +11,8 @@ abstract class Notification
     private $hasValue;
 
     /**
-     * @param mixed   $kind     Kind of notification
+     * @param mixed $kind Kind of notification
      * @param boolean $hasValue If the notification has a value
-     * @return void
      */
     public function __construct($kind, $hasValue = false)
     {
@@ -36,9 +33,10 @@ abstract class Notification
 
     public function equals($other)
     {
-        return (string) $this === (string) $other;
+        return (string)$this === (string)$other;
     }
 
-    protected abstract function doAcceptObservable(ObserverInterface $observer);
-    protected abstract function doAccept($onNext, $onError, $onCompleted);
+    abstract protected function doAcceptObservable(ObserverInterface $observer);
+
+    abstract protected function doAccept($onNext, $onError, $onCompleted);
 }

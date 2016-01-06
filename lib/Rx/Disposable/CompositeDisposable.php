@@ -9,7 +9,7 @@ class CompositeDisposable implements DisposableInterface
     private $disposables;
     private $isDisposed = false;
 
-    public function __construct(array $disposables = array())
+    public function __construct(array $disposables = [])
     {
         $this->disposables = $disposables;
     }
@@ -22,8 +22,8 @@ class CompositeDisposable implements DisposableInterface
 
         $this->isDisposed = true;
 
-        $disposables = $this->disposables;
-        $this->disposables = array();
+        $disposables       = $this->disposables;
+        $this->disposables = [];
 
         foreach ($disposables as $disposable) {
             $disposable->dispose();
@@ -70,8 +70,8 @@ class CompositeDisposable implements DisposableInterface
 
     public function clear()
     {
-        $disposables = $this->disposables;
-        $this->disposables = array();
+        $disposables       = $this->disposables;
+        $this->disposables = [];
 
         foreach ($disposables as $disposable) {
             $disposable->dispose();

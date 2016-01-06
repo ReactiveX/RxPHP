@@ -29,18 +29,18 @@ class EventLoopScheduler implements SchedulerInterface
 
     public function scheduleRecursive(callable $action)
     {
-        $group = new CompositeDisposable();
+        $group     = new CompositeDisposable();
         $scheduler = $this;
 
         $recursiveAction = null;
-        $recursiveAction = function() use ($action, &$scheduler, &$group, &$recursiveAction) {
+        $recursiveAction = function () use ($action, &$scheduler, &$group, &$recursiveAction) {
             $action(
-                function() use (&$scheduler, &$group, &$recursiveAction) {
+                function () use (&$scheduler, &$group, &$recursiveAction) {
                     $isAdded = false;
                     $isDone  = false;
 
                     $d = null;
-                    $d = $scheduler->schedule(function() use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
+                    $d = $scheduler->schedule(function () use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
                         if (is_callable($recursiveAction)) {
                             $recursiveAction();
                         } else {
@@ -54,7 +54,7 @@ class EventLoopScheduler implements SchedulerInterface
                         }
                     });
 
-                    if ( ! $isDone) {
+                    if (!$isDone) {
                         $group->add($d);
                         $isAdded = true;
                     }
@@ -77,6 +77,4 @@ class EventLoopScheduler implements SchedulerInterface
         }
         return time();
     }
-
-
 }

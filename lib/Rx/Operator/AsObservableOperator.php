@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Rx\Operator;
 
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
-
 
 class AsObservableOperator implements OperatorInterface
 {

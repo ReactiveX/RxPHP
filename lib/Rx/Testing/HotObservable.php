@@ -11,20 +11,20 @@ class HotObservable extends BaseObservable
 {
     private $scheduler;
     private $messages;
-    private $subscriptions = array();
+    private $subscriptions = [];
 
     public function __construct($scheduler, array $messages)
     {
         $this->scheduler   = $scheduler;
-        $this->messages    = $messages ;
+        $this->messages    = $messages;
         $currentObservable = $this;
 
         foreach ($messages as $message) {
             $time         = $message->getTime();
             $notification = $message->getValue();
 
-            $schedule = function($innerNotification) use (&$currentObservable, $scheduler, $time) {
-                $scheduler->scheduleAbsolute($time, function() use (&$currentObservable, $innerNotification) {
+            $schedule = function ($innerNotification) use (&$currentObservable, $scheduler, $time) {
+                $scheduler->scheduleAbsolute($time, function () use (&$currentObservable, $innerNotification) {
                     $observers = $currentObservable->getObservers();
 
                     foreach ($observers as $observer) {
@@ -43,15 +43,15 @@ class HotObservable extends BaseObservable
     {
         $currentObservable = $this;
 
-        $this->observers[] = $observer;
+        $this->observers[]     = $observer;
         $this->subscriptions[] = new Subscription($this->scheduler->getClock());
 
         $subscriptions = &$this->subscriptions;
 
-        $index = count($this->subscriptions) - 1;
+        $index     = count($this->subscriptions) - 1;
         $scheduler = $this->scheduler;
 
-        return new CallbackDisposable(function() use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
+        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
             $currentObservable->removeObserver($observer);
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });
@@ -70,7 +70,9 @@ class HotObservable extends BaseObservable
         return true;
     }
 
-    public function doStart($scheduler){} // todo: remove from base?
+    public function doStart($scheduler)
+    {
+    } // todo: remove from base?
 
     /**
      * @internal

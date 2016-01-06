@@ -56,41 +56,41 @@ class CombineLatestOperator implements OperatorInterface
 
             $hasValue[$key] = false;
 
-            $compositeDisposable->add(
-                $o->subscribe(new CallbackObserver(
-                    function ($value) use ($count, &$hasValue, $key, &$values, $observer, &$waitingForValues, &$waitingToComplete) {
+            $cbObserver = new CallbackObserver(
+                function ($value) use ($count, &$hasValue, $key, &$values, $observer, &$waitingForValues, &$waitingToComplete) {
 
-                        if ($waitingForValues > 0 && !$hasValue[$key]) {
-                            $hasValue[$key] = true;
-                            $waitingForValues--;
-                        }
+                    if ($waitingForValues > 0 && !$hasValue[$key]) {
+                        $hasValue[$key] = true;
+                        $waitingForValues--;
+                    }
 
-                        if ($waitingToComplete < $count && $waitingForValues > 0) {
-                            $observer->onCompleted();
-                            return;
-                        }
+                    if ($waitingToComplete < $count && $waitingForValues > 0) {
+                        $observer->onCompleted();
+                        return;
+                    }
 
-                        $values[$key] = $value;
-                        if ($waitingForValues === 0) {
-                            try {
-                                $result = call_user_func_array($this->resultSelector, $values);
-                                $observer->onNext($result);
-                            } catch (\Exception $e) {
-                                $observer->onError($e);
-                            }
-                        }
-                    },
-                    function ($error) use ($observer) {
-                        $observer->onError($error);
-                    },
-                    function () use (&$waitingToComplete, $observer) {
-                        $waitingToComplete--;
-                        if ($waitingToComplete === 0) {
-                            $observer->onCompleted();
+                    $values[$key] = $value;
+                    if ($waitingForValues === 0) {
+                        try {
+                            $result = call_user_func_array($this->resultSelector, $values);
+                            $observer->onNext($result);
+                        } catch (\Exception $e) {
+                            $observer->onError($e);
                         }
                     }
-                ), $scheduler)
+                },
+                [$observer, 'onError'],
+                function () use (&$waitingToComplete, $observer) {
+                    $waitingToComplete--;
+                    if ($waitingToComplete === 0) {
+                        $observer->onCompleted();
+                    }
+                }
             );
+
+            $subscription = $o->subscribe($cbObserver, $scheduler);
+
+            $compositeDisposable->add($subscription);
         }
 
         return $compositeDisposable;

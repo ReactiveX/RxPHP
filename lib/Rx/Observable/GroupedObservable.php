@@ -21,12 +21,12 @@ class GroupedObservable extends BaseObservable
             $this->underlyingObservable = $underlyingObservable;
         } else {
             $this->underlyingObservable = new AnonymousObservable(
-                function($observer, $scheduler) use ($mergedDisposable, $underlyingObservable) {
+                function ($observer, $scheduler) use ($mergedDisposable, $underlyingObservable) {
                     // todo, typehint $mergedDisposable?
-                    return new CompositeDisposable(array(
+                    return new CompositeDisposable([
                         $mergedDisposable->getDisposable(),
                         $underlyingObservable->subscribe($observer, $scheduler),
-                    ));
+                    ]);
                 }
             );
         }
@@ -43,5 +43,7 @@ class GroupedObservable extends BaseObservable
     }
 
     // todo: remove doStart from BaseObservable?
-    public function doStart($scheduler) {}
+    public function doStart($scheduler)
+    {
+    }
 }

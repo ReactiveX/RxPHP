@@ -14,8 +14,8 @@ class VirtualTimeScheduler implements SchedulerInterface
     protected $queue;
 
     /**
-     * @param integer  $initialClock Initial value for the clock.
-     * @param callable $comparer     Comparer to determine causality of events based on absolute time.
+     * @param integer $initialClock Initial value for the clock.
+     * @param callable $comparer Comparer to determine causality of events based on absolute time.
      */
     public function __construct($initialClock = 0, callable $comparer)
     {
@@ -39,13 +39,13 @@ class VirtualTimeScheduler implements SchedulerInterface
     {
         $group = new CompositeDisposable();
 
-        $recursiveAction = function() use ($action, $group, &$recursiveAction) {
+        $recursiveAction = function () use ($action, $group, &$recursiveAction) {
             $action(
-                function() use ($group, &$recursiveAction) {
+                function () use ($group, &$recursiveAction) {
                     $isAdded = false;
                     $isDone  = true;
 
-                    $d = $this->schedule(function() use (&$isAdded, &$isDone, $group, &$recursiveAction, &$d) {
+                    $d = $this->schedule(function () use (&$isAdded, &$isDone, $group, &$recursiveAction, &$d) {
                         if (!is_callable($recursiveAction)) {
                             throw new \Exception("recursiveAction is not callable");
                         }
@@ -59,7 +59,7 @@ class VirtualTimeScheduler implements SchedulerInterface
                         }
                     });
 
-                    if ( ! $isDone) {
+                    if (!$isDone) {
                         $group->add($d);
                         $isAdded = true;
                     }
@@ -79,7 +79,7 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function scheduleAbsolute($dueTime, $action)
     {
-        $invokeAction = function($scheduler, $action) {
+        $invokeAction = function ($scheduler, $action) {
             $action();
             return new EmptyDisposable();
         };
@@ -93,7 +93,7 @@ class VirtualTimeScheduler implements SchedulerInterface
 
         $currentScheduler = $this;
         $scheduledItem    = null;
-        $run              = function($scheduler, $state1) use ($action, &$scheduledItem, &$queue) {
+        $run              = function ($scheduler, $state1) use ($action, &$scheduledItem, &$queue) {
             $queue->remove($scheduledItem);
 
             return $action($scheduler, $state1);
@@ -115,7 +115,7 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function start()
     {
-        if ( ! $this->isEnabled) {
+        if (!$this->isEnabled) {
 
             $this->isEnabled = true;
             $comparer        = $this->comparer;

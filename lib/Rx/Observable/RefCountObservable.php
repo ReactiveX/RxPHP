@@ -12,10 +12,10 @@ use Rx\ObserverInterface;
  */
 class RefCountObservable extends BaseObservable
 {
-    /** @var \Rx\Observable\ConnectableObservable  */
+    /** @var \Rx\Observable\ConnectableObservable */
     protected $source;
 
-    /** @var int  */
+    /** @var int */
     protected $count;
 
     /** @var  BinaryDisposable */

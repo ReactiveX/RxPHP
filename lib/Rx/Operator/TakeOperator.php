@@ -33,7 +33,7 @@ class TakeOperator implements OperatorInterface
     {
         $remaining = $this->count;
 
-        return $observable->subscribe(new CallbackObserver(
+        $callbackObserver = new CallbackObserver(
             function ($nextValue) use ($observer, &$remaining) {
                 if ($remaining > 0) {
                     $remaining--;
@@ -45,6 +45,8 @@ class TakeOperator implements OperatorInterface
             },
             [$observer, 'onError'],
             [$observer, 'onCompleted']
-        ), $scheduler);
+        );
+
+        return $observable->subscribe($callbackObserver, $scheduler);
     }
 }

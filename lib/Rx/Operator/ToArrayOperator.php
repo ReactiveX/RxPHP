@@ -21,9 +21,7 @@ class ToArrayOperator implements OperatorInterface
             function ($x) {
                 $this->arr[] = $x;
             },
-            function ($e) use ($observer) {
-                $observer->onError($e);
-            },
+            [$observer, 'onError'],
             function () use ($observer) {
                 $observer->onNext($this->arr);
                 $observer->onCompleted();

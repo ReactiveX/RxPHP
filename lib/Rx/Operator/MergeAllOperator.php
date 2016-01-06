@@ -35,41 +35,41 @@ class MergeAllOperator implements OperatorInterface
 
         $group->add($sourceSubscription);
 
-        $sourceSubscription->setDisposable(
-            $this->sources->subscribe(new CallbackObserver(
-                function (ObservableInterface $innerSource) use (&$group, &$isStopped, $observer, &$scheduler) {
-                    $innerSubscription = new SingleAssignmentDisposable();
-                    $group->add($innerSubscription);
+        $callbackObserver = new CallbackObserver(
+            function (ObservableInterface $innerSource) use (&$group, &$isStopped, $observer, &$scheduler) {
+                $innerSubscription = new SingleAssignmentDisposable();
+                $group->add($innerSubscription);
 
-                    $innerSubscription->setDisposable(
-                        $innerSource->subscribe(new CallbackObserver(
-                            function ($nextValue) use ($observer) {
-                                $observer->onNext($nextValue);
-                            },
-                            function ($error) use ($observer) {
-                                $observer->onError($error);
-                            },
-                            function () use (&$group, &$innerSubscription, &$isStopped, $observer) {
-                                $group->remove($innerSubscription);
+                $innerSubscription->setDisposable(
+                    $innerSource->subscribe(new CallbackObserver(
+                        function ($nextValue) use ($observer) {
+                            $observer->onNext($nextValue);
+                        },
+                        function ($error) use ($observer) {
+                            $observer->onError($error);
+                        },
+                        function () use (&$group, &$innerSubscription, &$isStopped, $observer) {
+                            $group->remove($innerSubscription);
 
-                                if ($isStopped && $group->count() === 1) {
-                                    $observer->onCompleted();
-                                }
+                            if ($isStopped && $group->count() === 1) {
+                                $observer->onCompleted();
                             }
-                        ), $scheduler)
-                    );
-                },
-                function ($error) use ($observer) {
-                    $observer->onError($error);
-                },
-                function () use (&$group, &$isStopped, $observer) {
-                    $isStopped = true;
-                    if ($group->count() === 1) {
-                        $observer->onCompleted();
-                    }
+                        }
+                    ), $scheduler)
+                );
+            },
+            [$observer, 'onError'],
+            function () use (&$group, &$isStopped, $observer) {
+                $isStopped = true;
+                if ($group->count() === 1) {
+                    $observer->onCompleted();
                 }
-            ), $scheduler)
+            }
         );
+
+        $subscription = $this->sources->subscribe($callbackObserver, $scheduler);
+
+        $sourceSubscription->setDisposable($subscription);
 
         return $group;
     }

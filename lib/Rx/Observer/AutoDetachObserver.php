@@ -27,7 +27,7 @@ class AutoDetachObserver extends AbstractObserver
         try {
             $this->observer->onCompleted();
             $this->dispose();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->dispose(); // todo: should be in finally?
             throw $e;
         }
@@ -38,7 +38,7 @@ class AutoDetachObserver extends AbstractObserver
         try {
             $this->observer->onError($exception);
             $this->dispose();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->dispose(); // todo: should be in finally?
             throw $e;
         }
@@ -48,7 +48,7 @@ class AutoDetachObserver extends AbstractObserver
     {
         try {
             $this->observer->onNext($value);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->dispose(); // todo: should be in finally?
             throw $e;
         }

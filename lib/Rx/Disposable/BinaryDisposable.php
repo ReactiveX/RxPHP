@@ -10,13 +10,13 @@ use Rx\DisposableInterface;
  */
 class BinaryDisposable implements DisposableInterface
 {
-    /** @var \Rx\DisposableInterface  */
+    /** @var \Rx\DisposableInterface */
     private $first;
 
-    /** @var \Rx\DisposableInterface  */
+    /** @var \Rx\DisposableInterface */
     private $second;
 
-    /** @var bool  */
+    /** @var bool */
     protected $isDisposed = false;
 
     /**

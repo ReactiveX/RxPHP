@@ -9,14 +9,14 @@ class Subscription
 
     public function __construct($start, $end = PHP_INT_MAX)
     {
-        $this->subscribed    = $start;
+        $this->subscribed   = $start;
         $this->unsubscribed = $end;
     }
 
     public function equals(Subscription $other)
     {
         return $this->subscribed === $other->subscribed
-            && $this->unsubscribed === $other->unsubscribed;
+        && $this->unsubscribed === $other->unsubscribed;
     }
 
     public function getSubscribed()
@@ -31,9 +31,9 @@ class Subscription
 
     public function __toString()
     {
-        return 'Subscription(' 
-            . $this->subscribed 
-            . ', ' . ($this->unsubscribed === PHP_INT_MAX ? 'Inifinite' : $this->unsubscribed)
-            . ')';
+        return 'Subscription('
+        . $this->subscribed
+        . ', ' . ($this->unsubscribed === PHP_INT_MAX ? 'Inifinite' : $this->unsubscribed)
+        . ')';
     }
 }

@@ -8,7 +8,8 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class ConcatOperator implements OperatorInterface {
+class ConcatOperator implements OperatorInterface
+{
     /** @var \Rx\ObservableInterface */
     private $subsequentObservable;
 
@@ -24,18 +25,17 @@ class ConcatOperator implements OperatorInterface {
     /**
      * @inheritDoc
      */
-    public function __invoke(
-        ObservableInterface $observable,
-        ObserverInterface $observer,
-        SchedulerInterface $scheduler = null
-    ) {
-        return $observable->subscribe(new CallbackObserver(
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    {
+        $cbObserver = new CallbackObserver(
             [$observer, 'onNext'],
             [$observer, 'onError'],
             function () use ($observer, $scheduler) {
                 $o = new AutoDetachObserver($observer);
                 $o->setDisposable($this->subsequentObservable->subscribe($o, $scheduler));
             }
-        ), $scheduler);
+        );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 }

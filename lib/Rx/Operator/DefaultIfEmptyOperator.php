@@ -35,9 +35,7 @@ class DefaultIfEmptyOperator implements OperatorInterface
                 $this->passThrough = true;
                 $observer->onNext($x);
             },
-            function ($e) use ($observer) {
-                $observer->onError($e);
-            },
+            [$observer, 'onError'],
             function () use ($observer, $disposable, $scheduler) {
                 if (!$this->passThrough) {
                     $disposable->setDisposable($this->observable->subscribe($observer, $scheduler));

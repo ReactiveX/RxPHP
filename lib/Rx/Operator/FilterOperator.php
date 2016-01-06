@@ -34,24 +34,20 @@ class FilterOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $selectObserver = new CallbackObserver(
-          function ($nextValue) use ($observer) {
-              $shouldFire = false;
-              try {
-                  $shouldFire = call_user_func($this->predicate, $nextValue);
-              } catch (\Exception $e) {
-                  $observer->onError($e);
-              }
+            function ($nextValue) use ($observer) {
+                $shouldFire = false;
+                try {
+                    $shouldFire = call_user_func($this->predicate, $nextValue);
+                } catch (\Exception $e) {
+                    $observer->onError($e);
+                }
 
-              if ($shouldFire) {
-                  $observer->onNext($nextValue);
-              }
-          },
-          function ($error) use ($observer) {
-              $observer->onError($error);
-          },
-          function () use ($observer) {
-              $observer->onCompleted();
-          }
+                if ($shouldFire) {
+                    $observer->onNext($nextValue);
+                }
+            },
+            [$observer, 'onError'],
+            [$observer, 'onCompleted']
         );
 
         return $observable->subscribe($selectObserver, $scheduler);

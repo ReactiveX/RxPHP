@@ -41,12 +41,8 @@ class SkipLastOperator implements OperatorInterface
                     $observer->onNext(array_shift($this->q));
                 }
             },
-            function ($e) use ($observer) {
-                $observer->onError($e);
-            },
-            function () use ($observer) {
-                $observer->onCompleted();
-            }
+            [$observer, 'onError'],
+            [$observer, 'onCompleted']
         );
 
         return $observable->subscribe($cbObserver, $scheduler);

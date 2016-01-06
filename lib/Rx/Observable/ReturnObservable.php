@@ -2,8 +2,6 @@
 
 namespace Rx\Observable;
 
-use Rx\Disposable\EmptyDisposable;
-
 class ReturnObservable extends BaseObservable
 {
     private $value;
@@ -19,16 +17,15 @@ class ReturnObservable extends BaseObservable
     protected function doStart($scheduler)
     {
         $value     = $this->value;
-
         $observers = &$this->observers;
 
-        $scheduler->schedule(function() use (&$observers, $value) {
+        $scheduler->schedule(function () use (&$observers, $value) {
             foreach ($observers as $observer) {
                 $observer->onNext($value);
             }
         });
 
-        $scheduler->schedule(function() use (&$observers) {
+        $scheduler->schedule(function () use (&$observers) {
             foreach ($observers as $observer) {
                 $observer->onCompleted();
             }

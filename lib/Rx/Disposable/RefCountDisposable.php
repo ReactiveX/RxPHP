@@ -2,14 +2,13 @@
 
 namespace Rx\Disposable;
 
-use InvalidArgumentException;
 use Rx\DisposableInterface;
 
 class RefCountDisposable implements DisposableInterface
 {
-    private $count             = 0;
+    private $count = 0;
     private $disposable;
-    private $isDisposed        = false;
+    private $isDisposed = false;
     private $isPrimaryDisposed = false;
 
     public function __construct(DisposableInterface $disposable)
@@ -33,11 +32,12 @@ class RefCountDisposable implements DisposableInterface
 
     public function getDisposable()
     {
-        if ( ! $this->isDisposed) {
+        if (!$this->isDisposed) {
             return $this->createInnerDisposable();
         }
 
-        return new CallbackDisposable(function(){}); // no op
+        return new CallbackDisposable(function () {
+        }); // no op
     }
 
     public function isDisposed()
@@ -54,11 +54,11 @@ class RefCountDisposable implements DisposableInterface
     {
         $count = &$this->count;
         $count++;
-        $innerDisposable = &$this;
-        $isInnerDisposed = false;
+        $innerDisposable      = &$this;
+        $isInnerDisposed      = false;
         $underLyingDisposable = &$this->disposable;
 
-        return new CallbackDisposable(function() use (&$count, &$innerDisposable, &$isInnerDisposed) {
+        return new CallbackDisposable(function () use (&$count, &$innerDisposable, &$isInnerDisposed) {
             if ($innerDisposable->isDisposed()) {
                 return;
             }

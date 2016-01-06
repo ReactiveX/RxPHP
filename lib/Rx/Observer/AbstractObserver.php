@@ -4,13 +4,12 @@ namespace Rx\Observer;
 
 use Exception;
 use Rx\ObserverInterface;
-use Rx\Disposable\SingleAssignmentDisposable;
 
 abstract class AbstractObserver implements ObserverInterface
 {
     private $isStopped = false;
 
-    function onCompleted()
+    public function onCompleted()
     {
         if ($this->isStopped) {
             return;
@@ -20,7 +19,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->completed();
     }
 
-    function onError(Exception $error)
+    public function onError(Exception $error)
     {
         if ($this->isStopped) {
             return;
@@ -30,7 +29,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->error($error);
     }
 
-    function onNext($value)
+    public function onNext($value)
     {
         if ($this->isStopped) {
             return;
@@ -40,6 +39,8 @@ abstract class AbstractObserver implements ObserverInterface
     }
 
     abstract protected function completed();
+
     abstract protected function next($value);
+
     abstract protected function error(Exception $error);
 }

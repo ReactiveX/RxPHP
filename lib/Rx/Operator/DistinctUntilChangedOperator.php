@@ -57,12 +57,8 @@ class DistinctUntilChangedOperator implements OperatorInterface
                 }
 
             },
-            function ($e) use ($observer) {
-                $observer->onError($e);
-            },
-            function () use ($observer) {
-                $observer->onCompleted();
-            }
+            [$observer, 'onError'],
+            [$observer, 'onCompleted']
         );
 
         return $observable->subscribe($cbObserver, $scheduler);

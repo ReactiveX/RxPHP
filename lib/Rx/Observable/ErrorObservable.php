@@ -18,7 +18,7 @@ class ErrorObservable extends BaseObservable
     {
         $observers = $this->observers;
 
-        $scheduler->schedule(function() use ($observers) {
+        $scheduler->schedule(function () use ($observers) {
             foreach ($observers as $observer) {
                 $observer->onError($this->error);
             }

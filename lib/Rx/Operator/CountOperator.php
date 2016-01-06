@@ -24,32 +24,31 @@ class CountOperator implements OperatorInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(
-      ObservableInterface $observable,
-      ObserverInterface $observer,
-      SchedulerInterface $scheduler = null
-    ) {
-        return $observable->subscribe(new CallbackObserver(
-          function ($x) use ($observer) {
-              if ($this->predicate === null) {
-                  $this->count++;
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    {
+        $callbackObserver = new CallbackObserver(
+            function ($x) use ($observer) {
+                if ($this->predicate === null) {
+                    $this->count++;
 
-                  return;
-              }
-              try {
-                  $predicate = $this->predicate;
-                  if (call_user_func($predicate, $x)) {
-                      $this->count++;
-                  }
-              } catch (\Exception $e) {
-                  $observer->onError($e);
-              }
-          },
-          [$observer, 'onError'],
-          function () use ($observer) {
-              $observer->onNext($this->count);
-              $observer->onCompleted();
-          }
-        ), $scheduler);
+                    return;
+                }
+                try {
+                    $predicate = $this->predicate;
+                    if (call_user_func($predicate, $x)) {
+                        $this->count++;
+                    }
+                } catch (\Exception $e) {
+                    $observer->onError($e);
+                }
+            },
+            [$observer, 'onError'],
+            function () use ($observer) {
+                $observer->onNext($this->count);
+                $observer->onCompleted();
+            }
+        );
+
+        return $observable->subscribe($callbackObserver, $scheduler);
     }
 }

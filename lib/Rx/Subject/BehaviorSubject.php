@@ -5,7 +5,8 @@ namespace Rx\Subject;
 use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
-class BehaviorSubject extends Subject {
+class BehaviorSubject extends Subject
+{
     private $value;
 
     public function __construct($initValue = null)

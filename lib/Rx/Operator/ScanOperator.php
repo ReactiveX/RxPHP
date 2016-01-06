@@ -50,9 +50,7 @@ class ScanOperator implements OperatorInterface
                 }
                 $observer->onNext($accumulation);
             },
-            function ($e) use ($observer) {
-                $observer->onError($e);
-            },
+            [$observer, 'onError'],
             function () use ($observer, &$hasValue, &$hasSeed) {
                 if (!$hasValue && $hasSeed) {
                     $observer->onNext($this->seed);
