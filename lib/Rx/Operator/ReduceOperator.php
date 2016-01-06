@@ -36,8 +36,7 @@ class ReduceOperator implements OperatorInterface
         $hasAccumulation = false;
         $accumulation    = null;
         $hasValue        = false;
-
-        return $observable->subscribe(new CallbackObserver(
+        $cbObserver      = new CallbackObserver(
             function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasValue) {
 
                 $hasValue = true;
@@ -68,8 +67,10 @@ class ReduceOperator implements OperatorInterface
                 }
 
                 $observer->onCompleted();
-            })
+            }
         );
+
+        return $observable->subscribe($cbObserver, $scheduler);
 
     }
 }
