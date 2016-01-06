@@ -112,7 +112,10 @@ class DeferTest extends FunctionalTestCase
             });
         });
 
-        $this->assertMessages([onError(200, new \Exception('error'))], $results->getMessages());
+        // Note: these tests differ from the RxJS tests that they were based on because RxJS was
+        // explicitly using the immediate scheduler on subscribe internally. When we pass the
+        // proper scheduler in, the subscription gets scheduled which requires an extra tick.
+        $this->assertMessages([onError(201, new \Exception('error'))], $results->getMessages());
 
         $this->assertEquals(1, $invoked);
 
