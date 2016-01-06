@@ -33,7 +33,7 @@ class SkipOperator implements OperatorInterface
     {
         $remaining = $this->count;
 
-        return $observable->subscribe(new CallbackObserver(
+        $cbObserver = new CallbackObserver(
             function ($nextValue) use ($observer, &$remaining) {
                 if ($remaining <= 0) {
                     $observer->onNext($nextValue);
@@ -43,6 +43,8 @@ class SkipOperator implements OperatorInterface
             },
             [$observer, 'onError'],
             [$observer, 'onCompleted']
-        ));
+        );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 }
