@@ -32,10 +32,10 @@ class ConcatOperator implements OperatorInterface {
         return $observable->subscribe(new CallbackObserver(
             [$observer, 'onNext'],
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer, $scheduler) {
                 $o = new AutoDetachObserver($observer);
-                $o->setDisposable($this->subsequentObservable->subscribe($o));
+                $o->setDisposable($this->subsequentObservable->subscribe($o, $scheduler));
             }
-        ));
+        ), $scheduler);
     }
 }

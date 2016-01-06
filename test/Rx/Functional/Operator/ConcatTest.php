@@ -273,22 +273,28 @@ class ConcatTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () use ($xs1, $xs2, $xs3) {
             return (new EmptyObservable())->concat($xs1)->concat($xs2)->concat($xs3);
         });
-        $this->assertMessages([
-            onNext(210, 1),
-            onNext(220, 2),
-            onNext(230, 3),
-            onNext(250, 4),
-            onNext(260, 5),
-            onNext(280, 6),
-            onNext(290, 7),
-            onNext(300, 8),
-            onNext(310, 9),
-            onCompleted(320)
-        ],
-            $results->getMessages());
-        $this->assertSubscriptions([subscribe(200, 240)], $xs1->getSubscriptions());
-        $this->assertSubscriptions([subscribe(240, 270)], $xs2->getSubscriptions());
-        $this->assertSubscriptions([subscribe(270, 320)], $xs3->getSubscriptions());
+
+        // Note: these tests differ from the RxJS tests that they were based on because RxJS was
+        // explicitly using the immediate scheduler on subscribe internally. When we pass the
+        // proper scheduler in, the subscription gets scheduled which requires an extra tick.
+        $this->assertMessages(
+            [
+                onNext(211, 1),
+                onNext(221, 2),
+                onNext(231, 3),
+                onNext(251, 4),
+                onNext(261, 5),
+                onNext(281, 6),
+                onNext(291, 7),
+                onNext(301, 8),
+                onNext(311, 9),
+                onCompleted(321)
+            ],
+            $results->getMessages()
+        );
+        $this->assertSubscriptions([subscribe(201, 241)], $xs1->getSubscriptions());
+        $this->assertSubscriptions([subscribe(241, 271)], $xs2->getSubscriptions());
+        $this->assertSubscriptions([subscribe(271, 321)], $xs3->getSubscriptions());
 
     }
 }
