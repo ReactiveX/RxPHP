@@ -72,7 +72,7 @@ class GroupByUntilOperator implements OperatorInterface
         $keySerializer    = $this->keySerializer;
 
         $callbackObserver = new CallbackObserver(
-            function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable) {
+            function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable, $scheduler) {
                 try {
                     $key           = $keySelector($value);
                     $serializedKey = $keySerializer($key);
@@ -129,22 +129,24 @@ class GroupByUntilOperator implements OperatorInterface
                         $groupDisposable->remove($md);
                     };
 
-                    $md->setDisposable(
-                        $duration->take(1)->subscribeCallback(
-                            function () {
-                            },
-                            function (Exception $exception) use ($map, $observer) {
-                                foreach ($map as $writer) {
-                                    $writer->onError($exception);
-                                }
-
-                                $observer->onError($exception);
-                            },
-                            function () use ($expire) {
-                                $expire();
+                    $callbackObserver = new CallbackObserver(
+                        function () {
+                        },
+                        function (Exception $exception) use ($map, $observer) {
+                            foreach ($map as $writer) {
+                                $writer->onError($exception);
                             }
-                        )
+
+                            $observer->onError($exception);
+                        },
+                        function () use ($expire) {
+                            $expire();
+                        }
                     );
+
+                    $subscription = $duration->take(1)->subscribe($callbackObserver, $scheduler);
+
+                    $md->setDisposable($subscription);
                 }
 
                 try {
