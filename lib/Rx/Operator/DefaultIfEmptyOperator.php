@@ -30,24 +30,27 @@ class DefaultIfEmptyOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $disposable = new SerialDisposable();
-        $disposable->setDisposable($observable->subscribe(new CallbackObserver(
+        $cbObserver = new CallbackObserver(
             function ($x) use ($observer) {
                 $this->passThrough = true;
                 $observer->onNext($x);
-
             },
             function ($e) use ($observer) {
                 $observer->onError($e);
             },
-            function () use ($observer, $disposable) {
+            function () use ($observer, $disposable, $scheduler) {
                 if (!$this->passThrough) {
-                    $disposable->setDisposable($this->observable->subscribe($observer));
+                    $disposable->setDisposable($this->observable->subscribe($observer, $scheduler));
                     return;
                 }
 
                 $observer->onCompleted();
             }
-        ), $scheduler));
+        );
+
+        $subscription = $observable->subscribe($cbObserver, $scheduler);
+
+        $disposable->setDisposable($subscription);
 
         return $disposable;
     }

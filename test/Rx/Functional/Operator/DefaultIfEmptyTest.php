@@ -75,9 +75,13 @@ class DefaultIfEmptyTest extends FunctionalTestCase
             return $xs->defaultIfEmpty(new ReturnObservable(null));
         });
 
+        // Note: these tests differ from the RxJS tests that they were based on because RxJS was
+        // explicitly using the immediate scheduler on subscribe internally. When we pass the
+        // proper scheduler in, the subscription gets scheduled which requires an extra tick.
+
         $this->assertMessages([
-            onNext(420, null),
-            onCompleted(420)
+            onNext(421, null),
+            onCompleted(421)
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 420)], $xs->getSubscriptions());
@@ -98,9 +102,12 @@ class DefaultIfEmptyTest extends FunctionalTestCase
             return $xs->defaultIfEmpty(new ReturnObservable(-1));
         });
 
+        // Note: these tests differ from the RxJS tests that they were based on because RxJS was
+        // explicitly using the immediate scheduler on subscribe internally. When we pass the
+        // proper scheduler in, the subscription gets scheduled which requires an extra tick.
         $this->assertMessages([
-            onNext(420, -1),
-            onCompleted(420)
+            onNext(421, -1),
+            onCompleted(421)
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 420)], $xs->getSubscriptions());
