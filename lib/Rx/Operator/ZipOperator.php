@@ -8,10 +8,11 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class ZipOperator implements OperatorInterface {
+class ZipOperator implements OperatorInterface
+{
     /** @var ObservableInterface[] */
     private $sources;
-    
+
     /** @var callable */
     private $resultSelector;
 
@@ -43,7 +44,8 @@ class ZipOperator implements OperatorInterface {
         ObservableInterface $observable,
         ObserverInterface $observer,
         SchedulerInterface $scheduler = null
-    ) {
+    )
+    {
         array_unshift($this->sources, $observable);
 
         $this->numberOfSources = count($this->sources);
@@ -56,10 +58,10 @@ class ZipOperator implements OperatorInterface {
             $this->queues[$i] = new \SplQueue();
         }
 
-        for($i = 0; $i < $this->numberOfSources; $i++) {
+        for ($i = 0; $i < $this->numberOfSources; $i++) {
             $source = $this->sources[$i];
 
-            $disposable->add($source->subscribe(new CallbackObserver(
+            $cbObserver = new CallbackObserver(
                 function ($x) use ($i, $observer) {
                     // if there is another item in the sequence after one of the other source
                     // observables completes, we need to complete at this time to match the
@@ -97,9 +99,13 @@ class ZipOperator implements OperatorInterface {
                         $observer->onCompleted();
                     }
                 }
-            )));
+            );
+
+            $subscription = $source->subscribe($cbObserver, $scheduler);
+
+            $disposable->add($subscription);
         }
-        
+
         return $disposable;
     }
 }
