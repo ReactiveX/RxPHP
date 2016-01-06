@@ -23,7 +23,7 @@ class ScanOperator implements OperatorInterface
     public function __construct(callable $accumulator, $seed = null)
     {
         $this->accumulator = $accumulator;
-        $this->seed = $seed;
+        $this->seed        = $seed;
     }
 
     /**
@@ -35,14 +35,13 @@ class ScanOperator implements OperatorInterface
         $hasAccumulation = false;
         $accumulation    = $this->seed;
         $hasSeed         = $this->seed !== null;
-
-        return $observable->subscribe(new CallbackObserver(
+        $cbObserver      = new CallbackObserver(
             function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue) {
                 $hasValue = true;
                 if ($hasAccumulation) {
                     $accumulation = call_user_func($this->tryCatch($this->accumulator), $accumulation, $x);
                 } else {
-                    $accumulation = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
+                    $accumulation    = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
                     $hasAccumulation = true;
                 }
                 if ($accumulation instanceof \Exception) {
@@ -60,7 +59,9 @@ class ScanOperator implements OperatorInterface
                 }
                 $observer->onCompleted();
             }
-        ));
+        );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 
     private function tryCatch($functionToWrap)
