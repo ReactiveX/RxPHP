@@ -25,6 +25,9 @@ class ZipOperator implements OperatorInterface
     /** @var int */
     private $numberOfSources;
 
+    /** @var bool[] */
+    private $completed = [];
+
     public function __construct(array $sources, callable $resultSelector = null)
     {
         $this->sources = $sources;
@@ -52,19 +55,25 @@ class ZipOperator implements OperatorInterface
 
         for ($i = 0; $i < $this->numberOfSources; $i++) {
             $this->queues[$i] = new \SplQueue();
+            $this->completed[$i] = false;
         }
 
         for ($i = 0; $i < $this->numberOfSources; $i++) {
             $source = $this->sources[$i];
 
             $cbObserver = new CallbackObserver(
-                function ($x) use ($i, $observer) {
+                function ($x) use ($i, $observer, $scheduler) {
                     // if there is another item in the sequence after one of the other source
                     // observables completes, we need to complete at this time to match the
                     // behavior of RxJS
                     if ($this->completesRemaining < $this->numberOfSources) {
-                        $observer->onCompleted();
-                        return;
+                        // check for completed and empty queues
+                        for ($j = 0; $j < $this->numberOfSources; $j++) {
+                            if ($this->completed[$j] && count($this->queues[$j]) === 0) {
+                                $observer->onCompleted();
+                                return;
+                            }
+                        }
                     }
 
                     $this->queues[$i]->enqueue($x);
@@ -91,6 +100,7 @@ class ZipOperator implements OperatorInterface
                 },
                 function () use ($i, $observer) {
                     $this->completesRemaining--;
+                    $this->completed[$i] = true;
                     if ($this->completesRemaining === 0) {
                         $observer->onCompleted();
                     }

@@ -3,7 +3,10 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable\ArrayObservable;
 use Rx\Observable\NeverObservable;
+use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\ImmediateScheduler;
 
 class ZipTest extends FunctionalTestCase
 {
@@ -407,5 +410,45 @@ class ZipTest extends FunctionalTestCase
     public function add($x, $y)
     {
         return $x + $y;
+    }
+
+    public function testZipWithImmediateScheduler()
+    {
+        $scheduler = new ImmediateScheduler();
+
+        $o = new ArrayObservable(range(0, 4));
+
+        $source = $o
+            ->zip([
+                $o->skip(1),
+                $o->skip(2)
+            ]);
+
+        $result = null;
+
+        $source->toArray()->subscribe(new CallbackObserver(
+            function ($x) use (&$result) {
+                $result = $x;
+            }
+        ), $scheduler);
+
+        $this->assertEquals(
+            [
+                [0, 1, 2],
+                [1, 2, 3],
+                [2, 3, 4]
+            ],
+            $result
+        );
+
+        $result = null;
+
+        $source->count()->subscribe(new CallbackObserver(
+            function ($x) use (&$result) {
+                $result = $x;
+            }
+        ), $scheduler);
+
+        $this->assertEquals(3, $result);
     }
 }
