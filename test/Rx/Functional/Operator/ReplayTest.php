@@ -376,10 +376,6 @@ class ReplayTest extends FunctionalTestCase
     public function replay_count_zip_complete()
     {
 
-        $this->markTestSkipped(
-          'repeat operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -397,11 +393,11 @@ class ReplayTest extends FunctionalTestCase
           onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->replay(function (BaseObservable $ys) {
                 return $ys->take(6)->repeat();
             }, 3, null, $this->scheduler);
-        }, ["disposed" => 610]);
+        }, 610);
 
         $this->assertMessages([
           onNext(221, 3),
@@ -445,14 +441,10 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_errorr()
+    public function replay_count_zip_error()
     {
 
         $error = new \Exception();
-
-        $this->markTestSkipped(
-          'repeat operator has not been implemented yet'
-        );
 
         $xs = $this->createHotObservable([
           onNext(110, 7),
@@ -517,10 +509,6 @@ class ReplayTest extends FunctionalTestCase
     public function replay_count_zip_dispose()
     {
 
-        $this->markTestSkipped(
-          'repeat operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -538,11 +526,11 @@ class ReplayTest extends FunctionalTestCase
           onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->replay(function (BaseObservable $ys) {
                 return $ys->take(6)->repeat();
             }, 3, null, $this->scheduler);
-        }, ["disposed" => 470]);
+        }, 470);
 
         $this->assertMessages([
           onNext(221, 3),
@@ -933,10 +921,6 @@ class ReplayTest extends FunctionalTestCase
     public function replay_time_zip_complete()
     {
 
-        $this->markTestSkipped(
-          'repeat operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -954,11 +938,11 @@ class ReplayTest extends FunctionalTestCase
           onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->replay(function (BaseObservable $ys) {
                 return $ys->take(6)->repeat();
             }, null, 50, $this->scheduler);
-        }, ["disposed" => 610]);
+        }, 610);
 
         $this->assertMessages([
           onNext(221, 3),
@@ -1003,10 +987,6 @@ class ReplayTest extends FunctionalTestCase
     {
 
         $error = new \Exception();
-
-        $this->markTestSkipped(
-          'repeat operator has not been implemented yet'
-        );
 
         $xs = $this->createHotObservable([
           onNext(110, 7),
@@ -1070,10 +1050,6 @@ class ReplayTest extends FunctionalTestCase
     public function replay_time_zip_dispose()
     {
 
-        $this->markTestSkipped(
-          'repeat operator has not been implemented yet'
-        );
-
         $xs = $this->createHotObservable([
           onNext(110, 7),
           onNext(220, 3),
@@ -1091,11 +1067,11 @@ class ReplayTest extends FunctionalTestCase
           onCompleted(600)
         ]);
 
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->replay(function (BaseObservable $ys) {
                 return $ys->take(6)->repeat();
             }, null, 50, $this->scheduler);
-        }, ["disposed" => 470]);
+        }, 470);
 
         $this->assertMessages([
           onNext(221, 3),
