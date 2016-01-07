@@ -38,8 +38,4 @@ class ArrayObservable extends BaseObservable
             $observer->onCompleted();
         });
     }
-
-    protected function doStart($scheduler)
-    {
-    }
 }

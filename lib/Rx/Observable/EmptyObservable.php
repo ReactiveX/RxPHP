@@ -3,20 +3,19 @@
 namespace Rx\Observable;
 
 use Rx\Disposable\EmptyDisposable;
+use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
+use Rx\SchedulerInterface;
 
 class EmptyObservable extends BaseObservable
 {
-    protected function doStart($scheduler)
+
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        $observers = $this->observers;
+        $scheduler = $scheduler?: new ImmediateScheduler();
 
-        $scheduler->schedule(function() use ($observers) {
-            foreach ($observers as $observer) {
-                $observer->onCompleted();
-            }
+        return $scheduler->schedule(function () use ($observer) {
+            $observer->onCompleted();
         });
-
-        //todo: add "real" disposable
-        return new EmptyDisposable();
     }
 }

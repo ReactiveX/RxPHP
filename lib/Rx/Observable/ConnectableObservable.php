@@ -82,11 +82,4 @@ class ConnectableObservable extends BaseObservable
     {
         return new RefCountObservable($this);
     }
-
-    /**
-     * @param $scheduler
-     */
-    protected function doStart($scheduler)
-    {
-    }
 }

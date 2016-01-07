@@ -41,9 +41,4 @@ class GroupedObservable extends BaseObservable
     {
         return $this->underlyingObservable->subscribe($observer, $scheduler);
     }
-
-    // todo: remove doStart from BaseObservable?
-    public function doStart($scheduler)
-    {
-    }
 }

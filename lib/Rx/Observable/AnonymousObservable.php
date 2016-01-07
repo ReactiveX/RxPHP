@@ -35,9 +35,4 @@ class AnonymousObservable extends BaseObservable
             $autoDetachObserver->dispose();
         });
     }
-
-    protected function doStart($scheduler)
-    {
-        // todo: remove from base
-    }
 }

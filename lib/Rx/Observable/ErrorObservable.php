@@ -4,6 +4,9 @@ namespace Rx\Observable;
 
 use Exception;
 use Rx\Disposable\EmptyDisposable;
+use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
+use Rx\SchedulerInterface;
 
 class ErrorObservable extends BaseObservable
 {
@@ -14,17 +17,13 @@ class ErrorObservable extends BaseObservable
         $this->error = $error;
     }
 
-    protected function doStart($scheduler)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        $observers = $this->observers;
 
-        $scheduler->schedule(function () use ($observers) {
-            foreach ($observers as $observer) {
-                $observer->onError($this->error);
-            }
+        $scheduler = $scheduler?: new ImmediateScheduler();
+
+        return $scheduler->schedule(function () use ($observer) {
+            $observer->onError($this->error);
         });
-
-        //todo: add "real" disposable
-        return new EmptyDisposable();
     }
 }

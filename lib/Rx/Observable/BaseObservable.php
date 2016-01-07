@@ -44,15 +44,10 @@ abstract class BaseObservable implements ObservableInterface
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $this->observers[] = $observer;
+        $this->started     = true;
 
-        if (!$this->started) {
-            $this->start($scheduler);
-        }
-
-        $observable = $this;
-
-        return new CallbackDisposable(function () use ($observer, $observable) {
-            $observable->removeObserver($observer);
+        return new CallbackDisposable(function () use ($observer) {
+            $this->removeObserver($observer);
         });
     }
 
@@ -78,19 +73,6 @@ abstract class BaseObservable implements ObservableInterface
 
         return $this->subscribe($observer, $scheduler);
     }
-
-    private function start($scheduler = null)
-    {
-        if (null === $scheduler) {
-            $scheduler = new ImmediateScheduler();
-        }
-
-        $this->started = true;
-
-        $this->doStart($scheduler);
-    }
-
-    abstract protected function doStart($scheduler);
 
     public function map(callable $selector)
     {

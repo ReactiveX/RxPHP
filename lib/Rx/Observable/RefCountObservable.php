@@ -64,11 +64,4 @@ class RefCountObservable extends BaseObservable
             }
         });
     }
-
-    /**
-     * @param $scheduler
-     */
-    protected function doStart($scheduler)
-    {
-    }
 }

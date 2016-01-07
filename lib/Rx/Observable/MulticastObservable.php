@@ -45,11 +45,4 @@ class MulticastObservable extends BaseObservable
 
         return new BinaryDisposable($observable->subscribe($observer, $scheduler), $connectable->connect());
     }
-
-    /**
-     * @param $scheduler
-     */
-    protected function doStart($scheduler)
-    {
-    }
 }

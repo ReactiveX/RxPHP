@@ -37,9 +37,4 @@ class ReturnObservable extends BaseObservable
 
         return $disposable;
     }
-
-    protected function doStart($scheduler)
-    {
-
-    }
 }
