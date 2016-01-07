@@ -2,6 +2,10 @@
 
 namespace Rx\Observable;
 
+use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
+use Rx\SchedulerInterface;
+
 class ArrayObservable extends BaseObservable
 {
     private $data;
@@ -11,34 +15,31 @@ class ArrayObservable extends BaseObservable
         $this->data = $data;
     }
 
-    protected function doStart($scheduler)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $values    = &$this->data;
-        $observers = &$this->observers;
         $max       = count($values);
         $keys      = array_keys($values);
         $count     = 0;
 
-        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observers, &$values, $max, &$count, $keys) {
+        if ($scheduler === null) {
+            $scheduler = new ImmediateScheduler();
+        }
 
+        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys) {
             if ($count < $max) {
-                foreach ($observers as $observer) {
-                    $observer->onNext($values[$keys[$count]]);
-                }
-
+                $observer->onNext($values[$keys[$count]]);
                 $count++;
-
                 if ($count >= 1) {
                     $reschedule();
-
                     return;
                 }
             }
-
-            foreach ($observers as $observer) {
-                $observer->onCompleted();
-            }
-
+            $observer->onCompleted();
         });
+    }
+
+    protected function doStart($scheduler)
+    {
     }
 }
