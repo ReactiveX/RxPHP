@@ -1,0 +1,10 @@
+<?php
+
+require_once __DIR__ . '/../bootstrap.php';
+
+$source = \Rx\Observable\BaseObservable::fromArray(range(1, 10));
+
+$subscription = $source->count()->subscribe($stdoutObserver);
+
+//Next value: 10
+//Complete!
