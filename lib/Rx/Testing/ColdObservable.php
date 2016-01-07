@@ -59,8 +59,4 @@ class ColdObservable extends BaseObservable
     {
         return $this->subscriptions;
     }
-
-    public function doStart($scheduler)
-    {
-    } // todo: remove from base?
 }

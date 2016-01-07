@@ -123,8 +123,4 @@ class Subject extends BaseObservable implements ObserverInterface, DisposableInt
 
         return true;
     }
-
-    public function doStart($scheduler)
-    {
-    }
 }

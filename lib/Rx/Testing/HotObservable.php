@@ -70,10 +70,6 @@ class HotObservable extends BaseObservable
         return true;
     }
 
-    public function doStart($scheduler)
-    {
-    } // todo: remove from base?
-
     /**
      * @internal
      */

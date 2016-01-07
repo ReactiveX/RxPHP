@@ -22,8 +22,5 @@ class BaseObservableTest extends TestCase
 
 class ConcreteObservable extends BaseObservable
 {
-    public function doStart($scheduler)
-    {
-        // meh
-    }
+
 }
