@@ -18,6 +18,7 @@ use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
 use Rx\Operator\MergeAllOperator;
 use Rx\Operator\ReduceOperator;
+use Rx\Operator\RepeatOperator;
 use Rx\Operator\RetryOperator;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
@@ -637,6 +638,17 @@ abstract class BaseObservable implements ObservableInterface
     {
         return $this->lift(function () use ($observable) {
             return new DefaultIfEmptyOperator($observable);
+        });
+    }
+
+    public function repeat($count = -1)
+    {
+        if ($count == 0) {
+            return new EmptyObservable();
+        }
+
+        return $this->lift(function () use ($count) {
+            return new RepeatOperator($count);
         });
     }
 }
