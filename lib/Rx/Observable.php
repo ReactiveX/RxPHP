@@ -78,11 +78,88 @@ class Observable implements ObservableInterface
         return $this->subscribe($observer, $scheduler);
     }
 
+    /**
+     * @param callable $subscribeAction
+     * @return AnonymousObservable
+     */
     public static function create(callable $subscribeAction)
     {
         return new AnonymousObservable($subscribeAction);
     }
 
+    /**
+     * @param mixed $value
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function just($value)
+    {
+        return new ReturnObservable($value);
+    }
+
+    /**
+     * @return EmptyObservable
+     */
+    public static function emptyObservable()
+    {
+        return new EmptyObservable();
+    }
+
+    /**
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function never()
+    {
+        return new NeverObservable();
+    }
+
+    /**
+     * @param $error
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function error(\Exception $error)
+    {
+        return new ErrorObservable($error);
+    }
+
+    /**
+     * Merges an observable sequence of observables into an observable sequence.
+     *
+     * @param ObservableInterface $sources
+     * @return AnonymousObservable
+     */
+    public static function mergeAll(ObservableInterface $sources)
+    {
+        return (new EmptyObservable())->lift(function () use ($sources) {
+            return new MergeAllOperator($sources);
+        });
+    }
+
+    /**
+     * @param array $array
+     * @return ArrayObservable
+     */
+    public static function fromArray(array $array)
+    {
+        return new ArrayObservable($array);
+    }
+
+    /**
+     * Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
+     *
+     * @param callable $factory
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public static function defer(callable $factory)
+    {
+        return (new EmptyObservable())->lift(function () use ($factory) {
+            return new DeferOperator($factory);
+        });
+    }
+
+    /**
+     * @param callable $selector
+     * @return AnonymousObservable
+     */
     public function map(callable $selector)
     {
         return $this->lift(function () use ($selector) {
@@ -149,24 +226,6 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Merges an observable sequence of observables into an observable sequence.
-     *
-     * @param ObservableInterface $sources
-     * @return AnonymousObservable
-     */
-    public static function mergeAll(ObservableInterface $sources)
-    {
-        return (new EmptyObservable())->lift(function () use ($sources) {
-            return new MergeAllOperator($sources);
-        });
-    }
-
-    public static function fromArray(array $array)
-    {
-        return new ArrayObservable($array);
-    }
-
-    /**
      * @param integer $count
      * @return AnonymousObservable
      */
@@ -209,15 +268,6 @@ class Observable implements ObservableInterface
         return $this->lift(function () use ($keySelector, $elementSelector, $durationSelector, $keySerializer) {
             return new GroupByUntilOperator($keySelector, $elementSelector, $durationSelector, $keySerializer);
         });
-    }
-
-    /**
-     * @param mixed $value
-     * @return \Rx\Observable\AnonymousObservable
-     */
-    public static function just($value)
-    {
-        return new ReturnObservable($value);
     }
 
     /**
@@ -265,31 +315,6 @@ class Observable implements ObservableInterface
         return $this->lift(function () use ($keySelector, $comparer) {
             return new DistinctUntilChangedOperator($keySelector, $comparer);
         });
-    }
-
-    /**
-     * @return EmptyObservable
-     */
-    public static function emptyObservable()
-    {
-        return new EmptyObservable();
-    }
-
-    /**
-     * @return \Rx\Observable\AnonymousObservable
-     */
-    public static function never()
-    {
-        return new NeverObservable();
-    }
-
-    /**
-     * @param $error
-     * @return \Rx\Observable\AnonymousObservable
-     */
-    public static function error(\Exception $error)
-    {
-        return new ErrorObservable($error);
     }
 
     /**
@@ -429,19 +454,6 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($predicate) {
             return new CountOperator($predicate);
-        });
-    }
-
-    /**
-     * Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
-     *
-     * @param callable $factory
-     * @return \Rx\Observable\AnonymousObservable
-     */
-    public static function defer(callable $factory)
-    {
-        return (new EmptyObservable())->lift(function () use ($factory) {
-            return new DeferOperator($factory);
         });
     }
 
