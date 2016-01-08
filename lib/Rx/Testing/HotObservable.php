@@ -4,10 +4,10 @@ namespace Rx\Testing;
 
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 
-class HotObservable extends BaseObservable
+class HotObservable extends Observable
 {
     private $scheduler;
     private $messages;

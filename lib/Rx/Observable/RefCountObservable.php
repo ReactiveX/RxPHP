@@ -4,13 +4,14 @@ namespace Rx\Observable;
 
 use Rx\Disposable\BinaryDisposable;
 use Rx\Disposable\CallbackDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 
 /**
  * Class RefCountObservable
  * @package Rx\Observable
  */
-class RefCountObservable extends BaseObservable
+class RefCountObservable extends Observable
 {
     /** @var \Rx\Observable\ConnectableObservable */
     protected $source;

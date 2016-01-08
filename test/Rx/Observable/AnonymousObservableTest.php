@@ -3,7 +3,7 @@
 namespace Rx\Observable;
 
 use Rx\TestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\EmptyDisposable;
 

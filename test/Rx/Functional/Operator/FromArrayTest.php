@@ -2,7 +2,7 @@
 
 namespace Rx\Functional;
 
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 class FromArrayTest extends FunctionalTestCase
 {
@@ -11,7 +11,7 @@ class FromArrayTest extends FunctionalTestCase
      */
     public function it_schedules_all_elements_from_the_array()
     {
-        $xs = BaseObservable::fromArray(['foo', 'bar', 'baz']);
+        $xs = Observable::fromArray(['foo', 'bar', 'baz']);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -30,7 +30,7 @@ class FromArrayTest extends FunctionalTestCase
      */
     public function it_calls_on_complete_when_the_array_is_empty()
     {
-        $xs = BaseObservable::fromArray([]);
+        $xs = Observable::fromArray([]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -46,7 +46,7 @@ class FromArrayTest extends FunctionalTestCase
      */
     public function fromArray_one()
     {
-        $xs = BaseObservable::fromArray([1]);
+        $xs = Observable::fromArray([1]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;

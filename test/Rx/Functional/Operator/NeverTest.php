@@ -3,7 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Testing\MockObserver;
 
 class NeverTest extends FunctionalTestCase
@@ -13,7 +13,7 @@ class NeverTest extends FunctionalTestCase
      */
     public function never_basic()
     {
-        $xs = BaseObservable::never();
+        $xs = Observable::never();
 
         $results = new MockObserver($this->scheduler);
 

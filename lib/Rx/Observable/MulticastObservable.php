@@ -3,15 +3,16 @@
 namespace Rx\Observable;
 
 use Rx\Disposable\BinaryDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 
 /**
  * Class MulticastObservable
  * @package Rx\Observable
  */
-class MulticastObservable extends BaseObservable
+class MulticastObservable extends Observable
 {
-    /** @var \Rx\Observable\BaseObservable */
+    /** @var \Rx\Observable */
     private $source;
 
     /** @var  callable */
@@ -26,7 +27,7 @@ class MulticastObservable extends BaseObservable
      * @param $fn1
      * @param $fn2
      */
-    public function __construct(BaseObservable $source, callable $fn1, callable $fn2)
+    public function __construct(Observable $source, callable $fn1, callable $fn2)
     {
         $this->source = $source;
         $this->fn1    = $fn1;

@@ -2,11 +2,12 @@
 
 namespace Rx\Observable;
 
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
-class ArrayObservable extends BaseObservable
+class ArrayObservable extends Observable
 {
     private $data;
 

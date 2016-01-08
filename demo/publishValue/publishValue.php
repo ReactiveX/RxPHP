@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$range = \Rx\Observable\BaseObservable::fromArray(range(0, 1000));
+$range = \Rx\Observable::fromArray(range(0, 1000));
 
 $source = $range
     ->take(2)

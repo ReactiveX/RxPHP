@@ -4,7 +4,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\EmptyObservable;
 
 class ConcatTest extends FunctionalTestCase
@@ -31,7 +31,7 @@ class ConcatTest extends FunctionalTestCase
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = BaseObservable::never();
+        $e2 = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->concat($e2);
         });
@@ -44,7 +44,7 @@ class ConcatTest extends FunctionalTestCase
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = BaseObservable::never();
+        $e2 = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e2->concat($e1);
         });
@@ -53,8 +53,8 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatNeverNever()
     {
-        $e1 = BaseObservable::never();
-        $e2 = BaseObservable::never();
+        $e1 = Observable::never();
+        $e2 = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->concat($e2);
         });
@@ -150,7 +150,7 @@ class ConcatTest extends FunctionalTestCase
             onNext(210, 2),
             onCompleted(230)
         ]);
-        $e2 = BaseObservable::never();
+        $e2 = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->concat($e2);
         });
@@ -164,7 +164,7 @@ class ConcatTest extends FunctionalTestCase
             onNext(210, 2),
             onCompleted(230)
         ]);
-        $e2 = BaseObservable::never();
+        $e2 = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e2->concat($e1);
         });

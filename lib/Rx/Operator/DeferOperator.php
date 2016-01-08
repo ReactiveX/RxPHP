@@ -2,7 +2,7 @@
 
 namespace Rx\Operator;
 
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
@@ -35,7 +35,7 @@ class DeferOperator implements OperatorInterface
 
             return $result->subscribe($observer, $scheduler);
         } catch (\Exception $e) {
-            return BaseObservable::error($e)->subscribe($observer, $scheduler);
+            return Observable::error($e)->subscribe($observer, $scheduler);
         }
     }
 }

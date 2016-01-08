@@ -3,7 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ReturnObservable;
 

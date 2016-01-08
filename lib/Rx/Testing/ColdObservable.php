@@ -5,10 +5,10 @@ namespace Rx\Testing;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 
-class ColdObservable extends BaseObservable
+class ColdObservable extends Observable
 {
     private $scheduler;
     private $messages;

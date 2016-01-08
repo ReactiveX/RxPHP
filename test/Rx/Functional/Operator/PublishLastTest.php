@@ -3,7 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\NeverObservable;
 
 class PublishLastTest extends FunctionalTestCase
@@ -379,7 +379,7 @@ class PublishLastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publishLast(function (BaseObservable $ys) {
+            return $xs->publishLast(function (Observable $ys) {
                 return $ys->zip([$ys], [$this, 'add']);
             });
         });
@@ -424,7 +424,7 @@ class PublishLastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publishLast(function (BaseObservable $ys) {
+            return $xs->publishLast(function (Observable $ys) {
                 return $ys->zip([$ys], [$this, 'add']);
             });
         });
@@ -466,7 +466,7 @@ class PublishLastTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->publishLast(function (BaseObservable $ys)  {
+            return $xs->publishLast(function (Observable $ys)  {
                 return $ys->zip([$ys], [$this, 'add']);
             });
         }, 470);

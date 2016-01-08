@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$source = \Rx\Observable\BaseObservable::fromArray([1, 2, 3, 4]);
+$source = \Rx\Observable::fromArray([1, 2, 3, 4]);
 
 $subscription = $source->subscribe($stdoutObserver);
 

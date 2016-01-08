@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 //Without a seed
-$source = \Rx\Observable\BaseObservable::fromArray(range(1, 3));
+$source = \Rx\Observable::fromArray(range(1, 3));
 
 $subscription = $source
     ->reduce(function ($acc, $x) {
@@ -16,7 +16,7 @@ $subscription = $source
 
 
 //With a seed
-$source = \Rx\Observable\BaseObservable::fromArray(range(1, 3));
+$source = \Rx\Observable::fromArray(range(1, 3));
 
 $subscription = $source
     ->reduce(function ($acc, $x) {

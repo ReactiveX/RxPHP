@@ -3,11 +3,12 @@
 namespace Rx\Observable;
 
 use Rx\Disposable\EmptyDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
-class EmptyObservable extends BaseObservable
+class EmptyObservable extends Observable
 {
 
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)

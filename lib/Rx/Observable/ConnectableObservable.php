@@ -4,6 +4,7 @@ namespace Rx\Observable;
 
 use Rx\Disposable\BinaryDisposable;
 use Rx\Disposable\CallbackDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 use Rx\Subject\Subject;
@@ -12,7 +13,7 @@ use Rx\Subject\Subject;
  * Class ConnectableObservable
  * @package Rx\Observable
  */
-class ConnectableObservable extends BaseObservable
+class ConnectableObservable extends Observable
 {
     /** @var \Rx\Subject\Subject */
     protected $subject;
@@ -20,7 +21,7 @@ class ConnectableObservable extends BaseObservable
     /** @var  BinaryDisposable */
     protected $subscription;
 
-    /** @var  BaseObservable */
+    /** @var  Observable */
     protected $sourceObservable;
 
     /** @var bool */
@@ -31,11 +32,11 @@ class ConnectableObservable extends BaseObservable
 
     /**
      * ConnectableObservable constructor.
-     * @param BaseObservable $source
+     * @param Observable $source
      * @param \Rx\Subject\Subject $subject
      * @param SchedulerInterface $scheduler
      */
-    public function __construct(BaseObservable $source, Subject $subject = null, SchedulerInterface $scheduler = null)
+    public function __construct(Observable $source, Subject $subject = null, SchedulerInterface $scheduler = null)
     {
         $this->sourceObservable = $source->asObservable();
         $this->subject          = $subject ?: new Subject();

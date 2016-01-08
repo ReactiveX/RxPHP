@@ -4,11 +4,12 @@ namespace Rx\Observable;
 
 use Exception;
 use Rx\Disposable\EmptyDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
-class ErrorObservable extends BaseObservable
+class ErrorObservable extends Observable
 {
     private $error;
 

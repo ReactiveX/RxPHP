@@ -4,7 +4,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 class CountTest extends FunctionalTestCase
 {
@@ -348,7 +348,7 @@ class CountTest extends FunctionalTestCase
     public function testCountAfterRange()
     {
 
-        $xs = BaseObservable::fromArray(range(1, 10));
+        $xs = Observable::fromArray(range(1, 10));
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->count();

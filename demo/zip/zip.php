@@ -5,7 +5,7 @@ use Rx\Observer\CallbackObserver;
 require_once __DIR__ . '/../bootstrap.php';
 
 //Without a result selector
-$range = \Rx\Observable\BaseObservable::fromArray(range(0, 4));
+$range = \Rx\Observable::fromArray(range(0, 4));
 
 $source = $range
     ->zip([
@@ -31,7 +31,7 @@ $subscription = $source
 
 
 //With a result selector
-$range = \Rx\Observable\BaseObservable::fromArray(range(0, 4));
+$range = \Rx\Observable::fromArray(range(0, 4));
 
 $source = $range
     ->zip([

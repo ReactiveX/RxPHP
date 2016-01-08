@@ -1,9 +1,15 @@
 <?php
 
-namespace Rx\Observable;
+namespace Rx;
 
-use Rx\ObserverInterface;
-use Rx\ObservableInterface;
+use Rx\Observable\AnonymousObservable;
+use Rx\Observable\ArrayObservable;
+use Rx\Observable\ConnectableObservable;
+use Rx\Observable\EmptyObservable;
+use Rx\Observable\ErrorObservable;
+use Rx\Observable\MulticastObservable;
+use Rx\Observable\NeverObservable;
+use Rx\Observable\ReturnObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
 use Rx\Operator\CombineLatestOperator;
@@ -27,7 +33,6 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
-use Rx\SchedulerInterface;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
@@ -35,7 +40,7 @@ use Rx\Subject\Subject;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\CallbackDisposable;
 
-abstract class BaseObservable implements ObservableInterface
+class Observable implements ObservableInterface
 {
     protected $observers = [];
     protected $started = false;

@@ -3,7 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\NeverObservable;
 
 class ReplayTest extends FunctionalTestCase
@@ -394,7 +394,7 @@ class ReplayTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->replay(function (BaseObservable $ys) {
+            return $xs->replay(function (Observable $ys) {
                 return $ys->take(6)->repeat();
             }, 3, null, $this->scheduler);
         }, 610);
@@ -464,7 +464,7 @@ class ReplayTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->replay(function (BaseObservable $ys) {
+            return $xs->replay(function (Observable $ys) {
                 return $ys->take(6)->repeat();
             }, 3, null, $this->scheduler);
         });
@@ -527,7 +527,7 @@ class ReplayTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->replay(function (BaseObservable $ys) {
+            return $xs->replay(function (Observable $ys) {
                 return $ys->take(6)->repeat();
             }, 3, null, $this->scheduler);
         }, 470);
@@ -939,7 +939,7 @@ class ReplayTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->replay(function (BaseObservable $ys) {
+            return $xs->replay(function (Observable $ys) {
                 return $ys->take(6)->repeat();
             }, null, 50, $this->scheduler);
         }, 610);
@@ -1006,7 +1006,7 @@ class ReplayTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->replay(function (BaseObservable $ys) {
+            return $xs->replay(function (Observable $ys) {
                 return $ys->take(6)->repeat();
             }, null, 50, $this->scheduler);
         });
@@ -1068,7 +1068,7 @@ class ReplayTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->replay(function (BaseObservable $ys) {
+            return $xs->replay(function (Observable $ys) {
                 return $ys->take(6)->repeat();
             }, null, 50, $this->scheduler);
         }, 470);

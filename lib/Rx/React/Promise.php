@@ -3,7 +3,7 @@
 namespace Rx\React;
 
 use Rx\ObservableInterface;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
@@ -67,7 +67,7 @@ final class Promise
      */
     public static function toObservable(PromiseInterface $promise)
     {
-        return BaseObservable::defer(
+        return Observable::defer(
             function () use ($promise) {
                 $subject = new AsyncSubject();
 

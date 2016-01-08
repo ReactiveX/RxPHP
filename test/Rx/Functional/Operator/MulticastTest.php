@@ -5,7 +5,7 @@ namespace Rx\Functional\Operator;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\MulticastObservable;
 use Rx\Observer\CallbackObserver;

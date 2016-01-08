@@ -5,7 +5,7 @@ namespace Rx\Functional\Operator;
 
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 
 class DeferTest extends FunctionalTestCase
@@ -19,7 +19,7 @@ class DeferTest extends FunctionalTestCase
         $xs      = null;
 
         $results = $this->scheduler->startWithCreate(function () use (&$invoked, &$xs) {
-            return BaseObservable::defer(function () use (&$invoked, &$xs) {
+            return Observable::defer(function () use (&$invoked, &$xs) {
                 $invoked++;
                 $xs = $this->createColdObservable([
                   onNext(100, $this->scheduler->getClock()),
@@ -48,7 +48,7 @@ class DeferTest extends FunctionalTestCase
         $xs      = null;
 
         $results = $this->scheduler->startWithCreate(function () use (&$invoked, &$xs) {
-            return BaseObservable::defer(function () use (&$invoked, &$xs) {
+            return Observable::defer(function () use (&$invoked, &$xs) {
                 $invoked++;
                 $xs = $this->createColdObservable([
                   onNext(100, $this->scheduler->getClock()),
@@ -77,7 +77,7 @@ class DeferTest extends FunctionalTestCase
         $xs      = null;
 
         $results = $this->scheduler->startWithCreate(function () use (&$invoked, &$xs) {
-            return BaseObservable::defer(function () use (&$invoked, &$xs) {
+            return Observable::defer(function () use (&$invoked, &$xs) {
                 $invoked++;
                 $xs = $this->createColdObservable([
                   onNext(100, $this->scheduler->getClock()),
@@ -106,7 +106,7 @@ class DeferTest extends FunctionalTestCase
         $invoked = 0;
 
         $results = $this->scheduler->startWithCreate(function () use (&$invoked) {
-            return BaseObservable::defer(function () use (&$invoked) {
+            return Observable::defer(function () use (&$invoked) {
                 $invoked++;
                 throw new \Exception('error');
             });

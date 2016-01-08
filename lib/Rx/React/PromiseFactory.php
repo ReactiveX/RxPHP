@@ -2,7 +2,7 @@
 
 namespace Rx\React;
 
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 final class PromiseFactory
 {
@@ -18,6 +18,6 @@ final class PromiseFactory
             return Promise::toObservable($factory());
         };
 
-        return BaseObservable::defer($observableFactory);
+        return Observable::defer($observableFactory);
     }
 }

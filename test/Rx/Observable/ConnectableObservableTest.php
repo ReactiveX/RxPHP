@@ -4,6 +4,7 @@
 namespace Rx\Observable;
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\Subject;
 use Rx\Testing\TestSubject;
@@ -18,7 +19,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     {
         $y   = 0;
         $s2  = new Subject();
-        $co2 = new ConnectableObservable(BaseObservable::just(1), $s2);
+        $co2 = new ConnectableObservable(Observable::just(1), $s2);
 
         $co2->subscribe(new CallbackObserver(function ($x) use (&$y) {
             $y = $x;

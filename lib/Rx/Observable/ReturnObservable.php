@@ -3,11 +3,12 @@
 namespace Rx\Observable;
 
 use Rx\Disposable\CompositeDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
-class ReturnObservable extends BaseObservable
+class ReturnObservable extends Observable
 {
     private $value;
 

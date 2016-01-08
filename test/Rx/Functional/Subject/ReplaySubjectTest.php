@@ -3,7 +3,7 @@
 namespace Rx\Functional\Subject;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\ReplaySubject;
 
@@ -565,7 +565,7 @@ class ReplaySubjectTest extends FunctionalTestCase
     public function it_replays_with_no_scheduler() {
         $rs = new ReplaySubject();
 
-        $o = BaseObservable::fromArray(range(1,5));
+        $o = Observable::fromArray(range(1,5));
 
         $o->subscribe($rs);
 

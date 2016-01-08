@@ -5,11 +5,11 @@ namespace Rx\Subject;
 use Exception;
 use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
-class Subject extends BaseObservable implements ObserverInterface, DisposableInterface
+class Subject extends Observable implements ObserverInterface, DisposableInterface
 {
     protected $exception;
     protected $isDisposed = false;

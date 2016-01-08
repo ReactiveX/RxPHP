@@ -2,13 +2,14 @@
 
 namespace Rx\Observable;
 
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\Disposable\CompositeDisposable;
 use Rx\DisposableInterface;
 
-class GroupedObservable extends BaseObservable
+class GroupedObservable extends Observable
 {
     private $key;
     private $underlyingObservable;

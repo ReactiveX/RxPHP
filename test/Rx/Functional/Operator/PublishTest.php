@@ -5,7 +5,7 @@ namespace Rx\Functional\Operator;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Testing\TestSubject;
@@ -37,7 +37,7 @@ class PublishTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publish(function (BaseObservable $ys) {
+            return $xs->publish(function (Observable $ys) {
                 return $ys->zip([$ys], [$this, 'add']);
             });
         });
@@ -105,7 +105,7 @@ class PublishTest extends FunctionalTestCase
 
         $count = 0;
 
-        $xs = BaseObservable::defer(function () use (&$count, &$disconnected) {
+        $xs = Observable::defer(function () use (&$count, &$disconnected) {
             $count++;
 
             return new AnonymousObservable(function () use (&$disconnected) {
@@ -516,7 +516,7 @@ class PublishTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publish(function (BaseObservable $ys) {
+            return $xs->publish(function (Observable $ys) {
                 return $ys->zip([$ys->skip(1)], [$this, 'add']);
             });
         });
@@ -571,7 +571,7 @@ class PublishTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->publish(function (BaseObservable $ys) {
+            return $xs->publish(function (Observable $ys) {
                 return $ys->zip([$ys->skip(1)], [$this, 'add']);
             });
         });
@@ -624,7 +624,7 @@ class PublishTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->publish(function (BaseObservable $ys) {
+            return $xs->publish(function (Observable $ys) {
                 return $ys->zip([$ys->skip(1)], [$this, 'add']);
             });
         }, 470);

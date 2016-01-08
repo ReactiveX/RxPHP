@@ -3,11 +3,12 @@
 namespace Rx\Observable;
 
 use Rx\Disposable\CallbackDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Observer\AutoDetachObserver;
 use Rx\Scheduler\ImmediateScheduler;
 
-class AnonymousObservable extends BaseObservable
+class AnonymousObservable extends Observable
 {
     private $subscribeAction;
 

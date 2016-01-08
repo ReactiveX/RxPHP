@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
-class RecursiveReturnObservable extends BaseObservable
+class RecursiveReturnObservable extends Observable
 {
     private $value;
 

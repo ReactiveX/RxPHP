@@ -5,7 +5,7 @@ namespace Rx\Functional\Operator;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnNextNotification;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\EmptyObservable;
 use Rx\Testing\Recorded;
 
@@ -20,7 +20,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () {
             $o = new EmptyObservable();
 
-            return BaseObservable::never()->distinctUntilChanged();
+            return Observable::never()->distinctUntilChanged();
         });
 
         $this->assertMessages([], $results->getMessages());
