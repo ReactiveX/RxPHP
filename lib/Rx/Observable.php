@@ -268,6 +268,14 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * @return EmptyObservable
+     */
+    public static function emptyObservable()
+    {
+        return new EmptyObservable();
+    }
+
+    /**
      * @return \Rx\Observable\AnonymousObservable
      */
     public static function never()
