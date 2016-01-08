@@ -6,19 +6,27 @@ use Exception;
 
 class CallbackObserver extends AbstractObserver
 {
+    /** @var callable|null  */
     private $onNext;
+
+    /** @var callable|null  */
     private $onError;
+
+    /** @var callable|null  */
     private $onCompleted;
 
-    public function __construct($onNext = null, $onError = null, $onCompleted = null)
+    public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
     {
-        $this->onNext      = $this->getOrDefault($onNext, function () {
-        });
-        $this->onError     = $this->getOrDefault($onError, function ($e) {
+        $default = function () {
+        };
+
+        $this->onNext = $this->getOrDefault($onNext, $default);
+
+        $this->onError = $this->getOrDefault($onError, function ($e) {
             throw $e;
         });
-        $this->onCompleted = $this->getOrDefault($onCompleted, function () {
-        });
+
+        $this->onCompleted = $this->getOrDefault($onCompleted, $default);
     }
 
     protected function completed()
@@ -37,7 +45,7 @@ class CallbackObserver extends AbstractObserver
         call_user_func_array($this->onNext, [$value]);
     }
 
-    private function getOrDefault($callback, $default)
+    private function getOrDefault(callable $callback = null, $default = null)
     {
         if (null === $callback) {
             return $default;

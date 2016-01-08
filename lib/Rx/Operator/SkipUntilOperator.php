@@ -16,7 +16,7 @@ class SkipUntilOperator implements OperatorInterface
     /** @var ObservableInterface */
     private $other;
 
-    public function __construct($other = null)
+    public function __construct(ObservableInterface $other)
     {
         $this->other = $other;
     }

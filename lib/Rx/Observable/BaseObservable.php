@@ -27,7 +27,6 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
-use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
@@ -67,7 +66,7 @@ abstract class BaseObservable implements ObservableInterface
         return true;
     }
 
-    public function subscribeCallback($onNext = null, $onError = null, $onCompleted = null, $scheduler = null)
+    public function subscribeCallback(callable $onNext = null, callable  $onError = null, callable $onCompleted = null, SchedulerInterface $scheduler = null)
     {
         $observer = new CallbackObserver($onNext, $onError, $onCompleted);
 
@@ -116,7 +115,7 @@ abstract class BaseObservable implements ObservableInterface
         return $this->filter($predicate);
     }
 
-    public function merge(ObservableInterface $otherObservable, $scheduler = null)
+    public function merge(ObservableInterface $otherObservable)
     {
         return self::mergeAll(
             self::fromArray([$this, $otherObservable])
@@ -157,6 +156,10 @@ abstract class BaseObservable implements ObservableInterface
         return new ArrayObservable($array);
     }
 
+    /**
+     * @param integer $count
+     * @return AnonymousObservable
+     */
     public function skip($count)
     {
         return $this->lift(function () use ($count) {
@@ -164,9 +167,12 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
+    /**
+     * @param integer $count
+     * @return AnonymousObservable|EmptyObservable
+     */
     public function take($count)
     {
-
         if ($count === 0) {
             return new EmptyObservable();
         }
@@ -196,7 +202,7 @@ abstract class BaseObservable implements ObservableInterface
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      * @return \Rx\Observable\AnonymousObservable
      */
     public static function just($value)
@@ -263,7 +269,7 @@ abstract class BaseObservable implements ObservableInterface
      * @param $error
      * @return \Rx\Observable\AnonymousObservable
      */
-    public static function error($error)
+    public static function error(\Exception $error)
     {
         return new ErrorObservable($error);
     }
@@ -285,14 +291,14 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
-    public function doOnNext($onNext)
+    public function doOnNext(callable $onNext)
     {
         return $this->doOnEach(new CallbackObserver(
             $onNext
         ));
     }
 
-    public function doOnError($onError)
+    public function doOnError(callable $onError)
     {
         return $this->doOnEach(new CallbackObserver(
             null,
@@ -300,7 +306,7 @@ abstract class BaseObservable implements ObservableInterface
         ));
     }
 
-    public function doOnCompleted($onCompleted)
+    public function doOnCompleted(callable $onCompleted)
     {
         return $this->doOnEach(new CallbackObserver(
             null,
@@ -344,7 +350,7 @@ abstract class BaseObservable implements ObservableInterface
      * received, elements are taken from the front of the queue and produced on the result sequence. This causes
      * elements to be delayed.
      *
-     * @param $count Number of elements to bypass at the end of the source sequence.
+     * @param integer $count Number of elements to bypass at the end of the source sequence.
      * @return AnonymousObservable An observable sequence containing the source sequence elements except for the
      * bypassed ones at the end.
      */
@@ -362,7 +368,7 @@ abstract class BaseObservable implements ObservableInterface
      * @return AnonymousObservable An observable sequence containing the elements of the source sequence starting
      * from the point the other sequence triggered propagation.
      */
-    public function skipUntil($other)
+    public function skipUntil(ObservableInterface $other)
     {
         return $this->lift(function () use ($other) {
             return new SkipUntilOperator($other);
@@ -487,7 +493,7 @@ abstract class BaseObservable implements ObservableInterface
      * that shares a single subscription to the underlying sequence and starts with initialValue.
      * This operator is a specialization of Multicast using a BehaviorSubject.
      *
-     * @param null $initialValue
+     * @param mixed $initialValue
      * @param callable $selector
      * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
      */
@@ -535,12 +541,12 @@ abstract class BaseObservable implements ObservableInterface
      * zero to one, then shares that  subscription with all subsequent observers until the number of observers returns
      * to zero, at which point the subscription is disposed.
      *
-     * @param $bufferSize
-     * @param $windowSize
+     * @param integer $bufferSize
+     * @param integer $windowSize
      * @param $scheduler
      * @return \Rx\Observable\RefCountObservable
      */
-    public function shareReplay($bufferSize, $windowSize, $scheduler)
+    public function shareReplay($bufferSize, $windowSize, SchedulerInterface $scheduler)
     {
         return $this->replay(null, $bufferSize, $windowSize, $scheduler)->refCount();
     }
@@ -553,8 +559,8 @@ abstract class BaseObservable implements ObservableInterface
      * This operator is a specialization of Multicast using a ReplaySubject.
      *
      * @param callable|null $selector
-     * @param null $bufferSize
-     * @param null $windowSize
+     * @param integer|null $bufferSize
+     * @param integer|null $windowSize
      * @param \Rx\SchedulerInterface|null $scheduler
      * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
      */
@@ -624,6 +630,10 @@ abstract class BaseObservable implements ObservableInterface
         });
     }
 
+    /**
+     * @param int $count
+     * @return AnonymousObservable|EmptyObservable
+     */
     public function repeat($count = -1)
     {
         if ($count == 0) {
