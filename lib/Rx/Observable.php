@@ -78,6 +78,11 @@ class Observable implements ObservableInterface
         return $this->subscribe($observer, $scheduler);
     }
 
+    public static function create(callable $subscribeAction)
+    {
+        return new AnonymousObservable($subscribeAction);
+    }
+
     public function map(callable $selector)
     {
         return $this->lift(function () use ($selector) {
