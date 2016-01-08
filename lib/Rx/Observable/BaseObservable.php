@@ -429,15 +429,16 @@ abstract class BaseObservable implements ObservableInterface
      *
      * @param \Rx\Subject\Subject $subject
      * @param null $selector
-     * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
+     * @param SchedulerInterface $scheduler
+     * @return ConnectableObservable|MulticastObservable
      */
-    public function multicast(Subject $subject, $selector = null)
+    public function multicast(Subject $subject, $selector = null, SchedulerInterface $scheduler = null)
     {
         return $selector ?
             new MulticastObservable($this, function () use ($subject) {
                 return $subject;
             }, $selector) :
-            new ConnectableObservable($this, $subject);
+            new ConnectableObservable($this, $subject, $scheduler);
     }
 
     /**

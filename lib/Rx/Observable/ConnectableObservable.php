@@ -4,8 +4,8 @@ namespace Rx\Observable;
 
 use Rx\Disposable\BinaryDisposable;
 use Rx\Disposable\CallbackDisposable;
-use Rx\ObservableInterface;
 use Rx\ObserverInterface;
+use Rx\SchedulerInterface;
 use Rx\Subject\Subject;
 
 /**
@@ -20,31 +20,40 @@ class ConnectableObservable extends BaseObservable
     /** @var  BinaryDisposable */
     protected $subscription;
 
-    /** @var  ObserverInterface */
+    /** @var  BaseObservable */
     protected $sourceObservable;
 
     /** @var bool */
-    public $hasSubscription;
+    protected $hasSubscription;
+
+    /** @var  SchedulerInterface */
+    protected $scheduler;
 
     /**
      * ConnectableObservable constructor.
-     * @param \Rx\ObservableInterface $source
+     * @param BaseObservable $source
      * @param \Rx\Subject\Subject $subject
+     * @param SchedulerInterface $scheduler
      */
-    public function __construct(ObservableInterface $source, Subject $subject = null)
+    public function __construct(BaseObservable $source, Subject $subject = null, SchedulerInterface $scheduler = null)
     {
         $this->sourceObservable = $source->asObservable();
         $this->subject          = $subject ?: new Subject();
         $this->hasSubscription  = false;
+        $this->scheduler        = $scheduler;
     }
 
     /**
      * @param \Rx\ObserverInterface $observer
      * @param null $scheduler
-     * @return \Rx\Disposable\CallbackDisposable|\Rx\Disposable\EmptyDisposable|\Rx\DisposableInterface|\Rx\Subject\InnerSubscriptionDisposable
+     * @return CallbackDisposable|\Rx\Disposable\EmptyDisposable|\Rx\DisposableInterface|\Rx\Subject\InnerSubscriptionDisposable
      */
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
+        if ($scheduler) {
+            $this->scheduler = $scheduler;
+        }
+
         return $this->subject->subscribe($observer, $scheduler);
     }
 
@@ -70,7 +79,7 @@ class ConnectableObservable extends BaseObservable
             $this->hasSubscription = false;
         });
 
-        $this->subscription = new BinaryDisposable($this->sourceObservable->subscribe($this->subject), $connectableDisposable);
+        $this->subscription = new BinaryDisposable($this->sourceObservable->subscribe($this->subject, $this->scheduler), $connectableDisposable);
 
         return $this->subscription;
     }
