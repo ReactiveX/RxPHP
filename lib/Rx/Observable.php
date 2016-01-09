@@ -33,6 +33,7 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
+use Rx\Scheduler\ImmediateScheduler;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
@@ -154,6 +155,34 @@ class Observable implements ObservableInterface
         return (new EmptyObservable())->lift(function () use ($factory) {
             return new DeferOperator($factory);
         });
+    }
+
+    /**
+     * Invokes the specified function asynchronously on the specified scheduler, surfacing the result through an
+     * observable sequence.
+     *
+     * @param callable $action
+     * @param SchedulerInterface $scheduler
+     * @return AnonymousObservable
+     */
+    public static function start(callable $action, SchedulerInterface $scheduler = null)
+    {
+        $scheduler = $scheduler ?: new ImmediateScheduler();
+        $subject   = new AsyncSubject();
+
+        $scheduler->schedule(function () use ($subject, $action) {
+            $result = null;
+            try {
+                $result = call_user_func($action);
+            } catch (\Exception $e) {
+                $subject->onError($e);
+                return;
+            }
+            $subject->onNext($result);
+            $subject->onCompleted();
+        });
+
+        return $subject->asObservable();
     }
 
     /**
