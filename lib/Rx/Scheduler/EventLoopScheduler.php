@@ -3,7 +3,7 @@
 namespace Rx\Scheduler;
 
 use React\EventLoop\LoopInterface;
-use React\EventLoop\Timer\Timers;
+use React\EventLoop\Timer\Timer;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\SchedulerInterface;
@@ -17,10 +17,14 @@ class EventLoopScheduler implements SchedulerInterface
         $this->loop = $loop;
     }
 
+    /**
+     * @param callable $action
+     * @return CallbackDisposable
+     */
     public function schedule(callable $action)
     {
 
-        $timer = $this->loop->addTimer(Timers::MIN_RESOLUTION, $action);
+        $timer = $this->loop->addTimer(Timer::MIN_INTERVAL, $action);
 
         return new CallbackDisposable(function () use ($timer) {
             $timer->cancel();
@@ -29,18 +33,18 @@ class EventLoopScheduler implements SchedulerInterface
 
     public function scheduleRecursive(callable $action)
     {
-        $group     = new CompositeDisposable();
-        $scheduler = $this;
+        $group = new CompositeDisposable();
 
         $recursiveAction = null;
-        $recursiveAction = function () use ($action, &$scheduler, &$group, &$recursiveAction) {
+
+        $recursiveAction = function () use ($action, &$group, &$recursiveAction) {
             $action(
-                function () use (&$scheduler, &$group, &$recursiveAction) {
+                function () use (&$group, &$recursiveAction) {
                     $isAdded = false;
                     $isDone  = false;
 
                     $d = null;
-                    $d = $scheduler->schedule(function () use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
+                    $d = $this->schedule(function () use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
                         if (is_callable($recursiveAction)) {
                             $recursiveAction();
                         } else {
