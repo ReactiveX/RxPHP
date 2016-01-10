@@ -33,6 +33,25 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function create_null_disposable()
+    {
+
+        $results = $this->scheduler->startWithCreate(function () {
+            return Observable::create(function (ObserverInterface $o) {
+                $o->onNext(1);
+                $o->onNext(2);
+            });
+        });
+
+        $this->assertMessages([
+            onNext(200, 1),
+            onNext(200, 2)
+        ], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
     public function create_completed()
     {
 
