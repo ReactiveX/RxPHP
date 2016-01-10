@@ -30,6 +30,7 @@ use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipOperator;
 use Rx\Operator\SkipUntilOperator;
+use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
@@ -701,6 +702,19 @@ class Observable implements ObservableInterface
 
         return $this->lift(function () use ($count) {
             return new RepeatOperator($count);
+        });
+    }
+
+    /**
+     * Wraps the source sequence in order to run its subscription and unsubscription logic on the specified scheduler.
+     *
+     * @param SchedulerInterface $scheduler
+     * @return AnonymousObservable
+     */
+    public function subscribeOn(SchedulerInterface $scheduler)
+    {
+        return $this->lift(function () use ($scheduler) {
+            return new SubscribeOnOperator($scheduler);
         });
     }
 }
