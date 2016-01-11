@@ -339,6 +339,6 @@ class TakeUntilTest extends FunctionalTestCase
             $result->getMessages()
         );
 
-        $this->assertTrue($sourceNotDisposed);
+        $this->assertFalse($sourceNotDisposed);
     }
 }
