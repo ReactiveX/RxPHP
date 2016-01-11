@@ -32,6 +32,7 @@ use Rx\Operator\SkipOperator;
 use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\TakeOperator;
+use Rx\Operator\TakeUntilOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
 use Rx\Scheduler\ImmediateScheduler;
@@ -278,6 +279,21 @@ class Observable implements ObservableInterface
 
         return $this->lift(function () use ($count) {
             return new TakeOperator($count);
+        });
+    }
+
+    /**
+     * Returns the values from the source observable sequence until the other observable sequence produces a value.
+     *
+     * @param ObservableInterface $other - other Observable sequence that terminates propagation of elements of
+     * the source sequence.
+     * @return AnonymousObservable - An observable sequence containing the elements of the source sequence up to the
+     * point the other sequence interrupted further propagation.
+     */
+    public function takeUntil(ObservableInterface $other)
+    {
+        return $this->lift(function () use ($other) {
+            return new TakeUntilOperator($other);
         });
     }
 
