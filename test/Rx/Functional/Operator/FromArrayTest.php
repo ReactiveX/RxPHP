@@ -57,4 +57,20 @@ class FromArrayTest extends FunctionalTestCase
             onCompleted(202),
         ], $results->getMessages());
     }
+
+    /**
+     * @test
+     */
+    public function fromArray_dispose()
+    {
+        $xs = Observable::fromArray(['foo', 'bar', 'baz']);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs;
+        }, 202);
+
+        $this->assertMessages([
+            onNext(201, 'foo')
+        ], $results->getMessages());
+    }
 }

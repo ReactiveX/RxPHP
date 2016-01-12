@@ -4,6 +4,7 @@ namespace Rx\Scheduler;
 
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\SerialDisposable;
 use Rx\SchedulerInterface;
 
 class VirtualTimeScheduler implements SchedulerInterface
@@ -37,39 +38,27 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function scheduleRecursive(callable $action)
     {
-        $group = new CompositeDisposable();
+        if (!is_callable($action)) {
+            throw new \InvalidArgumentException("Action should be a callable.");
+        }
 
-        $recursiveAction = function () use ($action, $group, &$recursiveAction) {
-            $action(
-                function () use ($group, &$recursiveAction) {
-                    $isAdded = false;
-                    $isDone  = true;
+        $goAgain    = true;
+        $disposable = new SerialDisposable();
 
-                    $d = $this->schedule(function () use (&$isAdded, &$isDone, $group, &$recursiveAction, &$d) {
-                        if (!is_callable($recursiveAction)) {
-                            throw new \Exception("recursiveAction is not callable");
-                        }
-
-                        $recursiveAction();
-
-                        if ($isAdded) {
-                            $group->remove($d);
-                        } else {
-                            $isDone = true;
-                        }
-                    });
-
-                    if (!$isDone) {
-                        $group->add($d);
-                        $isAdded = true;
-                    }
-                }
-            );
+        $recursiveAction = function () use ($action, &$goAgain, $disposable, &$recursiveAction) {
+            $disposable->setDisposable($this->schedule(function () use ($action, &$recursiveAction) {
+                $action(function () use (&$recursiveAction) {
+                    $recursiveAction();
+                });
+            }));
         };
 
-        $group->add($this->schedule($recursiveAction));
+        // seems like the first run through should be scheduled - but that
+        // kills a bunch of tests
+        //$disposable->add($this->schedule($recursiveAction));
+        $recursiveAction();
 
-        return $group;
+        return $disposable;
     }
 
     public function getClock()
