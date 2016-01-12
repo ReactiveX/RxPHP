@@ -25,18 +25,28 @@ class IteratorObservable extends Observable
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $scheduler = $scheduler ?: new ImmediateScheduler();
+        $key       = 0;
 
-        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer) {
+        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$key) {
             try {
 
-                if (null === $this->items->key()) {
+                //HHVM requires you to call next() before current()
+                if (defined('HHVM_VERSION')) {
+                    $this->items->next();
+                    $key = $this->items->key();
+                }
+                if (null === $key) {
                     $observer->onCompleted();
                     return;
                 }
 
                 $current = $this->items->current();
                 $observer->onNext($current);
-                $this->items->next();
+
+                if (!defined('HHVM_VERSION')) {
+                    $this->items->next();
+                    $key = $this->items->key();
+                }
 
                 $reschedule();
 
