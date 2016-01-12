@@ -7,6 +7,7 @@ use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
+use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
 use Rx\Observable\NeverObservable;
 use Rx\Observable\ReturnObservable;
@@ -144,6 +145,15 @@ class Observable implements ObservableInterface
     public static function fromArray(array $array)
     {
         return new ArrayObservable($array);
+    }
+
+    /**
+     * @param \Iterator $iterator
+     * @return IteratorObservable
+     */
+    public static function fromIterator(\Iterator $iterator)
+    {
+        return new IteratorObservable($iterator);
     }
 
     /**
