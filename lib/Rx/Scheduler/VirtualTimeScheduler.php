@@ -3,7 +3,6 @@
 namespace Rx\Scheduler;
 
 use Rx\Disposable\EmptyDisposable;
-use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\SerialDisposable;
 use Rx\SchedulerInterface;
 
@@ -53,9 +52,6 @@ class VirtualTimeScheduler implements SchedulerInterface
             }));
         };
 
-        // seems like the first run through should be scheduled - but that
-        // kills a bunch of tests
-        //$disposable->add($this->schedule($recursiveAction));
         $recursiveAction();
 
         return $disposable;

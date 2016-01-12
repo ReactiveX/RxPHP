@@ -2,12 +2,9 @@
 
 namespace Rx\Functional\Observable;
 
-use React\EventLoop\Factory;
+
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-use Rx\Observer\CallbackObserver;
-use Rx\React\Interval;
-use SebastianBergmann\Exporter\Exception;
 
 class IteratorObservableTest extends FunctionalTestCase
 {
@@ -75,7 +72,7 @@ class IteratorObservableTest extends FunctionalTestCase
      */
     public function generator_throws_error()
     {
-        $error     = new Exception();
+        $error     = new \Exception();
         $generator = $this->genError($error);
 
         $xs = new \Rx\Observable\IteratorObservable($generator);
@@ -124,7 +121,7 @@ class IteratorObservableTest extends FunctionalTestCase
         yield 1;
     }
 
-    private function genError(Exception $e)
+    private function genError(\Exception $e)
     {
         throw $e;
         yield;
