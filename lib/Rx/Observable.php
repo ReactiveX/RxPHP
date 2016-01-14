@@ -7,6 +7,7 @@ use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
+use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
 use Rx\Observable\NeverObservable;
@@ -89,6 +90,18 @@ class Observable implements ObservableInterface
     public static function create(callable $subscribeAction)
     {
         return new AnonymousObservable($subscribeAction);
+    }
+
+    /**
+     * Returns an observable sequence that produces a value after each period.
+     *
+     * @param $interval
+     * @param SchedulerInterface|null $scheduler
+     * @return IntervalObservable
+     */
+    public static function interval($interval, $scheduler = null)
+    {
+        return new IntervalObservable($interval, $scheduler);
     }
 
     /**
