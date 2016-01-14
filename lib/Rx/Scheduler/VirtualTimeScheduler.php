@@ -24,7 +24,7 @@ class VirtualTimeScheduler implements SchedulerInterface
         $this->queue    = new PriorityQueue();
     }
 
-    public function schedule(callable $action)
+    public function schedule(callable $action, $delay = 0)
     {
 
         $invokeAction = function ($scheduler, $action) {
@@ -32,7 +32,7 @@ class VirtualTimeScheduler implements SchedulerInterface
             return new EmptyDisposable();
         };
 
-        return $this->scheduleAbsoluteWithState($action, $this->clock, $invokeAction);
+        return $this->scheduleAbsoluteWithState($action, $this->clock + $delay, $invokeAction);
     }
 
     public function scheduleRecursive(callable $action)
@@ -96,6 +96,32 @@ class VirtualTimeScheduler implements SchedulerInterface
         $runAt = $this->clock + $dueTime;
 
         return $this->scheduleAbsoluteWithState($state, $runAt, $action);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function schedulePeriodic(callable $action, $delay, $period)
+    {
+        $now = $this->now();
+
+        $nextTime = $now + $delay;
+
+        $disposable = new SerialDisposable();
+
+        $doActionAndReschedule = function () use (&$nextTime, $period, $disposable, $action, &$doActionAndReschedule) {
+            $action();
+            $nextTime = $nextTime + $period;
+            $delay = $nextTime - $this->now();
+            if ($delay < 0) {
+                $delay = 0;
+            }
+            $disposable->setDisposable($this->schedule($doActionAndReschedule, $delay));
+        };
+
+        $disposable->setDisposable($this->schedule($doActionAndReschedule, $delay));
+
+        return $disposable;
     }
 
     public function start()

@@ -9,8 +9,12 @@ use InvalidArgumentException;
 
 class ImmediateScheduler implements SchedulerInterface
 {
-    public function schedule(callable $action)
+    public function schedule(callable $action, $delay = 0)
     {
+        if ($delay !== 0) {
+            throw new InvalidArgumentException("ImmediateScheduler does not support a non-zero delay.");
+        }
+
         $action();
 
         return new EmptyDisposable();
@@ -40,6 +44,14 @@ class ImmediateScheduler implements SchedulerInterface
         $disposable->add($this->schedule($recursiveAction));
 
         return $disposable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function schedulePeriodic(callable $action, $delay, $period)
+    {
+        throw new \Exception("ImmediateScheduler does not support a non-zero delay.");
     }
 
     /**

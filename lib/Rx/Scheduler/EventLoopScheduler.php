@@ -3,7 +3,6 @@
 namespace Rx\Scheduler;
 
 use React\EventLoop\LoopInterface;
-use React\EventLoop\Timer\Timer;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\SchedulerInterface;
@@ -19,12 +18,13 @@ class EventLoopScheduler implements SchedulerInterface
 
     /**
      * @param callable $action
+     * @param $delay
      * @return CallbackDisposable
      */
-    public function schedule(callable $action)
+    public function schedule(callable $action, $delay = 0)
     {
-
-        $timer = $this->loop->addTimer(Timer::MIN_INTERVAL, $action);
+        $delay = $delay / 1000; // switch from ms to seconds for react
+        $timer = $this->loop->addTimer($delay, $action);
 
         return new CallbackDisposable(function () use ($timer) {
             $timer->cancel();
@@ -69,6 +69,25 @@ class EventLoopScheduler implements SchedulerInterface
         $group->add($this->schedule($recursiveAction));
 
         return $group;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function schedulePeriodic(callable $action, $delay, $period)
+    {
+        $delay = $delay / 1000;
+        $period = $period / 1000;
+
+        $timer = $this->loop->addTimer($delay, function ($timer) use ($action, $period, &$timer) {
+            $timer = $this->loop->addPeriodicTimer($period, function ($timer) use ($action) {
+                $action();
+            });
+        });
+
+        return new CallbackDisposable(function () use (&$timer) {
+            $timer->cancel();
+        });
     }
 
     /**
