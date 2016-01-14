@@ -19,6 +19,7 @@ use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
 use Rx\Operator\DefaultIfEmptyOperator;
 use Rx\Operator\DeferOperator;
+use Rx\Operator\DelayOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\GroupByUntilOperator;
@@ -754,6 +755,20 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($scheduler) {
             return new SubscribeOnOperator($scheduler);
+        });
+    }
+
+    /**
+     * Time shifts the observable sequence by dueTime. The relative time intervals between the values are preserved.
+     *
+     * @param $delay
+     * @param SchedulerInterface|null $scheduler
+     * @return AnonymousObservable
+     */
+    public function delay($delay, $scheduler = null)
+    {
+        return $this->lift(function () use ($delay, $scheduler) {
+            return new DelayOperator($delay, $scheduler);
         });
     }
 }
