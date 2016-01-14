@@ -80,6 +80,7 @@ class EventLoopScheduler implements SchedulerInterface
         $period = $period / 1000;
 
         $timer = $this->loop->addTimer($delay, function ($timer) use ($action, $period, &$timer) {
+            $action();
             $timer = $this->loop->addPeriodicTimer($period, function ($timer) use ($action) {
                 $action();
             });
