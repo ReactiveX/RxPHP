@@ -36,6 +36,7 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
+use Rx\Operator\TimeoutOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
 use Rx\Scheduler\ImmediateScheduler;
@@ -769,6 +770,19 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($delay, $scheduler) {
             return new DelayOperator($delay, $scheduler);
+        });
+    }
+
+    /**
+     * @param $timeout
+     * @param ObservableInterface $timeoutObservable
+     * @param SchedulerInterface $scheduler
+     * @return AnonymousObservable
+     */
+    public function timeout($timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null)
+    {
+        return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
+            return new TimeoutOperator($timeout, $timeoutObservable, $scheduler);
         });
     }
 }
