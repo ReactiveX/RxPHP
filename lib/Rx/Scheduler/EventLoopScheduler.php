@@ -79,14 +79,19 @@ class EventLoopScheduler implements SchedulerInterface
         $delay = $delay / 1000;
         $period = $period / 1000;
 
-        $timer = $this->loop->addTimer($delay, function ($timer) use ($action, $period, &$timer) {
+        $disposed = false;
+
+        $timer = $this->loop->addTimer($delay, function () use ($action, $period, &$timer, &$disposed) {
             $action();
-            $timer = $this->loop->addPeriodicTimer($period, function ($timer) use ($action) {
-                $action();
-            });
+            if (!$disposed) {
+                $timer = $this->loop->addPeriodicTimer($period, function () use ($action) {
+                    $action();
+                });
+            }
         });
 
-        return new CallbackDisposable(function () use (&$timer) {
+        return new CallbackDisposable(function () use (&$timer, &$disposed) {
+            $disposed = true;
             $timer->cancel();
         });
     }
