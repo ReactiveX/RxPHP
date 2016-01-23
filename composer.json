@@ -1,14 +1,22 @@
 {
-    "name": "asm89/rx.php",
+    "name": "reactivex/rxphp",
     "description": "Reactive extensions for php.",
     "keywords": ["reactive", "extensions", "rx"],
-    "homepage": "https://github.com/asm89/Rx.PHP",
+    "homepage": "https://github.com/ReactiveX/RxPHP",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Alexander",
             "email": "iam.asm89@gmail.com"
+        },
+        {
+            "name": "David Dan",
+            "email": "davidwdan@gmail.com"
+        },
+        {
+            "name": "Matt Bonneau",
+            "email": "matt@bonneau.net"
         }
     ],
     "require": {
@@ -27,7 +35,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.4-dev"
+            "dev-master": "1.0-dev"
         }
     }
 }
