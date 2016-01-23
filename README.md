@@ -1,3 +1,5 @@
+# This package is abandoned. Use https://github.com/ReactiveX/RxPHP instead
+
 Rx.PHP
 ======
 

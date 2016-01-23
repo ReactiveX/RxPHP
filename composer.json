@@ -25,9 +25,5 @@
     "autoload": {
         "psr-4": { "Rx\\": "lib/Rx" }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.4-dev"
-        }
-    }
+    "abandoned": "reactivex/rxphp"
 }
