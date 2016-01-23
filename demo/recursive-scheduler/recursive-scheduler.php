@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
-class RecursiveReturnObservable extends BaseObservable
+class RecursiveReturnObservable extends Observable
 {
     private $value;
 
@@ -16,33 +16,27 @@ class RecursiveReturnObservable extends BaseObservable
         $this->value = $value;
     }
 
-    protected function doStart($scheduler)
+    public function subscribe(\Rx\ObserverInterface $observer, $scheduler = null)
     {
-        $value     = $this->value;
-
-        $observers = &$this->observers;
-
-        return $scheduler->scheduleRecursive(function($reschedule) use (&$observers, $value) {
-            foreach ($observers as $observer) {
-                $observer->onNext($value);
-            }
-
+        return $scheduler->scheduleRecursive(function ($reschedule) use ($observer) {
+            $observer->onNext($this->value);
             $reschedule();
         });
     }
 }
 
-$loop = React\EventLoop\Factory::create();
+$loop      = React\EventLoop\Factory::create();
 $scheduler = new Rx\Scheduler\EventLoopScheduler($loop);
 
 $observable = new RecursiveReturnObservable(42);
 $observable->subscribe($stdoutObserver, $scheduler);
+
 $observable = new RecursiveReturnObservable(21);
 $disposable = $observable->subscribe($stdoutObserver, $scheduler);
 
 $loop->addPeriodicTimer(0.01, function () {
-    $memory = memory_get_usage() / 1024;
-    $formatted = number_format($memory, 3).'K';
+    $memory    = memory_get_usage() / 1024;
+    $formatted = number_format($memory, 3) . 'K';
     echo "Current memory usage: {$formatted}\n";
 });
 
@@ -53,3 +47,19 @@ $loop->addTimer(1.0, function () use ($disposable) {
 });
 
 $loop->run();
+
+
+// After one second...
+//Next value: 21
+//Next value: 42
+//Next value: 21
+//Next value: 42
+//Next value: 21
+//Disposing 21 observable.
+//Next value: 42
+//Next value: 42
+//Next value: 42
+//Next value: 42
+//Next value: 42
+//Current memory usage: 3,349.203K
+//...

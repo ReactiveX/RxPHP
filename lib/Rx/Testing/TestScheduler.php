@@ -7,16 +7,18 @@ use Rx\Scheduler\VirtualTimeScheduler;
 
 class TestScheduler extends VirtualTimeScheduler
 {
-    const CREATED    = 100;
+    const CREATED = 100;
     const SUBSCRIBED = 200;
-    const DISPOSED   = 1000;
+    const DISPOSED = 1000;
 
     public function __construct()
     {
-        parent::__construct(0, function($a, $b) { return $a - $b; });
+        parent::__construct(0, function ($a, $b) {
+            return $a - $b;
+        });
     }
 
-    public function scheduleAbsoluteWithState($state, $dueTime, $action)
+    public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
     {
         if ($dueTime <= $this->clock) {
             $dueTime = $this->clock + 1;
@@ -42,19 +44,19 @@ class TestScheduler extends VirtualTimeScheduler
         $scheduler    = $this;
         $subscription = null;
 
-        $this->scheduleAbsoluteWithState(null, $created, function() use ($create, &$source) {
+        $this->scheduleAbsoluteWithState(null, $created, function () use ($create, &$source) {
             $source = $create();
 
             return new EmptyDisposable();
         });
 
-        $this->scheduleAbsoluteWithState(null, $subscribed, function() use (&$observer, &$source, &$subscription, $scheduler) {
+        $this->scheduleAbsoluteWithState(null, $subscribed, function () use (&$observer, &$source, &$subscription, $scheduler) {
             $subscription = $source->subscribe($observer, $scheduler);
 
             return new EmptyDisposable();
         });
 
-        $this->scheduleAbsoluteWithState(null, $disposed, function() use (&$subscription) {
+        $this->scheduleAbsoluteWithState(null, $disposed, function () use (&$subscription) {
             $subscription->dispose();
 
             return new EmptyDisposable();
@@ -64,7 +66,8 @@ class TestScheduler extends VirtualTimeScheduler
         return $observer;
     }
 
-    public function createObserver() {
+    public function createObserver()
+    {
         return new MockObserver($this);
     }
 }

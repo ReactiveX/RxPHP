@@ -7,7 +7,7 @@ use Exception;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\EmptyObservable;
 use Rx\React\Promise;
 use Rx\Subject\Subject;
@@ -21,7 +21,7 @@ class PromiseFromObservableTest extends FunctionalTestCase
     public function promise_success()
     {
 
-        $source = BaseObservable::just(42);
+        $source = Observable::just(42);
 
         $promise = Promise::fromObservable($source);
 

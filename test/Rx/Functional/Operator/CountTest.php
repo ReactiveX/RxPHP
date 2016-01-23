@@ -4,7 +4,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 class CountTest extends FunctionalTestCase
 {
@@ -348,31 +348,13 @@ class CountTest extends FunctionalTestCase
     public function testCountAfterRange()
     {
 
-        $xs = BaseObservable::fromArray(range(1, 10));
+        $xs = Observable::fromArray(range(1, 10));
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->count();
         });
 
         $this->assertMessages([onNext(211, 10), onCompleted(211)], $results->getMessages());
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function throws_if_predicate_is_not_callable()
-    {
-        $xs = $this->createHotObservable(
-          [
-            onNext(150, 1),
-            onNext(210, 2),
-            onNext(230, 3),
-            onCompleted(240)
-          ]);
-
-        $xs->count("non-callable");
-
     }
 
 }

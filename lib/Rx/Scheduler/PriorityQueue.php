@@ -63,7 +63,7 @@ class InternalPriorityQueue extends SplPriorityQueue
 
     public function insert($item, $priority)
     {
-        parent::insert($item, array($priority, $this->serial--));
+        parent::insert($item, [$priority, $this->serial--]);
     }
 
     public function compare($a, $b)

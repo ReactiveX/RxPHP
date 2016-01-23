@@ -2,7 +2,7 @@
 
 namespace Rx\Operator;
 
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
@@ -15,7 +15,7 @@ class DeferOperator implements OperatorInterface
      */
     private $factory;
 
-    function __construct($factory)
+    public function __construct(callable $factory)
     {
         $this->factory = $factory;
     }
@@ -33,9 +33,9 @@ class DeferOperator implements OperatorInterface
         try {
             $result = $factory();
 
-            return $result->subscribe($observer);
+            return $result->subscribe($observer, $scheduler);
         } catch (\Exception $e) {
-            return BaseObservable::error($e)->subscribe($observer);
+            return Observable::error($e)->subscribe($observer, $scheduler);
         }
     }
 }

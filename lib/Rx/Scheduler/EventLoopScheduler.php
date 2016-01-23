@@ -3,11 +3,9 @@
 namespace Rx\Scheduler;
 
 use React\EventLoop\LoopInterface;
-use React\EventLoop\Timer\Timers;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\SchedulerInterface;
-use InvalidArgumentException;
 
 class EventLoopScheduler implements SchedulerInterface
 {
@@ -18,35 +16,35 @@ class EventLoopScheduler implements SchedulerInterface
         $this->loop = $loop;
     }
 
-    public function schedule($action)
+    /**
+     * @param callable $action
+     * @param $delay
+     * @return CallbackDisposable
+     */
+    public function schedule(callable $action, $delay = 0)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
+        $delay = $delay / 1000; // switch from ms to seconds for react
+        $timer = $this->loop->addTimer($delay, $action);
 
-        $timer = $this->loop->addTimer(Timers::MIN_RESOLUTION, $action);
-
-        return new CallbackDisposable(function() use ($timer) { $timer->cancel(); });
+        return new CallbackDisposable(function () use ($timer) {
+            $timer->cancel();
+        });
     }
 
-    public function scheduleRecursive($action)
+    public function scheduleRecursive(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $group = new CompositeDisposable();
-        $scheduler = $this;
 
         $recursiveAction = null;
-        $recursiveAction = function() use ($action, &$scheduler, &$group, &$recursiveAction) {
+
+        $recursiveAction = function () use ($action, &$group, &$recursiveAction) {
             $action(
-                function() use (&$scheduler, &$group, &$recursiveAction) {
+                function () use (&$group, &$recursiveAction) {
                     $isAdded = false;
                     $isDone  = false;
 
                     $d = null;
-                    $d = $scheduler->schedule(function() use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
+                    $d = $this->schedule(function () use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
                         if (is_callable($recursiveAction)) {
                             $recursiveAction();
                         } else {
@@ -60,7 +58,7 @@ class EventLoopScheduler implements SchedulerInterface
                         }
                     });
 
-                    if ( ! $isDone) {
+                    if (!$isDone) {
                         $group->add($d);
                         $isAdded = true;
                     }
@@ -76,6 +74,31 @@ class EventLoopScheduler implements SchedulerInterface
     /**
      * @inheritDoc
      */
+    public function schedulePeriodic(callable $action, $delay, $period)
+    {
+        $delay = $delay / 1000;
+        $period = $period / 1000;
+
+        $disposed = false;
+
+        $timer = $this->loop->addTimer($delay, function () use ($action, $period, &$timer, &$disposed) {
+            $action();
+            if (!$disposed) {
+                $timer = $this->loop->addPeriodicTimer($period, function () use ($action) {
+                    $action();
+                });
+            }
+        });
+
+        return new CallbackDisposable(function () use (&$timer, &$disposed) {
+            $disposed = true;
+            $timer->cancel();
+        });
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function now()
     {
         if (function_exists('microtime')) {
@@ -83,6 +106,4 @@ class EventLoopScheduler implements SchedulerInterface
         }
         return time();
     }
-
-
 }

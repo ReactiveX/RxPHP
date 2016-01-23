@@ -14,11 +14,13 @@ class ScheduledItem
 
     public function __construct($scheduler, $state, $action, $dueTime, $comparer = null)
     {
-        $this->scheduler = $scheduler;
-        $this->state     = $state;
-        $this->action    = $action;
-        $this->dueTime   = $dueTime;
-        $this->comparer  = $comparer ?: function($a, $b) { return $a - $b; };
+        $this->scheduler  = $scheduler;
+        $this->state      = $state;
+        $this->action     = $action;
+        $this->dueTime    = $dueTime;
+        $this->comparer   = $comparer ?: function ($a, $b) {
+            return $a - $b;
+        };
         $this->disposable = new SingleAssignmentDisposable();
     }
 

@@ -2,10 +2,10 @@
 
 namespace Rx\Observable;
 
+use Rx\Observable;
 use Rx\TestCase;
-use Rx\Observable\BaseObservable;
 
-class BaseObservableTest extends TestCase
+class ObservableTest extends TestCase
 {
     /**
      * @test
@@ -20,10 +20,7 @@ class BaseObservableTest extends TestCase
     }
 }
 
-class ConcreteObservable extends BaseObservable
+class ConcreteObservable extends Observable
 {
-    public function doStart($scheduler)
-    {
-        // meh
-    }
+
 }

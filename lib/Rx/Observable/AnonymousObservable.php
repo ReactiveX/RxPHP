@@ -2,22 +2,18 @@
 
 namespace Rx\Observable;
 
-use InvalidArgumentException;
 use Rx\Disposable\CallbackDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Observer\AutoDetachObserver;
 use Rx\Scheduler\ImmediateScheduler;
 
-class AnonymousObservable extends BaseObservable
+class AnonymousObservable extends Observable
 {
     private $subscribeAction;
 
-    public function __construct($subscribeAction)
+    public function __construct(callable $subscribeAction)
     {
-        if ( ! is_callable($subscribeAction)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $this->subscribeAction = $subscribeAction;
     }
 
@@ -36,13 +32,8 @@ class AnonymousObservable extends BaseObservable
 
         $autoDetachObserver->setDisposable($subscribeAction($autoDetachObserver, $scheduler));
 
-        return new CallbackDisposable(function() use ($autoDetachObserver) {
+        return new CallbackDisposable(function () use ($autoDetachObserver) {
             $autoDetachObserver->dispose();
         });
-    }
-
-    protected function doStart($scheduler)
-    {
-        // todo: remove from base
     }
 }

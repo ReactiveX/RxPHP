@@ -3,7 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 class ScanTest extends FunctionalTestCase
 {
@@ -12,7 +12,7 @@ class ScanTest extends FunctionalTestCase
         $seed = 42;
 
         $results = $this->scheduler->startWithCreate(function () use ($seed) {
-            return BaseObservable::never()->scan(function ($acc, $x) use ($seed) {
+            return Observable::never()->scan(function ($acc, $x) use ($seed) {
                 return $acc + $x;
             }, $seed);
         });
@@ -137,7 +137,7 @@ class ScanTest extends FunctionalTestCase
     public function testScanNoSeedNever()
     {
         $results = $this->scheduler->startWithCreate(function () {
-            return BaseObservable::never()->scan(function ($acc, $x) {
+            return Observable::never()->scan(function ($acc, $x) {
                 return $acc + $x;
             });
         });
@@ -252,23 +252,6 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function throws_if_accumulator_is_not_callable()
-    {
-        $xs = $this->createHotObservable(
-          [
-            onNext(150, 1),
-            onNext(210, 2),
-            onNext(230, 3),
-            onCompleted(240)
-          ]);
-
-        $xs->scan("non-callable");
-
-    }
 
     /**
      * @test

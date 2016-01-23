@@ -3,7 +3,7 @@
 namespace Rx\React;
 
 use Rx\ObservableInterface;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
@@ -45,15 +45,15 @@ final class Promise
         $value = null;
 
         $observable->subscribe(new CallbackObserver(
-          function ($v) use (&$value) {
-              $value = $v;
-          },
-          function ($error) use ($d) {
-              $d->reject($error);
-          },
-          function () use ($d, &$value) {
-              $d->resolve($value);
-          }
+            function ($v) use (&$value) {
+                $value = $v;
+            },
+            function ($error) use ($d) {
+                $d->reject($error);
+            },
+            function () use ($d, &$value) {
+                $d->resolve($value);
+            }
         ));
 
         return $d->promise();
@@ -67,19 +67,20 @@ final class Promise
      */
     public static function toObservable(PromiseInterface $promise)
     {
-        return BaseObservable::defer(
-          function () use ($promise) {
-              $subject = new AsyncSubject();
+        return Observable::defer(
+            function () use ($promise) {
+                $subject = new AsyncSubject();
 
-              $promise->then(
-                function ($value) use ($subject) {
-                    $subject->onNext($value);
-                    $subject->onCompleted();
-                },
-                [$subject, "onError"]
-              );
+                $promise->then(
+                    function ($value) use ($subject) {
+                        $subject->onNext($value);
+                        $subject->onCompleted();
+                    },
+                    [$subject, "onError"]
+                );
 
-              return $subject;
-          });
+                return $subject;
+            }
+        );
     }
 }

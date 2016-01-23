@@ -5,16 +5,16 @@ namespace Rx\Subject;
 use Exception;
 use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
-class Subject extends BaseObservable implements ObserverInterface, DisposableInterface
+class Subject extends Observable implements ObserverInterface, DisposableInterface
 {
     protected $exception;
     protected $isDisposed = false;
-    protected $isStopped  = false;
-    protected $observers  = array();
+    protected $isStopped = false;
+    protected $observers = [];
 
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
@@ -62,14 +62,14 @@ class Subject extends BaseObservable implements ObserverInterface, DisposableInt
             return;
         }
 
-        $observers = $this->observers;
+        $observers       = $this->observers;
         $this->isStopped = true;
 
         foreach ($observers as $observer) {
             $observer->onCompleted();
         }
 
-        $this->observers = array();
+        $this->observers = [];
     }
 
     public function onError(Exception $exception)
@@ -80,7 +80,7 @@ class Subject extends BaseObservable implements ObserverInterface, DisposableInt
             return;
         }
 
-        $observers = $this->observers;
+        $observers       = $this->observers;
         $this->isStopped = true;
         $this->exception = $exception;
 
@@ -88,7 +88,7 @@ class Subject extends BaseObservable implements ObserverInterface, DisposableInt
             $observer->onError($exception);
         }
 
-        $this->observers = array();
+        $this->observers = [];
     }
 
     public function onNext($value)
@@ -108,7 +108,7 @@ class Subject extends BaseObservable implements ObserverInterface, DisposableInt
     public function dispose()
     {
         $this->isDisposed = true;
-        $this->observers  = array();
+        $this->observers  = [];
     }
 
     public function removeObserver(ObserverInterface $observer)
@@ -123,6 +123,4 @@ class Subject extends BaseObservable implements ObserverInterface, DisposableInt
 
         return true;
     }
-
-    public function doStart($scheduler) {}
 }

@@ -14,7 +14,7 @@ class SingleAssignmentDisposable implements DisposableInterface
     {
         $old = null;
 
-        if ( ! $this->isDisposed) {
+        if (!$this->isDisposed) {
             $this->isDisposed = true;
             $old              = $this->current;
             $this->current    = null;
@@ -31,7 +31,7 @@ class SingleAssignmentDisposable implements DisposableInterface
             throw new RuntimeException('Disposable has already been assigned.');
         }
 
-        if ( ! $this->isDisposed) {
+        if (!$this->isDisposed) {
             $this->current = $disposable;
         }
 

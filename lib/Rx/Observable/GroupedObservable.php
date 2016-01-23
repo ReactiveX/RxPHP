@@ -2,13 +2,14 @@
 
 namespace Rx\Observable;
 
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\Disposable\CompositeDisposable;
 use Rx\DisposableInterface;
 
-class GroupedObservable extends BaseObservable
+class GroupedObservable extends Observable
 {
     private $key;
     private $underlyingObservable;
@@ -21,12 +22,12 @@ class GroupedObservable extends BaseObservable
             $this->underlyingObservable = $underlyingObservable;
         } else {
             $this->underlyingObservable = new AnonymousObservable(
-                function($observer, $scheduler) use ($mergedDisposable, $underlyingObservable) {
+                function ($observer, $scheduler) use ($mergedDisposable, $underlyingObservable) {
                     // todo, typehint $mergedDisposable?
-                    return new CompositeDisposable(array(
+                    return new CompositeDisposable([
                         $mergedDisposable->getDisposable(),
                         $underlyingObservable->subscribe($observer, $scheduler),
-                    ));
+                    ]);
                 }
             );
         }
@@ -41,7 +42,4 @@ class GroupedObservable extends BaseObservable
     {
         return $this->underlyingObservable->subscribe($observer, $scheduler);
     }
-
-    // todo: remove doStart from BaseObservable?
-    public function doStart($scheduler) {}
 }

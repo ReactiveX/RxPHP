@@ -4,7 +4,7 @@ namespace Rx\Functional\Operator;
 
 use Exception;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 
 class MergeAllTest extends FunctionalTestCase
 {
@@ -28,7 +28,7 @@ class MergeAllTest extends FunctionalTestCase
         ));
 
         $results = $this->scheduler->startWithCreate(function() use ($ys) {
-            return BaseObservable::mergeAll($ys);
+            return Observable::mergeAll($ys);
         });
 
         $this->assertMessages(array(
@@ -50,7 +50,7 @@ class MergeAllTest extends FunctionalTestCase
         ));
 
         $results = $this->scheduler->startWithCreate(function() use ($ys) {
-            return BaseObservable::mergeAll($ys);
+            return Observable::mergeAll($ys);
         });
 
         $this->assertMessages(array(

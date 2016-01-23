@@ -14,7 +14,7 @@ use Rx\ObserverInterface;
 class MockObserver implements ObserverInterface
 {
     private $scheduler;
-    private $messages = array();
+    private $messages = [];
 
     public function __construct($scheduler)
     {

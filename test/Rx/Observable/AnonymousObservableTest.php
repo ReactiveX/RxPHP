@@ -3,20 +3,12 @@
 namespace Rx\Observable;
 
 use Rx\TestCase;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\EmptyDisposable;
 
 class AnonymousObservableTest extends TestCase
 {
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function it_throws_if_subscribe_action_is_not_a_callable()
-    {
-        new AnonymousObservable('foo');
-    }
 
     /**
      * @test

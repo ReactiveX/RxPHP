@@ -5,7 +5,8 @@ namespace Rx;
 interface ObservableInterface
 {
     /**
+     * @param ObserverInterface $observer
      * @return DisposableInterface
      */
-    function subscribe(ObserverInterface $observer);
+    public function subscribe(ObserverInterface $observer);
 }

@@ -4,5 +4,5 @@ namespace Rx;
 
 interface DisposableInterface
 {
-    function dispose();
+    public function dispose();
 }

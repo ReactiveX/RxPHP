@@ -15,7 +15,7 @@
         "php": "~5.5|~7.0"
     },
     "require-dev": {
-        "react/event-loop": "0.3.*@dev",
+        "react/event-loop": "~0.4.1",
         "react/promise": "~2.2"
     },
     "suggest": {
@@ -23,7 +23,7 @@
         "react/promise": "For converting promises to and from observables."
     },
     "autoload": {
-        "psr-0": { "Rx\\": "lib/" }
+        "psr-4": { "Rx\\": "lib/Rx" }
     },
     "extra": {
         "branch-alias": {

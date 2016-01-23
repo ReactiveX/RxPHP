@@ -7,7 +7,7 @@ use Exception;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\EmptyObservable;
 
 class AsObservableTest extends FunctionalTestCase
@@ -22,7 +22,7 @@ class AsObservableTest extends FunctionalTestCase
     {
 
         $results = $this->scheduler->startWithCreate(function () {
-            return BaseObservable::never()->asObservable();
+            return Observable::never()->asObservable();
         });
 
         $this->assertMessages(

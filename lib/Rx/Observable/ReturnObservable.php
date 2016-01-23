@@ -2,9 +2,13 @@
 
 namespace Rx\Observable;
 
-use Rx\Disposable\EmptyDisposable;
+use Rx\Disposable\CompositeDisposable;
+use Rx\Observable;
+use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
+use Rx\SchedulerInterface;
 
-class ReturnObservable extends BaseObservable
+class ReturnObservable extends Observable
 {
     private $value;
 
@@ -16,22 +20,22 @@ class ReturnObservable extends BaseObservable
         $this->value = $value;
     }
 
-    protected function doStart($scheduler)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $value     = $this->value;
 
-        $observers = &$this->observers;
+        $scheduler = $scheduler ?: new ImmediateScheduler();
 
-        $scheduler->schedule(function() use (&$observers, $value) {
-            foreach ($observers as $observer) {
-                $observer->onNext($value);
-            }
-        });
+        $disposable = new CompositeDisposable();
 
-        $scheduler->schedule(function() use (&$observers) {
-            foreach ($observers as $observer) {
-                $observer->onCompleted();
-            }
-        });
+        $disposable->add($scheduler->schedule(function () use ($observer, $value) {
+            $observer->onNext($value);
+        }));
+
+        $disposable->add($scheduler->schedule(function () use ($observer) {
+            $observer->onCompleted();
+        }));
+
+        return $disposable;
     }
 }

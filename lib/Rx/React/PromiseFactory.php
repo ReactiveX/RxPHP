@@ -2,12 +2,7 @@
 
 namespace Rx\React;
 
-use Rx\ObservableInterface;
-use Rx\Observable\BaseObservable;
-use Rx\Observer\CallbackObserver;
-use Rx\Subject\AsyncSubject;
-use React\Promise\Deferred;
-use React\Promise\PromiseInterface;
+use Rx\Observable;
 
 final class PromiseFactory
 {
@@ -17,16 +12,12 @@ final class PromiseFactory
      * @param callable $factory
      * @return \Rx\Observable\AnonymousObservable
      */
-    public static function toObservable($factory)
+    public static function toObservable(callable $factory)
     {
-        if ( ! is_callable($factory)) {
-            throw new InvalidArgumentException('Factory should be a callable.');
-        }
-
-        $observableFactory = function() use ($factory) {
+        $observableFactory = function () use ($factory) {
             return Promise::toObservable($factory());
         };
 
-        return BaseObservable::defer($observableFactory);
+        return Observable::defer($observableFactory);
     }
 }

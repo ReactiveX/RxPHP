@@ -2,47 +2,41 @@
 
 namespace Rx\Observable;
 
-use Rx\Disposable\EmptyDisposable;
+use Rx\Observable;
 use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
+use Rx\SchedulerInterface;
 
-class ArrayObservable extends BaseObservable
+class ArrayObservable extends Observable
 {
+    private $data;
+
     public function __construct(array $data)
     {
         $this->data = $data;
     }
 
-    protected function doStart($scheduler)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        $observers = $this->observers;
+        $values    = &$this->data;
+        $max       = count($values);
+        $keys      = array_keys($values);
+        $count     = 0;
 
-        $values     = $this->data;
+        if ($scheduler === null) {
+            $scheduler = new ImmediateScheduler();
+        }
 
-        $observers = &$this->observers;
-
-        return $scheduler->scheduleRecursive(function($reschedule) use (&$observers, &$values) {
-            $count = count($values);
-
-            if ($count > 0) {
-                $value = array_shift($values);
-
-                foreach ($observers as $observer) {
-                    $observer->onNext($value);
-                }
-
-                if ($count > 1) {
+        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys) {
+            if ($count < $max) {
+                $observer->onNext($values[$keys[$count]]);
+                $count++;
+                if ($count >= 1) {
                     $reschedule();
-
                     return;
                 }
             }
-
-            foreach ($observers as $observer) {
-                $observer->onCompleted();
-            }
+            $observer->onCompleted();
         });
-
-        //todo: add "real" disposable
-        return new EmptyDisposable();
     }
 }

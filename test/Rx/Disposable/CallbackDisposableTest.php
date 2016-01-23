@@ -21,12 +21,4 @@ class CallbackDisposableTest extends TestCase
         $this->assertTrue($disposed);
     }
 
-    /**
-     * @test
-     * @expectedException InvalidArgumentException
-     */
-    public function it_can_only_be_constructed_with_a_callable()
-    {
-        new CallbackDisposable('asm89');
-    }
 }

@@ -9,19 +9,15 @@ use Rx\SchedulerInterface;
 
 class MapOperator implements OperatorInterface
 {
-    /** @var callable  */
+    /** @var callable */
     private $selector;
 
     /**
      * MapOperator constructor.
      * @param $selector
      */
-    public function __construct($selector)
+    public function __construct(callable $selector)
     {
-        if ( ! is_callable($selector)) {
-            throw new \InvalidArgumentException('Selector should be a callable.');
-        }
-
         $this->selector = $selector;
     }
 
@@ -34,21 +30,17 @@ class MapOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $selectObserver = new CallbackObserver(
-          function($nextValue) use ($observer) {
-              $value = null;
-              try {
-                  $value = call_user_func($this->selector, $nextValue);
-              } catch (\Exception $e) {
-                  $observer->onError($e);
-              }
-              $observer->onNext($value);
-          },
-          function($error) use ($observer) {
-              $observer->onError($error);
-          },
-          function() use ($observer) {
-              $observer->onCompleted();
-          }
+            function ($nextValue) use ($observer) {
+                $value = null;
+                try {
+                    $value = call_user_func($this->selector, $nextValue);
+                } catch (\Exception $e) {
+                    $observer->onError($e);
+                }
+                $observer->onNext($value);
+            },
+            [$observer, 'onError'],
+            [$observer, 'onCompleted']
         );
 
         return $observable->subscribe($selectObserver, $scheduler);

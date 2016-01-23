@@ -2,7 +2,6 @@
 
 namespace Rx\Operator;
 
-
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
@@ -21,14 +20,10 @@ class ScanOperator implements OperatorInterface
      * @param callable $accumulator
      * @param $seed
      */
-    public function __construct($accumulator, $seed = null)
+    public function __construct(callable $accumulator, $seed = null)
     {
-        if (!is_callable($accumulator)) {
-            throw new \InvalidArgumentException('Accumulator should be a callable.');
-        }
-
         $this->accumulator = $accumulator;
-        $this->seed = $seed;
+        $this->seed        = $seed;
     }
 
     /**
@@ -40,14 +35,13 @@ class ScanOperator implements OperatorInterface
         $hasAccumulation = false;
         $accumulation    = $this->seed;
         $hasSeed         = $this->seed !== null;
-
-        return $observable->subscribe(new CallbackObserver(
+        $cbObserver      = new CallbackObserver(
             function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue) {
                 $hasValue = true;
                 if ($hasAccumulation) {
                     $accumulation = call_user_func($this->tryCatch($this->accumulator), $accumulation, $x);
                 } else {
-                    $accumulation = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
+                    $accumulation    = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
                     $hasAccumulation = true;
                 }
                 if ($accumulation instanceof \Exception) {
@@ -56,16 +50,16 @@ class ScanOperator implements OperatorInterface
                 }
                 $observer->onNext($accumulation);
             },
-            function ($e) use ($observer) {
-                $observer->onError($e);
-            },
+            [$observer, 'onError'],
             function () use ($observer, &$hasValue, &$hasSeed) {
                 if (!$hasValue && $hasSeed) {
                     $observer->onNext($this->seed);
                 }
                 $observer->onCompleted();
             }
-        ));
+        );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 
     private function tryCatch($functionToWrap)

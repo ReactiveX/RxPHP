@@ -16,7 +16,7 @@ class SerialDisposable implements DisposableInterface
     /** @var DisposableInterface */
     private $disposable = null;
 
-    function dispose()
+    public function dispose()
     {
         if ($this->isDisposed) {
             return;

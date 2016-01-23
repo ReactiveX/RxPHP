@@ -2,12 +2,9 @@
 
 namespace Rx\Scheduler;
 
-use InvalidArgumentException;
-use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\SerialDisposable;
 use Rx\SchedulerInterface;
-use SplPriorityQueue;
 
 class VirtualTimeScheduler implements SchedulerInterface
 {
@@ -17,73 +14,47 @@ class VirtualTimeScheduler implements SchedulerInterface
     protected $queue;
 
     /**
-     * @param integer  $initialClock Initial value for the clock.
-     * @param callable $comparer     Comparer to determine causality of events based on absolute time.
+     * @param integer $initialClock Initial value for the clock.
+     * @param callable $comparer Comparer to determine causality of events based on absolute time.
      */
-    public function __construct($initialClock = 0, $comparer)
+    public function __construct($initialClock = 0, callable $comparer)
     {
-        if (! is_callable($comparer)) {
-            throw new RuntimeException('Comparer should be a callable.');
-        }
-
         $this->clock    = $initialClock;
         $this->comparer = $comparer;
         $this->queue    = new PriorityQueue();
     }
 
-    public function schedule($action)
+    public function schedule(callable $action, $delay = 0)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
 
-        $invokeAction = function($scheduler, $action) {
+        $invokeAction = function ($scheduler, $action) {
             $action();
             return new EmptyDisposable();
         };
 
-        return $this->scheduleAbsoluteWithState($action, $this->clock, $invokeAction);
+        return $this->scheduleAbsoluteWithState($action, $this->clock + $delay, $invokeAction);
     }
 
-    public function scheduleRecursive($action)
+    public function scheduleRecursive(callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
+        if (!is_callable($action)) {
+            throw new \InvalidArgumentException("Action should be a callable.");
         }
 
-        $group = new CompositeDisposable();
+        $goAgain    = true;
+        $disposable = new SerialDisposable();
 
-        $recursiveAction = function() use ($action, $group, &$recursiveAction) {
-            $action(
-                function() use ($group, &$recursiveAction) {
-                    $isAdded = false;
-                    $isDone  = true;
-
-                    $d = $this->schedule(function() use (&$isAdded, &$isDone, $group, &$recursiveAction, &$d) {
-                        if (!is_callable($recursiveAction)) {
-                            throw new \Exception("recursiveAction is not callable");
-                        }
-
-                        $recursiveAction();
-
-                        if ($isAdded) {
-                            $group->remove($d);
-                        } else {
-                            $isDone = true;
-                        }
-                    });
-
-                    if ( ! $isDone) {
-                        $group->add($d);
-                        $isAdded = true;
-                    }
-                }
-            );
+        $recursiveAction = function () use ($action, &$goAgain, $disposable, &$recursiveAction) {
+            $disposable->setDisposable($this->schedule(function () use ($action, &$recursiveAction) {
+                $action(function () use (&$recursiveAction) {
+                    $recursiveAction();
+                });
+            }));
         };
 
-        $group->add($this->schedule($recursiveAction));
+        $recursiveAction();
 
-        return $group;
+        return $disposable;
     }
 
     public function getClock()
@@ -93,7 +64,7 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function scheduleAbsolute($dueTime, $action)
     {
-        $invokeAction = function($scheduler, $action) {
+        $invokeAction = function ($scheduler, $action) {
             $action();
             return new EmptyDisposable();
         };
@@ -101,17 +72,13 @@ class VirtualTimeScheduler implements SchedulerInterface
         return $this->scheduleAbsoluteWithState($action, $dueTime, $invokeAction);
     }
 
-    public function scheduleAbsoluteWithState($state, $dueTime, $action)
+    public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
-        }
-
         $queue = $this->queue;
 
         $currentScheduler = $this;
         $scheduledItem    = null;
-        $run              = function($scheduler, $state1) use ($action, &$scheduledItem, &$queue) {
+        $run              = function ($scheduler, $state1) use ($action, &$scheduledItem, &$queue) {
             $queue->remove($scheduledItem);
 
             return $action($scheduler, $state1);
@@ -131,9 +98,35 @@ class VirtualTimeScheduler implements SchedulerInterface
         return $this->scheduleAbsoluteWithState($state, $runAt, $action);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function schedulePeriodic(callable $action, $delay, $period)
+    {
+        $now = $this->now();
+
+        $nextTime = $now + $delay;
+
+        $disposable = new SerialDisposable();
+
+        $doActionAndReschedule = function () use (&$nextTime, $period, $disposable, $action, &$doActionAndReschedule) {
+            $action();
+            $nextTime = $nextTime + $period;
+            $delay = $nextTime - $this->now();
+            if ($delay < 0) {
+                $delay = 0;
+            }
+            $disposable->setDisposable($this->schedule($doActionAndReschedule, $delay));
+        };
+
+        $disposable->setDisposable($this->schedule($doActionAndReschedule, $delay));
+
+        return $disposable;
+    }
+
     public function start()
     {
-        if ( ! $this->isEnabled) {
+        if (!$this->isEnabled) {
 
             $this->isEnabled = true;
             $comparer        = $this->comparer;

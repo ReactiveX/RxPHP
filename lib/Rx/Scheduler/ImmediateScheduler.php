@@ -9,10 +9,10 @@ use InvalidArgumentException;
 
 class ImmediateScheduler implements SchedulerInterface
 {
-    public function schedule($action)
+    public function schedule(callable $action, $delay = 0)
     {
-        if ( ! is_callable($action)) {
-            throw new InvalidArgumentException("Action should be a callable.");
+        if ($delay !== 0) {
+            throw new InvalidArgumentException("ImmediateScheduler does not support a non-zero delay.");
         }
 
         $action();
@@ -20,47 +20,38 @@ class ImmediateScheduler implements SchedulerInterface
         return new EmptyDisposable();
     }
 
-    public function scheduleRecursive($action)
+    public function scheduleRecursive(callable $action)
     {
-        if ( ! is_callable($action)) {
+
+        if (!is_callable($action)) {
             throw new InvalidArgumentException("Action should be a callable.");
         }
 
-        $group = new CompositeDisposable();
-        $scheduler = $this;
+        $goAgain    = true;
+        $disposable = new CompositeDisposable();
 
-        $recursiveAction = null;
-        $recursiveAction = function() use ($action, &$scheduler, &$group, &$recursiveAction) {
-            $action(
-                function() use (&$scheduler, &$group, &$recursiveAction) {
-                    $isAdded = false;
-                    $isDone  = true;
-
-                    $d = $scheduler->schedule(function() use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
-                        if (is_callable($recursiveAction)) {
-                            $recursiveAction();
-                        } else {
-                            throw new \Exception("recursiveAction is not callable");
-                        }
-
-                        if ($isAdded) {
-                            $group->remove($d);
-                        } else {
-                            $isDone = true;
-                        }
+        $recursiveAction = function () use ($action, &$goAgain, $disposable) {
+            while ($goAgain) {
+                $goAgain = false;
+                $disposable->add($this->schedule(function () use ($action, &$goAgain, $disposable) {
+                    return $action(function () use (&$goAgain, $action) {
+                        $goAgain = true;
                     });
-
-                    if ( ! $isDone) {
-                        $group->add($d);
-                        $isAdded = true;
-                    }
-                }
-            );
+                }));
+            }
         };
 
-        $group->add($this->schedule($recursiveAction));
+        $disposable->add($this->schedule($recursiveAction));
 
-        return $group;
+        return $disposable;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function schedulePeriodic(callable $action, $delay, $period)
+    {
+        throw new \Exception("ImmediateScheduler does not support a non-zero delay.");
     }
 
     /**

@@ -7,7 +7,7 @@ use React\Promise\Deferred;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\React\Promise;

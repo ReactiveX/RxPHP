@@ -11,7 +11,7 @@ class DoOnEachOperator implements OperatorInterface
 {
     private $onEachObserver;
 
-    function __construct(ObserverInterface $observer)
+    public function __construct(ObserverInterface $observer)
     {
         $this->onEachObserver = $observer;
     }
@@ -24,7 +24,7 @@ class DoOnEachOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        return $observable->subscribe(new CallbackObserver(
+        $cbObserver = new CallbackObserver(
             function ($x) use ($observer) {
                 try {
                     $this->onEachObserver->onNext($x);
@@ -49,7 +49,9 @@ class DoOnEachOperator implements OperatorInterface
                     return $observer->onError($e);
                 }
                 $observer->onCompleted();
-            })
+            }
         );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 }

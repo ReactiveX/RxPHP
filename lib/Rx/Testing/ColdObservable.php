@@ -5,19 +5,19 @@ namespace Rx\Testing;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\ObserverInterface;
 
-class ColdObservable extends BaseObservable
+class ColdObservable extends Observable
 {
     private $scheduler;
     private $messages;
-    private $subscriptions = array();
+    private $subscriptions = [];
 
-    public function __construct($scheduler, $messages = array())
+    public function __construct($scheduler, $messages = [])
     {
-        $this->scheduler     = $scheduler;
-        $this->messages      = $messages ;
+        $this->scheduler = $scheduler;
+        $this->messages  = $messages;
     }
 
     public function subscribe(ObserverInterface $observer)
@@ -28,15 +28,15 @@ class ColdObservable extends BaseObservable
         $currentObservable = $this;
         $disposable        = new CompositeDisposable();
         $scheduler         = $this->scheduler;
-        $isDisposed = false;
+        $isDisposed        = false;
 
         foreach ($this->messages as $message) {
             $notification = $message->getValue();
             $time         = $message->getTime();
 
-            $schedule = function($innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed) {
-                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function() use ($observer, $innerNotification, &$isDisposed) {
-                    if ( ! $isDisposed) {
+            $schedule = function ($innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed) {
+                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function () use ($observer, $innerNotification, &$isDisposed) {
+                    if (!$isDisposed) {
                         $innerNotification->accept($observer);
                     }
                     return new EmptyDisposable();
@@ -48,8 +48,8 @@ class ColdObservable extends BaseObservable
 
         $subscriptions = &$this->subscriptions;
 
-        return new CallbackDisposable(function() use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
-            $isDisposed = true;
+        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
+            $isDisposed            = true;
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });
 
@@ -59,6 +59,4 @@ class ColdObservable extends BaseObservable
     {
         return $this->subscriptions;
     }
-
-    public function doStart($scheduler){} // todo: remove from base?
 }

@@ -6,7 +6,9 @@ use Exception;
 
 interface ObserverInterface
 {
-    function onCompleted();
-    function onError(Exception $error);
-    function onNext($value);
+    public function onCompleted();
+
+    public function onError(Exception $error);
+
+    public function onNext($value);
 }

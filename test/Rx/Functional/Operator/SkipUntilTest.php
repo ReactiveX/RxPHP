@@ -6,7 +6,7 @@ namespace Rx\Functional\Operator;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
-use Rx\Observable\BaseObservable;
+use Rx\Observable;
 use Rx\Testing\MockObserver;
 
 class SkipUntilTest extends FunctionalTestCase
@@ -119,7 +119,7 @@ class SkipUntilTest extends FunctionalTestCase
     public function testSkipUntilNeverNext()
     {
 
-        $l = BaseObservable::never();
+        $l = Observable::never();
 
         $r = $this->createHotObservable(
             [
@@ -146,7 +146,7 @@ class SkipUntilTest extends FunctionalTestCase
 
         $error = new \Exception();
 
-        $l = BaseObservable::never();
+        $l = Observable::never();
 
         $r = $this->createHotObservable(
             [
@@ -181,7 +181,7 @@ class SkipUntilTest extends FunctionalTestCase
             ]
         );
 
-        $r = BaseObservable::never();
+        $r = Observable::never();
 
         $results = $this->scheduler->startWithCreate(function () use ($l, $r) {
             return $l->skipUntil($r);
@@ -196,7 +196,7 @@ class SkipUntilTest extends FunctionalTestCase
     public function testSkipUntilNeverEmpty()
     {
 
-        $l = BaseObservable::never();
+        $l = Observable::never();
 
         $r = $this->createHotObservable(
             [
@@ -218,9 +218,9 @@ class SkipUntilTest extends FunctionalTestCase
     public function testSkipUntilNeverNever()
     {
 
-        $l = BaseObservable::never();
+        $l = Observable::never();
 
-        $r = BaseObservable::never();
+        $r = Observable::never();
 
         $results = $this->scheduler->startWithCreate(function () use ($l, $r) {
             return $l->skipUntil($r);
