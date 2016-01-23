@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of Rx.PHP.
+ * This file is part of RxPHP.
  *
  * (c) Alexander <iam.asm89@gmail.com>
  *
