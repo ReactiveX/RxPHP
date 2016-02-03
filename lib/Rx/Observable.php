@@ -11,6 +11,7 @@ use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
 use Rx\Observable\NeverObservable;
+use Rx\Observable\RangeObservable;
 use Rx\Observable\ReturnObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
@@ -182,6 +183,19 @@ class Observable implements ObservableInterface
         return (new EmptyObservable())->lift(function () use ($factory) {
             return new DeferOperator($factory);
         });
+    }
+
+    /**
+     * Generates an observable sequence of integral numbers within a specified range, using the specified scheduler to
+     * send out observer messages.
+     *
+     * @param $start
+     * @param $count
+     * @return ArrayObservable
+     */
+    public static function range($start, $count, SchedulerInterface $scheduler = null)
+    {
+        return new RangeObservable($start, $count, $scheduler);
     }
 
     /**
