@@ -238,6 +238,33 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * Map operator variant that calls the map selector with the index and value
+     *
+     * @param callable $selector
+     * @return AnonymousObservable
+     */
+    public function mapWithIndex(callable $selector)
+    {
+        $index = 0;
+        return $this->map(function ($value) use ($selector, &$index) {
+            return call_user_func_array($selector, [$index++, $value]);
+        });
+    }
+
+    /**
+     * Maps every value to the same value every time
+     *
+     * @param $value
+     * @return AnonymousObservable
+     */
+    public function mapTo($value)
+    {
+        return $this->map(function () use ($value) {
+            return $value;
+        });
+    }
+
+    /**
      * Alias for Map
      *
      * @param callable $selector
