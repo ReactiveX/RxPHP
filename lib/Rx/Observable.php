@@ -13,6 +13,7 @@ use Rx\Observable\MulticastObservable;
 use Rx\Observable\NeverObservable;
 use Rx\Observable\RangeObservable;
 use Rx\Observable\ReturnObservable;
+use Rx\Observable\TimerObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
 use Rx\Operator\CombineLatestOperator;
@@ -501,6 +502,18 @@ class Observable implements ObservableInterface
         return $this->lift(function () use ($other) {
             return new SkipUntilOperator($other);
         });
+    }
+
+    /**
+     * Returns an observable sequence that produces a value after dueTime has elapsed.
+     *
+     * @param integer $dueTime - milliseconds
+     * @param SchedulerInterface $scheduler
+     * @return TimerObservable
+     */
+    public static function timer($dueTime, SchedulerInterface $scheduler = null)
+    {
+        return new TimerObservable($dueTime, $scheduler);
     }
 
     /**
