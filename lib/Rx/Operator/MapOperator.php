@@ -2,6 +2,8 @@
 
 namespace Rx\Operator;
 
+use Rx\Disposable\CallbackDisposable;
+use Rx\Disposable\CompositeDisposable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
@@ -29,20 +31,32 @@ class MapOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
+        $disposed   = false;
+        $disposable = new CompositeDisposable();
+
         $selectObserver = new CallbackObserver(
-            function ($nextValue) use ($observer) {
+            function ($nextValue) use ($observer, &$disposed) {
+
                 $value = null;
                 try {
-                    $value = call_user_func($this->selector, $nextValue);
+                    $value = call_user_func_array($this->selector, [$nextValue]);
                 } catch (\Exception $e) {
                     $observer->onError($e);
                 }
-                $observer->onNext($value);
+                if (!$disposed) {
+                    $observer->onNext($value);
+                }
             },
             [$observer, 'onError'],
             [$observer, 'onCompleted']
         );
 
-        return $observable->subscribe($selectObserver, $scheduler);
+        $disposable->add(new CallbackDisposable(function () use (&$disposed) {
+            $disposed = true;
+        }));
+
+        $disposable->add($observable->subscribe($selectObserver, $scheduler));
+
+        return $disposable;
     }
 }
