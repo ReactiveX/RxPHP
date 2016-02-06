@@ -32,16 +32,24 @@ class RangeObservable extends Observable
 
         $this->start     = $start;
         $this->count     = $count;
-        $this->scheduler = $scheduler ?: new ImmediateScheduler();
+        $this->scheduler = $scheduler;
 
     }
 
-    public function subscribe(ObserverInterface $observer)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
+
+        if ($this->scheduler !== null) {
+            $scheduler = $this->scheduler;
+        }
+
+        if ($scheduler === null) {
+            $scheduler = new ImmediateScheduler();
+        }
 
         $i = 0;
 
-        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i) {
+        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i) {
             if ($i < $this->count) {
                 $observer->onNext($this->start + $i);
                 $i++;
