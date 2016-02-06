@@ -4,7 +4,6 @@ namespace Rx\Observable;
 
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
 class RangeObservable extends Observable
@@ -32,16 +31,23 @@ class RangeObservable extends Observable
 
         $this->start     = $start;
         $this->count     = $count;
-        $this->scheduler = $scheduler ?: new ImmediateScheduler();
+        $this->scheduler = $scheduler;
 
     }
 
-    public function subscribe(ObserverInterface $observer)
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
+
+        if ($this->scheduler !== null) {
+            $scheduler = $this->scheduler;
+        }
+        if ($scheduler === null) {
+            throw new \Exception("You must use a scheduler that support non-zero delay.");
+        }
 
         $i = 0;
 
-        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i) {
+        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i) {
             if ($i < $this->count) {
                 $observer->onNext($this->start + $i);
                 $i++;
