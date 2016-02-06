@@ -4,6 +4,7 @@ namespace Rx\Observable;
 
 use Rx\Observable;
 use Rx\ObserverInterface;
+use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
 class RangeObservable extends Observable
@@ -41,8 +42,9 @@ class RangeObservable extends Observable
         if ($this->scheduler !== null) {
             $scheduler = $this->scheduler;
         }
+
         if ($scheduler === null) {
-            throw new \Exception("You must use a scheduler that support non-zero delay.");
+            $scheduler = new ImmediateScheduler();
         }
 
         $i = 0;
