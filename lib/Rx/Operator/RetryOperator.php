@@ -3,6 +3,7 @@
 namespace Rx\Operator;
 
 use Rx\Disposable\CallbackDisposable;
+use Rx\Disposable\SerialDisposable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
@@ -27,22 +28,22 @@ class RetryOperator implements OperatorInterface
      * @param \Rx\SchedulerInterface $scheduler
      * @return \Rx\DisposableInterface
      */
-    public function __invoke(
-        ObservableInterface $observable,
-        ObserverInterface $observer,
-        SchedulerInterface $scheduler = null
-    ) {
-        $getNewObserver = function () use ($observable, $observer, &$disposable, &$getNewObserver, $scheduler) {
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    {
+        $disposable = new SerialDisposable();
+
+        $getNewObserver = function () use ($observable, $observer, $disposable, &$getNewObserver, $scheduler) {
             return new CallbackObserver(
                 [$observer, "onNext"],
-                function ($error) use ($observable, $observer, &$disposable, &$getNewObserver, $scheduler) {
+                function ($error) use ($observable, $observer, $disposable, &$getNewObserver, $scheduler) {
                     $this->retryCount--;
                     if ($this->retryCount === 0) {
                         $observer->onError($error);
                         return;
                     }
-                    $disposable->dispose();
-                    $disposable = $observable->subscribe($getNewObserver(), $scheduler);
+
+                    $subscription = $observable->subscribe($getNewObserver(), $scheduler);
+                    $disposable->setDisposable($subscription);
                 },
                 function () use ($observer) {
                     $observer->onCompleted();
@@ -51,7 +52,8 @@ class RetryOperator implements OperatorInterface
             );
         };
 
-        $disposable = $observable->subscribe($getNewObserver(), $scheduler);
+        $subscription = $observable->subscribe($getNewObserver(), $scheduler);
+        $disposable->setDisposable($subscription);
 
         return new CallbackDisposable(function () use (&$disposable) {
             $disposable->dispose();
