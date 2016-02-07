@@ -3,11 +3,10 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 $loop = \React\EventLoop\Factory::create();
+$scheduler  = new \Rx\Scheduler\EventLoopScheduler($loop);
 
 //Without Share
-$interval = new \Rx\React\Interval(1000, $loop);
-
-$source = $interval
+$source = \Rx\Observable::interval(1000, $scheduler)
     ->take(2)
     ->doOnNext(function ($x) {
         echo "Side effect\n";
@@ -30,10 +29,7 @@ $loop->run();
 
 
 //With Share
-
-$interval = new \Rx\React\Interval(1000, $loop);
-
-$source = $interval
+$source = \Rx\Observable::interval(1000, $scheduler)
     ->take(2)
     ->doOnNext(function ($x) {
         echo "Side effect\n";
