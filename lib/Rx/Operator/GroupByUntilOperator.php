@@ -2,6 +2,7 @@
 
 namespace Rx\Operator;
 
+use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\RefCountDisposable;
 use Rx\Disposable\SingleAssignmentDisposable;
@@ -70,9 +71,10 @@ class GroupByUntilOperator implements OperatorInterface
         $elementSelector  = $this->elementSelector;
         $durationSelector = $this->durationSelector;
         $keySerializer    = $this->keySerializer;
+        $sourceEmits      = true;
 
         $callbackObserver = new CallbackObserver(
-            function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable, $scheduler) {
+            function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable, $scheduler, &$sourceEmits) {
                 try {
                     $key           = $keySelector($value);
                     $serializedKey = $keySerializer($key);
@@ -118,7 +120,9 @@ class GroupByUntilOperator implements OperatorInterface
                         return;
                     }
 
-                    $observer->onNext($group);
+                    if ($sourceEmits) {
+                        $observer->onNext($group);
+                    }
                     $md = new SingleAssignmentDisposable();
                     $groupDisposable->add($md);
                     $expire = function () use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
@@ -181,6 +185,11 @@ class GroupByUntilOperator implements OperatorInterface
 
         $groupDisposable->add($subscription);
 
-        return $refCountDisposable;
+        $sourceDisposable = new CallbackDisposable(function () use ($refCountDisposable, &$sourceEmits) {
+            $sourceEmits = false;
+            $refCountDisposable->dispose();
+        });
+
+        return $sourceDisposable;
     }
 }
