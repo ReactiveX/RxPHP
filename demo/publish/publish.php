@@ -1,16 +1,16 @@
 <?php
 
-require_once __DIR__.'/../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 /* Without publish */
-$interval = new Rx\Observable\ArrayObservable(range(0, 10));
+$interval = \Rx\Observable::range(0, 10);
 
 
 $source = $interval
-  ->take(2)
-  ->doOnNext(function ($x) {
-      echo "Side effect\n";
-  });
+    ->take(2)
+    ->doOnNext(function ($x) {
+        echo "Side effect\n";
+    });
 
 $source->subscribe($createStdoutObserver('SourceA '));
 $source->subscribe($createStdoutObserver('SourceB '));
@@ -23,14 +23,13 @@ $source->subscribe($createStdoutObserver('SourceB '));
 
 
 /* With publish */
-$interval = new Rx\Observable\ArrayObservable(range(0, 10));
-
+$interval = \Rx\Observable::range(0, 10);
 
 $source = $interval
-  ->take(2)
-  ->doOnNext(function ($x) {
-      echo "Side effect\n";
-  });
+    ->take(2)
+    ->doOnNext(function ($x) {
+        echo "Side effect\n";
+    });
 
 $published = $source->publish();
 

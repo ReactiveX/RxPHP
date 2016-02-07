@@ -5,8 +5,8 @@ require_once __DIR__ . '/../bootstrap.php';
 $loop      = React\EventLoop\Factory::create();
 $scheduler = new Rx\Scheduler\EventLoopScheduler($loop);
 
-$observable       = (new \Rx\Observable\ReturnObservable(42))->repeat();
-$otherObservable  = (new \Rx\Observable\ReturnObservable(21))->repeat();
+$observable       = Rx\Observable::just(42)->repeat();
+$otherObservable  = Rx\Observable::just(21)->repeat();
 $mergedObservable = $observable->merge($otherObservable, $scheduler);
 
 $disposable = $mergedObservable->subscribe($stdoutObserver, $scheduler);

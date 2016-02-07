@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop = React\EventLoop\Factory::create();
+$loop      = React\EventLoop\Factory::create();
 $scheduler = new Rx\Scheduler\EventLoopScheduler($loop);
 
-$observable = new Rx\Observable\ArrayObservable(range(1, 5), $scheduler);
+$observable = Rx\Observable::range(1, 5);
 
-$selectManyObservable = $observable->flatMap(function($value) {
-    return new Rx\Observable\ArrayObservable(range(1, $value));
+$selectManyObservable = $observable->flatMap(function ($value) {
+    return Rx\Observable::range(1, $value);
 }, $scheduler);
 
 $disposable = $selectManyObservable->subscribe($stdoutObserver, $scheduler);
