@@ -7,15 +7,47 @@ collections and LINQ-style query operators in PHP.
 
 [![Build Status](https://secure.travis-ci.org/ReactiveX/RxPHP.png?branch=master)](https://travis-ci.org/ReactiveX/RxPHP)
 
+## Installation
+Install dependencies using [composer](https://getcomposer.org).
+
+```bash
+$ composer.phar require reactivex/rxphp
+```
+
+## Example
+
+```php
+$source = \Rx\Observable::fromArray([1, 2, 3, 4]);
+
+$subscription = $source->subscribe(new \Rx\Observer\CallbackObserver(
+    function ($x) {
+        echo 'Next: ', $x, PHP_EOL;
+    },
+    function (Exception $ex) {
+        echo 'Error: ', $ex->getMessage(), PHP_EOL;
+    },
+    function () {
+        echo 'Completed', PHP_EOL;
+    }
+));
+
+//Next: 1
+//Next: 2
+//Next: 3
+//Next: 4
+//Completed
+
+```
+
 ## Quick start for demos
 
-Install dependencies using [composer](https://getcomposer.org).
 
 ```bash
 $ composer.phar install
 ```
 
 Have fun running the demos in `/demo`.
+
 
 ## License
 
