@@ -16,6 +16,7 @@ use Rx\Observable\ReturnObservable;
 use Rx\Observable\TimerObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
+use Rx\Operator\BufferWithCountOperator;
 use Rx\Operator\CombineLatestOperator;
 use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
@@ -881,6 +882,21 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
             return new TimeoutOperator($timeout, $timeoutObservable, $scheduler);
+        });
+    }
+
+    /**
+     * Projects each element of an observable sequence into zero or more buffers which are produced based on
+     * element count information.
+     *
+     * @param $count
+     * @param int $skip
+     * @return AnonymousObservable
+     */
+    public function bufferWithCount($count, $skip = null)
+    {
+        return $this->lift(function () use ($count, $skip) {
+            return new BufferWithCountOperator($count, $skip);
         });
     }
 }
