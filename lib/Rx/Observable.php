@@ -22,6 +22,7 @@ use Rx\Operator\CountOperator;
 use Rx\Operator\DefaultIfEmptyOperator;
 use Rx\Operator\DeferOperator;
 use Rx\Operator\DelayOperator;
+use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\GroupByUntilOperator;
@@ -416,14 +417,57 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * Returns an observable sequence that contains only distinct elements according to the keySelector and the
+     * comparer. Usage of this operator should be considered carefully due to the maintenance of an internal lookup
+     * structure which can grow large.
+     *
+     * @param callable|null $comparer
+     * @return AnonymousObservable
+     */
+    public function distinct(callable $comparer = null)
+    {
+        return $this->lift(function () use ($comparer) {
+            return new DistinctOperator(null, $comparer);
+        });
+    }
+
+    /**
+     *  Variant of distinct that takes a key selector
+     *
+     * @param callable|null $keySelector
+     * @param callable|null $comparer
+     * @return AnonymousObservable
+     */
+    public function distinctKey(callable $keySelector, callable $comparer = null)
+    {
+        return $this->lift(function () use ($keySelector, $comparer) {
+            return new DistinctOperator($keySelector, $comparer);
+        });
+    }
+
+    /**
      * Returns an observable sequence that contains only distinct contiguous elements according to the keySelector
+     * and the comparer.
+     *
+     * @param callable $comparer
+     * @return \Rx\Observable\AnonymousObservable
+     */
+    public function distinctUntilChanged(callable $comparer = null)
+    {
+        return $this->lift(function () use ($comparer) {
+            return new DistinctUntilChangedOperator(null, $comparer);
+        });
+    }
+
+    /**
+     * Variant of distinctUntilChanged that takes a key selector
      * and the comparer.
      *
      * @param callable $keySelector
      * @param callable $comparer
      * @return \Rx\Observable\AnonymousObservable
      */
-    public function distinctUntilChanged(callable $keySelector = null, callable $comparer = null)
+    public function distinctUntilKeyChanged(callable $keySelector = null, callable $comparer = null)
     {
         return $this->lift(function () use ($keySelector, $comparer) {
             return new DistinctUntilChangedOperator($keySelector, $comparer);
