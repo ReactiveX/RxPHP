@@ -3,6 +3,7 @@
 namespace Rx\Operator;
 
 use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\EmptyDisposable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
@@ -45,6 +46,8 @@ class DelayOperator implements OperatorInterface
 
         $disposable = new CompositeDisposable();
 
+        $sourceDisposable = new EmptyDisposable();
+
         $sourceDisposable = $observable->subscribe(new CallbackObserver(
             function ($x) use ($scheduler, $observer, &$lastScheduledTime, $disposable) {
                 $schedDisp = $scheduler->schedule(function () use ($x, $observer, &$schedDisp, $disposable) {
@@ -68,8 +71,9 @@ class DelayOperator implements OperatorInterface
                 }, $this->delay);
 
                 $disposable->add($schedDisp);
-            }
-        ));
+            }),
+            $scheduler
+        );
 
         $disposable->add($sourceDisposable);
 

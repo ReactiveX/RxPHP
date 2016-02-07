@@ -3,6 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable;
 
 class DelayTest extends FunctionalTestCase
 {
@@ -269,5 +270,45 @@ class DelayTest extends FunctionalTestCase
             ],
             $xs->getSubscriptions()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function delay_scheduler_is_passed_to_source()
+    {
+        $schedulerPassedIn = null;
+
+        Observable::create(
+            function ($observer, $scheduler) use (&$schedulerPassedIn) {
+                $schedulerPassedIn = $scheduler;
+                $observer->onCompleted();
+            })
+            ->delay(1, $this->scheduler)
+            ->subscribeCallback();
+
+        $this->assertSame($schedulerPassedIn, $this->scheduler);
+    }
+
+    /**
+     * @test
+     */
+    public function delay_completes_during_subscribe_without_throwing()
+    {
+        $completes = false;
+
+        Observable::create(function ($observer, $scheduler) {
+            $observer->onCompleted();
+        })->delay(1, $this->scheduler)->subscribeCallback(
+            null,
+            null,
+            function () use (&$completes) {
+                $completes = true;
+            }
+        );
+
+        $this->scheduler->start();
+
+        $this->assertTrue($completes);
     }
 }
