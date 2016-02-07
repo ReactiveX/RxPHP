@@ -11,7 +11,8 @@ $timeout = \Rx\Observable::create(function (\Rx\ObserverInterface $o) use ($loop
     return new \Rx\Disposable\EmptyDisposable();
 });
 
-$source = (new \Rx\React\Interval(1000, $loop))->takeUntil($timeout);
+$scheduler  = new \Rx\Scheduler\EventLoopScheduler($loop);
+$source = \Rx\Observable::interval(1000, $scheduler)->takeUntil($timeout);
 
 $subscription = $source->subscribe($stdoutObserver);
 
