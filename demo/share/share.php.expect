@@ -1,0 +1,17 @@
+Side effect
+SourceANext value: 0
+Side effect
+SourceBNext value: 0
+Side effect
+SourceANext value: 1
+SourceAComplete!
+SourceBNext value: 1
+SourceBComplete!
+Side effect
+SourceANext value: 0
+SourceBNext value: 0
+Side effect
+SourceANext value: 1
+SourceBNext value: 1
+SourceAComplete!
+SourceBComplete!
