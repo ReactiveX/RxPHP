@@ -10,7 +10,7 @@ $source = \Rx\Observable::create(function (\Rx\ObserverInterface $observer) {
     $observer->onCompleted();
 
     return new CallbackDisposable(function () {
-        echo "Disposed \n";
+        echo "Disposed\n";
     });
 });
 
@@ -27,7 +27,7 @@ $source = new \Rx\Observable\AnonymousObservable(function (\Rx\ObserverInterface
     $observer->onCompleted();
 
     return new CallbackDisposable(function () {
-        echo "Disposed \n";
+        echo "Disposed\n";
     });
 });
 

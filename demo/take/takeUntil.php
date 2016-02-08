@@ -4,7 +4,7 @@ require_once __DIR__ . '/../bootstrap.php';
 
 $loop    = \React\EventLoop\Factory::create();
 $timeout = \Rx\Observable::create(function (\Rx\ObserverInterface $o) use ($loop) {
-    $loop->addTimer(6, function () use ($o) {
+    $loop->addTimer(1, function () use ($o) {
         $o->onNext(0);
     });
 
@@ -12,7 +12,7 @@ $timeout = \Rx\Observable::create(function (\Rx\ObserverInterface $o) use ($loop
 });
 
 $scheduler  = new \Rx\Scheduler\EventLoopScheduler($loop);
-$source = \Rx\Observable::interval(1000, $scheduler)->takeUntil($timeout);
+$source = \Rx\Observable::interval(100, $scheduler)->takeUntil($timeout);
 
 $subscription = $source->subscribe($stdoutObserver);
 
