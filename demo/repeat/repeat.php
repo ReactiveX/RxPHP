@@ -1,10 +1,11 @@
 <?php
 
-require_once __DIR__.'/../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
-$source = new \Rx\Observable\ArrayObservable(range(1, 3));
+$source = \Rx\Observable::range(1, 3)
+    ->repeat(3);
 
-$subscription = $source->repeat(3)->subscribe($createStdoutObserver());
+$subscription = $source->subscribe($createStdoutObserver());
 
 //Next value: 1
 //Next value: 2
