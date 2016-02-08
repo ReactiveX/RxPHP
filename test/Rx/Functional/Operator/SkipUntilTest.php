@@ -267,4 +267,27 @@ class SkipUntilTest extends FunctionalTestCase
 
     }
 
+    public function testCanCompleteInSubscribeAction()
+    {
+        $completed = false;
+        $emitted = null;
+
+        Observable::just(1)
+            ->skipUntil(Observable::just(1))
+            ->subscribeCallback(
+                function ($x) use (&$emitted) {
+                    if ($emitted !== null) {
+                        $this->fail("emitted should be null");
+                    }
+                    $emitted = $x;
+                },
+                null,
+                function () use (&$completed) {
+                    $completed = true;
+                }
+            );
+
+        $this->assertTrue($completed);
+        $this->assertEquals(1, $emitted);
+    }
 }
