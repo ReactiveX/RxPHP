@@ -40,6 +40,7 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
+use Rx\Operator\TakeWhileOperator;
 use Rx\Operator\TimeoutOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
@@ -363,6 +364,37 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($other) {
             return new TakeUntilOperator($other);
+        });
+    }
+
+    /**
+     * Returns elements from an observable sequence as long as a specified condition is true.  It takes as a parameter a
+     * a callback to test each source element for a condition.  The callback predicate is called with the value of the
+     * element.
+     *
+     * @param callable $predicate
+     * @return AnonymousObservable
+     */
+    public function takeWhile(callable $predicate)
+    {
+        return $this->lift(function () use ($predicate) {
+            return new TakeWhileOperator($predicate);
+        });
+    }
+
+    /**
+     * Returns elements from an observable sequence as long as a specified condition is true.  It takes as a parameter a
+     * a callback to test each source element for a condition.  The callback predicate is called with the index and the
+     * value of the element.
+     *
+     * @param callable $predicate
+     * @return AnonymousObservable
+     */
+    public function takeWhileWithIndex(callable $predicate)
+    {
+        $index = 0;
+        return $this->takeWhile(function ($value) use ($predicate, &$index) {
+            return call_user_func_array($predicate, [$index++, $value]);
         });
     }
 
