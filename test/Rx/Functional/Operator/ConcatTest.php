@@ -11,11 +11,11 @@ class ConcatTest extends FunctionalTestCase
 {
     public function testConcatEmptyEmpty()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(250)
         ]);
@@ -27,11 +27,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatEmptyNever()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = Observable::never();
+        $e2      = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->concat($e2);
         });
@@ -40,11 +40,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatNeverEmpty()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = Observable::never();
+        $e2      = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e2->concat($e1);
         });
@@ -53,8 +53,8 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatNeverNever()
     {
-        $e1 = Observable::never();
-        $e2 = Observable::never();
+        $e1      = Observable::never();
+        $e2      = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->concat($e2);
         });
@@ -63,11 +63,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatEmptyThrow()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onError(250, new \Exception('error'))
         ]);
@@ -79,11 +79,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatThrowEmpty()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onError(230, new \Exception('error'))
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(250)
         ]);
@@ -95,11 +95,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatThrowThrow()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onError(230, new \ErrorException())
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onError(250, new \Exception())
         ]);
@@ -111,12 +111,12 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatReturnEmpty()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onNext(210, 2),
             onCompleted(230)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(250)
         ]);
@@ -128,11 +128,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatEmptyReturn()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onCompleted(230)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onNext(240, 2),
             onCompleted(250)
@@ -145,12 +145,12 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatReturnNever()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onNext(210, 2),
             onCompleted(230)
         ]);
-        $e2 = Observable::never();
+        $e2      = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e1->concat($e2);
         });
@@ -159,12 +159,12 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatNeverReturn()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onNext(210, 2),
             onCompleted(230)
         ]);
-        $e2 = Observable::never();
+        $e2      = Observable::never();
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
             return $e2->concat($e1);
         });
@@ -173,12 +173,12 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatReturnReturn()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onNext(220, 2),
             onCompleted(230)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onNext(240, 3),
             onCompleted(250)
@@ -191,11 +191,11 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatThrowReturn()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onError(220, new \Exception())
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onNext(240, 3),
             onCompleted(250)
@@ -208,12 +208,12 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatReturnThrow()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onNext(220, 2),
             onCompleted(230)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onError(250, new \Exception())
         ]);
@@ -225,13 +225,13 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatSomeDataOnBothSides()
     {
-        $e1 = $this->createHotObservable([
+        $e1      = $this->createHotObservable([
             onNext(150, 1),
             onNext(210, 2),
             onNext(220, 3),
             onCompleted(225)
         ]);
-        $e2 = $this->createHotObservable([
+        $e2      = $this->createHotObservable([
             onNext(150, 1),
             onNext(230, 4),
             onNext(240, 5),
@@ -252,18 +252,18 @@ class ConcatTest extends FunctionalTestCase
 
     public function testConcatAsArguments()
     {
-        $xs1 = $this->createColdObservable([
+        $xs1     = $this->createColdObservable([
             onNext(10, 1),
             onNext(20, 2),
             onNext(30, 3),
             onCompleted(40)
         ]);
-        $xs2 = $this->createColdObservable([
+        $xs2     = $this->createColdObservable([
             onNext(10, 4),
             onNext(20, 5),
             onCompleted(30)
         ]);
-        $xs3 = $this->createColdObservable([
+        $xs3     = $this->createColdObservable([
             onNext(10, 6),
             onNext(20, 7),
             onNext(30, 8),
@@ -295,6 +295,69 @@ class ConcatTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(201, 241)], $xs1->getSubscriptions());
         $this->assertSubscriptions([subscribe(241, 271)], $xs2->getSubscriptions());
         $this->assertSubscriptions([subscribe(271, 321)], $xs3->getSubscriptions());
+
+    }
+
+
+    public function testConcatAll()
+    {
+
+        $sources = Observable::fromArray([
+            Observable::just(0),
+            Observable::just(1),
+            Observable::just(2),
+            Observable::just(3),
+        ]);
+
+        $res       = [];
+        $completed = false;
+
+        $sources->concatAll()->subscribeCallback(
+            function ($x) use (&$res) {
+                $res[] = $x;
+            },
+            function ($e) {
+                $this->fail();
+            },
+            function () use (&$completed) {
+                $completed = true;
+            }
+        );
+
+        $this->assertEquals([0, 1, 2, 3], $res);
+        $this->assertTrue($completed);
+    }
+
+
+    public function testConcatAllError()
+    {
+
+        $sources = Observable::fromArray([
+            Observable::just(0),
+            Observable::error(new \Exception()),
+            Observable::just(2),
+            Observable::just(3),
+        ]);
+
+        $res       = [];
+        $error     = false;
+        $completed = false;
+
+        $sources->concatAll()->subscribeCallback(
+            function ($x) use (&$res) {
+                $res[] = $x;
+            },
+            function ($e) use (&$res, &$error) {
+                $this->assertEquals([0], $res);
+                $error = true;
+            },
+            function () use (&$completed) {
+                $completed = true;
+            }
+        );
+
+        $this->assertTrue($error);
+        $this->assertFalse($completed);
 
     }
 }
