@@ -451,6 +451,29 @@ class Observable implements ObservableInterface
     /**
      * Bypasses a specified number of elements in an observable sequence and then returns the remaining elements.
      *
+     * Transform the items emitted by an Observable into Observables, and mirror those items emitted by the
+     * most-recently transformed Observable.
+     *
+     * The flatMapLatest operator is similar to the flatMap and concatMap methods described above, however, rather than
+     * emitting all of the items emitted by all of the Observables that the operator generates by transforming items
+     * from the source Observable, flatMapLatest instead emits items from each such transformed Observable only until
+     * the next such Observable is emitted, then it ignores the previous one and begins emitting items emitted by the
+     * new one.
+     *
+     * @param callable $selector - A transform function to apply to each source element.
+     * @return AnonymousObservable - An observable sequence which transforms the items emitted by an Observable into
+     * Observables, and mirror those items emitted by the most-recently transformed Observable.
+     *
+     * @demo flatMap/flatMapLatest.php
+     * @operator
+     * @reactivex flatMap
+     */
+    public function flatMapLatest(callable $selector, SchedulerInterface $scheduler = null)
+    {
+        return $this->map($selector)->switchLatest($scheduler);
+    }
+
+    /**
      * @param integer $count
      * @return AnonymousObservable
      *
@@ -1506,10 +1529,10 @@ class Observable implements ObservableInterface
      * @return AnonymousObservable - The observable sequence that at any point in time produces the elements of the most
      * recent inner observable sequence that has been received.
      */
-    public function switchLatest()
+    public function switchLatest(SchedulerInterface $scheduler = null)
     {
-        return $this->lift(function () {
-            return new SwitchLatestOperator();
+        return $this->lift(function () use ($scheduler) {
+            return new SwitchLatestOperator($scheduler);
         });
     }
     
