@@ -34,6 +34,7 @@ use Rx\Operator\MergeAllOperator;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\RepeatOperator;
 use Rx\Operator\RetryOperator;
+use Rx\Operator\RetryWhenOperator;
 use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipOperator;
@@ -805,6 +806,20 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($retryCount) {
             return new RetryOperator($retryCount);
+        });
+    }
+
+    /**
+     * Repeats the source observable sequence on error when the notifier emits a next value. If the source observable
+     * errors and the notifier completes, it will complete the source sequence.
+     *
+     * @param callable $notifier
+     * @return AnonymousObservable
+     */
+    public function retryWhen(callable $notifier)
+    {
+        return $this->lift(function () use ($notifier) {
+            return new RetryWhenOperator($notifier);
         });
     }
 
