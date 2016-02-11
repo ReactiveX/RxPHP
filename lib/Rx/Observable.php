@@ -47,6 +47,7 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\StartWithArrayOperator;
 use Rx\Operator\SkipWhileOperator;
 use Rx\Operator\SubscribeOnOperator;
+use Rx\Operator\SwitchLatestOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
 use Rx\Operator\TakeWhileOperator;
@@ -1495,6 +1496,21 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($scheduler) {
             return new TimestampOperator($scheduler);
+        });
+    }
+
+    /**
+     * Transforms an observable sequence of observable sequences into an observable sequence producing values only
+     * from the most recent observable sequence.
+     *
+     * @return AnonymousObservable - The observable sequence that at any point in time produces the elements of the most
+     * recent inner observable sequence that has been received.
+     */
+    public
+    function switchLatest()
+    {
+        return $this->lift(function () {
+            return new SwitchLatestOperator();
         });
     }
 }
