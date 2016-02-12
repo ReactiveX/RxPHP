@@ -4,11 +4,14 @@
 namespace Rx\Functional\Operator;
 
 use Exception;
+use React\EventLoop\Factory;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable;
 use Rx\Observable\EmptyObservable;
+use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\EventLoopScheduler;
 
 class AsObservableTest extends FunctionalTestCase
 {
@@ -107,7 +110,7 @@ class AsObservableTest extends FunctionalTestCase
 
         $xs = new AnonymousObservable(function ($obs) use (&$subscribed) {
             $subscribed = true;
-            $disp = $this->createHotObservable(
+            $disp       = $this->createHotObservable(
                 [
                     onNext(150, 1),
                     onNext(220, 2),
@@ -131,4 +134,24 @@ class AsObservableTest extends FunctionalTestCase
         $this->assertTrue($subscribed);
     }
 
+    public function testAsObservablePassThroughScheduler()
+    {
+        $loop      = Factory::create();
+        $scheduler = new EventLoopScheduler($loop);
+
+        $gotValue = false;
+        Observable::interval(10 /*will throw if it doesn't get passed the event loop scheduler*/)
+            ->asObservable()
+            ->take(1)
+            ->subscribe(new CallbackObserver(
+                function ($x) use (&$gotValue) {
+                    $this->assertEquals(0, $x);
+                    $gotValue = true;
+                }
+            ), $scheduler);
+
+        $loop->run();
+
+        $this->assertTrue($gotValue);
+    }
 }

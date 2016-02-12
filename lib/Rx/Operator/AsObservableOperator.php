@@ -13,6 +13,6 @@ class AsObservableOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        return $observable->subscribe($observer);
+        return $observable->subscribe($observer, $scheduler);
     }
 }
