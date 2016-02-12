@@ -4,6 +4,7 @@ namespace Rx\Observable;
 
 use Rx\Observable;
 use Rx\ObserverInterface;
+use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class TimerObservable extends Observable
@@ -25,11 +26,10 @@ class TimerObservable extends Observable
         $this->scheduler = $scheduler;
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer)
     {
-        if ($this->scheduler !== null) {
-            $scheduler = $this->scheduler;
-        }
+        $scheduler = $this->scheduler ?: Scheduler::getDefault();
+
         if ($scheduler === null) {
             throw new \Exception("You must use a scheduler that support non-zero delay.");
         }

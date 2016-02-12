@@ -4,7 +4,7 @@ namespace Rx\Observable;
 
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
+use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class RangeObservable extends Observable
@@ -44,7 +44,7 @@ class RangeObservable extends Observable
         }
 
         if ($scheduler === null) {
-            $scheduler = new ImmediateScheduler();
+            $scheduler = Scheduler::getDefault();
         }
 
         $i = 0;

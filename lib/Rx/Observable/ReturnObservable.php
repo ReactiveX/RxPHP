@@ -5,7 +5,7 @@ namespace Rx\Observable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
+use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class ReturnObservable extends Observable
@@ -24,7 +24,7 @@ class ReturnObservable extends Observable
     {
         $value     = $this->value;
 
-        $scheduler = $scheduler ?: new ImmediateScheduler();
+        $scheduler = $scheduler ?: Scheduler::getDefault();
 
         $disposable = new CompositeDisposable();
 

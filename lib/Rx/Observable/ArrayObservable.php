@@ -4,7 +4,7 @@ namespace Rx\Observable;
 
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
+use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class ArrayObservable extends Observable
@@ -24,7 +24,7 @@ class ArrayObservable extends Observable
         $count     = 0;
 
         if ($scheduler === null) {
-            $scheduler = new ImmediateScheduler();
+            $scheduler = Scheduler::getDefault();
         }
 
         return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys) {

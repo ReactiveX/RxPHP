@@ -4,7 +4,7 @@ namespace Rx\Observable;
 
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
+use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class IteratorObservable extends Observable
@@ -24,7 +24,7 @@ class IteratorObservable extends Observable
      */
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        $scheduler = $scheduler ?: new ImmediateScheduler();
+        $scheduler = $scheduler ?: Scheduler::getDefault();
         $key       = 0;
 
         return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$key) {
