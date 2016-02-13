@@ -17,6 +17,7 @@ use Rx\Observable\TimerObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
 use Rx\Operator\BufferWithCountOperator;
+use Rx\Operator\CatchErrorOperator;
 use Rx\Operator\CombineLatestOperator;
 use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
@@ -897,6 +898,19 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($count, $skip) {
             return new BufferWithCountOperator($count, $skip);
+        });
+    }
+
+    /**
+     * Continues an observable sequence that is terminated by an exception with the next observable sequence.
+     *
+     * @param callable $selector
+     * @return AnonymousObservable
+     */
+    public function catchError(callable $selector)
+    {
+        return $this->lift(function () use ($selector) {
+            return new CatchErrorOperator($selector);
         });
     }
 }
