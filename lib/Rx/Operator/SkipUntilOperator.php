@@ -4,6 +4,7 @@
 namespace Rx\Operator;
 
 use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\EmptyDisposable;
 use Rx\DisposableInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
@@ -27,6 +28,8 @@ class SkipUntilOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $isOpen = false;
+
+        $otherDisposable = new EmptyDisposable();
 
         /** @var DisposableInterface $otherDisposable */
         $otherDisposable = $this->other->subscribe(new CallbackObserver(
