@@ -231,8 +231,14 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * It takes a transforming function that operates on each element.
+     *
      * @param callable $selector
      * @return AnonymousObservable
+     *
+     * @demo map/map.php
+     * @operator
+     * @reactivex map
      */
     public function map(callable $selector)
     {
