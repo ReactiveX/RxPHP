@@ -26,15 +26,9 @@ class IteratorObservable extends Observable
     {
         $scheduler = $scheduler ?: new ImmediateScheduler();
         $key       = 0;
-
-        return $scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$key) {
+        
+        $defaultFn = function ($reschedule) use (&$observer, &$key) {
             try {
-
-                //HHVM requires you to call next() before current()
-                if (defined('HHVM_VERSION')) {
-                    $this->items->next();
-                    $key = $this->items->key();
-                }
                 if (null === $key) {
                     $observer->onCompleted();
                     return;
@@ -43,16 +37,41 @@ class IteratorObservable extends Observable
                 $current = $this->items->current();
                 $observer->onNext($current);
 
-                if (!defined('HHVM_VERSION')) {
-                    $this->items->next();
-                    $key = $this->items->key();
-                }
+                $this->items->next();
+                $key = $this->items->key();
 
                 $reschedule();
 
             } catch (\Exception $e) {
                 $observer->onError($e);
             }
-        });
+        };
+        
+        $hhvmFn = function ($reschedule) use (&$observer, &$key) {
+            try {
+                //HHVM requires you to call next() before current()
+                $this->items->next();
+                $key = $this->items->key();
+
+                if (null === $key) {
+                    $observer->onCompleted();
+                    return;
+                }
+
+                $current = $this->items->current();
+                $observer->onNext($current);
+
+                $reschedule();
+            } catch (\Exception $e) {
+                $observer->onError($e);
+            }
+
+        };
+
+        return $scheduler->scheduleRecursive(
+            defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.11.0', 'lt')
+                ? $hhvmFn
+                : $defaultFn
+        );
     }
 }
