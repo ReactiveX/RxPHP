@@ -32,6 +32,7 @@ use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
+use Rx\Operator\MaxOperator;
 use Rx\Operator\MergeAllOperator;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\RepeatOperator;
@@ -1092,5 +1093,18 @@ class Observable implements ObservableInterface
     public function startWith($startValue)
     {
         return $this->startWithArray([$startValue]);
+    }
+
+    /**
+     * Returns the maximum value in an observable sequence according to the specified comparer.
+     *
+     * @param callable $comparer
+     * @return AnonymousObservable
+     */
+    public function max(callable $comparer = null)
+    {
+        return $this->lift(function () use ($comparer) {
+            return new MaxOperator($comparer);
+        });
     }
 }
