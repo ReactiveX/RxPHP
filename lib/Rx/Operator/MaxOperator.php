@@ -66,6 +66,6 @@ class MaxOperator implements OperatorInterface
 
                 $observer->onError(new \Exception("Empty"));
             }
-        ));
+        ), $scheduler);
     }
 }
