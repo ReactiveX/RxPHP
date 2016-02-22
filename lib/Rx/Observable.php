@@ -39,6 +39,7 @@ use Rx\Operator\ScanOperator;
 use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipOperator;
 use Rx\Operator\SkipUntilOperator;
+use Rx\Operator\StartWithArrayOperator;
 use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
@@ -933,5 +934,29 @@ class Observable implements ObservableInterface
         return $this->lift(function () use ($selector) {
             return new CatchErrorOperator($selector);
         });
+    }
+
+    /**
+     * Prepends a sequence of values to an observable sequence with an argument of an array of values to prepend.
+     *
+     * @param array $startArray
+     * @return AnonymousObservable
+     */
+    public function startWithArray(array $startArray)
+    {
+        return $this->lift(function () use ($startArray) {
+            return new StartWithArrayOperator($startArray);
+        });
+    }
+
+    /**
+     * Prepends a value to an observable sequence with an argument of a signal value to prepend.
+     *
+     * @param mixed $startValue
+     * @return AnonymousObservable
+     */
+    public function startWith($startValue)
+    {
+        return $this->startWithArray([$startValue]);
     }
 }
