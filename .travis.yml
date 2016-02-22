@@ -11,3 +11,4 @@ before_script: composer install
 script:
   - phpunit
   - php demo/test.php
+  - php docs/build-docs.php lint
