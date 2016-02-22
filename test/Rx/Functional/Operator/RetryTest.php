@@ -3,10 +3,12 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\ErrorObservable;
 use Rx\Observable\ReturnObservable;
 use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\ImmediateScheduler;
 use Rx\Testing\TestScheduler;
 
 class RetryTest extends FunctionalTestCase
@@ -391,5 +393,33 @@ class RetryTest extends FunctionalTestCase
             $exception = $e;
         }
         $this->assertNotNull($exception);
+    }
+
+    public function testWithImmediateSchedulerWithRecursion()
+    {
+        $completed = false;
+        $emitted   = null;
+
+        Observable::range(0, 10)
+            ->flatMap(function ($x) use (&$count) {
+                if (++$count < 2) {
+                    return Observable::error(new \Exception("Something"));
+                }
+                return Observable::just(42);
+            })
+            ->retry(3)
+            ->take(1)
+            ->subscribe(new CallbackObserver(
+                function ($x) use (&$emitted) {
+                    $emitted = $x;
+                },
+                null,
+                function () use (&$completed) {
+                    $completed = true;
+                }
+            ), new ImmediateScheduler());
+
+        $this->assertTrue($completed);
+        $this->assertEquals(42, $emitted);
     }
 }
