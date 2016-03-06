@@ -76,7 +76,10 @@ final class Promise
                         $subject->onNext($value);
                         $subject->onCompleted();
                     },
-                    [$subject, "onError"]
+                    function ($error) use ($subject) {
+                        $error = $error instanceof \Exception ? $error : new RejectedPromiseException($error);
+                        $subject->onError($error);
+                    }
                 );
 
                 return $subject;

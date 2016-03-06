@@ -3,16 +3,11 @@
 namespace Rx\Functional\React;
 
 use Exception;
-use React\Promise\Deferred;
-use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\AnonymousObservable;
 use Rx\Observable;
-use Rx\Observable\EmptyObservable;
-use Rx\Observer\CallbackObserver;
 use Rx\React\Promise;
 use Rx\React\PromiseFactory;
-use Rx\Subject\Subject;
+use Rx\React\RejectedPromiseException;
 
 class PromiseFactoryTest extends FunctionalTestCase
 {
@@ -33,5 +28,59 @@ class PromiseFactoryTest extends FunctionalTestCase
             onNext(200, 42),
             onCompleted(200),
         ), $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function from_promise_reject_non_exception()
+    {
+        $source = PromiseFactory::toObservable(function () {
+            return Promise::rejected(42);
+        });
+
+        $theException = null;
+
+        $source->subscribeCallback(
+            [$this, 'fail'],
+            function ($err) use (&$theException) {
+                $theException = $err;
+            },
+            [$this, 'fail'],
+            $this->scheduler
+        );
+
+        $this->scheduler->start();
+
+        $this->assertTrue($theException instanceof RejectedPromiseException);
+        $this->assertEquals(42, $theException->getRejectValue());
+    }
+
+    /**
+     * @test
+     */
+    public function from_promise_reject()
+    {
+        $error = new Exception("Test exception");
+
+        $source = PromiseFactory::toObservable(function () use ($error) {
+            return Promise::rejected($error);
+        });
+
+        $theException = null;
+
+        $source->subscribeCallback(
+            [$this, 'fail'],
+            function ($err) use (&$theException) {
+                $theException = $err;
+            },
+            [$this, 'fail'],
+            $this->scheduler
+        );
+
+        $this->scheduler->start();
+
+        $this->assertTrue($theException instanceof Exception);
+        $this->assertSame($error, $theException);
     }
 }
