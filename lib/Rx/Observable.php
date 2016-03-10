@@ -19,6 +19,8 @@ use Rx\Operator\AsObservableOperator;
 use Rx\Operator\BufferWithCountOperator;
 use Rx\Operator\CatchErrorOperator;
 use Rx\Operator\CombineLatestOperator;
+use Rx\Operator\ConcatAllOperator;
+use Rx\Operator\ConcatMapOperator;
 use Rx\Operator\ConcatOperator;
 use Rx\Operator\CountOperator;
 use Rx\Operator\DefaultIfEmptyOperator;
@@ -651,6 +653,71 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($observable) {
             return new ConcatOperator($observable);
+        });
+    }
+
+    /**
+     * Projects each element of an observable sequence to an observable sequence and concatenates the resulting
+     * observable sequences into one observable sequence.
+     *
+     * @param callable $selector A transform function to apply to each element from the source sequence onto.
+     * The selector is called with the following information:
+     *   - the value of the element
+     *   - the index of the element
+     *   - the Observable object being subscribed
+     *
+     * @param callable $resultSelector A transform function to apply to each element of the intermediate sequence.
+     * The resultSelector is called with the following information:
+     *   - the value of the outer element
+     *   - the value of the inner element
+     *   - the index of the outer element
+     *   - the index of the inner element
+     *
+     * @return AnonymousObservable - An observable sequence whose elements are the result of invoking the one-to-many
+     * transform function collectionSelector on each element of the input sequence and then mapping each of those
+     * sequence elements and their corresponding source element to a result element.
+     */
+    public function concatMap(callable $selector, callable $resultSelector = null)
+    {
+        return $this->lift(function () use ($selector, $resultSelector) {
+            return new ConcatMapOperator($selector, $resultSelector);
+        });
+    }
+
+    /**
+     * Projects each element of the source observable sequence to the other observable sequence and merges the
+     * resulting observable sequences into one observable sequence.
+     *
+     * @param ObservableInterface $observable - An an observable sequence to project each element from the source
+     * sequence onto.
+     *
+     * @param callable $resultSelector A transform function to apply to each element of the intermediate sequence.
+     * The resultSelector is called with the following information:
+     *   - the value of the outer element
+     *   - the value of the inner element
+     *   - the index of the outer element
+     *   - the index of the inner element
+     *
+     * @return AnonymousObservable An observable sequence whose elements are the result of invoking the one-to-many
+     * transform function collectionSelector on each element of the input sequence and then mapping each of those
+     * sequence elements and their corresponding source element to a result element.
+     */
+    public function concatMapTo(ObservableInterface $observable, callable $resultSelector = null)
+    {
+        return $this->concatMap(function () use ($observable) {
+            return $observable;
+        }, $resultSelector);
+    }
+
+    /**
+     * Concatenates a sequence of observable sequences into a single observable sequence.
+     *
+     * @return AnonymousObservable The observable sequence that merges the elements of the inner sequences.
+     */
+    public function concatAll()
+    {
+        return $this->lift(function () {
+            return new ConcatAllOperator();
         });
     }
 
