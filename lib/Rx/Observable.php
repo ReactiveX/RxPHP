@@ -42,6 +42,7 @@ use Rx\Operator\SkipLastOperator;
 use Rx\Operator\SkipOperator;
 use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\StartWithArrayOperator;
+use Rx\Operator\SkipWhileOperator;
 use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
@@ -345,6 +346,40 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($count) {
             return new SkipOperator($count);
+        });
+    }
+
+    /**
+     * Bypasses elements in an observable sequence as long as a specified condition is true and then returns the
+     * remaining elements.
+     *
+     * @param callable $predicate A function to test each element for a condition.
+     *
+     * @return AnonymousObservable An observable sequence that contains the elements from the input sequence starting
+     * at the first element in the linear series that does not pass the test specified by predicate.
+     */
+    public function skipWhile(callable $predicate)
+    {
+        return $this->lift(function () use ($predicate) {
+            return new SkipWhileOperator($predicate);
+        });
+    }
+
+    /**
+     * Bypasses elements in an observable sequence as long as a specified condition is true and then returns the
+     * remaining elements. The element's index is used in the logic of the predicate function.
+     *
+     * @param callable $predicate A function to test each element for a condition; the first parameter of the
+     * function represents the index of the source element, the second parameter is the value.
+     *
+     * @return AnonymousObservable An observable sequence that contains the elements from the input sequence starting
+     * at the first element in the linear series that does not pass the test specified by predicate.
+     */
+    public function skipWhileWithIndex(callable $predicate)
+    {
+        $index = 0;
+        return $this->skipWhile(function ($value) use ($predicate, &$index) {
+            return call_user_func_array($predicate, [$index++, $value]);
         });
     }
 
