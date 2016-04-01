@@ -241,4 +241,51 @@ class MaxTest extends FunctionalTestCase
             onError(220, $error)
         ], $results->getMessages());
     }
+
+    /**
+     * @test
+     */
+    public function max_never_dispose()
+    {
+        $error = new \Exception();
+
+        $xs = $this->createHotObservable([
+            onNext(150, 'z'),
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs, $error) {
+            return $xs->max();
+        }, 400);
+
+        $this->assertMessages([], $results->getMessages());
+        
+        $this->assertSubscriptions([
+            subscribe(200, 400)
+        ], $xs->getSubscriptions());
+    }
+
+    /**
+     * @test
+     */
+    public function max_some_dispose()
+    {
+        $error = new \Exception();
+
+        $xs = $this->createHotObservable([
+            onNext(150, 'z'),
+            onNext(210, 'b'),
+            onNext(220, 'c'),
+            onNext(230, 'a')
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs, $error) {
+            return $xs->max();
+        }, 400);
+
+        $this->assertMessages([], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 400)
+        ], $xs->getSubscriptions());
+    }
 }
