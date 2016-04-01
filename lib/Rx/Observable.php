@@ -33,6 +33,7 @@ use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
 use Rx\Operator\MaxOperator;
+use Rx\Operator\MaterializeOperator;
 use Rx\Operator\MergeAllOperator;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\RepeatOperator;
@@ -1105,6 +1106,16 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($comparer) {
             return new MaxOperator($comparer);
+        });
+    }
+    
+    /**
+     * Materializes the implicit notifications of an observable sequence as explicit notifications.
+     */
+    public function materialize()
+    {
+        return $this->lift(function () {
+            return new MaterializeOperator();
         });
     }
 }
