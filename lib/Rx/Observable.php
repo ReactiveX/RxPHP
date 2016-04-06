@@ -26,6 +26,7 @@ use Rx\Operator\CountOperator;
 use Rx\Operator\DefaultIfEmptyOperator;
 use Rx\Operator\DeferOperator;
 use Rx\Operator\DelayOperator;
+use Rx\Operator\DematerializeOperator;
 use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
@@ -1108,7 +1109,7 @@ class Observable implements ObservableInterface
             return new MaxOperator($comparer);
         });
     }
-    
+
     /**
      * Materializes the implicit notifications of an observable sequence as explicit notifications.
      */
@@ -1116,6 +1117,18 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () {
             return new MaterializeOperator();
+        });
+    }
+
+    /**
+     * Dematerializes the explicit notification values of an observable sequence as implicit notifications.
+     * 
+     * @return AnonymousObservable
+     */
+    public function dematerialize()
+    {
+        return $this->lift(function () {
+            return new DematerializeOperator();
         });
     }
 }
