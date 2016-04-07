@@ -1506,8 +1506,7 @@ class Observable implements ObservableInterface
      * @return AnonymousObservable - The observable sequence that at any point in time produces the elements of the most
      * recent inner observable sequence that has been received.
      */
-    public
-    function switchLatest()
+    public function switchLatest()
     {
         return $this->lift(function () {
             return new SwitchLatestOperator();
