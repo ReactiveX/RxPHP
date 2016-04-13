@@ -104,6 +104,44 @@ class IteratorObservableTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
+    /**
+     * @test
+     *
+     * @link https://github.com/ReactiveX/RxPHP/issues/39
+     */
+    public function splObjectStorage_many()
+    {
+
+        if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.11.0', 'lt')) {
+            $this->markTestSkipped();
+        }
+        
+        $spl = new \SplObjectStorage();
+
+        $a = (object)["prop" => 1];
+        $b = (object)["prop" => 2];
+        $c = (object)["prop" => 3];
+
+        $spl->attach($a);
+        $spl->attach($b);
+        $spl->attach($c);
+
+        $spl->rewind();
+
+        $xs = new \Rx\Observable\IteratorObservable($spl);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs;
+        });
+
+        $this->assertMessages([
+            onNext(201, $a),
+            onNext(202, $b),
+            onNext(203, $c),
+            onCompleted(204)
+        ], $results->getMessages());
+    }
+
     private function genOneToThree()
     {
         for ($i = 1; $i <= 3; $i++) {
