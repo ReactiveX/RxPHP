@@ -927,4 +927,47 @@ class CombineLatestTest extends FunctionalTestCase
         $this->assertEquals([0, 0, 0], $result);
         $this->assertTrue($completed);
     }
+
+    /**
+     * @test
+     */
+    public function combineLatest_args_order()
+    {
+
+        $e1 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(600, 2),
+                onCompleted(650)
+            ]
+        );
+
+        $e2 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(220, 1),
+                onCompleted(250)
+            ]
+        );
+
+        $e3 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(700, 3),
+                onCompleted(750)
+            ]
+        );
+
+        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2, $e3) {
+            return $e1->combineLatest([$e2, $e3]);
+        });
+
+        $this->assertMessages(
+            [
+                onNext(700, [2, 1, 3]),
+                onCompleted(750)
+            ],
+            $results->getMessages()
+        );
+    }
 }

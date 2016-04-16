@@ -47,7 +47,7 @@ class CombineLatestOperator implements OperatorInterface
         $observables         = &$this->observables;
         $compositeDisposable = new CompositeDisposable();
         $hasValue            = [];
-        $values              = [];
+        $values              = array_keys($observables);
         $count               = count($observables);
         $waitingToComplete   = $count;
         $waitingForValues    = $count;
