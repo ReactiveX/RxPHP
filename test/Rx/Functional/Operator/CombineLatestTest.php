@@ -3,8 +3,12 @@
 
 namespace Rx\Functional\Operator;
 
+use React\EventLoop\Factory;
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable;
 use Rx\Observable\NeverObservable;
+use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\EventLoopScheduler;
 
 class CombineLatestTest extends FunctionalTestCase
 {
@@ -888,5 +892,39 @@ class CombineLatestTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function combineLatest_delay()
+    {
+        $loop      = Factory::create();
+        $scheduler = new EventLoopScheduler($loop);
+
+        $source1 = Observable::timer(100);
+        $source2 = Observable::timer(120);
+        $source3 = Observable::timer(140);
+
+        $source = $source1->combineLatest([$source2, $source3]);
+
+        $result    = null;
+        $completed = false;
+
+        $source->subscribe(new CallbackObserver(
+            function ($x) use (&$result) {
+                $result = $x;
+            },
+            null,
+            function () use (&$completed) {
+                $completed = true;
+            }
+
+        ), $scheduler);
+
+        $loop->run();
+
+        $this->assertEquals([0, 0, 0], $result);
+        $this->assertTrue($completed);
     }
 }
