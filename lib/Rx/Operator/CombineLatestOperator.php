@@ -59,14 +59,15 @@ class CombineLatestOperator implements OperatorInterface
             $cbObserver = new CallbackObserver(
                 function ($value) use ($count, &$hasValue, $key, &$values, $observer, &$waitingForValues, &$waitingToComplete) {
 
+                    // If an observable has completed before it has emitted, we need to complete right away
+                    if ($waitingForValues > $waitingToComplete) {
+                        $observer->onCompleted();
+                        return;
+                    }
+
                     if ($waitingForValues > 0 && !$hasValue[$key]) {
                         $hasValue[$key] = true;
                         $waitingForValues--;
-                    }
-
-                    if ($waitingToComplete < $count && $waitingForValues > 0) {
-                        $observer->onCompleted();
-                        return;
                     }
 
                     $values[$key] = $value;
