@@ -6,16 +6,16 @@ use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
 
-function onError($dueTime, $error) {
-    return new Recorded($dueTime, new OnErrorNotification($error));
+function onError($dueTime, $error, $comparer = null) {
+    return new Recorded($dueTime, new OnErrorNotification($error), $comparer);
 }
 
-function onNext($dueTime, $value) {
-    return new Recorded($dueTime, new OnNextNotification($value));
+function onNext($dueTime, $value, $comparer = null) {
+    return new Recorded($dueTime, new OnNextNotification($value), $comparer);
 }
 
-function onCompleted($dueTime) {
-    return new Recorded($dueTime, new OnCompletedNotification());
+function onCompleted($dueTime, $comparer = null) {
+    return new Recorded($dueTime, new OnCompletedNotification(), $comparer);
 }
 
 function subscribe($start, $end = null) {
