@@ -199,4 +199,50 @@ class MaterializeTest extends FunctionalTestCase
             onError(250, $error)
         ], $results->getMessages());
     }
+
+    /**
+     * @test
+     */
+    public function materialize_dispose()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(220, 3),
+            onNext(230, 4),
+            onCompleted(250)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->materialize();
+        }, 225);
+
+        $this->assertMessages([
+            onNext(210, new OnNextNotification(2), [$this, 'materializedNotificationsEqual']),
+            onNext(220, new OnNextNotification(3), [$this, 'materializedNotificationsEqual']),
+        ], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function materialize_dematerialize_dispose()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(220, 3),
+            onNext(230, 4),
+            onCompleted(250)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->materialize()->dematerialize();
+        }, 225);
+
+        $this->assertMessages([
+            onNext(210, 2),
+            onNext(220, 3),
+        ], $results->getMessages());
+    }
 }
