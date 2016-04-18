@@ -81,7 +81,7 @@ class CombineLatestOperator implements OperatorInterface
                     }
                 },
                 [$observer, 'onError'],
-                function () use (&$waitingToComplete, $observer, $key) {
+                function () use (&$waitingToComplete, $observer) {
                     $waitingToComplete--;
                     if ($waitingToComplete === 0) {
                         $observer->onCompleted();
