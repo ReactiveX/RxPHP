@@ -97,13 +97,13 @@ class EventLoopScheduler implements SchedulerInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns milliseconds since the start of the epoch.
      */
     public function now()
     {
         if (function_exists('microtime')) {
-            return microtime(true);
+            return $milliseconds = floor(microtime(true) * 1000);
         }
-        return time();
+        return time() * 1000;
     }
 }

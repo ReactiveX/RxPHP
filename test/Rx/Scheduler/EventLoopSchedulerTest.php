@@ -11,12 +11,12 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function now_returns_the_time()
+    public function now_returns_time_since_epoch_in_ms()
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);
 
-        $this->assertTrue(abs(time() - $scheduler->now()) < 1, "time difference is less than or equal to 1");
+        $this->assertTrue(abs(time() * 1000 - $scheduler->now()) < 1000, "time difference is less than or equal to 1");
     }
 
     /**
