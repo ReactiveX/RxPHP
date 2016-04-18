@@ -21,7 +21,6 @@ class TimestampOperator implements OperatorInterface
         $this->scheduler = $scheduler;
     }
 
-
     /**
      * @inheritDoc
      */
