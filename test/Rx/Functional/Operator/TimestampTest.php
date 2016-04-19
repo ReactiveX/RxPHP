@@ -4,6 +4,7 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
+use Rx\Timestamped;
 
 class TimestampTest extends FunctionalTestCase
 {
@@ -27,11 +28,11 @@ class TimestampTest extends FunctionalTestCase
         });
 
         $this->assertMessages([
-            onNext(210, (object)["value" => 2, "timestamp" => 210]),
-            onNext(230, (object)["value" => 3, "timestamp" => 230]),
-            onNext(260, (object)["value" => 4, "timestamp" => 260]),
-            onNext(300, (object)["value" => 5, "timestamp" => 300]),
-            onNext(350, (object)["value" => 6, "timestamp" => 350]),
+            onNext(210, new Timestamped(210, 2)),
+            onNext(230, new Timestamped(230, 3)),
+            onNext(260, new Timestamped(260, 4)),
+            onNext(300, new Timestamped(300, 5)),
+            onNext(350, new Timestamped(350, 6)),
             onCompleted(400)
         ], $results->getMessages());
     }
@@ -98,9 +99,9 @@ class TimestampTest extends FunctionalTestCase
         }, 275);
 
         $this->assertMessages([
-            onNext(210, (object)["value" => 2, "timestamp" => 210]),
-            onNext(230, (object)["value" => 3, "timestamp" => 230]),
-            onNext(260, (object)["value" => 4, "timestamp" => 260]),
+            onNext(210, new Timestamped(210, 2)),
+            onNext(230, new Timestamped(230, 3)),
+            onNext(260, new Timestamped(260, 4))
         ], $results->getMessages());
     }
 }

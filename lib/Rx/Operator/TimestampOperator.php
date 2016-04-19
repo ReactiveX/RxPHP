@@ -6,6 +6,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
+use Rx\Timestamped;
 
 class TimestampOperator implements OperatorInterface
 {
@@ -36,7 +37,7 @@ class TimestampOperator implements OperatorInterface
 
         return $observable->subscribe(new CallbackObserver(
             function ($x) use ($observer, $scheduler) {
-                $observer->onNext((object)["value" => $x, "timestamp" => $scheduler->now()]);
+                $observer->onNext(new Timestamped($scheduler->now(), $x));
             },
             [$observer, "onError"],
             [$observer, "onCompleted"]
