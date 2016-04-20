@@ -8,8 +8,8 @@ $scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
 
 $source = \Rx\Observable::interval(1000, $scheduler)
     ->timestamp()
-    ->map(function ($x) {
-        return $x->value . ':' . $x->timestamp;
+    ->map(function (\Rx\Timestamped $x) {
+        return $x->getValue() . ':' . $x->getTimestampMillis();
     })
     ->take(5);
 
