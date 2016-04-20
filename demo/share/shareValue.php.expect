@@ -1,0 +1,10 @@
+SourceA Next value: 42
+SourceB Next value: 42
+Side effect
+SourceA Next value: 0
+SourceB Next value: 0
+Side effect
+SourceA Next value: 1
+SourceB Next value: 1
+SourceA Complete!
+SourceB Complete!

@@ -8,6 +8,3 @@ $source = \Rx\Observable::defer(function () {
 });
 
 $subscription = $source->subscribe($stdoutObserver);
-
-//Next value: 42
-//Complete!

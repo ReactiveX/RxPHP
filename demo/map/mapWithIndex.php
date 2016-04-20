@@ -7,8 +7,3 @@ $subscriptions = Rx\Observable::fromArray([21, 42])
         return $index + $elem;
     })
     ->subscribe($stdoutObserver);
-
-
-//Next value: 21
-//Next value: 43
-//Complete!

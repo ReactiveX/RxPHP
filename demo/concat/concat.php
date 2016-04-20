@@ -9,9 +9,3 @@ $source2 = \Rx\Observable::just(56);
 $source = \Rx\Observable::emptyObservable()->concat($source1)->concat($source2);
 
 $subscription = $source->subscribe($stdoutObserver);
-
-//Next value: 42
-//Next value: 56
-//Complete!
-
-

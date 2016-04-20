@@ -11,11 +11,3 @@ $subject->subscribe($stdoutObserver);
 $connected = $source->connect();
 
 $subscription->dispose();
-
-//Next value: 0
-//Next value: 0
-//Next value: 1
-//Next value: 1
-//Next value: 2
-//Next value: 2
-//Complete!

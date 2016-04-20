@@ -10,6 +10,3 @@ $source = \Rx\Observable::timer(200, $scheduler);
 $source->subscribe($createStdoutObserver());
 
 $loop->run();
-
-//Next value: 0
-//Complete!
