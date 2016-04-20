@@ -893,7 +893,7 @@ class Observable implements ObservableInterface
      * @param $scheduler
      * @return \Rx\Observable\RefCountObservable
      */
-    public function shareReplay($bufferSize, $windowSize, SchedulerInterface $scheduler)
+    public function shareReplay($bufferSize = null, $windowSize = null, SchedulerInterface $scheduler = null)
     {
         return $this->replay(null, $bufferSize, $windowSize, $scheduler)->refCount();
     }
