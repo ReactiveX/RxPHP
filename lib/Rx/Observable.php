@@ -51,6 +51,7 @@ use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
 use Rx\Operator\TakeWhileOperator;
 use Rx\Operator\TimeoutOperator;
+use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
 use Rx\Scheduler\ImmediateScheduler;
@@ -1129,6 +1130,19 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () {
             return new DematerializeOperator();
+        });
+    }
+
+    /**
+     * Records the timestamp for each value in an observable sequence.
+     *
+     * @param SchedulerInterface|null $scheduler
+     * @return AnonymousObservable
+     */
+    public function timestamp(SchedulerInterface $scheduler = null)
+    {
+        return $this->lift(function () use ($scheduler) {
+            return new TimestampOperator($scheduler);
         });
     }
 }

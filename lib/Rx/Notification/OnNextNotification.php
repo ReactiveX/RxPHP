@@ -30,4 +30,15 @@ class OnNextNotification extends Notification
     {
         return 'OnNext(' . json_encode($this->value) . ')';
     }
+    
+    public function equals($other)
+    {
+        if (($other instanceof $this) && is_object($this->value) && is_object($other->value)) {
+            if ($this->value instanceof $other->value && method_exists($this->value, "equals")) {
+                return $this->value->equals($other->value);
+            }
+        }
+        
+        return (string)$this === (string)$other;
+    }
 }
