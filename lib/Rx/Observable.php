@@ -116,7 +116,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that produces a value after each period.
+     * Returns an Observable that emits an infinite sequence of ascending integers starting at 0, with a constant interval of time of your choosing between emissions.
      *
      * @param $interval int Period for producing the values in the resulting sequence (specified as an integer denoting milliseconds).
      * @param SchedulerInterface|null $scheduler
@@ -190,7 +190,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Merges all the observable sequences into a single observable sequence.
+     * Combine an Observable together with another Observable by merging their emissions into a single Observable.
      *
      * @param ObservableInterface $otherObservable
      * @return AnonymousObservable
@@ -386,7 +386,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Filters the elements of an observable sequence based on a predicate by incorporating the element's index.
+     * Emit only those items from an Observable that pass a predicate test.
      *
      * @param callable $predicate
      * @return \Rx\Observable\AnonymousObservable
@@ -702,8 +702,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Returns an observable sequence that contains only distinct contiguous elements according to the keySelector
-     * and the comparer.
+     * A variant of distinct that only compares emitted items from the source Observable against their immediate predecessors in order to determine whether or not they are distinct.
      *
      * @param callable $comparer
      * @return \Rx\Observable\AnonymousObservable
@@ -811,7 +810,6 @@ class Observable implements ObservableInterface
     /**
      * Applies an accumulator function over an observable sequence and returns each intermediate result.
      * The optional seed value is used as the initial accumulator value.
-     * For aggregation behavior with no intermediate results, see Observable.aggregate.
      *
      * @param $accumulator
      * @param null $seed
@@ -830,7 +828,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Creates an array from an observable sequence.
+     * Creates an observable sequence containing a single element which is an array containing all the elements of the source sequence.
      *
      * @return AnonymousObservable An observable sequence containing a single element with a list containing all the
      * elements of the source sequence.
@@ -919,7 +917,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Concatenates all the observable sequences.
+     * Concatenate an observable sequence onto the end of the source observable.
      *
      * @param ObservableInterface $observable
      * @return AnonymousObservable
@@ -1216,7 +1214,7 @@ class Observable implements ObservableInterface
      * @param array $observables
      * @param callable $selector
      * @return \Rx\Observable\AnonymousObservable
-     * 
+     *
      * @demo zip/zip.php
      * @demo zip/zip-result-selector.php
      * @operator
@@ -1254,7 +1252,7 @@ class Observable implements ObservableInterface
      *
      * @param callable $notifier
      * @return AnonymousObservable
-     * 
+     *
      * @demo retry/retryWhen.php
      * @operator
      * @reactivex retry
@@ -1274,7 +1272,7 @@ class Observable implements ObservableInterface
      * @param array $observables
      * @param callable|null $selector
      * @return AnonymousObservable
-     * 
+     *
      * @demo combineLatest/combineLatest.php
      * @operator
      * @reactivex combinelatest
@@ -1397,7 +1395,7 @@ class Observable implements ObservableInterface
      *
      * @param callable $selector
      * @return AnonymousObservable
-     * 
+     *
      * @demo catch/catchError.php
      * @operator
      * @reactivex catch
@@ -1446,7 +1444,7 @@ class Observable implements ObservableInterface
      *
      * @param callable $comparer
      * @return AnonymousObservable
-     * 
+     *
      * @demo max/max.php
      * @demo max/max-with-comparer.php
      * @operator
@@ -1471,7 +1469,7 @@ class Observable implements ObservableInterface
 
     /**
      * Dematerializes the explicit notification values of an observable sequence as implicit notifications.
-     * 
+     *
      * @return AnonymousObservable
      */
     public function dematerialize()
