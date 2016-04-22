@@ -58,8 +58,6 @@ class ConcatAllOperator implements OperatorInterface
                         return;
                     }
 
-                    $this->startBuffering = true;
-
                     $onCompleted = function () use (&$subscribeToInner, $observer) {
 
                         $this->disposable->remove($this->innerDisposable);
@@ -69,14 +67,14 @@ class ConcatAllOperator implements OperatorInterface
 
                         $obs = array_shift($this->buffer);
 
+                        if (empty($this->buffer)) {
+                            $this->startBuffering = false;
+                        }
+
                         if ($obs) {
                             $subscribeToInner($obs);
                         } elseif ($this->sourceCompleted === true) {
                             $observer->onCompleted();
-                        }
-
-                        if (empty($this->buffer)) {
-                            $this->startBuffering = false;
                         }
                     };
 
@@ -88,6 +86,7 @@ class ConcatAllOperator implements OperatorInterface
                         );
 
                         $this->innerCompleted = false;
+                        $this->startBuffering = true;
 
                         $this->innerDisposable = $observable->subscribe($callbackObserver, $scheduler);
                         $this->disposable->add($this->innerDisposable);
