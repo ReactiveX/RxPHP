@@ -11,6 +11,10 @@ class EventLoopScheduler implements SchedulerInterface
 {
     private $loop;
 
+    private $insideScheduledAction = false;
+
+    private $actionForTimes = [];
+
     public function __construct(LoopInterface $loop)
     {
         $this->loop = $loop;
@@ -23,11 +27,52 @@ class EventLoopScheduler implements SchedulerInterface
      */
     public function schedule(callable $action, $delay = 0)
     {
-        $delay = $delay / 1000; // switch from ms to seconds for react
-        $timer = $this->loop->addTimer($delay, $action);
+        $canceled = false;
 
-        return new CallbackDisposable(function () use ($timer) {
-            $timer->cancel();
+        $outerAction = function () use ($action, &$canceled) {
+            if ($canceled) {
+                return;
+            }
+            $this->insideScheduledAction = true;
+            $action();
+            foreach ($this->actionForTimes as $delay => $actionForTime) {
+                $timer = $this->loop->addTimer($delay, function () use ($actionForTime) {
+                    foreach ($actionForTime as $action) {
+                        $action();
+                    }
+                });
+            }
+            $this->actionForTimes = [];
+            $this->insideScheduledAction = false;
+        };
+
+        $delay = (string)$delay / 1000; // switch from ms to seconds for react
+
+        if (!$this->insideScheduledAction) {
+            if ($delay === 0) {
+                $this->loop->nextTick($outerAction);
+
+                return new CallbackDisposable(function () use (&$canceled) {
+                    $canceled = true;
+                });
+            }
+            $timer = $this->loop->addTimer($delay, function () use ($outerAction) {
+                $outerAction();
+            });
+
+            return new CallbackDisposable(function () use ($timer) {
+                $timer->cancel();
+            });
+        }
+
+        if (!isset($this->actionForTimes[$delay])) {
+            $this->actionForTimes[$delay] = [];
+        }
+
+        $this->actionForTimes[$delay][] = $outerAction;
+
+        return new CallbackDisposable(function () use (&$canceled) {
+            $canceled = true;
         });
     }
 
