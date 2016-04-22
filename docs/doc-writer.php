@@ -71,10 +71,10 @@ function get_replace_position($lines) {
 }
 
 function build_documentation($docs) {
-    usort(
-        $docs,
-        function($a, $b) { return strcmp($a->methodName, $b->methodName); }
-    );
+//    usort(
+//        $docs,
+//        function($a, $b) { return strcmp($a->methodName, $b->methodName); }
+//    );
     $names = array_map(
         function($doc) { return $doc->methodName; },
         $docs
@@ -97,6 +97,7 @@ DOCUMENTATION;
 
 function build_variant_documentation($index, $doc) {
     $introduction = build_documentation_introduction($index, $doc);
+    $description = $doc->description;
 
     $demos = array_map('build_code_samples', $doc->demos);
 
@@ -111,6 +112,9 @@ function build_variant_documentation($index, $doc) {
     <p>
     $introduction
     </p>
+    <p>
+    $description
+    </p>
 $sampleCode
     </figcaption>
 </figure>
@@ -119,9 +123,9 @@ DOCUMENTATION;
 
 function build_documentation_introduction($index, $doc) {
     $template = $index === 0
-        ? 'RxPHP implements this operator as <code>%s</code>. %s'
-        : 'RxPHP also has an operator <code>%s</code>. %s';
-    return sprintf($template, $doc->methodName, $doc->description);
+        ? 'RxPHP implements this operator as <code>%s</code>.'
+        : 'RxPHP also has an operator <code>%s</code>.';
+    return sprintf($template, $doc->methodName);
 }
 
 function build_code_samples(Demo $demo) {
@@ -140,7 +144,7 @@ function build_code_samples(Demo $demo) {
     return <<<DEMO
 <div class="code php">
     <pre>
-// from $url
+//from $url
 
 $demoCode
    </pre>

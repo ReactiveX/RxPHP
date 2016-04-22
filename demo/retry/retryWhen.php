@@ -20,13 +20,3 @@ $source = Rx\Observable::interval(1000)
 $subscription = $source->subscribe($createStdoutObserver(), $scheduler);
 
 $loop->run();
-
-// => Next: 0
-// => Next: 1
-// 200 ms pass
-// => Next: 0
-// => Next: 1
-// 200 ms pass
-// => Next: 0
-// => Next: 1
-// => Completed

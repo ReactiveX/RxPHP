@@ -13,8 +13,3 @@ $generator = gen_one_to_three();
 $source    = new \Rx\Observable\IteratorObservable($generator);
 
 $source->subscribe($stdoutObserver);
-
-//Next value: 1
-//Next value: 2
-//Next value: 3
-//Complete!

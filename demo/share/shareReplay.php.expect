@@ -1,0 +1,18 @@
+Side effect
+SourceA Next value: 0
+SourceB Next value: 0
+Side effect
+SourceA Next value: 1
+SourceB Next value: 1
+Side effect
+SourceA Next value: 2
+SourceB Next value: 2
+Side effect
+SourceA Next value: 3
+SourceB Next value: 3
+SourceA Complete!
+SourceB Complete!
+SourceC Next value: 1
+SourceC Next value: 2
+SourceC Next value: 3
+SourceC Complete!

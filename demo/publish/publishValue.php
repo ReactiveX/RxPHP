@@ -16,14 +16,3 @@ $published->subscribe($createStdoutObserver('SourceA'));
 $published->subscribe($createStdoutObserver('SourceB'));
 
 $connection = $published->connect();
-
-//SourceA Next value: 42
-//SourceB Next value: 42
-//Side effect
-//SourceA Next value: 0
-//SourceB Next value: 0
-//Side effect
-//SourceA Next value: 1
-//SourceB Next value: 1
-//SourceA Complete!
-//SourceB Complete!

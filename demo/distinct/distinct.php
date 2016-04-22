@@ -7,8 +7,3 @@ $source = \Rx\Observable::fromArray([
 ])->distinct();
 
 $subscription = $source->subscribe($stdoutObserver);
-
-
-//Next value: 42
-//Next value: 24
-//Complete!

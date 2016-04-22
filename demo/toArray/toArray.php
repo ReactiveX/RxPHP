@@ -16,7 +16,3 @@ $subscription = $source->toArray()
         [$observer, "onError"],
         [$observer, "onCompleted"]
     ));
-
-
-//Next value: [1,2,3,4]
-//Complete!

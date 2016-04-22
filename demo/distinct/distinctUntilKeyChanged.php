@@ -16,9 +16,3 @@ $source = \Rx\Observable::fromArray([
     });
 
 $subscription = $source->subscribe($stdoutObserver);
-
-
-//Next value: 24
-//Next value: 42
-//Next value: 24
-//Complete!

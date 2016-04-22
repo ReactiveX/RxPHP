@@ -7,6 +7,3 @@ $source = Rx\Observable::start(function () {
 });
 
 $source->subscribe($stdoutObserver);
-
-//Next value: 42
-//Complete!
