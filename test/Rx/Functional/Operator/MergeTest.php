@@ -33,18 +33,18 @@ class MergeTest extends FunctionalTestCase
         });
 
         $this->assertMessages(array(
-            onNext(252, 'foo'),
-            onNext(301, 4),
-            onNext(302, 'bar'),
-            onNext(352, 'baz'),
-            onNext(401, 2),
-            onNext(402, 'qux'),
-            onNext(501, 3),
-            onNext(601, 1),
-            onCompleted(701)
+            onNext(250, 'foo'),
+            onNext(300, 4),
+            onNext(300, 'bar'),
+            onNext(350, 'baz'),
+            onNext(400, 2),
+            onNext(400, 'qux'),
+            onNext(500, 3),
+            onNext(600, 1),
+            onCompleted(700)
         ), $results->getMessages());
 
-        $this->assertSubscriptions(array(subscribe(201, 701)), $xs->getSubscriptions());
-        $this->assertSubscriptions(array(subscribe(202, 452)), $ys->getSubscriptions());
+        $this->assertSubscriptions(array(subscribe(200, 700)), $xs->getSubscriptions());
+        $this->assertSubscriptions(array(subscribe(200, 450)), $ys->getSubscriptions());
     }
 }

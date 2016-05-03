@@ -9,7 +9,7 @@ $scheduler  = new \Rx\Scheduler\EventLoopScheduler($loop);
     ->doOnNext(function ($x) {
         echo "Side effect: " . $x . "\n";
     })
-    ->delay(1000)
+    ->delay(500)
     ->take(5)
     ->subscribe($createStdoutObserver(), $scheduler);
 

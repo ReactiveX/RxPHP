@@ -56,12 +56,14 @@ class EventLoopSchedulerTest extends TestCase
         $actionCalled = false;
         $count        = 0;
 
-        $action = function ($reschedule) use (&$actionCalled, &$count) {
+        $action = function ($reschedule) use (&$actionCalled, &$count, $loop) {
             $actionCalled = true;
             $count++;
             if ($count < 5) {
                 $reschedule();
+                return;
             }
+            $loop->stop();
         };
 
         $disposable = $scheduler->scheduleRecursive($action);
@@ -70,24 +72,9 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertFalse($actionCalled);
         $this->assertEquals(0, $count);
 
-        $loop->tick();
-        $this->assertEquals(1, $count);
-
-        $loop->tick();
-        $this->assertEquals(2, $count);
-
-        $loop->tick();
-        $this->assertEquals(3, $count);
-
-        $loop->tick();
-        $this->assertEquals(4, $count);
-
-        $loop->tick();
+        $loop->run();
+        
         $this->assertEquals(5, $count);
-
-        $loop->tick();
         $this->assertTrue($actionCalled);
-        $this->assertEquals(5, $count);
-
     }
 }
