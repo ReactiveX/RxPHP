@@ -62,6 +62,7 @@ class DelayOperator implements OperatorInterface
                 function (Timestamped $x) use ($scheduler, $observer) {
                     if ($x->getValue() instanceof Notification\OnErrorNotification) {
                         $x->getValue()->accept($observer);
+                        return;
                     }
                     $this->queue->enqueue($x);
                     if ($this->schedulerDisposable === null) {
