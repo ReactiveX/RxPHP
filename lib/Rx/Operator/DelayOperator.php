@@ -85,10 +85,7 @@ class DelayOperator implements OperatorInterface
                         $doScheduledStuff();
                     }
                 },
-                [$observer, 'onError'],
-                function () {
-
-                }
+                [$observer, 'onError']
             ), $scheduler);
     }
 }
