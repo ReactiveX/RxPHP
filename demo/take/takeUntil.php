@@ -12,7 +12,7 @@ $timeout = \Rx\Observable::create(function (\Rx\ObserverInterface $o) use ($loop
 });
 
 $scheduler  = new \Rx\Scheduler\EventLoopScheduler($loop);
-$source = \Rx\Observable::interval(100, $scheduler)->takeUntil($timeout);
+$source = \Rx\Observable::interval(105, $scheduler)->takeUntil($timeout);
 
 $subscription = $source->subscribe($stdoutObserver);
 

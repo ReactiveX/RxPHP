@@ -10,6 +10,8 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     private $timerCallable;
 
     private $nextTimer = PHP_INT_MAX;
+    
+    private $insideInvoke = false;
 
     /**
      * NewEventLoopScheduler constructor.
@@ -27,14 +29,25 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         parent::__construct($this->now(), function ($a, $b) {
             return $a - $b;
         });
-
-        call_user_func($this->timerCallable, 0, [$this, 'start']);
     }
+
+    public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
+    {
+        $disp = parent::scheduleAbsoluteWithState($state, $dueTime, $action);
+        
+        if (!$this->insideInvoke) {
+            call_user_func($this->timerCallable, 0, [$this, 'start']);
+        }
+        
+        return $disp;
+    }
+
 
     public function start()
     {
         $this->clock = $this->now();
 
+        $this->insideInvoke = true;
         while ($this->queue->count() > 0) {
             if ($this->queue->peek()->getDueTime() > $this->clock) {
                 $this->nextTimer = $this->queue->peek()->getDueTime();
@@ -48,6 +61,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
                 $next->inVoke();
             }
         }
+        $this->insideInvoke = false;
     }
 
     /**
