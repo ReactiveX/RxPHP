@@ -1512,4 +1512,29 @@ class Observable implements ObservableInterface
             return new SwitchLatestOperator();
         });
     }
+    
+    /**
+     * Returns two observables which partition the observations of the source by the given function.
+     * The first will trigger observations for those values for which the predicate returns true.
+     * The second will trigger observations for those values where the predicate returns false.
+     * The predicate is executed once for each subscribed observer.
+     * Both also propagate all error observations arising from the source and each completes
+     * when the source completes.
+     *
+     * @param callable $predicate
+     * @return AnonymousObservable[]
+     *
+     * @demo partition/partition.php
+     * @operator
+     * @reactivex groupby
+     */
+    public function partition(callable $predicate)
+    {
+        return [
+            $this->filter($predicate),
+            $this->filter(function () use ($predicate) {
+                return !call_user_func_array($predicate, func_get_args());
+            })
+        ];
+    }
 }
