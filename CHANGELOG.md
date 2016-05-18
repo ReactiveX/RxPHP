@@ -1,3 +1,23 @@
+# 1.3.0
+
+### Bug Fixes
+
+- Fixed `combineLatest` when using the EventLoopScheduler ([12fce12](https://github.com/ReactiveX/RxPHP/commit/12fce1200e8d7951bcfc12a681f7105d5a171620))
+- Fixed argument ordering issue with `combineLatest` ([c5a8e5a](https://github.com/ReactiveX/RxPHP/commit/c5a8e5a07b4cae3bfe506ba2fced59fa3ed0467e))
+- Fixed `shareReplay`, so arguments are optional ([e38e8a4](https://github.com/ReactiveX/RxPHP/commit/e38e8a4da42f154caa58e8aa006b7c515fe3d809))
+- Fixed double subscription issue with `concatAll` ([4c64a82](https://github.com/ReactiveX/RxPHP/commit/4c64a82478fdf180dee97283413da85c38bc4ab7))
+- Fixed `delay` now uses `materialize` and `timestamp`, so that it has consistent behavior between all supported schedulers ([#51](https://github.com/ReactiveX/RxPHP/pull/51)) 
+- Fixed EventLoopScheduler, which is now based off of the VirtualTimeScheduler ([#50](https://github.com/ReactiveX/RxPHP/pull/50))
+
+
+### Features
+
+- Added `materialize` and `dematerialize` operators ([6d6bba4](https://github.com/ReactiveX/RxPHP/commit/6d6bba44a139bb4c6a05ec5b4521ac3d13825a24))
+- Added `timestamp` operator ([4109934](https://github.com/ReactiveX/RxPHP/commit/41099345d05e2dac87b84ea3b297ab31421f9504)) 
+- Added `switchLatest` operator ([58c95b0](https://github.com/ReactiveX/RxPHP/commit/58c95b04271dd3dee8f1c71673ba7e4b6056d8e5))
+- Added `partition` operator ([ca95144](https://github.com/ReactiveX/RxPHP/commit/ca951446f38a0ae16bc02039f70c89c74c98fe66))
+- Added `flatMapLatest` operator ([c0d15ff](https://github.com/ReactiveX/RxPHP/commit/c0d15ffd88ecda1a32f7cba73112c28c667ce9a8))
+
 # 1.2.0
 
 ### Bug Fixes
