@@ -2,39 +2,48 @@
 
 namespace Rx\Operator;
 
-use Rx\Disposable\CompositeDisposable;
-use Rx\Disposable\EmptyDisposable;
+use Rx\DisposableInterface;
+use Rx\Notification;
+use Rx\Observable\AnonymousObservable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
+use Rx\Timestamped;
 
 class DelayOperator implements OperatorInterface
 {
-    private $delay;
+    /** @var int */
+    private $delayTime;
+
+    /** @var \SplQueue */
+    private $queue;
+
+    /** @var DisposableInterface */
+    private $schedulerDisposable;
+
+    /** @var bool */
+    private $innerCompleted = false;
 
     /** @var SchedulerInterface */
     private $scheduler;
 
     /**
-     * DelayOperator constructor.
-     * @param $delay
-     * @param SchedulerInterface $scheduler
+     * DelayNewOperator constructor.
+     * @param int $delayTime
      */
-    public function __construct($delay, SchedulerInterface $scheduler = null)
+    public function __construct($delayTime, SchedulerInterface $scheduler = null)
     {
-        $this->delay     = $delay;
+        $this->delayTime = $delayTime;
+        $this->queue = new \SplQueue();
         $this->scheduler = $scheduler;
     }
 
     /**
      * @inheritDoc
      */
-    public function __invoke(
-        ObservableInterface $observable,
-        ObserverInterface $observer,
-        SchedulerInterface $scheduler = null
-    ) {
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    {
         if ($this->scheduler !== null) {
             $scheduler = $this->scheduler;
         }
@@ -42,41 +51,41 @@ class DelayOperator implements OperatorInterface
             throw new \Exception("You must use a scheduler that support non-zero delay.");
         }
 
-        $lastScheduledTime = 0;
+        /** @var AnonymousObservable $observable */
+        return $observable
+            ->materialize()
+            ->timestamp()
+            ->map(function (Timestamped $x) {
+                return new Timestamped($x->getTimestampMillis() + $this->delayTime, $x->getValue());
+            })
+            ->subscribe(new CallbackObserver(
+                function (Timestamped $x) use ($scheduler, $observer) {
+                    if ($x->getValue() instanceof Notification\OnErrorNotification) {
+                        $x->getValue()->accept($observer);
+                        return;
+                    }
+                    $this->queue->enqueue($x);
+                    if ($this->schedulerDisposable === null) {
+                        $doScheduledStuff = function () use ($observer, $scheduler, &$doScheduledStuff) {
+                            while ((!$this->queue->isEmpty()) && $scheduler->now() >= $this->queue->bottom()->getTimestampMillis()) {
+                                /** @var Timestamped $item */
+                                $item = $this->queue->dequeue();
+                                /** @var Notification $materializedValue */
+                                $materializedValue = $item->getValue();
+                                $materializedValue->accept($observer);
+                            }
 
-        $disposable = new CompositeDisposable();
+                            if ($this->queue->isEmpty()) {
+                                $this->schedulerDisposable = null;
+                                return;
+                            }
+                            $this->schedulerDisposable = $scheduler->schedule($doScheduledStuff, $this->queue->bottom()->getTimestampMillis() - $scheduler->now());
+                        };
 
-        $sourceDisposable = new EmptyDisposable();
-
-        $sourceDisposable = $observable->subscribe(new CallbackObserver(
-            function ($x) use ($scheduler, $observer, &$lastScheduledTime, $disposable) {
-                $schedDisp = $scheduler->schedule(function () use ($x, $observer, &$schedDisp, $disposable) {
-                    $observer->onNext($x);
-                    $disposable->remove($schedDisp);
-                }, $this->delay);
-
-                $disposable->add($schedDisp);
-            },
-            function ($err) use ($scheduler, $observer, &$lastScheduledTime, $disposable, &$sourceDisposable) {
-                $disposable->remove($sourceDisposable);
-                $sourceDisposable->dispose();
-                $observer->onError($err);
-            },
-            function () use ($scheduler, $observer, $disposable, &$sourceDisposable) {
-                $disposable->remove($sourceDisposable);
-                $sourceDisposable->dispose();
-                $schedDisp = $scheduler->schedule(function () use ($observer, &$schedDisp, $disposable) {
-                    $observer->onCompleted();
-                    $disposable->remove($schedDisp);
-                }, $this->delay);
-
-                $disposable->add($schedDisp);
-            }),
-            $scheduler
-        );
-
-        $disposable->add($sourceDisposable);
-
-        return $disposable;
+                        $doScheduledStuff();
+                    }
+                },
+                [$observer, 'onError']
+            ), $scheduler);
     }
 }
