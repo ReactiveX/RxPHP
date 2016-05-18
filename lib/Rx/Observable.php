@@ -201,9 +201,11 @@ class Observable implements ObservableInterface
      */
     public function merge(ObservableInterface $otherObservable)
     {
-        return self::mergeAll(
-            self::fromArray([$this, $otherObservable])
-        );
+        return self::mergeAll(new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($otherObservable) {
+            $observer->onNext($this);
+            $observer->onNext($otherObservable);
+            $observer->onCompleted();
+        }));
     }
 
     /**

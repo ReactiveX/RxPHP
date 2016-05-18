@@ -3,106 +3,74 @@
 namespace Rx\Scheduler;
 
 use React\EventLoop\LoopInterface;
-use Rx\Disposable\CallbackDisposable;
-use Rx\Disposable\CompositeDisposable;
-use Rx\SchedulerInterface;
 
-class EventLoopScheduler implements SchedulerInterface
+final class EventLoopScheduler extends VirtualTimeScheduler
 {
-    private $loop;
+    /** @var callable */
+    private $timerCallable;
 
-    public function __construct(LoopInterface $loop)
-    {
-        $this->loop = $loop;
-    }
+    private $nextTimer = PHP_INT_MAX;
+    
+    private $insideInvoke = false;
 
     /**
-     * @param callable $action
-     * @param $delay
-     * @return CallbackDisposable
+     * NewEventLoopScheduler constructor.
+     * @param callable|LoopInterface $timerCallableOrLoop
      */
-    public function schedule(callable $action, $delay = 0)
+    public function __construct($timerCallableOrLoop)
     {
-        $delay = $delay / 1000; // switch from ms to seconds for react
-        $timer = $this->loop->addTimer($delay, $action);
+        // passing a loop directly into the scheduler will be deprecated in the next major release
+        $this->timerCallable = $timerCallableOrLoop instanceof LoopInterface ?
+            function ($ms, $callable) use ($timerCallableOrLoop) {
+                $timerCallableOrLoop->addTimer($ms / 1000, $callable);
+            } :
+            $timerCallableOrLoop;
 
-        return new CallbackDisposable(function () use ($timer) {
-            $timer->cancel();
+        parent::__construct($this->now(), function ($a, $b) {
+            return $a - $b;
         });
     }
 
-    public function scheduleRecursive(callable $action)
+    public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
     {
-        $group = new CompositeDisposable();
+        $disp = parent::scheduleAbsoluteWithState($state, $dueTime, $action);
+        
+        if (!$this->insideInvoke) {
+            call_user_func($this->timerCallable, 0, [$this, 'start']);
+        }
+        
+        return $disp;
+    }
 
-        $recursiveAction = null;
 
-        $recursiveAction = function () use ($action, &$group, &$recursiveAction) {
-            $action(
-                function () use (&$group, &$recursiveAction) {
-                    $isAdded = false;
-                    $isDone  = false;
+    public function start()
+    {
+        $this->clock = $this->now();
 
-                    $d = null;
-                    $d = $this->schedule(function () use (&$isAdded, &$isDone, &$group, &$recursiveAction, &$d) {
-                        if (is_callable($recursiveAction)) {
-                            $recursiveAction();
-                        } else {
-                            throw new \Exception("recursiveAction is not callable");
-                        }
+        $this->insideInvoke = true;
+        while ($this->queue->count() > 0) {
+            if ($this->queue->peek()->getDueTime() > $this->clock) {
+                $this->nextTimer = $this->queue->peek()->getDueTime();
+                $timerCallable = $this->timerCallable;
+                $timerCallable($this->nextTimer - $this->clock, [$this, "start"]);
+                break;
+            }
 
-                        if ($isAdded) {
-                            $group->remove($d);
-                        } else {
-                            $isDone = true;
-                        }
-                    });
-
-                    if (!$isDone) {
-                        $group->add($d);
-                        $isAdded = true;
-                    }
-                }
-            );
-        };
-
-        $group->add($this->schedule($recursiveAction));
-
-        return $group;
+            $next = $this->getNext();
+            if ($next !== null) {
+                $next->inVoke();
+            }
+        }
+        $this->insideInvoke = false;
     }
 
     /**
      * @inheritDoc
      */
-    public function schedulePeriodic(callable $action, $delay, $period)
-    {
-        $delay = $delay / 1000;
-        $period = $period / 1000;
-
-        $disposed = false;
-
-        $timer = $this->loop->addTimer($delay, function () use ($action, $period, &$timer, &$disposed) {
-            $action();
-            if (!$disposed) {
-                $timer = $this->loop->addPeriodicTimer($period, function () use ($action) {
-                    $action();
-                });
-            }
-        });
-
-        return new CallbackDisposable(function () use (&$timer, &$disposed) {
-            $disposed = true;
-            $timer->cancel();
-        });
-    }
-
-    /**
-     * Returns milliseconds since the start of the epoch.
-     */
     public function now()
     {
         if (function_exists('microtime')) {
-            return $milliseconds = floor(microtime(true) * 1000);
+            return (int)floor(microtime(true) * 1000);
         }
         return time() * 1000;
     }
