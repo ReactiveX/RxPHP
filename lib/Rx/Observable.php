@@ -36,6 +36,7 @@ use Rx\Operator\FilterOperator;
 use Rx\Operator\MaxOperator;
 use Rx\Operator\MaterializeOperator;
 use Rx\Operator\MergeAllOperator;
+use Rx\Operator\RaceOperator;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\RepeatOperator;
 use Rx\Operator\RetryOperator;
@@ -1559,5 +1560,26 @@ class Observable implements ObservableInterface
                 return !call_user_func_array($predicate, func_get_args());
             })
         ];
+    }
+
+    /**
+     * Propagates the observable sequence that reacts first.  Also known as 'amb'.
+     *
+     * @param AnonymousObservable[] $observables
+     * @return AnonymousObservable
+     *
+     * @demo race/race.php
+     * @operator
+     * @reactivex amb
+     */
+    public static function race(array $observables)
+    {
+        if (count($observables) === 1) {
+            return $observables[0];
+        }
+
+        return (new ArrayObservable($observables))->lift(function () {
+            return new RaceOperator();
+        });
     }
 }
