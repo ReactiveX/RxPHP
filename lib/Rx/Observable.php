@@ -1485,6 +1485,11 @@ class Observable implements ObservableInterface
 
     /**
      * Materializes the implicit notifications of an observable sequence as explicit notifications.
+     *
+     * @return AnonymousObservable
+     *
+     * @operator
+     * @reactivex materialize-dematerialize
      */
     public function materialize()
     {
@@ -1497,6 +1502,9 @@ class Observable implements ObservableInterface
      * Dematerializes the explicit notification values of an observable sequence as implicit notifications.
      *
      * @return AnonymousObservable
+     *
+     * @operator
+     * @reactivex materialize-dematerialize
      */
     public function dematerialize()
     {
@@ -1528,6 +1536,10 @@ class Observable implements ObservableInterface
      *
      * @return AnonymousObservable - The observable sequence that at any point in time produces the elements of the most
      * recent inner observable sequence that has been received.
+     *
+     * @demo switch/switchLatest.php
+     * @operator
+     * @reactivex switch
      */
     public function switchLatest(SchedulerInterface $scheduler = null)
     {
@@ -1549,7 +1561,7 @@ class Observable implements ObservableInterface
      *
      * @demo partition/partition.php
      * @operator
-     * @reactivex groupby
+     * @reactivex groupBy
      */
     public function partition(callable $predicate)
     {
