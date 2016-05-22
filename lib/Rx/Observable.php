@@ -48,6 +48,7 @@ use Rx\Operator\StartWithArrayOperator;
 use Rx\Operator\SkipWhileOperator;
 use Rx\Operator\SubscribeOnOperator;
 use Rx\Operator\SwitchLatestOperator;
+use Rx\Operator\TakeLastOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
 use Rx\Operator\TakeWhileOperator;
@@ -606,6 +607,23 @@ class Observable implements ObservableInterface
         $index = 0;
         return $this->takeWhile(function ($value) use ($predicate, &$index) {
             return call_user_func_array($predicate, [$index++, $value]);
+        });
+    }
+
+    /**
+     * Returns a specified number of contiguous elements from the end of an observable sequence.
+     *
+     * @param $count
+     * @return AnonymousObservable
+     *
+     * @demo take/takeLast.php
+     * @operator
+     * @reactivex takelast
+     */
+    public function takeLast($count)
+    {
+        return $this->lift(function () use ($count) {
+            return new TakeLastOperator($count);
         });
     }
 
