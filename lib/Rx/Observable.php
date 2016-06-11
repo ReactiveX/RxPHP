@@ -39,6 +39,7 @@ use Rx\Operator\MergeAllOperator;
 use Rx\Operator\RaceOperator;
 use Rx\Operator\ReduceOperator;
 use Rx\Operator\RepeatOperator;
+use Rx\Operator\RepeatWhenOperator;
 use Rx\Operator\RetryOperator;
 use Rx\Operator\RetryWhenOperator;
 use Rx\Operator\ScanOperator;
@@ -1364,6 +1365,27 @@ class Observable implements ObservableInterface
 
         return $this->lift(function () use ($count) {
             return new RepeatOperator($count);
+        });
+    }
+
+    /**
+     * Returns an Observable that emits the same values as the source Observable with the exception of an onCompleted. 
+     * An onCompleted notification from the source will result in the emission of a count item to the Observable provided 
+     * as an argument to the notificationHandler function. If that Observable calls onComplete or onError then 
+     * repeatWhen will call onCompleted or onError on the child subscription. Otherwise, this Observable will 
+     * resubscribe to the source observable.
+     *
+     * @param callable $notifier
+     * @return AnonymousObservable|EmptyObservable
+     *
+     * @demo repeat/repeatWhen.php
+     * @operator
+     * @reactivex repeat
+     */
+    public function repeatWhen(callable $notifier)
+    {
+        return $this->lift(function () use ($notifier) {
+            return new RepeatWhenOperator($notifier);
         });
     }
 
