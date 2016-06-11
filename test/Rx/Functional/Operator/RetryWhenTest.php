@@ -204,8 +204,6 @@ class RetryWhenTest extends FunctionalTestCase
      */
     public function retryWhen_Observable_next_complete()
     {
-        $this->markTestSkipped("skip until takeWhile is implemented");
-
         $error = new \Exception();
 
         $xs = $this->createColdObservable([

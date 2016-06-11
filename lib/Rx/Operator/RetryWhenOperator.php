@@ -90,8 +90,11 @@ class RetryWhenOperator implements OperatorInterface
                 }
             },
             [$observer, 'onError'],
-            function () use (&$innerCompleted) {
+            function () use (&$innerCompleted, &$sourceError, $observer) {
                 $innerCompleted = true;
+                if ($sourceError) {
+                    $observer->onCompleted();
+                }
             }
         ), $scheduler);
 
