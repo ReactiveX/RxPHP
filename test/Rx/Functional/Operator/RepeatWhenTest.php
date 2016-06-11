@@ -223,4 +223,102 @@ class RepeatWhenTest extends FunctionalTestCase
             subscribe(200, 230)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     */
+    public function repeatWhen_Observable_dispose()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(220, 3),
+            onNext(230, 4),
+            onNext(240, 5),
+            onCompleted(250)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->repeatWhen(function () {
+                return Observable::never();
+            });
+        }, 225);
+
+        $this->assertMessages([
+            onNext(210, 2),
+            onNext(220, 3),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $xs->getSubscriptions());
+    }
+
+    /**
+     * @test
+     */
+    public function repeatWhen_Observable_dispose_second()
+    {
+        $xs = $this->createColdObservable([
+            onNext(10, 1),
+            onNext(20, 2),
+            onNext(30, 3),
+            onNext(40, 4),
+            onNext(50, 5),
+            onCompleted(60)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->repeatWhen(function ($n) {
+                return $n;
+            });
+        }, 275);
+
+        $this->assertMessages([
+            onNext(210, 1),
+            onNext(220, 2),
+            onNext(230, 3),
+            onNext(240, 4),
+            onNext(250, 5),
+            onNext(270, 1)
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 260),
+            subscribe(260, 275)
+        ], $xs->getSubscriptions());
+    }
+
+    /**
+     * @test
+     */
+    public function repeatWhen_Observable_dispose_between()
+    {
+        $xs = $this->createColdObservable([
+            onNext(10, 1),
+            onNext(20, 2),
+            onNext(30, 3),
+            onNext(40, 4),
+            onNext(50, 5),
+            onCompleted(60)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->repeatWhen(function () {
+                return Observable::never();
+            });
+        }, 275);
+
+        $this->assertMessages([
+            onNext(210, 1),
+            onNext(220, 2),
+            onNext(230, 3),
+            onNext(240, 4),
+            onNext(250, 5)
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 260)
+        ], $xs->getSubscriptions());
+    }
 }
