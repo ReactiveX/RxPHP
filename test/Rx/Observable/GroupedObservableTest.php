@@ -14,34 +14,18 @@ class GroupedObservableTest extends TestCase
      */
     public function it_returns_the_disposable_of_the_underlying_disposable()
     {
-        $this->markTestSkipped("Disposable is now wrapped by AnonymousObservable. Find other way to test?");
         $disposable = $this->getMock('Rx\DisposableInterface');
+        
+        $disposable->expects($this->once())
+            ->method('dispose');
+        
         $observable = new AnonymousObservable(function() use (&$disposable) {
             return $disposable;
         });
 
         $groupedObservable = new GroupedObservable('key', $observable);
 
-        $this->assertEquals($disposable, $groupedObservable->subscribe(new CallbackObserver()));
-    }
-
-    /**
-     * @test
-     */
-    public function it_returns_a_composite_disposable_with_the_given_merged_disposable()
-    {
-        $this->markTestSkipped("Disposable is now wrapped by AnonymousObservable. Find other way to test?");
-        $d1 = $this->getMock('Rx\DisposableInterface');
-        $d2 = new RefCountDisposable($d1);
-
-        $observable = new AnonymousObservable(function() use (&$d1) {
-            return $d1;
-        });
-
-        $groupedObservable = new GroupedObservable('key', $observable, $d2);
-
-        $disposable = $groupedObservable->subscribe(new CallbackObserver());
-        $this->assertInstanceOf('Rx\Disposable\CompositeDisposable', $disposable);
+        $groupedObservable->subscribe(new CallbackObserver())->dispose();
     }
 
     /**
