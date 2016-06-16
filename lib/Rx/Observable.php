@@ -30,6 +30,7 @@ use Rx\Operator\DematerializeOperator;
 use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
+use Rx\Operator\ElementAtOperator;
 use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
@@ -1650,6 +1651,23 @@ class Observable implements ObservableInterface
 
         return (new ArrayObservable($observables))->lift(function () {
             return new RaceOperator();
+        });
+    }
+
+    /**
+     * Take only one element from sequence at specified index.
+     * First element in sequence have index 0.
+     *
+     * @param int $index
+     * @return AnonymousObservable
+     *
+     * @demo elementAt/elementAt.php
+     * @operator
+     * @reactivex elementAt
+     */
+    public function elementAt($index=null){
+        return $this->lift(function () use ($index) {
+            return new ElementAtOperator($index);
         });
     }
 }
