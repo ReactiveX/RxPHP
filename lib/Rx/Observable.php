@@ -34,6 +34,7 @@ use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
 use Rx\Operator\MaxOperator;
+use Rx\Operator\MinOperator;
 use Rx\Operator\MaterializeOperator;
 use Rx\Operator\MergeAllOperator;
 use Rx\Operator\RaceOperator;
@@ -1524,6 +1525,23 @@ class Observable implements ObservableInterface
         });
     }
 
+    /**
+     * Returns the maximum value in an observable sequence according to the specified comparer.
+     *
+     * @param callable $comparer
+     * @return AnonymousObservable
+     *
+     * @demo max/max.php
+     * @demo max/max-with-comparer.php
+     * @operator
+     * @reactivex min
+     */
+    public function min(callable $comparer = null){
+        return $this->lift(function () use ($comparer) {
+            return new MinOperator($comparer);
+        });
+    }
+    
     /**
      * Materializes the implicit notifications of an observable sequence as explicit notifications.
      *
