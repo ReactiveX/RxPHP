@@ -58,6 +58,7 @@ use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
+use Rx\Operator\ElementAtOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
@@ -1632,6 +1633,24 @@ class Observable implements ObservableInterface
 
         return (new ArrayObservable($observables))->lift(function () {
             return new RaceOperator();
+        });
+    }
+
+    /**
+     * Take only one element from sequence at specified index.
+     * First element in sequence have index 0.
+     *
+     * @param int $index
+     * @return AnonymousObservable
+     *
+     * @demo elementAt/elementAt.php
+     * @demo elementAt/elementAtOverflow.php
+     * @operator
+     * @reactivex elementAt
+     */
+    public function elementAt($index=null){
+        return $this->lift(function () use ($index) {
+            return new ElementAtOperator($index);
         });
     }
 }
