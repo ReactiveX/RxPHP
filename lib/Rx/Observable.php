@@ -1526,13 +1526,13 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Returns the maximum value in an observable sequence according to the specified comparer.
+     * Returns the minimum value in an observable sequence according to the specified comparer.
      *
      * @param callable $comparer
      * @return AnonymousObservable
      *
-     * @demo max/max.php
-     * @demo max/max-with-comparer.php
+     * @demo min/min.php
+     * @demo min/min-with-comparer.php
      * @operator
      * @reactivex min
      */
