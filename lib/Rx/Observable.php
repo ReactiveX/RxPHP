@@ -30,10 +30,12 @@ use Rx\Operator\DematerializeOperator;
 use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
+use Rx\Operator\ElementAtOperator;
 use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
 use Rx\Operator\MaxOperator;
+use Rx\Operator\MinOperator;
 use Rx\Operator\MaterializeOperator;
 use Rx\Operator\MergeAllOperator;
 use Rx\Operator\RaceOperator;
@@ -1525,6 +1527,23 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * Returns the minimum value in an observable sequence according to the specified comparer.
+     *
+     * @param callable $comparer
+     * @return AnonymousObservable
+     *
+     * @demo min/min.php
+     * @demo min/min-with-comparer.php
+     * @operator
+     * @reactivex min
+     */
+    public function min(callable $comparer = null){
+        return $this->lift(function () use ($comparer) {
+            return new MinOperator($comparer);
+        });
+    }
+    
+    /**
      * Materializes the implicit notifications of an observable sequence as explicit notifications.
      *
      * @return AnonymousObservable
@@ -1632,6 +1651,23 @@ class Observable implements ObservableInterface
 
         return (new ArrayObservable($observables))->lift(function () {
             return new RaceOperator();
+        });
+    }
+
+    /**
+     * Take only one element from sequence at specified index.
+     * First element in sequence have index 0.
+     *
+     * @param int $index
+     * @return AnonymousObservable
+     *
+     * @demo elementAt/elementAt.php
+     * @operator
+     * @reactivex elementAt
+     */
+    public function elementAt($index=null){
+        return $this->lift(function () use ($index) {
+            return new ElementAtOperator($index);
         });
     }
 }
