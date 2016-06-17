@@ -39,33 +39,33 @@ class MinOperator implements OperatorInterface
         $comparing   = false;
 
         return $observable->subscribe(new CallbackObserver(
-                                          function ($x) use (&$comparing, &$previousMin, $observer) {
-                                              if (!$comparing) {
-                                                  $comparing = true;
-                                                  $previousMin = $x;
+            function ($x) use (&$comparing, &$previousMin, $observer) {
+                if (!$comparing) {
+                    $comparing = true;
+                    $previousMin = $x;
 
-                                                  return;
-                                              }
+                    return;
+                }
 
-                                              try {
-                                                  $result = call_user_func($this->comparer, $x, $previousMin);
-                                                  if ($result < 0) {
-                                                      $previousMin = $x;
-                                                  }
-                                              } catch (\Exception $e) {
-                                                  $observer->onError($e);
-                                              }
-                                          },
-                                          [$observer, 'onError'],
-                                          function () use (&$comparing, &$previousMin, $observer) {
-                                              if ($comparing) {
-                                                  $observer->onNext($previousMin);
-                                                  $observer->onCompleted();
-                                                  return;
-                                              }
+                try {
+                    $result = call_user_func($this->comparer, $x, $previousMin);
+                    if ($result < 0) {
+                        $previousMin = $x;
+                    }
+                } catch (\Exception $e) {
+                    $observer->onError($e);
+                }
+            },
+            [$observer, 'onError'],
+            function () use (&$comparing, &$previousMin, $observer) {
+                if ($comparing) {
+                    $observer->onNext($previousMin);
+                    $observer->onCompleted();
+                    return;
+                }
 
-                                              $observer->onError(new \Exception("Empty"));
-                                          }
-                                      ), $scheduler);
+                $observer->onError(new \Exception("Empty"));
+            }
+            ), $scheduler);
     }
 }
