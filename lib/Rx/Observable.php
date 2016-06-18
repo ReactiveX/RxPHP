@@ -49,6 +49,7 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\StartWithArrayOperator;
 use Rx\Operator\SkipWhileOperator;
 use Rx\Operator\SubscribeOnOperator;
+use Rx\Operator\SumOperator;
 use Rx\Operator\SwitchLatestOperator;
 use Rx\Operator\TakeLastOperator;
 use Rx\Operator\TakeOperator;
@@ -1071,6 +1072,31 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($predicate) {
             return new CountOperator($predicate);
+        });
+    }
+
+    /**
+     * The Sum operator operates on an Observable that emits numbers (or items that can be evaluated as numbers), 
+     * and emits a single value: the sum of all of the numbers emitted by the source Observable.
+     * @param int $resolver
+     * where
+     * SumOperator::UNEXPECTED_VALUE_THROW_EXCEPTION - throws \UnexpectedValueException on not numeric elements 
+     * of sequence
+     * SumOperator::UNEXPECTED_VALUE_IGNORE - all not numeric values consider as zero
+     * SumOperator::UNEXPECTED_VALUE_CAST - all not numeric values casted by default PHP specification
+     *
+     * @return \Rx\Observable\AnonymousObservable
+     *
+     * @demo sum/sum_strict.php
+     * @demo sum/sum_ignore_unexpected.php
+     * @demo sum/sum_cast_unexpected.php
+     * @operator
+     * @reactivex sum
+     */
+    public function sum($resolver = SumOperator::UNEXPECTED_VALUE_THROW_EXCEPTION)
+    {
+        return $this->lift(function () use ($resolver) {
+            return new SumOperator($resolver);
         });
     }
 
