@@ -33,6 +33,7 @@ use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
+use Rx\Operator\MinOperator;
 use Rx\Operator\MaxOperator;
 use Rx\Operator\MaterializeOperator;
 use Rx\Operator\MergeAllOperator;
@@ -1505,7 +1506,24 @@ class Observable implements ObservableInterface
             return new StartWithArrayOperator($startArray);
         });
     }
-
+    
+    /**
+     * Returns the minimum value in an observable sequence according to the specified comparer.
+     *
+     * @param callable $comparer
+     * @return AnonymousObservable
+     *
+     * @demo min/min.php
+     * @demo min/min-with-comparer.php
+     * @operator
+     * @reactivex min
+     */
+    public function min(callable $comparer = null){
+        return $this->lift(function () use ($comparer) {
+            return new MinOperator($comparer);
+        });
+    }
+    
     /**
      * Returns the maximum value in an observable sequence according to the specified comparer.
      *
