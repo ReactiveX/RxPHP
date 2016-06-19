@@ -16,6 +16,7 @@ use Rx\Observable\ReturnObservable;
 use Rx\Observable\TimerObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Operator\AsObservableOperator;
+use Rx\Operator\AverageOperator;
 use Rx\Operator\BufferWithCountOperator;
 use Rx\Operator\CatchErrorOperator;
 use Rx\Operator\CombineLatestOperator;
@@ -1650,6 +1651,32 @@ class Observable implements ObservableInterface
 
         return (new ArrayObservable($observables))->lift(function () {
             return new RaceOperator();
+        });
+    }
+
+    /**
+     * The Average operator operates on an Observable that emits numbers (or items that can be evaluated as numbers), 
+     * and emits a single value: the average of all of the numbers emitted by the source Observable.
+     * 
+     * @param int $resolver = AverageOperator::UNEXPECTED_VALUE_THROW_EXCEPTION
+     * where
+     * AverageOperator::UNEXPECTED_VALUE_THROW_EXCEPTION - throws \UnexpectedValueException on not numeric elements
+     * of sequence
+     * AverageOperator::UNEXPECTED_VALUE_IGNORE - all not numeric values consider as zero
+     * AverageOperator::UNEXPECTED_VALUE_CAST - all not numeric values casted by default PHP specification
+     *
+     * @return \Rx\Observable\AnonymousObservable
+     *
+     * @demo sum/sum_strict.php
+     * @demo sum/sum_ignore_unexpected.php
+     * @demo sum/sum_cast_unexpected.php
+     * @operator
+     * @reactivex sum
+     */
+    public function average($resolver = AverageOperator::UNEXPECTED_VALUE_THROW_EXCEPTION)
+    {
+        return $this->lift(function () use ($resolver) {
+            return new AverageOperator($resolver);
         });
     }
 }
