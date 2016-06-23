@@ -42,7 +42,9 @@ class ElementAtOperator
                 $remaining--;
             },
             [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            function () use (&$remaining, $observer){
+                if($remaining !== -1)$observer->onError(new \OutOfRangeException("index out of range"));
+            }
         );
 
         return $observable->subscribe($callbackObserver, $scheduler);

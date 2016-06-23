@@ -1370,10 +1370,10 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Returns an Observable that emits the same values as the source Observable with the exception of an onCompleted. 
-     * An onCompleted notification from the source will result in the emission of a count item to the Observable provided 
-     * as an argument to the notificationHandler function. If that Observable calls onComplete or onError then 
-     * repeatWhen will call onCompleted or onError on the child subscription. Otherwise, this Observable will 
+     * Returns an Observable that emits the same values as the source Observable with the exception of an onCompleted.
+     * An onCompleted notification from the source will result in the emission of a count item to the Observable provided
+     * as an argument to the notificationHandler function. If that Observable calls onComplete or onError then
+     * repeatWhen will call onCompleted or onError on the child subscription. Otherwise, this Observable will
      * resubscribe to the source observable.
      *
      * @param callable $notifier
@@ -1589,7 +1589,7 @@ class Observable implements ObservableInterface
             return new SwitchLatestOperator($scheduler);
         });
     }
-    
+
     /**
      * Returns two observables which partition the observations of the source by the given function.
      * The first will trigger observations for those values for which the predicate returns true.
@@ -1644,11 +1644,10 @@ class Observable implements ObservableInterface
      * @return AnonymousObservable
      *
      * @demo elementAt/elementAt.php
-     * @demo elementAt/elementAtOverflow.php
      * @operator
      * @reactivex elementAt
      */
-    public function elementAt($index=null){
+    public function elementAt($index){
         return $this->lift(function () use ($index) {
             return new ElementAtOperator($index);
         });

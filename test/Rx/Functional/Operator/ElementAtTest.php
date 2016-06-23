@@ -2,11 +2,10 @@
 
 namespace Rx\Functional\Operator;
 
-
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable;
 use Rx\Observable\ReturnObservable;
 use Rx\Observer\CallbackObserver;
-
 
 class ElementAtTest extends FunctionalTestCase
 {
@@ -48,7 +47,7 @@ class ElementAtTest extends FunctionalTestCase
             onCompleted(820),
         ));
 
-        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->elementAt(2);
         });
 
@@ -60,37 +59,32 @@ class ElementAtTest extends FunctionalTestCase
 
     /**
      * @test
+     * @expectedException \OutOfRangeException
      */
-    public function take_zero_calls_when_index_greater_than_sequence_length()
+    public function exception_when_index_greater_than_sequence_length()
     {
-        $xs        = $this->createHotObservable(array(
-            onNext(250, 21),
-            onNext(300, 42),
-            onNext(400, 84),
-            onCompleted(420),
-        ));
-
-        $results = $this->scheduler->startWithCreate(function() use ($xs) {
-            return $xs->elementAt(3);
-        });
-
-        $this->assertMessages(array(
-            onCompleted(420),
-        ), $results->getMessages());
+        Observable::fromArray([1, 2, 3])
+            ->elementAt(3)
+            ->subscribe(new CallbackObserver());
     }
 
-    public function take_zero_calls_on_empty_sequence()
+    /**
+     * @test
+     */
+    public function it_throws_exception_on_empty_sequence()
     {
-        $xs        = $this->createHotObservable(array(
-            onCompleted(220),
+        $error = new \OutOfRangeException("index out of range");
+
+        $xs = $this->createHotObservable(array(
+            onCompleted(230),
         ));
 
-        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->elementAt(3);
         });
 
         $this->assertMessages(array(
-            onCompleted(220),
+            onError(230, $error),
         ), $results->getMessages());
     }
 }
