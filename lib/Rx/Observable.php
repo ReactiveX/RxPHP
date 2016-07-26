@@ -59,6 +59,7 @@ use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
+use Rx\Operator\ElementAtOperator;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
@@ -1370,10 +1371,10 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * Returns an Observable that emits the same values as the source Observable with the exception of an onCompleted. 
-     * An onCompleted notification from the source will result in the emission of a count item to the Observable provided 
-     * as an argument to the notificationHandler function. If that Observable calls onComplete or onError then 
-     * repeatWhen will call onCompleted or onError on the child subscription. Otherwise, this Observable will 
+     * Returns an Observable that emits the same values as the source Observable with the exception of an onCompleted.
+     * An onCompleted notification from the source will result in the emission of a count item to the Observable provided
+     * as an argument to the notificationHandler function. If that Observable calls onComplete or onError then
+     * repeatWhen will call onCompleted or onError on the child subscription. Otherwise, this Observable will
      * resubscribe to the source observable.
      *
      * @param callable $notifier
@@ -1606,7 +1607,7 @@ class Observable implements ObservableInterface
             return new SwitchLatestOperator($scheduler);
         });
     }
-    
+
     /**
      * Returns two observables which partition the observations of the source by the given function.
      * The first will trigger observations for those values for which the predicate returns true.
@@ -1650,6 +1651,23 @@ class Observable implements ObservableInterface
 
         return (new ArrayObservable($observables))->lift(function () {
             return new RaceOperator();
+        });
+    }
+
+    /**
+     * Take only one element from sequence at specified index.
+     * First element in sequence have index 0.
+     *
+     * @param int $index
+     * @return AnonymousObservable
+     *
+     * @demo elementAt/elementAt.php
+     * @operator
+     * @reactivex elementAt
+     */
+    public function elementAt($index){
+        return $this->lift(function () use ($index) {
+            return new ElementAtOperator($index);
         });
     }
 }
