@@ -159,4 +159,35 @@ class PluckTest extends FunctionalTestCase
             subscribe(200, 290)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     */
+    public function pluck_array_numeric_index()
+    {
+        $xs = $this->createHotObservable([
+            onNext(180, [-1,-1,-1,-1]),
+            onNext(210, [4,3,2,1]),
+            onNext(240, [4,3,20,10]),
+            onNext(290, [4,3,200,100]),
+            onNext(350, [4,3,2000,1000]),
+            onCompleted(400)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->pluck(2);
+        });
+
+        $this->assertMessages([
+            onNext(210, 2),
+            onNext(240, 20),
+            onNext(290, 200),
+            onNext(350, 2000),
+            onCompleted(400)
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 400)
+        ], $xs->getSubscriptions());
+    }
 }

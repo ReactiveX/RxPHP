@@ -1703,7 +1703,7 @@ class Observable implements ObservableInterface
      *
      * @demo pluck/pluck.php
      * @operator
-     * @reactivex pluck
+     * @reactivex map
      */
     public function pluck($property)
     {
