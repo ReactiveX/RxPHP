@@ -1652,4 +1652,21 @@ class Observable implements ObservableInterface
             return new RaceOperator();
         });
     }
+
+    /**
+     * Computes the sum of a sequence of values
+     *
+     * @return AnonymousObservable
+     *
+     * @demo sum/sum.php
+     * @operator
+     * @reactivex sum
+     */
+    public function sum()
+    {
+        return $this
+            ->reduce(function ($a, $x) {
+                return $a + $x;
+            }, 0);
+    }
 }
