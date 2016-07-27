@@ -262,4 +262,31 @@ class ReduceTest extends FunctionalTestCase
 
         $this->assertMessages([onError(210, new \Exception())], $results->getMessages());
     }
+
+    /**
+     * @test
+     */
+    public function reduce_with_falsy_seed_range()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(220, 1),
+            onNext(230, 2),
+            onNext(240, 3),
+            onNext(250, 4),
+            onCompleted(260)
+        ]);
+
+        $accums = [];
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs, &$accums) {
+            return $xs->reduce(function ($acc, $x) use (&$accums){
+                $accums[] = $acc;
+                return $x;
+            }, 0);
+        });
+
+        $this->assertEquals($accums, [0, 1, 2, 3]);
+        $this->assertMessages([onNext(260, 4), onCompleted(260)], $results->getMessages());
+    }
 }
