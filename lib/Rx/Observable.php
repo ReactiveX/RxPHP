@@ -1691,6 +1691,6 @@ class Observable implements ObservableInterface
                 $total += $x;
 
                 return $total / $count;
-            });
+            }, 0);
     }
 }
