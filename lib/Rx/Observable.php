@@ -1669,4 +1669,28 @@ class Observable implements ObservableInterface
                 return $a + $x;
             }, 0);
     }
+
+    /**
+     * Computes the average of an observable sequence of values.
+     *
+     * @return AnonymousObservable
+     *
+     * @demo average/average.php
+     * @operator
+     * @reactivex average
+     */
+    public function average()
+    {
+        return $this
+            ->defaultIfEmpty(Observable::error(new \UnderflowException()))
+            ->reduce(function ($a, $x) {
+                static $count = 0;
+                static $total = 0;
+
+                $count++;
+                $total += $x;
+
+                return $total / $count;
+            }, 0);
+    }
 }
