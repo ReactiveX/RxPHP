@@ -22,7 +22,7 @@ class ReduceOperator implements OperatorInterface
     {
         $this->accumulator = $accumulator;
         $this->seed        = $seed;
-        $this->hasSeed     = $seed ? true : false;
+        $this->hasSeed     = !is_null($seed);
     }
 
     /**
