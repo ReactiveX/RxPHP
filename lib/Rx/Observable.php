@@ -1693,4 +1693,29 @@ class Observable implements ObservableInterface
                 return $total / $count;
             }, 0);
     }
+
+    /**
+     * Returns an Observable containing the value of a specified array index (if array) or property (if object) from
+     * all elements in the Observable sequence. If a property can't be resolved the observable will error.
+     *
+     * @param mixed $property
+     * @return Observable
+     *
+     * @demo pluck/pluck.php
+     * @operator
+     * @reactivex map
+     */
+    public function pluck($property)
+    {
+        return $this->map(function ($x) use ($property) {
+            if (is_array($x) && isset($x[$property])) {
+                return $x[$property];
+            }
+            if (is_object($x) && isset($x->$property)) {
+                return $x->$property;
+            }
+
+            throw new \Exception('Unable to pluck "' . $property . '"');
+        });
+    }
 }
