@@ -9,7 +9,7 @@ $observable = Rx\Observable::range(1, 5);
 
 $selectManyObservable = $observable->flatMap(function ($value) {
     return Rx\Observable::range(1, $value);
-}, $scheduler);
+});
 
 $disposable = $selectManyObservable->subscribe($stdoutObserver, $scheduler);
 
