@@ -9,19 +9,4 @@ $source = Rx\Observable::fromArray([
 ])
     ->pluck('value');
 
-$subscription = $source->subscribeCallback(
-    function ($x) {
-        echo 'Next: ' . $x . PHP_EOL;
-    },
-    function ($err) {
-        echo 'Error: ' . $err . PHP_EOL;
-    },
-    function () {
-        echo 'Completed' . PHP_EOL;
-    }
-);
-
-// => Next: 0
-// => Next: 1
-// => Next: 2
-// => Completed
+$subscription = $source->subscribe($stdoutObserver);
