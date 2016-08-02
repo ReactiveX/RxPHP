@@ -439,6 +439,26 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * Projects each element of the source observable sequence to the other observable sequence and merges the
+     * resulting observable sequences into one observable sequence.
+     *
+     * @param ObservableInterface $observable - An an observable sequence to project each element from the source
+     * sequence onto.
+     *
+     * @return AnonymousObservable
+     *
+     * @demo concat/flatMapTo.php
+     * @operator
+     * @reactivex flatMap
+     */
+    public function flatMapTo(ObservableInterface $observable)
+    {
+        return $this->flatMap(function () use ($observable) {
+            return $observable;
+        });
+    }
+
+    /**
      * Alias for flatMap
      *
      * @param $selector
