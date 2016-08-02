@@ -1,3 +1,24 @@
+# 1.4.0
+
+### Bug Fixes
+
+- Fixed doc block, demo updates ([7090947](https://github.com/ReactiveX/RxPHP/commit/70909479b99f2cc8fafa3ca666ff842b9c9f013e)) ([306ead9](https://github.com/ReactiveX/RxPHP/commit/306ead9c10356f2efcb0711d7581d6ebca2efd25)) ([8c4e9ab](https://github.com/ReactiveX/RxPHP/commit/8c4e9abf2d0993dbe126182fb1a6289c4568d353)) ([a21b8fd](https://github.com/ReactiveX/RxPHP/commit/a21b8fdf28bbe4b95599fca6febf2361899454d6))
+- Fixed `reduce` operator issue with falsy seed ([#71](https://github.com/ReactiveX/RxPHP/commit/d1cb412535beddb4d9892887104921340495bf81))
+- Fixed skipped tests ([26c2476](https://github.com/ReactiveX/RxPHP/commit/26c2476a2459307e9883279a258e1ed6dc854ed2))
+- Fixed `retryWhen` ([#59](https://github.com/ReactiveX/RxPHP/commit/e8e44ea9ae0b8f20c5fc4332aecec498cdcfc721))
+
+### Features
+
+- Added `flatMapTo` operator ([a8c6967](https://github.com/ReactiveX/RxPHP/commit/a8c69671ff4b7872423ebb602fba759c9564ae66))
+- Added `pluck` operator ([ec1fce1](https://github.com/ReactiveX/RxPHP/commit/ec1fce117bdc9a82e004624e2e8fcfb20ed50add))
+- Added `average` operator ([da591a6](https://github.com/ReactiveX/RxPHP/commit/da591a6cf8f32e923a597d08426fe1c8be116f7b))
+- Added `sum` operator ([2f44168](https://github.com/ReactiveX/RxPHP/commit/2f441687b8b806f4151f8966f38f1b11b065cd77))
+- Added CONTRIBUTING.md ([e45210c](https://github.com/ReactiveX/RxPHP/commit/e45210c9facbb3c38a48c8018f883dc820c6a292))
+- Added `min` operator ([f458564](https://github.com/ReactiveX/RxPHP/commit/f458564c82245813e3cf4d7d84a461b8a983e270))
+- Added `repeatWhen` operator ([d0fc1f8](https://github.com/ReactiveX/RxPHP/commit/d0fc1f84721940638274cd71492e91ea0030e4e4))
+- Added `race` operator (amb) ([81b70e7](https://github.com/ReactiveX/RxPHP/commit/81b70e7e7eca111fdfaa0bdc00a5b45afd569a6b))
+- Added `takeLast` operator ([8759ca4](https://github.com/ReactiveX/RxPHP/commit/8759ca42ba201b94c0a3dbe0979fde673c83df25))
+
 # 1.3.0
 
 ### Bug Fixes
