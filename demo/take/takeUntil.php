@@ -2,18 +2,13 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop    = \React\EventLoop\Factory::create();
-$timeout = \Rx\Observable::create(function (\Rx\ObserverInterface $o) use ($loop) {
-    $loop->addTimer(1, function () use ($o) {
-        $o->onNext(0);
-    });
+$loop = \React\EventLoop\Factory::create();
 
-    return new \Rx\Disposable\EmptyDisposable();
-});
+$scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
 
-$scheduler  = new \Rx\Scheduler\EventLoopScheduler($loop);
-$source = \Rx\Observable::interval(105, $scheduler)->takeUntil($timeout);
+$source = \Rx\Observable::interval(105, $scheduler)
+    ->takeUntil(\Rx\Observable::timer(1000));
 
-$subscription = $source->subscribe($stdoutObserver);
+$subscription = $source->subscribe($stdoutObserver, $scheduler);
 
 $loop->run();
