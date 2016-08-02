@@ -641,7 +641,7 @@ class Observable implements ObservableInterface
      *
      * @demo take/takeLast.php
      * @operator
-     * @reactivex takelast
+     * @reactivex takeLast
      */
     public function takeLast($count)
     {
