@@ -3,7 +3,6 @@
 namespace Rx\Scheduler;
 
 use React\EventLoop\Factory;
-use React\EventLoop\LoopInterface;
 use Rx\Observable;
 use Rx\TestCase;
 
