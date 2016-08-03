@@ -77,4 +77,36 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals(5, $count);
         $this->assertTrue($actionCalled);
     }
+    
+    public function testDisposedEventDoesNotCauseSkip()
+    {
+        // create a scheduler - timing is not important for this test
+        // so we can just use an empty callable
+        $scheduler = new EventLoopScheduler(function () {
+        });
+        
+        $calls = [];
+        
+        // the way that these are scheduled, if the scheduler runs (by calling start a few times),
+        // calls should be [2] because 0 is disposed and 1 shouldn't be called for 10s
+        $disposable = $scheduler->schedule(function () use (&$calls) {
+            $calls[] = 0;
+        }, 0);
+
+        $scheduler->schedule(function () use (&$calls) {
+            $calls[] = 1;
+        }, 10000);
+
+        $scheduler->schedule(function () use (&$calls) {
+            $calls[] = 2;
+        }, 0);
+        
+        $disposable->dispose();
+        
+        $scheduler->start();
+        $scheduler->start();
+        $scheduler->start();
+        
+        $this->assertEquals([2], $calls);
+    }
 }
