@@ -42,22 +42,21 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         return $disp;
     }
 
-
     public function start()
     {
         $this->clock = $this->now();
 
         $this->insideInvoke = true;
         while ($this->queue->count() > 0) {
-            if ($this->queue->peek()->getDueTime() > $this->clock) {
-                $this->nextTimer = $this->queue->peek()->getDueTime();
-                $timerCallable = $this->timerCallable;
-                $timerCallable($this->nextTimer - $this->clock, [$this, "start"]);
-                break;
-            }
-
             $next = $this->getNext();
             if ($next !== null) {
+                if ($next->getDueTime() > $this->clock) {
+                    $this->nextTimer = $next->getDueTime();
+                    $timerCallable   = $this->timerCallable;
+                    $timerCallable($this->nextTimer - $this->clock, [$this, "start"]);
+                    break;
+                }
+
                 $next->inVoke();
             }
         }
