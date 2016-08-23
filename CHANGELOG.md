@@ -1,3 +1,9 @@
+# 1.4.1
+
+### Bug Fixes
+- Fixed EventLoopScheduler ([f0302d2](https://github.com/ReactiveX/RxPHP/commit/680eed0af8596a938871aac967419c150f0302d2))
+
+
 # 1.4.0
 
 ### Bug Fixes
