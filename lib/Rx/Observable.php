@@ -15,6 +15,7 @@ use Rx\Observable\RangeObservable;
 use Rx\Observable\ReturnObservable;
 use Rx\Observable\TimerObservable;
 use Rx\Observer\CallbackObserver;
+use Rx\Observer\DoObserver;
 use Rx\Operator\AsObservableOperator;
 use Rx\Operator\BufferWithCountOperator;
 use Rx\Operator\CatchErrorOperator;
@@ -805,10 +806,18 @@ class Observable implements ObservableInterface
     }
 
     /**
-     *  Invokes an action for each element in the observable sequence and invokes an action upon graceful
-     *  or exceptional termination of the observable sequence.
-     *  This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to
-     *  run arbitrary actions for messages on the pipeline.
+     * Invokes an action for each element in the observable sequence and invokes an action upon graceful
+     * or exceptional termination of the observable sequence.
+     * This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to
+     * run arbitrary actions for messages on the pipeline.
+     *
+     * When using doOnEach, it is important to note that the Observer may receive additional
+     * events after a stream has completed or errored (such as when useing a repeat or resubscribing).
+     * If you are using an Observable that extends the AbstractObservable, you will not receive these
+     * events. For this special case, use the DoObservable.
+     *
+     * doOnNext, doOnError, and doOnCompleted uses the DoObservable internally and will receive these
+     * additional events.
      *
      * @param ObserverInterface $observer
      *
@@ -836,7 +845,7 @@ class Observable implements ObservableInterface
      */
     public function doOnNext(callable $onNext)
     {
-        return $this->doOnEach(new CallbackObserver(
+        return $this->doOnEach(new DoObserver(
             $onNext
         ));
     }
@@ -851,7 +860,7 @@ class Observable implements ObservableInterface
      */
     public function doOnError(callable $onError)
     {
-        return $this->doOnEach(new CallbackObserver(
+        return $this->doOnEach(new DoObserver(
             null,
             $onError
         ));
@@ -867,7 +876,7 @@ class Observable implements ObservableInterface
      */
     public function doOnCompleted(callable $onCompleted)
     {
-        return $this->doOnEach(new CallbackObserver(
+        return $this->doOnEach(new DoObserver(
             null,
             null,
             $onCompleted

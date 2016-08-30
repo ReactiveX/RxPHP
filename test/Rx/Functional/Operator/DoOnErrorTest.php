@@ -33,4 +33,31 @@ class DoOnErrorTest extends FunctionalTestCase
         $this->assertEquals(1, $called);
         $this->assertSame($ex, $error);
     }
+
+    /**
+     * @test
+     */
+    public function doOnError_should_call_after_resubscription()
+    {
+        $xs = $this->createColdObservable([
+            onError(10, new \Exception("Hello")),
+            onCompleted(20)
+        ]);
+
+        $messages = [];
+
+        $xs
+            ->doOnError(function ($x) use (&$messages) {
+                $messages[] = onError($this->scheduler->getClock(), $x);
+            })
+            ->retry(2)
+            ->subscribeCallback(null, function () {}, null, $this->scheduler);
+
+        $this->scheduler->start();
+
+        $this->assertMessages([
+            onError(10, new \Exception("Hello")),
+            onError(20, new \Exception("Hello"))
+        ], $messages);
+    }
 }
