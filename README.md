@@ -6,6 +6,7 @@ libraries to compose asynchronous and event-based programs using observable
 collections and LINQ-style query operators in PHP.
 
 [![Build Status](https://secure.travis-ci.org/ReactiveX/RxPHP.png?branch=master)](https://travis-ci.org/ReactiveX/RxPHP)
+[![Coverage Status](https://coveralls.io/repos/github/ReactiveX/RxPHP/badge.svg?branch=master)](https://coveralls.io/github/ReactiveX/RxPHP?branch=master)
 
 ## Installation
 Install dependencies using [composer](https://getcomposer.org).
