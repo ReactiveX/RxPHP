@@ -24,7 +24,9 @@
     },
     "require-dev": {
         "react/event-loop": "~0.4.1",
-        "react/promise": "~2.2"
+        "react/promise": "~2.2",
+        "satooshi/php-coveralls": "~1.0",
+        "phpunit/phpcov": "2.*"
     },
     "suggest": {
         "react/event-loop": "For using event-loop based scheduling.",
