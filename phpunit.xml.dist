@@ -20,6 +20,9 @@
   <filter>
     <whitelist>
       <directory suffix=".php">./lib/</directory>
+      <exclude>
+        <directory suffix="Interface.php">./lib/</directory>
+      </exclude>
     </whitelist>
   </filter>
   <logging>
