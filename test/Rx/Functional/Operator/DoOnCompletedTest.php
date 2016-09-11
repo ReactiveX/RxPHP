@@ -28,4 +28,31 @@ class DoOnCompletedTest extends FunctionalTestCase
 
         $this->assertEquals(1, $called);
     }
+
+    /**
+     * @test
+     */
+    public function doOnCompleted_should_call_after_resubscription()
+    {
+        $xs = $this->createColdObservable([
+            onNext(10, 1),
+            onCompleted(20)
+        ]);
+
+        $messages = [];
+
+        $xs
+            ->doOnCompleted(function () use (&$messages) {
+                $messages[] = onCompleted($this->scheduler->getClock());
+            })
+            ->repeat(2)
+            ->subscribeCallback(null, null, null, $this->scheduler);
+
+        $this->scheduler->start();
+
+        $this->assertMessages([
+            onCompleted(20),
+            onCompleted(40)
+        ], $messages);
+    }
 }

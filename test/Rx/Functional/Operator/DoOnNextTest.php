@@ -34,4 +34,31 @@ class DoOnNextTest extends FunctionalTestCase
         $this->assertEquals(4, $i);
         $this->assertEquals(0, $sum);
     }
+    
+    /**
+     * @test
+     */
+    public function doOnNext_should_call_after_resubscription()
+    {
+        $xs = $this->createColdObservable([
+            onNext(10, 1),
+            onCompleted(20)
+        ]);
+        
+        $messages = [];
+        
+        $xs
+            ->doOnNext(function ($x) use (&$messages) {
+                $messages[] = onNext($this->scheduler->getClock(), $x);
+            })
+            ->repeat(2)
+            ->subscribeCallback(null, null, null, $this->scheduler);
+        
+        $this->scheduler->start();
+        
+        $this->assertMessages([
+            onNext(10, 1),
+            onNext(30, 1)
+        ], $messages);
+    }
 }
