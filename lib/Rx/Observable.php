@@ -814,9 +814,9 @@ class Observable implements ObservableInterface
      * When using doOnEach, it is important to note that the Observer may receive additional
      * events after a stream has completed or errored (such as when useing a repeat or resubscribing).
      * If you are using an Observable that extends the AbstractObservable, you will not receive these
-     * events. For this special case, use the DoObservable.
+     * events. For this special case, use the DoObserver.
      *
-     * doOnNext, doOnError, and doOnCompleted uses the DoObservable internally and will receive these
+     * doOnNext, doOnError, and doOnCompleted uses the DoObserver internally and will receive these
      * additional events.
      *
      * @param ObserverInterface $observer
