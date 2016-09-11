@@ -50,6 +50,7 @@ use Rx\Operator\SkipUntilOperator;
 use Rx\Operator\StartWithArrayOperator;
 use Rx\Operator\SkipWhileOperator;
 use Rx\Operator\SubscribeOnOperator;
+use Rx\Operator\SwitchFirstOperator;
 use Rx\Operator\SwitchLatestOperator;
 use Rx\Operator\TakeLastOperator;
 use Rx\Operator\TakeOperator;
@@ -1624,6 +1625,29 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($scheduler) {
             return new SwitchLatestOperator($scheduler);
+        });
+    }
+
+
+    /**
+     * Receives an Observable of Observables and propagates the first Observable exclusively until it completes before
+     * it begins subscribes to the next Observable. Observables that come before the current Observable completes will
+     * be dropped and will not propagate.
+     *
+     * This operator is similar to concatAll() except that it will not hold onto Observables that come in before the
+     * current one is finished completed.
+     *
+     * @return AnonymousObservable - An Observable sequence that is the result of concatenating non-overlapping items
+     * emitted by an Observable of Observables.
+     *
+     * @demo switch/switchFirst.php
+     * @operator
+     * @reactivex switch
+     */
+    public function switchFirst()
+    {
+        return $this->lift(function () {
+            return new SwitchFirstOperator();
         });
     }
     
