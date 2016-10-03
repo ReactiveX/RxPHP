@@ -409,4 +409,53 @@ class SwitchFirstTest extends FunctionalTestCase
             $results->getMessages()
         );
     }
+
+    /**
+     * @test
+     */
+    public function switchFirst_SkipsOneObservable()
+    {
+
+        $xs = $this->createHotObservable([
+            onNext(300, $this->createColdObservable([
+                onNext(10, 101),
+                onNext(20, 102),
+                onNext(100, 103),
+                onCompleted(110)
+            ])),
+            onNext(400, $this->createColdObservable([
+                onNext(10, 201),
+                onNext(20, 202),
+                onNext(110, 203),
+                onNext(120, 204),
+                onCompleted(150)
+            ])),
+            onNext(500, $this->createColdObservable([
+                onNext(10, 301),
+                onNext(20, 302),
+                onNext(30, 303),
+                onNext(40, 304),
+                onCompleted(150)
+            ])),
+            onCompleted(600)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->switchFirst();
+        });
+
+        $this->assertMessages(
+            [
+                onNext(310, 101),
+                onNext(320, 102),
+                onNext(400, 103),
+                onNext(510, 301),
+                onNext(520, 302),
+                onNext(530, 303),
+                onNext(540, 304),
+                onCompleted(650)
+            ],
+            $results->getMessages()
+        );
+    }
 }
