@@ -16,7 +16,7 @@ class BehaviorSubjectTest extends TestCase
         $subject = new BehaviorSubject();
         $subject->dispose();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $subject->subscribe($observer);
     }
 
@@ -29,7 +29,7 @@ class BehaviorSubjectTest extends TestCase
 
         $this->assertFalse($subject->hasObservers());
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $subject->subscribe($observer);
         $this->assertTrue($subject->hasObservers());
     }
@@ -54,7 +54,7 @@ class BehaviorSubjectTest extends TestCase
     {
         $subject = new BehaviorSubject();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $subject->subscribe($observer);
         $this->assertTrue($subject->hasObservers());
 
@@ -69,7 +69,7 @@ class BehaviorSubjectTest extends TestCase
     {
         $subject = new BehaviorSubject();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $subject->subscribe($observer);
         $this->assertTrue($subject->hasObservers());
 
@@ -84,7 +84,7 @@ class BehaviorSubjectTest extends TestCase
     {
         $subject = new BehaviorSubject();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
 
         $this->assertFalse($subject->removeObserver($observer));
         $this->assertFalse($subject->hasObservers());
@@ -99,7 +99,7 @@ class BehaviorSubjectTest extends TestCase
         $subject   = new BehaviorSubject();
         $subject->onError($exception);
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $observer->expects($this->once())
             ->method('onError')
             ->with($this->equalTo($exception));
@@ -115,7 +115,7 @@ class BehaviorSubjectTest extends TestCase
         $subject   = new BehaviorSubject();
         $subject->onCompleted();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $observer->expects($this->once())
             ->method('onCompleted');
 
@@ -130,7 +130,7 @@ class BehaviorSubjectTest extends TestCase
         $exception = new Exception('fail');
         $subject   = new BehaviorSubject();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $observer->expects($this->once())
             ->method('onError')
             ->with($this->equalTo($exception));
@@ -147,7 +147,7 @@ class BehaviorSubjectTest extends TestCase
     {
         $subject  = new BehaviorSubject();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $observer->expects($this->once())
             ->method('onCompleted');
 
@@ -163,7 +163,7 @@ class BehaviorSubjectTest extends TestCase
         $subject  = new BehaviorSubject();
         $value    = 42;
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
 
         $observer->expects($this->exactly(2))
             ->method('onNext')
@@ -185,7 +185,7 @@ class BehaviorSubjectTest extends TestCase
         $value    = 42;
         $subject  = new BehaviorSubject($value);
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
 
         $observer->expects($this->once())
             ->method('onNext')
@@ -201,7 +201,7 @@ class BehaviorSubjectTest extends TestCase
     {
         $subject  = new BehaviorSubject();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
         $observer->expects($this->once())
             ->method('onCompleted');
 

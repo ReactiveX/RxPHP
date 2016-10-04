@@ -14,7 +14,7 @@ class ObservableTest extends TestCase
     {
         $observable = new ConcreteObservable();
 
-        $observer = $this->getMock('Rx\ObserverInterface');
+        $observer = $this->createMock('Rx\ObserverInterface');
 
         $this->assertFalse($observable->removeObserver($observer));
     }

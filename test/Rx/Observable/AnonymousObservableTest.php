@@ -18,7 +18,7 @@ class AnonymousObservableTest extends TestCase
         $called = 0;
         $observable = new AnonymousObservable(function() use (&$called) { $called++; return new EmptyDisposable(); });
 
-        $observerMock = $this->getMock('Rx\ObserverInterface');
+        $observerMock = $this->createMock('Rx\ObserverInterface');
         $observable->subscribe($observerMock);
 
         $this->assertEquals(1, $called);
@@ -37,7 +37,7 @@ class AnonymousObservableTest extends TestCase
             });
         });
 
-        $observerMock = $this->getMock('Rx\ObserverInterface');
+        $observerMock = $this->createMock('Rx\ObserverInterface');
         $disposable = $observable->subscribe($observerMock);
 
         $disposable->dispose();
