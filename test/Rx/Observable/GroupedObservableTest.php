@@ -14,7 +14,7 @@ class GroupedObservableTest extends TestCase
      */
     public function it_returns_the_disposable_of_the_underlying_disposable()
     {
-        $disposable = $this->getMock('Rx\DisposableInterface');
+        $disposable = $this->createMock('Rx\DisposableInterface');
         
         $disposable->expects($this->once())
             ->method('dispose');
