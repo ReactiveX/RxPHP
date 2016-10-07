@@ -2,6 +2,7 @@
 
 namespace Rx\Operator;
 
+use Rx\Disposable\CallbackDisposable;
 use Rx\DisposableInterface;
 use Rx\Notification;
 use Rx\Observable\AnonymousObservable;
@@ -50,9 +51,9 @@ class DelayOperator implements OperatorInterface
         if ($scheduler === null) {
             throw new \Exception("You must use a scheduler that support non-zero delay.");
         }
-
+        
         /** @var AnonymousObservable $observable */
-        return $observable
+        $disp = $observable
             ->materialize()
             ->timestamp()
             ->map(function (Timestamped $x) {
@@ -79,7 +80,10 @@ class DelayOperator implements OperatorInterface
                                 $this->schedulerDisposable = null;
                                 return;
                             }
-                            $this->schedulerDisposable = $scheduler->schedule($doScheduledStuff, $this->queue->bottom()->getTimestampMillis() - $scheduler->now());
+                            $this->schedulerDisposable = $scheduler->schedule(
+                                $doScheduledStuff,
+                                $this->queue->bottom()->getTimestampMillis() - $scheduler->now()
+                            );
                         };
 
                         $doScheduledStuff();
@@ -87,5 +91,12 @@ class DelayOperator implements OperatorInterface
                 },
                 [$observer, 'onError']
             ), $scheduler);
+        
+        return new CallbackDisposable(function () use ($disp) {
+            if ($this->schedulerDisposable) {
+                $this->schedulerDisposable->dispose();
+            }
+            $disp->dispose();
+        });
     }
 }

@@ -311,4 +311,30 @@ class DelayTest extends FunctionalTestCase
 
         $this->assertTrue($completes);
     }
+    
+    /**
+     * @test
+     */
+    public function delay_disposed_after_emit()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(250, 2),
+            onNext(299, 3),
+            onNext(350, 4),
+            onCompleted(351)
+        ]);
+        
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs->delay(5);
+        }, 300);
+        
+        $this->assertMessages([
+            onNext(255, 2)
+        ], $results->getMessages());
+        
+        $this->assertSubscriptions([
+            subscribe(200, 300)
+        ], $xs->getSubscriptions());
+    }
 }
