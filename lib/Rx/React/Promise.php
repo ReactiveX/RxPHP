@@ -73,7 +73,7 @@ final class Promise
             function () use ($promise) {
                 $subject = new AsyncSubject();
 
-                $promise->then(
+                $p = $promise->then(
                     function ($value) use ($subject) {
                         $subject->onNext($value);
                         $subject->onCompleted();
@@ -84,11 +84,11 @@ final class Promise
                     }
                 );
 
-                return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $promise) {
+                return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $p) {
                     $disp = $subject->subscribe($observer, $scheduler);
-                    return new CallbackDisposable(function () use ($promise, $disp) {
+                    return new CallbackDisposable(function () use ($p, $disp) {
                         $disp->dispose();
-                        $promise->cancel();
+                        $p->cancel();
                     });
                 });
             }
