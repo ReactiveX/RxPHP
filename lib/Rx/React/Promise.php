@@ -69,29 +69,25 @@ final class Promise
      */
     public static function toObservable(CancellablePromiseInterface $promise)
     {
-        return Observable::defer(
-            function () use ($promise) {
-                $subject = new AsyncSubject();
+        $subject = new AsyncSubject();
 
-                $p = $promise->then(
-                    function ($value) use ($subject) {
-                        $subject->onNext($value);
-                        $subject->onCompleted();
-                    },
-                    function ($error) use ($subject) {
-                        $error = $error instanceof \Exception ? $error : new RejectedPromiseException($error);
-                        $subject->onError($error);
-                    }
-                );
-
-                return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $p) {
-                    $disp = $subject->subscribe($observer, $scheduler);
-                    return new CallbackDisposable(function () use ($p, $disp) {
-                        $disp->dispose();
-                        $p->cancel();
-                    });
-                });
+        $p = $promise->then(
+            function ($value) use ($subject) {
+                $subject->onNext($value);
+                $subject->onCompleted();
+            },
+            function ($error) use ($subject) {
+                $error = $error instanceof \Exception ? $error : new RejectedPromiseException($error);
+                $subject->onError($error);
             }
         );
+
+        return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $p) {
+            $disp = $subject->subscribe($observer, $scheduler);
+            return new CallbackDisposable(function () use ($p, $disp) {
+                $disp->dispose();
+                $p->cancel();
+            });
+        });
     }
 }
