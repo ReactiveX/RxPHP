@@ -2,12 +2,14 @@
 
 namespace Rx\React;
 
+use React\Promise\CancellablePromiseInterface;
+use Rx\Disposable\CallbackDisposable;
 use Rx\ObservableInterface;
 use Rx\Observable;
+use Rx\Observable\AnonymousObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
-use React\Promise\PromiseInterface;
 
 final class Promise
 {
@@ -62,10 +64,10 @@ final class Promise
     /**
      * Converts a Promise to an Observable sequence
      *
-     * @param \React\Promise\PromiseInterface $promise
-     * @return \Rx\Observable\AnonymousObservable
+     * @param CancellablePromiseInterface $promise
+     * @return Observable\AnonymousObservable
      */
-    public static function toObservable(PromiseInterface $promise)
+    public static function toObservable(CancellablePromiseInterface $promise)
     {
         return Observable::defer(
             function () use ($promise) {
@@ -82,7 +84,13 @@ final class Promise
                     }
                 );
 
-                return $subject;
+                return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $promise) {
+                    $disp = $subject->subscribe($observer, $scheduler);
+                    return new CallbackDisposable(function () use ($promise, $disp) {
+                        $disp->dispose();
+                        $promise->cancel();
+                    });
+                });
             }
         );
     }
