@@ -6,7 +6,7 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-
+use Rx\Scheduler\ImmediateScheduler;
 
 class DeferTest extends FunctionalTestCase
 {
@@ -115,9 +115,44 @@ class DeferTest extends FunctionalTestCase
         // Note: these tests differ from the RxJS tests that they were based on because RxJS was
         // explicitly using the immediate scheduler on subscribe internally. When we pass the
         // proper scheduler in, the subscription gets scheduled which requires an extra tick.
-        $this->assertMessages([onError(201, new \Exception('error'))], $results->getMessages());
+        $this->assertMessages([
+            onError(201, new \Exception('error'))
+        ], $results->getMessages());
 
         $this->assertEquals(1, $invoked);
 
+    }
+
+    /**
+     * @test
+     * @expectedException \Exception
+     * @expectedExceptionMessage I take exception
+     */
+    public function defer_error_while_subscribe_with_immediate_scheduler()
+    {
+        Observable::defer(function () {
+            return Observable::create(function ($observer, $scheduler = null) {
+                $observer->onError(new \Exception('I take exception'));
+            });
+        })->subscribeCallback(null, null, null, new ImmediateScheduler());
+    }
+
+    /**
+     * @test
+     */
+    public function defer_error_while_subscribe_with_immediate_scheduler_passes_through()
+    {
+        $onErrorCalled = false;
+        
+        Observable::defer(function () {
+            return Observable::create(function ($observer, $scheduler = null) {
+                $observer->onError(new \Exception('I take exception'));
+            });
+        })->subscribeCallback(null, function (\Exception $e) use (&$onErrorCalled) {
+            $onErrorCalled = true;
+            $this->assertEquals('I take exception', $e->getMessage());
+        }, null, new ImmediateScheduler());
+        
+        $this->assertTrue($onErrorCalled);
     }
 }

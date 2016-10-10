@@ -32,10 +32,10 @@ class DeferOperator implements OperatorInterface
 
         try {
             $result = $factory();
-
-            return $result->subscribe($observer, $scheduler);
         } catch (\Exception $e) {
             return Observable::error($e)->subscribe($observer, $scheduler);
         }
+        
+        return $result->subscribe($observer, $scheduler);
     }
 }
