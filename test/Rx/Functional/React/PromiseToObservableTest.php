@@ -5,14 +5,11 @@ namespace Rx\Functional\React;
 
 use Exception;
 use React\Promise\Deferred;
-use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\AnonymousObservable;
 use Rx\Observable;
-use Rx\Observable\EmptyObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\React\Promise;
-use Rx\Subject\Subject;
+use Rx\Testing\MockObserver;
 
 class PromiseToObservableTest extends FunctionalTestCase
 {
@@ -61,5 +58,151 @@ class PromiseToObservableTest extends FunctionalTestCase
               $this->assertFalse(true);
           }));
 
+    }
+
+    /**
+     * @test
+     */
+    public function to_observable_cancels_on_dispose()
+    {
+        $canceled = false;
+
+        $deferred = new Deferred(function () use (&$canceled) {
+            $canceled = true;
+        });
+
+        $o = Promise::toObservable($deferred->promise());
+
+        $this->scheduler->schedule(function () use ($deferred) {
+            $deferred->resolve(1);
+        }, 300);
+        
+        $results = $this->scheduler->startWithDispose(function () use ($o) {
+            // adding the merge causes 2 subscriptions to test that the count
+            // of cancels works correctly through disposal
+            return $o->merge($o);
+        }, 250);
+        
+        $this->assertMessages([
+            
+        ], $results->getMessages());
+        
+        $this->assertTrue($canceled);
+    }
+    
+    /**
+     * @test
+     */
+    public function two_observables_one_delayed()
+    {
+        $canceled = false;
+        
+        $deferred = new Deferred(function () use (&$canceled) {
+            $canceled = true;
+        });
+        
+        $o1 = Promise::toObservable($deferred->promise());
+        $o2 = Promise::toObservable($deferred->promise())->delay(200);
+        
+        $deferred->resolve(1);
+        
+        $results1 = new MockObserver($this->scheduler);
+        
+        $o1->subscribe($results1, $this->scheduler);
+        
+        $results2 = new MockObserver($this->scheduler);
+        $o2->subscribe($results2, $this->scheduler);
+
+        $this->scheduler->start();
+        
+        $this->assertMessages([
+            onNext(0, 1),
+            onCompleted(0)
+        ], $results1->getMessages());
+
+        $this->assertMessages([
+            onNext(200, 1),
+            onCompleted(200)
+        ], $results2->getMessages());
+        
+        $this->assertFalse($canceled);
+    }
+
+    /**
+     * @test
+     */
+    public function two_observables_one_disposed_before_resolve()
+    {
+        $canceled = false;
+
+        $deferred = new Deferred(function () use (&$canceled) {
+            $canceled = true;
+        });
+
+        $o1 = Promise::toObservable($deferred->promise());
+        $o2 = Promise::toObservable($deferred->promise())->delay(100);
+
+        $this->scheduler->schedule(function () use ($deferred) {
+            $deferred->resolve(1);
+        }, 100);
+        
+
+        $results1 = new MockObserver($this->scheduler);
+
+        $s1 = $o1->subscribe($results1, $this->scheduler);
+        
+        $this->scheduler->schedule(function () use ($s1) {
+            $s1->dispose();
+        }, 50);
+
+        $results2 = new MockObserver($this->scheduler);
+        $o2->subscribe($results2, $this->scheduler);
+
+        $this->scheduler->start();
+
+        $this->assertMessages([
+        ], $results1->getMessages());
+
+        $this->assertMessages([
+            onNext(200, 1),
+            onCompleted(200)
+        ], $results2->getMessages());
+        
+        $this->assertFalse($canceled);
+    }
+    
+    /**
+     * @test
+     */
+    public function observable_dispose_after_complete()
+    {
+        $canceled = false;
+
+        $deferred = new Deferred(function () use (&$canceled) {
+            $canceled = true;
+        });
+
+        $o = Promise::toObservable($deferred->promise());
+        
+        $this->scheduler->schedule(function () use ($deferred) {
+            $deferred->resolve(1);
+        }, 200);
+        
+        $results = new MockObserver($this->scheduler);
+
+        $s = $o->subscribe($results, $this->scheduler);
+
+        $this->scheduler->schedule(function () use ($s) {
+            $s->dispose();
+        }, 250);
+        
+        $this->scheduler->start();
+
+        $this->assertMessages([
+            onNext(200, 1),
+            onCompleted(200)
+        ], $results->getMessages());
+        
+        $this->assertFalse($canceled);
     }
 }
