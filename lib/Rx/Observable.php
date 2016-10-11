@@ -57,6 +57,7 @@ use Rx\Operator\TakeLastOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
 use Rx\Operator\TakeWhileOperator;
+use Rx\Operator\ThrottleOperator;
 use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
@@ -1769,6 +1770,24 @@ class Observable implements ObservableInterface
             }
 
             throw new \Exception('Unable to pluck "' . $property . '"');
+        });
+    }
+
+    /**
+     * Returns an Observable that emits only the first item emitted by the source Observable during
+     * sequential time windows of a specified duration.
+     *
+     * If items are emitted on the source observable prior to the expiration of the time period,
+     * the last item emitted on the source observable will be emitted.
+     *
+     * @param $throttleDuration
+     * @param null $scheduler
+     * @return AnonymousObservable
+     */
+    public function throttle($throttleDuration, $scheduler = null)
+    {
+        return $this->lift(function () use ($throttleDuration, $scheduler) {
+            return new ThrottleOperator($throttleDuration, $scheduler);
         });
     }
 }
