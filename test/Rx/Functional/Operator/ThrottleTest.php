@@ -2,8 +2,11 @@
 
 namespace Rx\Functional\Operator;
 
+use Rx\Disposable\EmptyDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
+use Rx\SchedulerInterface;
 
 class ThrottleTest extends FunctionalTestCase
 {
@@ -260,5 +263,20 @@ class ThrottleTest extends FunctionalTestCase
         $this->assertSubscriptions([
             subscribe(200, 1000)
         ], $xs->getSubscriptions());
+    }
+    
+    /**
+     * @test
+     */
+    public function throttle_scheduler_overrides_subscribe_scheduler()
+    {
+        $scheduler = $this->createMock(SchedulerInterface::class);
+        $scheduler->expects($this->any())
+            ->method('schedule')
+            ->willReturn(new EmptyDisposable());
+        
+        Observable::just(1)
+            ->throttle(100, $scheduler)
+            ->subscribeCallback(null, null, null, new ImmediateScheduler());
     }
 }

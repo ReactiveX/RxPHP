@@ -1783,6 +1783,10 @@ class Observable implements ObservableInterface
      * @param $throttleDuration
      * @param null $scheduler
      * @return AnonymousObservable
+     *
+     * @demo throttle/throttle.php
+     * @operator
+     * @reactivex debounce
      */
     public function throttle($throttleDuration, $scheduler = null)
     {

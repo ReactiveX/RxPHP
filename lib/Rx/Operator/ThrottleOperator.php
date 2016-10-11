@@ -45,9 +45,6 @@ class ThrottleOperator implements OperatorInterface
         if ($this->scheduler !== null) {
             $scheduler = $this->scheduler;
         }
-        if ($scheduler === null) {
-            throw new \Exception("You must use a scheduler that support non-zero delay.");
-        }
 
         $innerDisp = new SerialDisposable();
         
