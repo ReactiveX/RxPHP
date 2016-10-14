@@ -109,4 +109,24 @@ class EventLoopSchedulerTest extends TestCase
         
         $this->assertEquals([2], $calls);
     }
+
+    public function testSchedulerWorkedWithScheduledEventOutsideItself()
+    {
+        $loop         = Factory::create();
+        $scheduler    = new EventLoopScheduler($loop);
+
+        $scheduler->start();
+        $start = microtime(true);
+        $called = null;
+
+        $loop->addTimer(0.1, function () use ($scheduler, &$called) {
+            $scheduler->schedule(function () use (&$called) {
+                $called = microtime(true);
+            }, 100);
+        });
+
+        $loop->run();
+
+        $this->assertEquals(0.2, $called-$start, '', 0.02);
+    }
 }
