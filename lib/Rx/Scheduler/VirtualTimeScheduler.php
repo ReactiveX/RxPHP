@@ -93,7 +93,7 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function scheduleRelativeWithState($state, $dueTime, $action)
     {
-        $runAt = $this->clock + $dueTime;
+        $runAt = $this->now() + $dueTime;
 
         return $this->scheduleAbsoluteWithState($state, $runAt, $action);
     }
