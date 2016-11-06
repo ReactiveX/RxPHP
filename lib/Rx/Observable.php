@@ -210,27 +210,26 @@ class Observable implements ObservableInterface
      */
     public function merge(ObservableInterface $otherObservable)
     {
-        return self::mergeAll(new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($otherObservable) {
+        return (new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($otherObservable) {
             $observer->onNext($this);
             $observer->onNext($otherObservable);
             $observer->onCompleted();
-        }));
+        }))->mergeAll();
     }
 
     /**
      * Merges an observable sequence of observables into an observable sequence.
      *
-     * @param ObservableInterface $sources
      * @return AnonymousObservable
      *
      * @demo merge/merge-all.php
      * @operator
      * @reactivex merge
      */
-    public static function mergeAll(ObservableInterface $sources)
+    public function mergeAll()
     {
-        return (new EmptyObservable())->lift(function () use ($sources) {
-            return new MergeAllOperator($sources);
+        return $this->lift(function () {
+            return new MergeAllOperator($this);
         });
     }
 
@@ -456,7 +455,7 @@ class Observable implements ObservableInterface
      */
     public function flatMap(callable $selector)
     {
-        return self::mergeAll($this->select($selector));
+        return $this->map($selector)->mergeAll();
     }
 
     /**
