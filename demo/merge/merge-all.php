@@ -10,7 +10,7 @@ $sources = Rx\Observable::range(0, 3)
         return Rx\Observable::range($x, 3);
     });
 
-$merged = \Rx\Observable::mergeAll($sources);
+$merged = $sources->mergeAll();
 
 $disposable = $merged->subscribe($stdoutObserver, $scheduler);
 

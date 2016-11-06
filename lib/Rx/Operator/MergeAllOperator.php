@@ -11,15 +11,6 @@ use Rx\SchedulerInterface;
 
 class MergeAllOperator implements OperatorInterface
 {
-    /**
-     * @var ObservableInterface
-     */
-    private $sources;
-
-    public function __construct(ObservableInterface $sources)
-    {
-        $this->sources = $sources;
-    }
 
     /**
      * @param \Rx\ObservableInterface $observable
@@ -67,7 +58,7 @@ class MergeAllOperator implements OperatorInterface
             }
         );
 
-        $subscription = $this->sources->subscribe($callbackObserver, $scheduler);
+        $subscription = $observable->subscribe($callbackObserver, $scheduler);
 
         $sourceSubscription->setDisposable($subscription);
 
