@@ -228,6 +228,16 @@ class Observable implements ObservableInterface
      */
     public function mergeAll()
     {
+        /**
+         * Calling 'Observable::mergeAll' statically has been deprecated and will be removed in the next release
+         * This is only here for backwards compatibility.
+         **/
+        $static = !(isset($this) && get_class($this) == __CLASS__);
+        $args   = func_get_args();
+        if ($static && isset($args[0]) && $args[0] instanceof Observable) {
+            return $args[0]->mergeAll();
+        }
+
         return $this->lift(function () {
             return new MergeAllOperator($this);
         });
