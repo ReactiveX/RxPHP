@@ -28,7 +28,7 @@ class MergeAllTest extends FunctionalTestCase
         ));
 
         $results = $this->scheduler->startWithCreate(function() use ($ys) {
-            return Observable::mergeAll($ys);
+            return $ys->mergeAll();
         });
 
         $this->assertMessages(array(
@@ -50,7 +50,7 @@ class MergeAllTest extends FunctionalTestCase
         ));
 
         $results = $this->scheduler->startWithCreate(function() use ($ys) {
-            return Observable::mergeAll($ys);
+            return $ys->mergeAll();
         });
 
         $this->assertMessages(array(

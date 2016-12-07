@@ -57,6 +57,7 @@ use Rx\Operator\TakeLastOperator;
 use Rx\Operator\TakeOperator;
 use Rx\Operator\TakeUntilOperator;
 use Rx\Operator\TakeWhileOperator;
+use Rx\Operator\ThrottleOperator;
 use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
@@ -208,27 +209,26 @@ class Observable implements ObservableInterface
      */
     public function merge(ObservableInterface $otherObservable)
     {
-        return self::mergeAll(new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($otherObservable) {
+        return (new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($otherObservable) {
             $observer->onNext($this);
             $observer->onNext($otherObservable);
             $observer->onCompleted();
-        }));
+        }))->mergeAll();
     }
 
     /**
      * Merges an observable sequence of observables into an observable sequence.
      *
-     * @param ObservableInterface $sources
      * @return AnonymousObservable
      *
      * @demo merge/merge-all.php
      * @operator
      * @reactivex merge
      */
-    public static function mergeAll(ObservableInterface $sources)
+    public function mergeAll()
     {
-        return (new EmptyObservable())->lift(function () use ($sources) {
-            return new MergeAllOperator($sources);
+        return $this->lift(function () {
+            return new MergeAllOperator($this);
         });
     }
 
@@ -437,7 +437,7 @@ class Observable implements ObservableInterface
      */
     public function flatMap(callable $selector)
     {
-        return self::mergeAll($this->select($selector));
+        return $this->map($selector)->mergeAll();
     }
 
     /**
@@ -1786,6 +1786,28 @@ class Observable implements ObservableInterface
             }
 
             throw new \Exception('Unable to pluck "' . $property . '"');
+        });
+    }
+
+    /**
+     * Returns an Observable that emits only the first item emitted by the source Observable during
+     * sequential time windows of a specified duration.
+     *
+     * If items are emitted on the source observable prior to the expiration of the time period,
+     * the last item emitted on the source observable will be emitted.
+     *
+     * @param $throttleDuration
+     * @param null $scheduler
+     * @return AnonymousObservable
+     *
+     * @demo throttle/throttle.php
+     * @operator
+     * @reactivex debounce
+     */
+    public function throttle($throttleDuration, $scheduler = null)
+    {
+        return $this->lift(function () use ($throttleDuration, $scheduler) {
+            return new ThrottleOperator($throttleDuration, $scheduler);
         });
     }
 }
