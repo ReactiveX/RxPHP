@@ -712,6 +712,23 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * This method allows the use of custom operators by adding an operator class
+     * with the namespace format: Rx\Custom\Operator\OperatorNameOperator
+     *
+     * @param $name
+     * @param $arguments
+     * @return Observable
+     */
+    public function __call($name, $arguments)
+    {
+        $className = 'Rx\Custom\Operator\\' . ucfirst($name) . 'Operator';
+
+        return $this->lift(function () use ($className, $arguments) {
+            return (new \ReflectionClass($className))->newInstanceArgs($arguments);
+        });
+    }
+
+    /**
      * Applies an accumulator function over an observable sequence,
      * returning the result of the aggregation as a single element in the result sequence.
      * The specified seed value is used as the initial accumulator value.

@@ -2,12 +2,14 @@
 
 namespace Rx\React;
 
+use React\Promise\CancellablePromiseInterface;
+use Rx\Disposable\CallbackDisposable;
 use Rx\ObservableInterface;
 use Rx\Observable;
+use Rx\Observable\AnonymousObservable;
 use Rx\Observer\CallbackObserver;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
-use React\Promise\PromiseInterface;
 
 final class Promise
 {
@@ -62,28 +64,30 @@ final class Promise
     /**
      * Converts a Promise to an Observable sequence
      *
-     * @param \React\Promise\PromiseInterface $promise
-     * @return \Rx\Observable\AnonymousObservable
+     * @param CancellablePromiseInterface $promise
+     * @return Observable\AnonymousObservable
      */
-    public static function toObservable(PromiseInterface $promise)
+    public static function toObservable(CancellablePromiseInterface $promise)
     {
-        return Observable::defer(
-            function () use ($promise) {
-                $subject = new AsyncSubject();
+        $subject = new AsyncSubject();
 
-                $promise->then(
-                    function ($value) use ($subject) {
-                        $subject->onNext($value);
-                        $subject->onCompleted();
-                    },
-                    function ($error) use ($subject) {
-                        $error = $error instanceof \Exception ? $error : new RejectedPromiseException($error);
-                        $subject->onError($error);
-                    }
-                );
-
-                return $subject;
+        $p = $promise->then(
+            function ($value) use ($subject) {
+                $subject->onNext($value);
+                $subject->onCompleted();
+            },
+            function ($error) use ($subject) {
+                $error = $error instanceof \Exception ? $error : new RejectedPromiseException($error);
+                $subject->onError($error);
             }
         );
+
+        return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $p) {
+            $disp = $subject->subscribe($observer, $scheduler);
+            return new CallbackDisposable(function () use ($p, $disp) {
+                $disp->dispose();
+                $p->cancel();
+            });
+        });
     }
 }
