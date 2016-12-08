@@ -41,7 +41,7 @@ final class Promise
      *
      * @param ObservableInterface $observable
      * @param \React\Promise\PromisorInterface|null $deferred
-     * @param SchedulerInterface $scheduler
+     * @param SchedulerInterface|null $scheduler
      * @return \React\Promise\Promise
      */
     public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null, $scheduler = null)
