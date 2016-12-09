@@ -8,6 +8,7 @@ use Rx\ObservableInterface;
 use Rx\Observable;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observer\CallbackObserver;
+use Rx\SchedulerInterface;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
 
@@ -38,10 +39,12 @@ final class Promise
     /**
      * Converts an existing observable sequence to React Promise
      *
-     * @param PromisorInterface|null $deferred
+     * @param ObservableInterface $observable
+     * @param \React\Promise\PromisorInterface|null $deferred
+     * @param SchedulerInterface|null $scheduler
      * @return \React\Promise\Promise
      */
-    public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null)
+    public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null, $scheduler = null)
     {
         $d     = $deferred ?: new Deferred();
         $value = null;
@@ -56,7 +59,7 @@ final class Promise
             function () use ($d, &$value) {
                 $d->resolve($value);
             }
-        ));
+        ), $scheduler);
 
         return $d->promise();
     }

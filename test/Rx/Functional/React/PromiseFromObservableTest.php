@@ -39,6 +39,33 @@ class PromiseFromObservableTest extends FunctionalTestCase
      * @test
      *
      */
+    public function promise_success_scheduler()
+    {
+
+        $scheduler = $this->createTestScheduler();
+        $observer = $scheduler->createObserver();
+
+        $scheduler->scheduleAbsoluteWithState(null, 200, function($scheduler) use ($observer) {
+            $source = Observable::just(42)->delay(100);
+            $promise = Promise::fromObservable($source, null, $scheduler);
+
+            $promise->then(function($value) use ($observer) {
+                $observer->onNext($value);
+            });
+        });
+
+        $scheduler->start();
+
+        $this->assertMessages([
+            onNext(301, 42),
+        ], $observer->getMessages());
+
+    }
+
+    /**
+     * @test
+     *
+     */
     public function promise_failure()
     {
 
