@@ -2,9 +2,8 @@
 
 namespace Rx\Functional\Observable;
 
-
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable;
+use Rx\Observable\IteratorObservable;
 
 class IteratorObservableTest extends FunctionalTestCase
 {
@@ -15,7 +14,7 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         $generator = $this->genOneToThree();
 
-        $xs = new \Rx\Observable\IteratorObservable($generator);
+        $xs = new IteratorObservable($generator);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -36,7 +35,7 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         $generator = $this->genNull();
 
-        $xs = new \Rx\Observable\IteratorObservable($generator);
+        $xs = new IteratorObservable($generator);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -55,14 +54,14 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         $generator = $this->genOne();
 
-        $xs = new \Rx\Observable\IteratorObservable($generator);
+        $xs = new IteratorObservable($generator);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
         });
 
         $this->assertMessages([
-            onNext(201, 1),
+            onNext(200, 1),
             onCompleted(202),
         ], $results->getMessages());
     }
@@ -75,7 +74,7 @@ class IteratorObservableTest extends FunctionalTestCase
         $error     = new \Exception();
         $generator = $this->genError($error);
 
-        $xs = new \Rx\Observable\IteratorObservable($generator);
+        $xs = new IteratorObservable($generator);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -93,7 +92,7 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         $generator = $this->genOneToThree();
 
-        $xs = new \Rx\Observable\IteratorObservable($generator);
+        $xs = new IteratorObservable($generator);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs;

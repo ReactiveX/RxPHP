@@ -132,7 +132,7 @@ class RepeatTest extends FunctionalTestCase
 
         $xs->subscribe(new CallbackObserver(
             function ($x) {
-                throw new \Exception;
+                throw new \Exception();
             }
         ), $scheduler1);
 
@@ -151,7 +151,7 @@ class RepeatTest extends FunctionalTestCase
         $xs->subscribe(new CallbackObserver(
             null,
             function ($x) {
-                throw new \Exception;
+                throw new \Exception();
             }
         ), $scheduler2);
 
@@ -367,12 +367,12 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_repeat_count_throws_2()
     {
         $scheduler2 = new TestScheduler();
-        $xs = (new ErrorObservable(new \Exception("from ErrorObservable")))->repeat(3);
+        $xs = (new ErrorObservable(new \Exception('from ErrorObservable')))->repeat(3);
 
         $xs->subscribe(new CallbackObserver(
             null,
             function ($x) {
-                throw new \Exception("from onError");
+                throw new \Exception('from onError');
             }
         ), $scheduler2);
 
@@ -392,7 +392,7 @@ class RepeatTest extends FunctionalTestCase
             null,
             null,
             function () {
-                throw new \Exception("from onCompleted");
+                throw new \Exception('from onCompleted');
             }
         ), $scheduler3);
 
@@ -407,7 +407,7 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_repeat_count_throws_4()
     {
         $xss = (new AnonymousObservable(function () {
-            throw new \Exception("from Anon");
+            throw new \Exception('from Anon');
         }))->repeat(3);
 
         $xss->subscribe(new CallbackObserver());

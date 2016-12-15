@@ -2,9 +2,6 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop      = \React\EventLoop\Factory::create();
-$scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
-
 $source = Rx\Observable::race(
     [
         Rx\Observable::timer(500)->map(function () {
@@ -16,6 +13,4 @@ $source = Rx\Observable::race(
     ]
 );
 
-$source->subscribe($stdoutObserver, $scheduler);
-
-$loop->run();
+$source->subscribe($stdoutObserver);

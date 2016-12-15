@@ -1,0 +1,15 @@
+<?php
+
+namespace Rx\Operator;
+
+use Rx\DisposableInterface;
+use Rx\ObservableInterface;
+use Rx\ObserverInterface;
+
+class AsObservableOperator implements OperatorInterface
+{
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
+    {
+        return $observable->subscribe($observer);
+    }
+}

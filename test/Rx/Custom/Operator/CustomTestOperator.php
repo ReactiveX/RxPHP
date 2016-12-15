@@ -2,11 +2,10 @@
 
 namespace Rx\Custom\Operator;
 
-use Rx\Observable;
+use Rx\DisposableInterface;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Operator\OperatorInterface;
-use Rx\SchedulerInterface;
 
 class CustomTestOperator implements OperatorInterface
 {
@@ -17,16 +16,10 @@ class CustomTestOperator implements OperatorInterface
         $this->mapTo = $mapTo;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(
-        ObservableInterface $observable,
-        ObserverInterface $observer,
-        SchedulerInterface $scheduler = null
-    ) {
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
+    {
         return $observable
             ->mapTo($this->mapTo)
-            ->subscribe($observer, $scheduler);
+            ->subscribe($observer);
     }
 }

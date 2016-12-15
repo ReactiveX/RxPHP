@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "php": "~5.5|~7.0",
+        "php": "~7.1",
         "wyrihaximus/react-async-interop-loop": "dev-master"
     },
     "require-dev": {
@@ -35,7 +35,7 @@
         "react/promise": "For converting promises to and from observables."
     },
     "autoload": {
-        "psr-4": { "Rx\\": "lib/Rx" }
+        "psr-4": { "Rx\\": "src" }
     },
     "extra": {
         "branch-alias": {

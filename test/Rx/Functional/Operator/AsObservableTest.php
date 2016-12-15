@@ -140,7 +140,7 @@ class AsObservableTest extends FunctionalTestCase
         $scheduler = new EventLoopScheduler($loop);
 
         $gotValue = false;
-        Observable::interval(10 /*will throw if it doesn't get passed the event loop scheduler*/)
+        Observable::interval(10, $scheduler)
             ->asObservable()
             ->take(1)
             ->subscribe(new CallbackObserver(
@@ -148,7 +148,7 @@ class AsObservableTest extends FunctionalTestCase
                     $this->assertEquals(0, $x);
                     $gotValue = true;
                 }
-            ), $scheduler);
+            ));
 
         $loop->run();
 

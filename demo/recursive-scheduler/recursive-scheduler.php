@@ -16,23 +16,20 @@ class RecursiveReturnObservable extends Observable
         $this->value = $value;
     }
 
-    public function subscribe(\Rx\ObserverInterface $observer, $scheduler = null)
+    public function subscribe(\Rx\ObserverInterface $observer): \Rx\DisposableInterface
     {
-        return $scheduler->scheduleRecursive(function ($reschedule) use ($observer) {
+        return \Rx\Scheduler::getDefault()->scheduleRecursive(function ($reschedule) use ($observer) {
             $observer->onNext($this->value);
             $reschedule();
         });
     }
 }
 
-$loop      = React\EventLoop\Factory::create();
-$scheduler = new Rx\Scheduler\EventLoopScheduler($loop);
-
 $observable = new RecursiveReturnObservable(42);
-$observable->subscribe($stdoutObserver, $scheduler);
+$observable->subscribe($stdoutObserver);
 
 $observable = new RecursiveReturnObservable(21);
-$disposable = $observable->subscribe($stdoutObserver, $scheduler);
+$disposable = $observable->subscribe($stdoutObserver);
 
 $loop->addPeriodicTimer(0.01, function () {
     $memory    = memory_get_usage() / 1024;
@@ -45,8 +42,6 @@ $loop->addTimer(1.0, function () use ($disposable) {
     echo "Disposing 21 observable.\n";
     $disposable->dispose();
 });
-
-$loop->run();
 
 
 // After one second...
