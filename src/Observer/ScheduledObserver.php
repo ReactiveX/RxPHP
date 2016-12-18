@@ -40,28 +40,28 @@ class ScheduledObserver extends AbstractObserver
     }
 
 
-    protected function completed(): void
+    protected function completed()
     {
         $this->queue[] = function () {
             $this->observer->onCompleted();
         };
     }
 
-    protected function next($value): void
+    protected function next($value)
     {
         $this->queue[] = function () use ($value) {
             $this->observer->onNext($value);
         };
     }
 
-    protected function error(Exception $error): void
+    protected function error(Exception $error)
     {
         $this->queue[] = function () use ($error) {
             $this->observer->onError($error);
         };
     }
 
-    public function ensureActive(): void
+    public function ensureActive()
     {
         $isOwner = false;
         if (!$this->hasFaulted && count($this->queue) > 0) {
@@ -103,7 +103,7 @@ class ScheduledObserver extends AbstractObserver
         );
     }
 
-    public function dispose(): void
+    public function dispose()
     {
         $this->disposable->dispose();
     }

@@ -18,14 +18,14 @@ class AutoDetachObserver extends AbstractObserver
         $this->disposable = new SingleAssignmentDisposable();
     }
 
-    public function setDisposable(DisposableInterface $disposable = null): void
+    public function setDisposable(DisposableInterface $disposable = null)
     {
         $disposable = $disposable ?: new EmptyDisposable();
 
         $this->disposable->setDisposable($disposable);
     }
 
-    protected function completed(): void
+    protected function completed()
     {
         try {
             $this->observer->onCompleted();
@@ -36,7 +36,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    protected function error(Exception $exception): void
+    protected function error(Exception $exception)
     {
         try {
             $this->observer->onError($exception);
@@ -47,7 +47,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    protected function next($value): void
+    protected function next($value)
     {
         try {
             $this->observer->onNext($value);
@@ -57,7 +57,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    public function dispose(): void
+    public function dispose()
     {
         $this->disposable->dispose();
     }

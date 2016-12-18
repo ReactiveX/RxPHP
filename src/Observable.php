@@ -146,29 +146,31 @@ class Observable implements ObservableInterface
      * Returns an observable sequence that contains a single element.
      *
      * @param mixed $value Single element in the resulting observable sequence.
+     * @param SchedulerInterface $scheduler
      * @return ReturnObservable An observable sequence with the single element.
      *
      * @demo just/just.php
      * @operator
      * @reactivex just
      */
-    public static function just($value): ReturnObservable
+    public static function just($value, SchedulerInterface $scheduler = null): ReturnObservable
     {
-        return new ReturnObservable($value);
+        return new ReturnObservable($value, $scheduler);
     }
 
     /**
      * Returns an empty observable sequence.
      *
+     * @param SchedulerInterface $scheduler
      * @return EmptyObservable An observable sequence with no elements.
      *
      * @demo empty-observable/empty-observable.php
      * @operator
      * @reactivex empty-never-throw
      */
-    public static function emptyObservable(): EmptyObservable
+    public static function emptyObservable(SchedulerInterface $scheduler = null): EmptyObservable
     {
-        return new EmptyObservable();
+        return new EmptyObservable($scheduler);
     }
 
     /**
@@ -188,16 +190,17 @@ class Observable implements ObservableInterface
     /**
      * Returns an observable sequence that terminates with an exception.
      *
-     * @param $error
+     * @param \Exception $error
+     * @param SchedulerInterface $scheduler
      * @return ErrorObservable The observable sequence that terminates exceptionally with the specified exception object.
      *
      * @demo error-observable/error-observable.php
      * @operator
      * @reactivex empty-never-throw
      */
-    public static function error(\Exception $error): ErrorObservable
+    public static function error(\Exception $error, SchedulerInterface $scheduler = null): ErrorObservable
     {
-        return new ErrorObservable($error);
+        return new ErrorObservable($error, $scheduler);
     }
 
     /**
@@ -212,7 +215,7 @@ class Observable implements ObservableInterface
      */
     public function merge(ObservableInterface $otherObservable)
     {
-        return (new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($otherObservable) {
+        return (new AnonymousObservable(function (ObserverInterface $observer) use ($otherObservable) {
             $observer->onNext($this);
             $observer->onNext($otherObservable);
             $observer->onCompleted();
@@ -296,7 +299,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex range
      */
-    public static function range($start, $count, SchedulerInterface $scheduler = null): RangeObservable
+    public static function range(int $start, int $count, SchedulerInterface $scheduler = null): RangeObservable
     {
         return new RangeObservable($start, $count, $scheduler);
     }
@@ -710,9 +713,9 @@ class Observable implements ObservableInterface
      */
     public function lift(callable $operatorFactory)
     {
-        return new AnonymousObservable(function (ObserverInterface $observer, SchedulerInterface $schedule) use ($operatorFactory) {
+        return new AnonymousObservable(function (ObserverInterface $observer) use ($operatorFactory) {
             $operator = $operatorFactory();
-            return $operator($this, $observer, $schedule);
+            return $operator($this, $observer);
         });
     }
 
@@ -994,7 +997,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex timer
      */
-    public static function timer($dueTime, SchedulerInterface $scheduler = null)
+    public static function timer(int $dueTime, SchedulerInterface $scheduler = null)
     {
         return new TimerObservable($dueTime, $scheduler);
     }
@@ -1466,7 +1469,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex delay
      */
-    public function delay($delay, $scheduler = null)
+    public function delay(int $delay, SchedulerInterface $scheduler = null)
     {
         return $this->lift(function () use ($delay, $scheduler) {
             return new DelayOperator($delay, $scheduler);
@@ -1483,7 +1486,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex timeout
      */
-    public function timeout($timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null)
+    public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null)
     {
         return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
             return new TimeoutOperator($timeout, $timeoutObservable, $scheduler);
@@ -1531,31 +1534,33 @@ class Observable implements ObservableInterface
      * Prepends a value to an observable sequence with an argument of a signal value to prepend.
      *
      * @param mixed $startValue
+     * @param SchedulerInterface $scheduler
      * @return AnonymousObservable
      *
      * @demo startWith/startWith.php
      * @operator
      * @reactivex startwith
      */
-    public function startWith($startValue)
+    public function startWith($startValue, SchedulerInterface $scheduler = null)
     {
-        return $this->startWithArray([$startValue]);
+        return $this->startWithArray([$startValue], $scheduler);
     }
 
     /**
      * Prepends a sequence of values to an observable sequence with an argument of an array of values to prepend.
      *
      * @param array $startArray
+     * @param SchedulerInterface $scheduler
      * @return AnonymousObservable
      *
      * @demo startWith/startWithArray.php
      * @operator
      * @reactivex startwith
      */
-    public function startWithArray(array $startArray)
+    public function startWithArray(array $startArray, SchedulerInterface $scheduler = null)
     {
-        return $this->lift(function () use ($startArray) {
-            return new StartWithArrayOperator($startArray);
+        return $this->lift(function () use ($startArray, $scheduler) {
+            return new StartWithArrayOperator($startArray, $scheduler);
         });
     }
 
@@ -1712,19 +1717,19 @@ class Observable implements ObservableInterface
      * Propagates the observable sequence that reacts first.  Also known as 'amb'.
      *
      * @param AnonymousObservable[] $observables
+     * @param SchedulerInterface $scheduler
      * @return AnonymousObservable
-     *
      * @demo race/race.php
      * @operator
      * @reactivex amb
      */
-    public static function race(array $observables)
+    public static function race(array $observables, SchedulerInterface $scheduler = null)
     {
         if (count($observables) === 1) {
             return $observables[0];
         }
 
-        return (new ArrayObservable($observables))->lift(function () {
+        return (new ArrayObservable($observables, $scheduler))->lift(function () {
             return new RaceOperator();
         });
     }
@@ -1810,7 +1815,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex debounce
      */
-    public function throttle($throttleDuration, $scheduler = null)
+    public function throttle(int $throttleDuration, $scheduler = null)
     {
         return $this->lift(function () use ($throttleDuration, $scheduler) {
             return new ThrottleOperator($throttleDuration, $scheduler);

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
@@ -271,7 +270,7 @@ class ConcatTest extends FunctionalTestCase
             onCompleted(50)
         ]);
         $results = $this->scheduler->startWithCreate(function () use ($xs1, $xs2, $xs3) {
-            return (new EmptyObservable())->concat($xs1)->concat($xs2)->concat($xs3);
+            return (new EmptyObservable($this->scheduler))->concat($xs1)->concat($xs2)->concat($xs3);
         });
 
         // Note: these tests differ from the RxJS tests that they were based on because RxJS was
@@ -297,7 +296,6 @@ class ConcatTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(271, 321)], $xs3->getSubscriptions());
 
     }
-
 
     public function testConcatAll()
     {

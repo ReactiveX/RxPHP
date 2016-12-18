@@ -16,16 +16,14 @@ class TimeoutOperator implements OperatorInterface
 {
     private $timeout;
 
-    /** @var SchedulerInterface */
     private $scheduler;
 
-    /** @var ObservableInterface */
     private $timeoutObservable;
 
     public function __construct(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null)
     {
         $this->timeout           = $timeout;
-        $this->scheduler         = $scheduler;
+        $this->scheduler         = $scheduler ?: Scheduler::getAsync();
         $this->timeoutObservable = $timeoutObservable;
 
         if ($this->timeoutObservable === null) {
@@ -38,8 +36,6 @@ class TimeoutOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $scheduler = $this->scheduler ?? Scheduler::getAsync();
-
         $disposable = new CompositeDisposable();
 
         $sourceDisposable = new EmptyDisposable();
@@ -50,14 +46,14 @@ class TimeoutOperator implements OperatorInterface
             $disposable->add($this->timeoutObservable->subscribe($observer));
         };
 
-        $doTimeoutDisposable = $scheduler->schedule($doTimeout, $this->timeout);
+        $doTimeoutDisposable = $this->scheduler->schedule($doTimeout, $this->timeout);
         $disposable->add($doTimeoutDisposable);
 
-        $rescheduleTimeout = function () use ($disposable, &$doTimeoutDisposable, $scheduler, $doTimeout) {
+        $rescheduleTimeout = function () use ($disposable, &$doTimeoutDisposable, $doTimeout) {
             $disposable->remove($doTimeoutDisposable);
             $doTimeoutDisposable->dispose();
 
-            $doTimeoutDisposable = $scheduler->schedule($doTimeout, $this->timeout);
+            $doTimeoutDisposable = $this->scheduler->schedule($doTimeout, $this->timeout);
             $disposable->add($doTimeoutDisposable);
         };
 

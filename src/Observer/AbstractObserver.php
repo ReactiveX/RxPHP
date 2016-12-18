@@ -9,7 +9,7 @@ abstract class AbstractObserver implements ObserverInterface
 {
     private $isStopped = false;
 
-    public function onCompleted(): void
+    public function onCompleted()
     {
         if ($this->isStopped) {
             return;
@@ -19,7 +19,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->completed();
     }
 
-    public function onError(Exception $error): void
+    public function onError(Exception $error)
     {
         if ($this->isStopped) {
             return;
@@ -29,7 +29,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->error($error);
     }
 
-    public function onNext($value): void
+    public function onNext($value)
     {
         if ($this->isStopped) {
             return;

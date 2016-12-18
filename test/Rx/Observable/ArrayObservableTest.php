@@ -53,6 +53,6 @@ class ArrayObservableTest extends \PHPUnit_Framework_TestCase
         $isCalled = false;
         $observable->subscribeCallback(null, null, function() use (&$isCalled) { $isCalled = true; });
 
-        $this->assertTrue($isCalled, "onComplete should be called.");
+        $this->assertTrue($isCalled, 'onComplete should be called.');
     }
 }

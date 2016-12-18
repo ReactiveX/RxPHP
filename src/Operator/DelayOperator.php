@@ -31,30 +31,28 @@ class DelayOperator implements OperatorInterface
     {
         $this->delayTime = $delayTime;
         $this->queue     = new \SplQueue();
-        $this->scheduler = $scheduler;
+        $this->scheduler = $scheduler ?: Scheduler::getAsync();
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $scheduler = $this->scheduler ?? Scheduler::getAsync();
-
         /** @var AnonymousObservable $observable */
         $disp = $observable
             ->materialize()
-            ->timestamp()
+            ->timestamp($this->scheduler)
             ->map(function (Timestamped $x) {
                 return new Timestamped($x->getTimestampMillis() + $this->delayTime, $x->getValue());
             })
             ->subscribe(new CallbackObserver(
-                function (Timestamped $x) use ($scheduler, $observer) {
+                function (Timestamped $x) use ($observer) {
                     if ($x->getValue() instanceof Notification\OnErrorNotification) {
                         $x->getValue()->accept($observer);
                         return;
                     }
                     $this->queue->enqueue($x);
                     if ($this->schedulerDisposable === null) {
-                        $doScheduledStuff = function () use ($observer, $scheduler, &$doScheduledStuff) {
-                            while ((!$this->queue->isEmpty()) && $scheduler->now() >= $this->queue->bottom()->getTimestampMillis()) {
+                        $doScheduledStuff = function () use ($observer, &$doScheduledStuff) {
+                            while ((!$this->queue->isEmpty()) && $this->scheduler->now() >= $this->queue->bottom()->getTimestampMillis()) {
                                 /** @var Timestamped $item */
                                 $item = $this->queue->dequeue();
                                 /** @var Notification $materializedValue */
@@ -66,9 +64,9 @@ class DelayOperator implements OperatorInterface
                                 $this->schedulerDisposable = null;
                                 return;
                             }
-                            $this->schedulerDisposable = $scheduler->schedule(
+                            $this->schedulerDisposable = $this->scheduler->schedule(
                                 $doScheduledStuff,
-                                $this->queue->bottom()->getTimestampMillis() - $scheduler->now()
+                                $this->queue->bottom()->getTimestampMillis() - $this->scheduler->now()
                             );
                         };
 

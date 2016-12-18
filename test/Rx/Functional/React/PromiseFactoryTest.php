@@ -4,7 +4,6 @@ namespace Rx\Functional\React;
 
 use Exception;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable;
 use Rx\React\Promise;
 use Rx\React\PromiseFactory;
 use Rx\React\RejectedPromiseException;

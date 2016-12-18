@@ -34,7 +34,7 @@ class AsyncSubject extends Subject
     /**
      * @param $value
      */
-    public function onNext($value): void
+    public function onNext($value)
     {
 
         $this->assertNotDisposed();
@@ -47,7 +47,7 @@ class AsyncSubject extends Subject
         $this->valueSet = true;
     }
 
-    public function onCompleted(): void
+    public function onCompleted()
     {
         if ($this->valueSet) {
             parent::onNext($this->value);
@@ -82,7 +82,7 @@ class AsyncSubject extends Subject
 
     }
 
-    public function dispose(): void
+    public function dispose()
     {
         parent::dispose();
 

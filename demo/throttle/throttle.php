@@ -1,20 +1,15 @@
 <?php
 
-use React\EventLoop\Factory;
 use Rx\Observable;
-use Rx\Scheduler\EventLoopScheduler;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop      = Factory::create();
-$scheduler = new EventLoopScheduler($loop);
-
 $times = [
-    ['value' => 0, 'time' => 100],
-    ['value' => 1, 'time' => 600],
+    ['value' => 0, 'time' => 10],
+    ['value' => 1, 'time' => 200],
     ['value' => 2, 'time' => 400],
-    ['value' => 3, 'time' => 900],
-    ['value' => 4, 'time' => 200]
+    ['value' => 3, 'time' => 500],
+    ['value' => 4, 'time' => 900]
 ];
 
 // Delay each item by time and project value;
@@ -25,6 +20,4 @@ $source = Observable::fromArray($times)
     })
     ->throttle(300 /* ms */);
 
-$subscription = $source->subscribe($stdoutObserver, $scheduler);
-
-$loop->run();
+$subscription = $source->subscribe($stdoutObserver);

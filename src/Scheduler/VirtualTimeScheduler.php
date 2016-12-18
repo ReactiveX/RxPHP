@@ -125,7 +125,7 @@ class VirtualTimeScheduler implements SchedulerInterface
         return $disposable;
     }
 
-    public function start(): void
+    public function start()
     {
         if (!$this->isEnabled) {
 

@@ -275,29 +275,11 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_scheduler_is_passed_to_source()
-    {
-        $schedulerPassedIn = null;
-
-        Observable::create(
-            function ($observer, $scheduler) use (&$schedulerPassedIn) {
-                $schedulerPassedIn = $scheduler;
-                $observer->onCompleted();
-            })
-            ->delay(1, $this->scheduler)
-            ->subscribeCallback();
-
-        $this->assertSame($schedulerPassedIn, $this->scheduler);
-    }
-
-    /**
-     * @test
-     */
     public function delay_completes_during_subscribe_without_throwing()
     {
         $completes = false;
 
-        Observable::create(function ($observer, $scheduler) {
+        Observable::create(function ($observer) {
             $observer->onCompleted();
         })->delay(1, $this->scheduler)->subscribeCallback(
             null,
@@ -326,7 +308,7 @@ class DelayTest extends FunctionalTestCase
         ]);
         
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->delay(5);
+            return $xs->delay(5, $this->scheduler);
         }, 300);
         
         $this->assertMessages([

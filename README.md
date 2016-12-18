@@ -1,6 +1,8 @@
 RxPHP
 ======
 
+## This is the development branch for RxPHP v2 and is not stable.  For production, use [v1](https://github.com/reactivex/rxphp) instead.
+
 Reactive extensions for PHP. The reactive extensions for PHP are a set of
 libraries to compose asynchronous and event-based programs using observable
 collections and LINQ-style query operators in PHP.

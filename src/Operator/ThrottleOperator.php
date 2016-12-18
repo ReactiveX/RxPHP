@@ -26,7 +26,7 @@ class ThrottleOperator implements OperatorInterface
     public function __construct(int $debounceTime, SchedulerInterface $scheduler = null)
     {
         $this->throttleTime = $debounceTime;
-        $this->scheduler    = $scheduler;
+        $this->scheduler    = $scheduler ?: Scheduler::getDefault();
     }
 
     /**
@@ -34,13 +34,11 @@ class ThrottleOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $scheduler = $this->scheduler ?? Scheduler::getDefault();
-
         $innerDisp = new SerialDisposable();
 
         $disp = $observable->subscribe(new CallbackObserver(
-            function ($x) use ($innerDisp, $observer, $scheduler) {
-                $now = $scheduler->now();
+            function ($x) use ($innerDisp, $observer) {
+                $now = $this->scheduler->now();
                 if ($this->nextSend <= $now) {
                     $innerDisp->setDisposable(new EmptyDisposable());
                     $observer->onNext($x);
@@ -48,12 +46,12 @@ class ThrottleOperator implements OperatorInterface
                     return;
                 }
 
-                $newDisp = Observable::just($x)
-                    ->delay($this->nextSend - $now)
+                $newDisp = Observable::just($x, $this->scheduler)
+                    ->delay($this->nextSend - $now, $this->scheduler)
                     ->subscribe(new CallbackObserver(
-                        function ($x) use ($observer, $scheduler) {
+                        function ($x) use ($observer) {
                             $observer->onNext($x);
-                            $this->nextSend = $scheduler->now() + $this->throttleTime - 1;
+                            $this->nextSend = $this->scheduler->now() + $this->throttleTime - 1;
                             if ($this->completed) {
                                 $observer->onCompleted();
                             }

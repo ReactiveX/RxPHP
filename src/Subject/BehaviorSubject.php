@@ -19,7 +19,7 @@ class BehaviorSubject extends Subject
         return $this->value;
     }
 
-    public function onNext($value): void
+    public function onNext($value)
     {
         $this->value = $value;
 
@@ -35,7 +35,7 @@ class BehaviorSubject extends Subject
         return $disposable;
     }
 
-    public function dispose(): void
+    public function dispose()
     {
         parent::dispose();
 

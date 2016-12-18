@@ -3,7 +3,7 @@
 
 namespace Rx\Functional\Operator;
 
-use React\EventLoop\Factory;
+use Interop\Async\Loop;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observable\NeverObservable;
@@ -899,7 +899,7 @@ class CombineLatestTest extends FunctionalTestCase
      */
     public function combineLatest_delay()
     {
-        $loop      = Factory::create();
+        $loop      = Loop::get();
         $scheduler = new EventLoopScheduler($loop);
 
         $source1 = Observable::timer(100);

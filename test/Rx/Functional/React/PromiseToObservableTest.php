@@ -6,7 +6,6 @@ namespace Rx\Functional\React;
 use Exception;
 use React\Promise\Deferred;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use Rx\React\Promise;
 use Rx\Testing\MockObserver;
@@ -33,7 +32,6 @@ class PromiseToObservableTest extends FunctionalTestCase
           function () {
               $this->assertTrue(true);
           }));
-
     }
 
     /**
@@ -102,16 +100,16 @@ class PromiseToObservableTest extends FunctionalTestCase
         });
         
         $o1 = Promise::toObservable($deferred->promise());
-        $o2 = Promise::toObservable($deferred->promise())->delay(200);
+        $o2 = Promise::toObservable($deferred->promise())->delay(200, $this->scheduler);
         
         $deferred->resolve(1);
         
         $results1 = new MockObserver($this->scheduler);
         
-        $o1->subscribe($results1, $this->scheduler);
+        $o1->subscribe($results1);
         
         $results2 = new MockObserver($this->scheduler);
-        $o2->subscribe($results2, $this->scheduler);
+        $o2->subscribe($results2);
 
         $this->scheduler->start();
         
@@ -140,7 +138,7 @@ class PromiseToObservableTest extends FunctionalTestCase
         });
 
         $o1 = Promise::toObservable($deferred->promise());
-        $o2 = Promise::toObservable($deferred->promise())->delay(100);
+        $o2 = Promise::toObservable($deferred->promise())->delay(100, $this->scheduler);
 
         $this->scheduler->schedule(function () use ($deferred) {
             $deferred->resolve(1);
@@ -149,14 +147,14 @@ class PromiseToObservableTest extends FunctionalTestCase
 
         $results1 = new MockObserver($this->scheduler);
 
-        $s1 = $o1->subscribe($results1, $this->scheduler);
+        $s1 = $o1->subscribe($results1);
         
         $this->scheduler->schedule(function () use ($s1) {
             $s1->dispose();
         }, 50);
 
         $results2 = new MockObserver($this->scheduler);
-        $o2->subscribe($results2, $this->scheduler);
+        $o2->subscribe($results2);
 
         $this->scheduler->start();
 

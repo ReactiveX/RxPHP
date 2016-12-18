@@ -16,7 +16,7 @@ class InnerSubscriptionDisposable implements DisposableInterface
         $this->observer = $observer;
     }
 
-    public function dispose(): void
+    public function dispose()
     {
         if ($this->subject->isDisposed()) {
             return;

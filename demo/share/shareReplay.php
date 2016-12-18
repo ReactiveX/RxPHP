@@ -2,9 +2,6 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop      = \React\EventLoop\Factory::create();
-$scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
-
 $interval = Rx\Observable::interval(1000);
 
 $source = $interval
@@ -16,8 +13,8 @@ $source = $interval
 $published = $source
     ->shareReplay(3);
 
-$published->subscribe($createStdoutObserver('SourceA '), $scheduler);
-$published->subscribe($createStdoutObserver('SourceB '), $scheduler);
+$published->subscribe($createStdoutObserver('SourceA '));
+$published->subscribe($createStdoutObserver('SourceB '));
 
 Rx\Observable
     ::just(true)
@@ -25,7 +22,4 @@ Rx\Observable
     ->flatMap(function () use ($published) {
         return $published;
     })
-    ->subscribe($createStdoutObserver('SourceC '), $scheduler);
-
-$loop->run();
-
+    ->subscribe($createStdoutObserver('SourceC '));

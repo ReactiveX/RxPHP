@@ -8,7 +8,6 @@ use Rx\Observable\AnonymousObservable;
 use Rx\Observable\ErrorObservable;
 use Rx\Observable\ReturnObservable;
 use Rx\Observer\CallbackObserver;
-use Rx\Scheduler\ImmediateScheduler;
 use Rx\Testing\TestScheduler;
 
 class RetryTest extends FunctionalTestCase
@@ -121,16 +120,14 @@ class RetryTest extends FunctionalTestCase
     {
         $scheduler1 = new TestScheduler();
 
-        $xs = (new ReturnObservable(1))->retry();
+        $xs = (new ReturnObservable(1, $scheduler1))->retry();
 
         $xs->subscribe(
             new CallbackObserver(
                 function () {
                     throw new \Exception();
                 }
-            ),
-            $scheduler1
-        );
+            ));
 
         $exception = null;
         try {
@@ -147,7 +144,7 @@ class RetryTest extends FunctionalTestCase
 
         $scheduler2 = new TestScheduler();
 
-        $ys = (new ErrorObservable(new \Exception()))->retry();
+        $ys = (new ErrorObservable(new \Exception(), $scheduler2))->retry();
 
         $d = $ys->subscribe(
             new CallbackObserver(
@@ -155,9 +152,7 @@ class RetryTest extends FunctionalTestCase
                 function ($err) {
                     throw $err;
                 }
-            ),
-            $scheduler2
-        );
+            ));
 
         $scheduler2->scheduleAbsolute(210, function () use ($d) {
             return $d->dispose();
@@ -167,7 +162,7 @@ class RetryTest extends FunctionalTestCase
 
         $scheduler3 = new TestScheduler();
 
-        $zs = (new ReturnObservable(1))->retry();
+        $zs = (new ReturnObservable(1, $scheduler3))->retry();
 
         $zs->subscribe(
             new CallbackObserver(
@@ -176,9 +171,7 @@ class RetryTest extends FunctionalTestCase
                 function () {
                     throw new \Exception();
                 }
-            ),
-            $scheduler3
-        );
+            ));
 
         $exception = null;
         try {
@@ -338,11 +331,11 @@ class RetryTest extends FunctionalTestCase
     {
         $scheduler1 = new TestScheduler();
 
-        $xs = (new ReturnObservable(1))->retry(3);
+        $xs = (new ReturnObservable(1, $scheduler1))->retry(3);
 
         $xs->subscribeCallback(function () {
             throw new \Exception();
-        }, null, null, $scheduler1);
+        });
 
         $exception = null;
         try {
@@ -354,11 +347,11 @@ class RetryTest extends FunctionalTestCase
 
         $scheduler2 = new TestScheduler();
 
-        $ys = (new ErrorObservable(new \Exception()))->retry(100);
+        $ys = (new ErrorObservable(new \Exception(), $scheduler2))->retry(100);
 
         $d = $ys->subscribeCallback(null, function ($err) {
             throw $err;
-        }, null, $scheduler2);
+        });
 
         $scheduler2->scheduleAbsolute(10, function () use ($d) {
             return $d->dispose();
@@ -368,11 +361,11 @@ class RetryTest extends FunctionalTestCase
 
         $scheduler3 = new TestScheduler();
 
-        $zs = (new ReturnObservable(1))->retry(100);
+        $zs = (new ReturnObservable(1, $scheduler3))->retry(100);
 
         $zs->subscribeCallback(null, null, function () {
             throw new \Exception();
-        }, $scheduler3);
+        });
 
         $exception = null;
         try {
@@ -403,7 +396,7 @@ class RetryTest extends FunctionalTestCase
         Observable::range(0, 10)
             ->flatMap(function ($x) use (&$count) {
                 if (++$count < 2) {
-                    return Observable::error(new \Exception("Something"));
+                    return Observable::error(new \Exception('Something'));
                 }
                 return Observable::just(42);
             })
@@ -417,7 +410,7 @@ class RetryTest extends FunctionalTestCase
                 function () use (&$completed) {
                     $completed = true;
                 }
-            ), new ImmediateScheduler());
+            ));
 
         $this->assertTrue($completed);
         $this->assertEquals(42, $emitted);

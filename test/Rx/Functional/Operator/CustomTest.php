@@ -10,7 +10,7 @@ class CustomTest extends FunctionalTestCase
     public function testCustomOperator()
     {
         $results = $this->scheduler->startWithCreate(function () {
-            return Observable::just(1)
+            return Observable::just(1, $this->scheduler)
                 ->customTest(2);
         });
         

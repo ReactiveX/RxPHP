@@ -5,11 +5,12 @@ namespace Rx\Functional\Subject;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\ImmediateScheduler;
 use Rx\Subject\ReplaySubject;
 
 class ReplaySubjectTest extends FunctionalTestCase
 {
-    function testInfinite()
+    public function testInfinite()
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -562,8 +563,8 @@ class ReplaySubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_replays_with_no_scheduler() {
-        $rs = new ReplaySubject();
+    public function it_replays_with_immediate_scheduler() {
+        $rs = new ReplaySubject(null, null, new ImmediateScheduler());
 
         $o = Observable::fromArray(range(1,5));
 
@@ -576,7 +577,7 @@ class ReplaySubjectTest extends FunctionalTestCase
                 $result[] = $x;
             },
             function ($e) {
-                $this->fail("Should not have failed");
+                $this->fail('Should not have failed');
             },
             function () use (&$result, &$completed) {
                 $completed = true;
@@ -587,4 +588,3 @@ class ReplaySubjectTest extends FunctionalTestCase
         $this->assertTrue($completed);
     }
 }
-

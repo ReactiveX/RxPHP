@@ -128,13 +128,14 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_throws_1()
     {
         $scheduler1 = new TestScheduler();
-        $xs         = (new ReturnObservable(1))->repeat();
+
+        $xs = (new ReturnObservable(1, $scheduler1))->repeat();
 
         $xs->subscribe(new CallbackObserver(
             function ($x) {
                 throw new \Exception();
             }
-        ), $scheduler1);
+        ));
 
         $scheduler1->start();
     }
@@ -164,7 +165,7 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_throws_3()
     {
         $scheduler3 = new TestScheduler();
-        $xs         = (new ReturnObservable(1))->repeat();
+        $xs         = (new ReturnObservable(1, $scheduler3))->repeat();
 
         $disp = $xs->subscribe(new CallbackObserver(
             null,
@@ -348,13 +349,13 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_repeat_count_throws_1()
     {
         $scheduler1 = new TestScheduler();
-        $xs = (new ReturnObservable(1))->repeat(3);
+        $xs         = (new ReturnObservable(1, $scheduler1))->repeat(3);
 
         $xs->subscribe(new CallbackObserver(
             function ($x) {
-                throw new \Exception("from onNext");
+                throw new \Exception('from onNext');
             }
-        ), $scheduler1);
+        ));
 
         $scheduler1->start();
     }
@@ -367,14 +368,15 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_repeat_count_throws_2()
     {
         $scheduler2 = new TestScheduler();
-        $xs = (new ErrorObservable(new \Exception('from ErrorObservable')))->repeat(3);
+
+        $xs = (new ErrorObservable(new \Exception('from ErrorObservable'), $scheduler2))->repeat(3);
 
         $xs->subscribe(new CallbackObserver(
             null,
             function ($x) {
                 throw new \Exception('from onError');
             }
-        ), $scheduler2);
+        ));
 
         $scheduler2->start();
     }
@@ -386,7 +388,8 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_repeat_count_throws_3()
     {
         $scheduler3 = new TestScheduler();
-        $xs = (new ReturnObservable(1))->repeat(3);
+
+        $xs = (new ReturnObservable(1, $scheduler3))->repeat(3);
 
         $xs->subscribe(new CallbackObserver(
             null,
@@ -394,7 +397,7 @@ class RepeatTest extends FunctionalTestCase
             function () {
                 throw new \Exception('from onCompleted');
             }
-        ), $scheduler3);
+        ));
 
         $scheduler3->start();
     }

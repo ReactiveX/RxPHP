@@ -3,7 +3,6 @@
 
 namespace Rx\Functional\Operator;
 
-
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Scheduler\ImmediateScheduler;
@@ -116,7 +115,7 @@ class DeferTest extends FunctionalTestCase
         // explicitly using the immediate scheduler on subscribe internally. When we pass the
         // proper scheduler in, the subscription gets scheduled which requires an extra tick.
         $this->assertMessages([
-            onError(201, new \Exception('error'))
+            onError(200, new \Exception('error'))
         ], $results->getMessages());
 
         $this->assertEquals(1, $invoked);

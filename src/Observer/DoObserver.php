@@ -30,17 +30,17 @@ class DoObserver implements ObserverInterface
         $this->onCompleted = $this->getOrDefault($onCompleted, $default);
     }
 
-    public function onCompleted(): void
+    public function onCompleted()
     {
         call_user_func($this->onCompleted);
     }
 
-    public function onError(Exception $error): void
+    public function onError(Exception $error)
     {
         call_user_func_array($this->onError, [$error]);
     }
 
-    public function onNext($value): void
+    public function onNext($value)
     {
         call_user_func_array($this->onNext, [$value]);
     }

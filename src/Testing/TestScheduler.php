@@ -19,9 +19,6 @@ class TestScheduler extends VirtualTimeScheduler
         parent::__construct(0, function ($a, $b) {
             return $a - $b;
         });
-
-        Scheduler::setDefault($this);//This doesn't seem right
-        Scheduler::setAsync($this);
     }
 
     public function scheduleAbsoluteWithState($state, int $dueTime, callable $action): DisposableInterface

@@ -4,11 +4,8 @@
 namespace Rx\Functional\React;
 
 use Exception;
-use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\AnonymousObservable;
 use Rx\Observable;
-use Rx\Observable\EmptyObservable;
 use Rx\React\Promise;
 use Rx\Subject\Subject;
 
@@ -20,7 +17,6 @@ class PromiseFromObservableTest extends FunctionalTestCase
      */
     public function promise_success()
     {
-
         $source = Observable::just(42);
 
         $promise = Promise::fromObservable($source);
@@ -32,7 +28,6 @@ class PromiseFromObservableTest extends FunctionalTestCase
           function () {
               $this->assertTrue(false);
           });
-
     }
 
     /**
@@ -41,7 +36,6 @@ class PromiseFromObservableTest extends FunctionalTestCase
      */
     public function promise_failure()
     {
-
         $source = (new Subject());
         $source->onError(new Exception("some error"));
 
@@ -54,6 +48,5 @@ class PromiseFromObservableTest extends FunctionalTestCase
           function ($error) {
               $this->assertEquals($error, new Exception("some error"));
           });
-
     }
 }

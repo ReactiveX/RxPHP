@@ -43,7 +43,7 @@ class TestSubject extends Subject
      * @param $value
      * @param $disposable
      */
-    public function disposeOn($value, DisposableInterface $disposable): void
+    public function disposeOn($value, DisposableInterface $disposable)
     {
         $this->disposeOnMap[$value] = $disposable;
     }
@@ -51,7 +51,7 @@ class TestSubject extends Subject
     /**
      * @param $value
      */
-    public function onNext($value): void
+    public function onNext($value)
     {
         $this->observer->onNext($value);
         if (isset($this->disposeOnMap[$value])) {
@@ -62,12 +62,12 @@ class TestSubject extends Subject
     /**
      * @param \Exception $exception
      */
-    public function onError(\Exception $exception): void
+    public function onError(\Exception $exception)
     {
         $this->observer->onError($exception);
     }
 
-    public function onCompleted(): void
+    public function onCompleted()
     {
         $this->observer->onCompleted();
     }

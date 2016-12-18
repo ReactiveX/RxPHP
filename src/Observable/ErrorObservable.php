@@ -7,22 +7,22 @@ use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler;
+use Rx\SchedulerInterface;
 
 class ErrorObservable extends Observable
 {
     private $error;
+    private $scheduler;
 
-    public function __construct(Exception $error)
+    public function __construct(Exception $error, SchedulerInterface $scheduler = null)
     {
-        $this->error = $error;
+        $this->error     = $error;
+        $this->scheduler = $scheduler ?: Scheduler::getImmediate();
     }
 
     public function subscribe(ObserverInterface $observer): DisposableInterface
     {
-
-        $scheduler = Scheduler::getDefault();
-
-        return $scheduler->schedule(function () use ($observer) {
+        return $this->scheduler->schedule(function () use ($observer) {
             $observer->onError($this->error);
         });
     }

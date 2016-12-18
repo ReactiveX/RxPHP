@@ -20,7 +20,7 @@ class Scheduler
         return static::$default;
     }
 
-    public static function setDefault(SchedulerInterface $scheduler): void
+    public static function setDefault(SchedulerInterface $scheduler)
     {
         static::$default = $scheduler;
     }
@@ -33,7 +33,7 @@ class Scheduler
         return self::$async;
     }
 
-    public static function getImmediate()
+    public static function getImmediate(): ImmediateScheduler
     {
         if (!static::$immediate) {
             static::$immediate = new ImmediateScheduler();

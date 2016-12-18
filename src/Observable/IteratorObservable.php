@@ -6,15 +6,18 @@ use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler;
+use Rx\SchedulerInterface;
 
 class IteratorObservable extends Observable
 {
-    /** @var \Iterator */
     private $items;
 
-    public function __construct(\Iterator $items)
+    private $scheduler;
+
+    public function __construct(\Iterator $items, SchedulerInterface $scheduler = null)
     {
-        $this->items = $items;
+        $this->items     = $items;
+        $this->scheduler = $scheduler ?: Scheduler::getDefault();
     }
 
     /**
@@ -23,8 +26,7 @@ class IteratorObservable extends Observable
      */
     public function subscribe(ObserverInterface $observer): DisposableInterface
     {
-        $scheduler = Scheduler::getDefault();
-        $key       = 0;
+        $key = 0;
 
         $defaultFn = function ($reschedule) use (&$observer, &$key) {
             try {
@@ -67,7 +69,7 @@ class IteratorObservable extends Observable
 
         };
 
-        return $scheduler->scheduleRecursive(
+        return $this->scheduler->scheduleRecursive(
             defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.11.0', 'lt')
                 ? $hhvmFn
                 : $defaultFn

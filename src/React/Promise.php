@@ -83,8 +83,8 @@ final class Promise
             }
         );
 
-        return new AnonymousObservable(function ($observer, $scheduler = null) use ($subject, $p) {
-            $disp = $subject->subscribe($observer, $scheduler);
+        return new AnonymousObservable(function ($observer) use ($subject, $p) {
+            $disp = $subject->subscribe($observer);
             return new CallbackDisposable(function () use ($p, $disp) {
                 $disp->dispose();
                 $p->cancel();

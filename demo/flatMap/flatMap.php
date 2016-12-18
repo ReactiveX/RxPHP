@@ -8,4 +8,4 @@ $selectManyObservable = $observable->flatMap(function ($value) {
     return Rx\Observable::range($value, 2);
 });
 
-$disposable = $selectManyObservable->subscribe($stdoutObserver);
+$selectManyObservable->subscribe($stdoutObserver);

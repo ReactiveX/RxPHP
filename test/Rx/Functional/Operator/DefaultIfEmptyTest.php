@@ -72,7 +72,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->defaultIfEmpty(new ReturnObservable(null));
+            return $xs->defaultIfEmpty(new ReturnObservable(null, $this->scheduler));
         });
 
         // Note: these tests differ from the RxJS tests that they were based on because RxJS was
@@ -99,7 +99,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->defaultIfEmpty(new ReturnObservable(-1));
+            return $xs->defaultIfEmpty(new ReturnObservable(-1, $this->scheduler));
         });
 
         // Note: these tests differ from the RxJS tests that they were based on because RxJS was

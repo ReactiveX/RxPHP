@@ -7,32 +7,28 @@ use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler;
+use Rx\SchedulerInterface;
 
 class ReturnObservable extends Observable
 {
     private $value;
+    private $scheduler;
 
-    /**
-     * @param mixed $value Value to return.
-     */
-    public function __construct($value)
+    public function __construct($value, SchedulerInterface $scheduler = null)
     {
-        $this->value = $value;
+        $this->value     = $value;
+        $this->scheduler = $scheduler ?: Scheduler::getDefault();
     }
 
     public function subscribe(ObserverInterface $observer): DisposableInterface
     {
-        $value = $this->value;
-
-        $scheduler = Scheduler::getDefault();
-
         $disposable = new CompositeDisposable();
 
-        $disposable->add($scheduler->schedule(function () use ($observer, $value) {
-            $observer->onNext($value);
+        $disposable->add($this->scheduler->schedule(function () use ($observer) {
+            $observer->onNext($this->value);
         }));
 
-        $disposable->add($scheduler->schedule(function () use ($observer) {
+        $disposable->add($this->scheduler->schedule(function () use ($observer) {
             $observer->onCompleted();
         }));
 

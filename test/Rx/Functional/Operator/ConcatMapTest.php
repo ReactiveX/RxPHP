@@ -42,7 +42,7 @@ class ConcatMapTest extends FunctionalTestCase
     public function concatMapTo_Then_Error_Task()
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
-        $ys = Observable::error(new \Exception("test"));
+        $ys = Observable::error(new \Exception('test'));
 
         $results   = [];
         $completed = false;
@@ -55,7 +55,7 @@ class ConcatMapTest extends FunctionalTestCase
                 },
                 function (\Exception $e) use (&$results, &$error) {
                     $error = true;
-                    $this->assertSame("test", $e->getMessage());
+                    $this->assertSame('test', $e->getMessage());
                 },
                 function () use (&$completed) {
                     $completed = true;

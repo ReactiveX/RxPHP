@@ -82,7 +82,7 @@ class ReplaySubject extends Subject
         return $subscription;
     }
 
-    public function onNext($value): void
+    public function onNext($value)
     {
         $this->assertNotDisposed();
 
@@ -103,7 +103,7 @@ class ReplaySubject extends Subject
 
     }
 
-    public function onCompleted(): void
+    public function onCompleted()
     {
         $this->assertNotDisposed();
 
@@ -122,7 +122,7 @@ class ReplaySubject extends Subject
         $this->observers = [];
     }
 
-    public function onError(Exception $exception): void
+    public function onError(Exception $exception)
     {
         $this->assertNotDisposed();
 
@@ -155,7 +155,7 @@ class ReplaySubject extends Subject
         });
     }
 
-    private function trim(): void
+    private function trim()
     {
         if (count($this->queue) > $this->bufferSize) {
             array_shift($this->queue);

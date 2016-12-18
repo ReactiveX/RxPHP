@@ -21,7 +21,7 @@ class ConcatAllTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->map(function ($x) {
-                return Observable::timer(5)->mapTo($x);
+                return Observable::timer(5, $this->scheduler)->mapTo($x);
             })->concatAll();
         });
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Rx\Observable;
 
 use Rx\Functional\FunctionalTestCase;

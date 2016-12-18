@@ -13,15 +13,13 @@ final class EventLoopScheduler extends VirtualTimeScheduler
 
     private $insideInvoke = false;
 
+    private static $loopSet = false;
+
     public function __construct()
     {
         parent::__construct($this->now(), function ($a, $b) {
             return $a - $b;
         });
-
-        //@todo check to see if a loop is set before setting the default
-        $driver = ReactDriverFactory::createFactoryFromLoop(StreamSelectLoop::class);
-        Loop::setFactory($driver);
 
         static::registerLoopRunner();
     }
@@ -38,7 +36,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         return $disp;
     }
 
-    public function start(): void
+    public function start()
     {
         $this->clock = $this->now();
 
@@ -69,6 +67,18 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     static private function registerLoopRunner()
     {
         $hasBeenRun = false;
+
+        if (!static::$loopSet){
+            try {
+                $driver = ReactDriverFactory::createFactoryFromLoop(StreamSelectLoop::class);
+                Loop::setFactory($driver);
+                static::$loopSet = true;
+            } catch (\RuntimeException $e) {
+                //Intentionally Left Blank
+            }
+
+        }
+
 
         register_shutdown_function(function () use (&$hasBeenRun) {
             if (!$hasBeenRun) {

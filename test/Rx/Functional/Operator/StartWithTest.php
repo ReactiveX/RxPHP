@@ -18,7 +18,7 @@ class StartWithTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->startWith(1);
+            return $xs->startWith(1, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -37,7 +37,7 @@ class StartWithTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->startWith(1);
+            return $xs->startWith(1, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -58,7 +58,7 @@ class StartWithTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->startWith(1);
+            return $xs->startWith(1, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -80,7 +80,7 @@ class StartWithTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->startWithArray([1, 2, 3]);
+            return $xs->startWithArray([1, 2, 3], $this->scheduler);
         });
 
         $this->assertMessages([
@@ -104,7 +104,7 @@ class StartWithTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->startWithArray([1, 2, 3]);
+            return $xs->startWithArray([1, 2, 3], $this->scheduler);
         });
 
         $this->assertMessages([
@@ -129,7 +129,7 @@ class StartWithTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->startWithArray([1, 2, 3]);
+            return $xs->startWithArray([1, 2, 3], $this->scheduler);
         });
 
         $this->assertMessages([
