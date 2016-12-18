@@ -12,6 +12,7 @@ use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
 use Rx\Observable\NeverObservable;
 use Rx\Observable\RangeObservable;
+use Rx\Observable\RefCountObservable;
 use Rx\Observable\ReturnObservable;
 use Rx\Observable\TimerObservable;
 use Rx\Observer\CallbackObserver;
@@ -88,12 +89,22 @@ class Observable implements ObservableInterface
         });
     }
 
+    public function subscribeCallback(callable $onNext = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface
+    {
+        $observer = new CallbackObserver($onNext, $onError, $onCompleted);
+
+        return $this->subscribe($observer);
+    }
+
     /**
      * @internal
+     *
+     * @param ObserverInterface $observer
+     * @return bool
      */
     public function removeObserver(ObserverInterface $observer): bool
     {
-        $key = array_search($observer, $this->observers);
+        $key = array_search($observer, $this->observers, true);
 
         if (false === $key) {
             return false;
@@ -102,13 +113,6 @@ class Observable implements ObservableInterface
         unset($this->observers[$key]);
 
         return true;
-    }
-
-    public function subscribeCallback(callable $onNext = null, callable  $onError = null, callable $onCompleted = null, SchedulerInterface $scheduler = null)
-    {
-        $observer = new CallbackObserver($onNext, $onError, $onCompleted);
-
-        return $this->subscribe($observer, $scheduler);
     }
 
     /**
@@ -236,7 +240,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex merge
      */
-    public function merge(ObservableInterface $otherObservable)
+    public function merge(ObservableInterface $otherObservable): AnonymousObservable
     {
         return (new AnonymousObservable(function (ObserverInterface $observer) use ($otherObservable) {
             $observer->onNext($this);
@@ -317,6 +321,7 @@ class Observable implements ObservableInterface
      * @param $count
      * @param SchedulerInterface $scheduler
      * @return RangeObservable
+     * @throws \InvalidArgumentException
      *
      * @demo range/range.php
      * @operator
@@ -386,11 +391,11 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex map
      */
-    public function mapWithIndex(callable $selector)
+    public function mapWithIndex(callable $selector): AnonymousObservable
     {
         $index = 0;
         return $this->map(function ($value) use ($selector, &$index) {
-            return call_user_func_array($selector, [$index++, $value]);
+            return $selector($index++, $value);
         });
     }
 
@@ -404,7 +409,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex map
      */
-    public function mapTo($value)
+    public function mapTo($value): AnonymousObservable
     {
         return $this->map(function () use ($value) {
             return $value;
@@ -420,7 +425,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex map
      */
-    public function select(callable $selector)
+    public function select(callable $selector): AnonymousObservable
     {
         return $this->map($selector);
     }
@@ -435,7 +440,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex filter
      */
-    public function filter(callable $predicate)
+    public function filter(callable $predicate): AnonymousObservable
     {
         return $this->lift(function () use ($predicate) {
             return new FilterOperator($predicate);
@@ -451,7 +456,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex filter
      */
-    public function where(callable $predicate)
+    public function where(callable $predicate): AnonymousObservable
     {
         return $this->filter($predicate);
     }
@@ -466,7 +471,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function flatMap(callable $selector)
+    public function flatMap(callable $selector): AnonymousObservable
     {
         return $this->map($selector)->mergeAll();
     }
@@ -484,7 +489,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function flatMapTo(ObservableInterface $observable)
+    public function flatMapTo(ObservableInterface $observable): AnonymousObservable
     {
         return $this->flatMap(function () use ($observable) {
             return $observable;
@@ -500,7 +505,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function selectMany($selector)
+    public function selectMany($selector): AnonymousObservable
     {
         return $this->flatMap($selector);
     }
@@ -518,6 +523,7 @@ class Observable implements ObservableInterface
      * new one.
      *
      * @param callable $selector - A transform function to apply to each source element.
+     * @param SchedulerInterface $scheduler
      * @return AnonymousObservable - An observable sequence which transforms the items emitted by an Observable into
      * Observables, and mirror those items emitted by the most-recently transformed Observable.
      *
@@ -525,7 +531,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function flatMapLatest(callable $selector, SchedulerInterface $scheduler = null)
+    public function flatMapLatest(callable $selector, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->map($selector)->switch($scheduler);
     }
@@ -538,7 +544,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex skip
      */
-    public function skip($count)
+    public function skip($count): AnonymousObservable
     {
         return $this->lift(function () use ($count) {
             return new SkipOperator($count);
@@ -558,7 +564,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex skipWhile
      */
-    public function skipWhile(callable $predicate)
+    public function skipWhile(callable $predicate): AnonymousObservable
     {
         return $this->lift(function () use ($predicate) {
             return new SkipWhileOperator($predicate);
@@ -579,11 +585,11 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex skipWhile
      */
-    public function skipWhileWithIndex(callable $predicate)
+    public function skipWhileWithIndex(callable $predicate): AnonymousObservable
     {
         $index = 0;
         return $this->skipWhile(function ($value) use ($predicate, &$index) {
-            return call_user_func_array($predicate, [$index++, $value]);
+            return $predicate($index++, $value);
         });
     }
 
@@ -597,7 +603,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex take
      */
-    public function take($count)
+    public function take(int $count): Observable
     {
         if ($count === 0) {
             return new EmptyObservable();
@@ -620,7 +626,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex take
      */
-    public function takeUntil(ObservableInterface $other)
+    public function takeUntil(ObservableInterface $other): AnonymousObservable
     {
         return $this->lift(function () use ($other) {
             return new TakeUntilOperator($other);
@@ -639,7 +645,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex takeWhile
      */
-    public function takeWhile(callable $predicate)
+    public function takeWhile(callable $predicate): AnonymousObservable
     {
         return $this->lift(function () use ($predicate) {
             return new TakeWhileOperator($predicate);
@@ -658,7 +664,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex takeWhile
      */
-    public function takeWhileWithIndex(callable $predicate)
+    public function takeWhileWithIndex(callable $predicate): AnonymousObservable
     {
         $index = 0;
         return $this->takeWhile(function ($value) use ($predicate, &$index) {
@@ -676,7 +682,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex takeLast
      */
-    public function takeLast($count)
+    public function takeLast(int $count): AnonymousObservable
     {
         return $this->lift(function () use ($count) {
             return new TakeLastOperator($count);
@@ -695,7 +701,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex groupBy
      */
-    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $keySerializer = null)
+    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $keySerializer = null): AnonymousObservable
     {
         return $this->groupByUntil($keySelector, $elementSelector, function () {
 
@@ -720,7 +726,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex groupBy
      */
-    public function groupByUntil(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null)
+    public function groupByUntil(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null): AnonymousObservable
     {
         return $this->lift(function () use ($keySelector, $elementSelector, $durationSelector, $keySerializer) {
             return new GroupByUntilOperator($keySelector, $elementSelector, $durationSelector, $keySerializer);
@@ -734,7 +740,7 @@ class Observable implements ObservableInterface
      * @param callable $operatorFactory
      * @return AnonymousObservable
      */
-    public function lift(callable $operatorFactory)
+    public function lift(callable $operatorFactory): AnonymousObservable
     {
         return new AnonymousObservable(function (ObserverInterface $observer) use ($operatorFactory) {
             $operator = $operatorFactory();
@@ -748,9 +754,9 @@ class Observable implements ObservableInterface
      *
      * @param $name
      * @param $arguments
-     * @return Observable
+     * @return AnonymousObservable
      */
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): AnonymousObservable
     {
         $className = 'Rx\Custom\Operator\\' . ucfirst($name) . 'Operator';
 
@@ -774,7 +780,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex reduce
      */
-    public function reduce(callable $accumulator, $seed = null)
+    public function reduce(callable $accumulator, $seed = null): AnonymousObservable
     {
         return $this->lift(function () use ($accumulator, $seed) {
             return new ReduceOperator($accumulator, $seed);
@@ -793,7 +799,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinct(callable $comparer = null)
+    public function distinct(callable $comparer = null): AnonymousObservable
     {
         return $this->lift(function () use ($comparer) {
             return new DistinctOperator(null, $comparer);
@@ -811,7 +817,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinctKey(callable $keySelector, callable $comparer = null)
+    public function distinctKey(callable $keySelector, callable $comparer = null): AnonymousObservable
     {
         return $this->lift(function () use ($keySelector, $comparer) {
             return new DistinctOperator($keySelector, $comparer);
@@ -828,7 +834,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinctUntilChanged(callable $comparer = null)
+    public function distinctUntilChanged(callable $comparer = null): AnonymousObservable
     {
         return $this->lift(function () use ($comparer) {
             return new DistinctUntilChangedOperator(null, $comparer);
@@ -847,7 +853,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinctUntilKeyChanged(callable $keySelector = null, callable $comparer = null)
+    public function distinctUntilKeyChanged(callable $keySelector = null, callable $comparer = null): AnonymousObservable
     {
         return $this->lift(function () use ($keySelector, $comparer) {
             return new DistinctUntilChangedOperator($keySelector, $comparer);
@@ -903,7 +909,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex do
      */
-    public function doOnNext(callable $onNext)
+    public function doOnNext(callable $onNext): AnonymousObservable
     {
         return $this->do(new DoObserver(
             $onNext
@@ -918,7 +924,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex do
      */
-    public function doOnError(callable $onError)
+    public function doOnError(callable $onError): AnonymousObservable
     {
         return $this->do(new DoObserver(
             null,
@@ -934,7 +940,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex do
      */
-    public function doOnCompleted(callable $onCompleted)
+    public function doOnCompleted(callable $onCompleted): AnonymousObservable
     {
         return $this->do(new DoObserver(
             null,
@@ -956,7 +962,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex scan
      */
-    public function scan(callable $accumulator, $seed = null)
+    public function scan(callable $accumulator, $seed = null): AnonymousObservable
     {
         return $this->lift(function () use ($accumulator, $seed) {
             return new ScanOperator($accumulator, $seed);
@@ -973,7 +979,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex to
      */
-    public function toArray()
+    public function toArray(): AnonymousObservable
     {
         return $this->lift(function () {
             return new ToArrayOperator();
@@ -995,7 +1001,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex skipLast
      */
-    public function skipLast($count)
+    public function skipLast(int $count): AnonymousObservable
     {
         return $this->lift(function () use ($count) {
             return new SkipLastOperator($count);
@@ -1013,7 +1019,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex skipUntil
      */
-    public function skipUntil(ObservableInterface $other)
+    public function skipUntil(ObservableInterface $other): AnonymousObservable
     {
         return $this->lift(function () use ($other) {
             return new SkipUntilOperator($other);
@@ -1031,7 +1037,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex timer
      */
-    public static function timer(int $dueTime, SchedulerInterface $scheduler = null)
+    public static function timer(int $dueTime, SchedulerInterface $scheduler = null): TimerObservable
     {
         return new TimerObservable($dueTime, $scheduler);
     }
@@ -1045,7 +1051,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex from
      */
-    public function asObservable()
+    public function asObservable(): AnonymousObservable
     {
         return $this->lift(function () {
             return new AsObservableOperator();
@@ -1062,7 +1068,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex concat
      */
-    public function concat(ObservableInterface $observable)
+    public function concat(ObservableInterface $observable): AnonymousObservable
     {
         return $this->lift(function () use ($observable) {
             return new ConcatOperator($observable);
@@ -1139,7 +1145,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex concat
      */
-    public function concatAll()
+    public function concatAll(): AnonymousObservable
     {
         return $this->lift(function () {
             return new ConcatAllOperator();
@@ -1157,7 +1163,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex count
      */
-    public function count(callable $predicate = null)
+    public function count(callable $predicate = null): AnonymousObservable
     {
         return $this->lift(function () use ($predicate) {
             return new CountOperator($predicate);
@@ -1171,7 +1177,7 @@ class Observable implements ObservableInterface
      * types, see Publish, PublishLast, and Replay.
      *
      * @param \Rx\Subject\Subject $subject
-     * @param null $selector
+     * @param callable|null $selector
      * @param SchedulerInterface $scheduler
      * @return ConnectableObservable|MulticastObservable
      *
@@ -1179,7 +1185,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function multicast(Subject $subject, $selector = null, SchedulerInterface $scheduler = null)
+    public function multicast(Subject $subject, callable $selector = null, SchedulerInterface $scheduler = null): Observable
     {
         return $selector ?
             new MulticastObservable($this, function () use ($subject) {
@@ -1195,13 +1201,13 @@ class Observable implements ObservableInterface
      * For specializations with fixed subject types, see Publish, PublishLast, and Replay.
      *
      * @param callable $subjectSelector
-     * @param null $selector
+     * @param callable|null $selector
      * @return \Rx\Observable\ConnectableObservable|\Rx\Observable\MulticastObservable
      *
      * @operator
      * @reactivex publish
      */
-    public function multicastWithSelector(callable $subjectSelector, $selector = null)
+    public function multicastWithSelector(callable $subjectSelector, callable $selector = null): MulticastObservable
     {
         return new MulticastObservable($this, $subjectSelector, $selector);
     }
@@ -1218,7 +1224,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function publish(callable $selector = null)
+    public function publish(callable $selector = null): Observable
     {
         return $this->multicast(new Subject(), $selector);
     }
@@ -1235,7 +1241,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function publishLast(callable $selector = null)
+    public function publishLast(callable $selector = null): Observable
     {
         return $this->multicast(new AsyncSubject(), $selector);
     }
@@ -1253,7 +1259,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function publishValue($initialValue, callable $selector = null)
+    public function publishValue($initialValue, callable $selector = null): Observable
     {
         return $this->multicast(new BehaviorSubject($initialValue), $selector);
     }
@@ -1272,7 +1278,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex refcount
      */
-    public function share()
+    public function share(): RefCountObservable
     {
         return $this->publish()->refCount();
     }
@@ -1292,7 +1298,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex refcount
      */
-    public function shareValue($initialValue)
+    public function shareValue($initialValue): RefCountObservable
     {
         return $this->publishValue($initialValue)->refCount();
     }
@@ -1314,7 +1320,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex replay
      */
-    public function replay(callable $selector = null, $bufferSize = null, $windowSize = null, SchedulerInterface $scheduler = null)
+    public function replay(callable $selector = null, int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler = null): Observable
     {
         return $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler), $selector);
     }
@@ -1336,7 +1342,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex replay
      */
-    public function shareReplay($bufferSize, $windowSize = null, SchedulerInterface $scheduler = null)
+    public function shareReplay(int $bufferSize, int $windowSize = null, SchedulerInterface $scheduler = null): RefCountObservable
     {
         return $this->replay(null, $bufferSize, $windowSize, $scheduler)->refCount();
     }
@@ -1356,7 +1362,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex zip
      */
-    public function zip(array $observables, callable $selector = null)
+    public function zip(array $observables, callable $selector = null): AnonymousObservable
     {
         return $this->lift(function () use ($observables, $selector) {
             return new ZipOperator($observables, $selector);
@@ -1375,7 +1381,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex retry
      */
-    public function retry($retryCount = -1)
+    public function retry(int $retryCount = -1): AnonymousObservable
     {
         return $this->lift(function () use ($retryCount) {
             return new RetryOperator($retryCount);
@@ -1393,7 +1399,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex retry
      */
-    public function retryWhen(callable $notifier)
+    public function retryWhen(callable $notifier): AnonymousObservable
     {
         return $this->lift(function () use ($notifier) {
             return new RetryWhenOperator($notifier);
@@ -1413,7 +1419,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex combinelatest
      */
-    public function combineLatest(array $observables, callable $selector = null)
+    public function combineLatest(array $observables, callable $selector = null): AnonymousObservable
     {
         return $this->lift(function () use ($observables, $selector) {
             return new CombineLatestOperator($observables, $selector);
@@ -1430,7 +1436,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex defaultIfEmpty
      */
-    public function defaultIfEmpty(ObservableInterface $observable)
+    public function defaultIfEmpty(ObservableInterface $observable): AnonymousObservable
     {
         return $this->lift(function () use ($observable) {
             return new DefaultIfEmptyOperator($observable);
@@ -1447,7 +1453,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex repeat
      */
-    public function repeat($count = -1)
+    public function repeat(int $count = -1): Observable
     {
         if ($count == 0) {
             return new EmptyObservable();
@@ -1472,7 +1478,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex repeat
      */
-    public function repeatWhen(callable $notifier)
+    public function repeatWhen(callable $notifier): AnonymousObservable
     {
         return $this->lift(function () use ($notifier) {
             return new RepeatWhenOperator($notifier);
@@ -1485,7 +1491,7 @@ class Observable implements ObservableInterface
      * @param SchedulerInterface $scheduler
      * @return AnonymousObservable
      */
-    public function subscribeOn(SchedulerInterface $scheduler)
+    public function subscribeOn(SchedulerInterface $scheduler): AnonymousObservable
     {
         return $this->lift(function () use ($scheduler) {
             return new SubscribeOnOperator($scheduler);
@@ -1503,7 +1509,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex delay
      */
-    public function delay(int $delay, SchedulerInterface $scheduler = null)
+    public function delay(int $delay, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($delay, $scheduler) {
             return new DelayOperator($delay, $scheduler);
@@ -1520,7 +1526,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex timeout
      */
-    public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null)
+    public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
             return new TimeoutOperator($timeout, $timeoutObservable, $scheduler);
@@ -1534,13 +1540,14 @@ class Observable implements ObservableInterface
      * @param $count
      * @param int $skip
      * @return AnonymousObservable
+     * @throws \InvalidArgumentException
      *
      * @demo bufferWithCount/bufferWithCount.php
      * @demo bufferWithCount/bufferWithCountAndSkip.php
      * @operator
      * @reactivex buffer
      */
-    public function bufferWithCount($count, $skip = null)
+    public function bufferWithCount(int $count, $skip = null): AnonymousObservable
     {
         return $this->lift(function () use ($count, $skip) {
             return new BufferWithCountOperator($count, $skip);
@@ -1586,7 +1593,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex startwith
      */
-    public function startWith($startValue, SchedulerInterface $scheduler = null)
+    public function startWith($startValue, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->startWithArray([$startValue], $scheduler);
     }
@@ -1602,7 +1609,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex startwith
      */
-    public function startWithArray(array $startArray, SchedulerInterface $scheduler = null)
+    public function startWithArray(array $startArray, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($startArray, $scheduler) {
             return new StartWithArrayOperator($startArray, $scheduler);
@@ -1620,7 +1627,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex min
      */
-    public function min(callable $comparer = null)
+    public function min(callable $comparer = null): AnonymousObservable
     {
         return $this->lift(function () use ($comparer) {
             return new MinOperator($comparer);
@@ -1638,7 +1645,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex max
      */
-    public function max(callable $comparer = null)
+    public function max(callable $comparer = null): AnonymousObservable
     {
         return $this->lift(function () use ($comparer) {
             return new MaxOperator($comparer);
@@ -1653,7 +1660,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex materialize-dematerialize
      */
-    public function materialize()
+    public function materialize(): AnonymousObservable
     {
         return $this->lift(function () {
             return new MaterializeOperator();
@@ -1668,7 +1675,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex materialize-dematerialize
      */
-    public function dematerialize()
+    public function dematerialize(): AnonymousObservable
     {
         return $this->lift(function () {
             return new DematerializeOperator();
@@ -1685,7 +1692,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex timestamp
      */
-    public function timestamp(SchedulerInterface $scheduler = null)
+    public function timestamp(SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($scheduler) {
             return new TimestampOperator($scheduler);
@@ -1735,7 +1742,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex switch
      */
-    public function switchFirst()
+    public function switchFirst(): AnonymousObservable
     {
         return $this->lift(function () {
             return new SwitchFirstOperator();
@@ -1757,7 +1764,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex groupBy
      */
-    public function partition(callable $predicate)
+    public function partition(callable $predicate): array
     {
         return [
             $this->filter($predicate),
@@ -1777,7 +1784,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex amb
      */
-    public static function race(array $observables, SchedulerInterface $scheduler = null)
+    public static function race(array $observables, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         if (count($observables) === 1) {
             return $observables[0];
@@ -1797,7 +1804,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex sum
      */
-    public function sum()
+    public function sum(): AnonymousObservable
     {
         return $this
             ->reduce(function ($a, $x) {
@@ -1814,7 +1821,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex average
      */
-    public function average()
+    public function average(): AnonymousObservable
     {
         return $this
             ->defaultIfEmpty(Observable::error(new \UnderflowException()))
@@ -1834,13 +1841,13 @@ class Observable implements ObservableInterface
      * all elements in the Observable sequence. If a property can't be resolved the observable will error.
      *
      * @param mixed $property
-     * @return Observable
+     * @return AnonymousObservable
      *
      * @demo pluck/pluck.php
      * @operator
      * @reactivex map
      */
-    public function pluck($property)
+    public function pluck($property): AnonymousObservable
     {
         return $this->map(function ($x) use ($property) {
             if (is_array($x) && isset($x[$property])) {
@@ -1862,14 +1869,14 @@ class Observable implements ObservableInterface
      * the last item emitted on the source observable will be emitted.
      *
      * @param $throttleDuration
-     * @param null $scheduler
+     * @param SchedulerInterface $scheduler
      * @return AnonymousObservable
      *
      * @demo throttle/throttle.php
      * @operator
      * @reactivex debounce
      */
-    public function throttle(int $throttleDuration, $scheduler = null)
+    public function throttle(int $throttleDuration, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($throttleDuration, $scheduler) {
             return new ThrottleOperator($throttleDuration, $scheduler);
