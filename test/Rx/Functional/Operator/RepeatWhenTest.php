@@ -20,7 +20,7 @@ class RepeatWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->repeatWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -79,7 +79,7 @@ class RepeatWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->repeatWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -145,7 +145,7 @@ class RepeatWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->repeatWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 

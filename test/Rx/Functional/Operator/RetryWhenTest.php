@@ -19,7 +19,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->retryWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -113,7 +113,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->retryWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -184,7 +184,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $error) {
             return $xs->retryWhen(function (Observable $attempts) {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -347,7 +347,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->retryWhen(function () {
-                return Observable::just(1);
+                return Observable::of(1);
             });
         }, 285);
 

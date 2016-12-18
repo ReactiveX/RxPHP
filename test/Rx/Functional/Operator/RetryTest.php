@@ -398,7 +398,7 @@ class RetryTest extends FunctionalTestCase
                 if (++$count < 2) {
                     return Observable::error(new \Exception('Something'));
                 }
-                return Observable::just(42);
+                return Observable::of(42);
             })
             ->retry(3)
             ->take(1)

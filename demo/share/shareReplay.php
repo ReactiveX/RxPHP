@@ -17,7 +17,7 @@ $published->subscribe($createStdoutObserver('SourceA '));
 $published->subscribe($createStdoutObserver('SourceB '));
 
 Rx\Observable
-    ::just(true)
+    ::of(true)
     ->concatMapTo(\Rx\Observable::timer(6000))
     ->flatMap(function () use ($published) {
         return $published;

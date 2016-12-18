@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 $source = \Rx\Observable::range(0, 3)
-    ->doOnEach(new \Rx\Observer\CallbackObserver(
+    ->do(new \Rx\Observer\CallbackObserver(
         function ($x) {
             echo 'Do Next:', $x, PHP_EOL;
         },

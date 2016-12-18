@@ -149,13 +149,25 @@ class Observable implements ObservableInterface
      * @param SchedulerInterface $scheduler
      * @return ReturnObservable An observable sequence with the single element.
      *
-     * @demo just/just.php
+     * @demo of/of.php
      * @operator
-     * @reactivex just
+     * @reactivex of
+     */
+    public static function of($value, SchedulerInterface $scheduler = null): ReturnObservable
+    {
+        return new ReturnObservable($value, $scheduler);
+    }
+
+    /**
+     * Alias for of
+     *
+     * @param $value
+     * @param SchedulerInterface|null $scheduler
+     * @return ReturnObservable
      */
     public static function just($value, SchedulerInterface $scheduler = null): ReturnObservable
     {
-        return new ReturnObservable($value, $scheduler);
+        return static::of($value, $scheduler);
     }
 
     /**
@@ -164,13 +176,24 @@ class Observable implements ObservableInterface
      * @param SchedulerInterface $scheduler
      * @return EmptyObservable An observable sequence with no elements.
      *
-     * @demo empty-observable/empty-observable.php
+     * @demo empty/empty.php
      * @operator
      * @reactivex empty-never-throw
      */
-    public static function emptyObservable(SchedulerInterface $scheduler = null): EmptyObservable
+    public static function empty(SchedulerInterface $scheduler = null): EmptyObservable
     {
         return new EmptyObservable($scheduler);
+    }
+
+    /**
+     * Alias for empty
+     *
+     * @param SchedulerInterface|null $scheduler
+     * @return EmptyObservable
+     */
+    public static function emptyObservable(SchedulerInterface $scheduler = null): EmptyObservable
+    {
+        return static::empty($scheduler);
     }
 
     /**
@@ -504,7 +527,7 @@ class Observable implements ObservableInterface
      */
     public function flatMapLatest(callable $selector, SchedulerInterface $scheduler = null)
     {
-        return $this->map($selector)->switchLatest($scheduler);
+        return $this->map($selector)->switch($scheduler);
     }
 
     /**
@@ -849,16 +872,27 @@ class Observable implements ObservableInterface
      *
      * @return \Rx\Observable\AnonymousObservable
      *
-     * @demo do/doOnEach.php
+     * @demo do/do.php
      * @operator
      * @reactivex do
      *
      */
-    public function doOnEach(ObserverInterface $observer)
+    public function do(ObserverInterface $observer): AnonymousObservable
     {
         return $this->lift(function () use ($observer) {
             return new DoOnEachOperator($observer);
         });
+    }
+
+    /**
+     * Alias for do
+     *
+     * @param ObserverInterface $observer
+     * @return mixed
+     */
+    public function doOnEach(ObserverInterface $observer): AnonymousObservable
+    {
+        return $this->doOnEach($observer);
     }
 
     /**
@@ -871,7 +905,7 @@ class Observable implements ObservableInterface
      */
     public function doOnNext(callable $onNext)
     {
-        return $this->doOnEach(new DoObserver(
+        return $this->do(new DoObserver(
             $onNext
         ));
     }
@@ -886,7 +920,7 @@ class Observable implements ObservableInterface
      */
     public function doOnError(callable $onError)
     {
-        return $this->doOnEach(new DoObserver(
+        return $this->do(new DoObserver(
             null,
             $onError
         ));
@@ -902,7 +936,7 @@ class Observable implements ObservableInterface
      */
     public function doOnCompleted(callable $onCompleted)
     {
-        return $this->doOnEach(new DoObserver(
+        return $this->do(new DoObserver(
             null,
             null,
             $onCompleted
@@ -1519,15 +1553,26 @@ class Observable implements ObservableInterface
      * @param callable $selector
      * @return AnonymousObservable
      *
-     * @demo catch/catchError.php
+     * @demo catch/catch.php
      * @operator
      * @reactivex catch
      */
-    public function catchError(callable $selector)
+    public function catch (callable $selector): AnonymousObservable
     {
         return $this->lift(function () use ($selector) {
             return new CatchErrorOperator($selector);
         });
+    }
+
+    /**
+     * Alias for catch
+     *
+     * @param callable $selector
+     * @return AnonymousObservable
+     */
+    public function catchError(callable $selector): AnonymousObservable
+    {
+        return $this->catch($selector);
     }
 
     /**
@@ -1654,17 +1699,26 @@ class Observable implements ObservableInterface
      * @return AnonymousObservable - The observable sequence that at any point in time produces the elements of the most
      * recent inner observable sequence that has been received.
      *
-     * @demo switch/switchLatest.php
+     * @demo switch/switch.php
      * @operator
      * @reactivex switch
      */
-    public function switchLatest()
+    public function switch (): AnonymousObservable
     {
         return $this->lift(function () {
             return new SwitchLatestOperator();
         });
     }
 
+    /**
+     * Alias for switch
+     *
+     * @return AnonymousObservable
+     */
+    public function switchLatest(): AnonymousObservable
+    {
+        return $this->switch();
+    }
 
     /**
      * Receives an Observable of Observables and propagates the first Observable exclusively until it completes before

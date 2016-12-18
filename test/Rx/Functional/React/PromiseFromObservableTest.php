@@ -17,7 +17,7 @@ class PromiseFromObservableTest extends FunctionalTestCase
      */
     public function promise_success()
     {
-        $source = Observable::just(42);
+        $source = Observable::of(42);
 
         $promise = Promise::fromObservable($source);
 

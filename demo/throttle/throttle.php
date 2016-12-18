@@ -15,7 +15,7 @@ $times = [
 // Delay each item by time and project value;
 $source = Observable::fromArray($times)
     ->flatMap(function ($item) {
-        return Observable::just($item['value'])
+        return Observable::of($item['value'])
             ->delay($item['time']);
     })
     ->throttle(300 /* ms */);

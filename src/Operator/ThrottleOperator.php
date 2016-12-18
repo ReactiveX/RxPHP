@@ -46,7 +46,7 @@ class ThrottleOperator implements OperatorInterface
                     return;
                 }
 
-                $newDisp = Observable::just($x, $this->scheduler)
+                $newDisp = Observable::of($x, $this->scheduler)
                     ->delay($this->nextSend - $now, $this->scheduler)
                     ->subscribe(new CallbackObserver(
                         function ($x) use ($observer) {

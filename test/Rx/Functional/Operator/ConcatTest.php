@@ -301,10 +301,10 @@ class ConcatTest extends FunctionalTestCase
     {
 
         $sources = Observable::fromArray([
-            Observable::just(0),
-            Observable::just(1),
-            Observable::just(2),
-            Observable::just(3),
+            Observable::of(0),
+            Observable::of(1),
+            Observable::of(2),
+            Observable::of(3),
         ]);
 
         $res       = [];
@@ -331,10 +331,10 @@ class ConcatTest extends FunctionalTestCase
     {
 
         $sources = Observable::fromArray([
-            Observable::just(0),
+            Observable::of(0),
             Observable::error(new \Exception()),
-            Observable::just(2),
-            Observable::just(3),
+            Observable::of(2),
+            Observable::of(3),
         ]);
 
         $res       = [];

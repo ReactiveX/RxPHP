@@ -6,6 +6,6 @@ $source = Rx\Observable::range(0, 3)
     ->map(function ($x) {
         return \Rx\Observable::range($x, 3);
     })
-    ->switchLatest();
+    ->switch();
 
 $subscription = $source->subscribe($stdoutObserver);
