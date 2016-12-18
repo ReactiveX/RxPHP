@@ -17,6 +17,15 @@ function run_demo($file) {
         return false;
     }
     $expected = file_get_contents($file . '.expect');
+    if (trim($output) != trim($expected)) {
+        echo $file . " output does not match expected output:\n";
+        echo "--- Actual output:\n";
+        echo $output;
+        echo "--- End actual output\n";
+        echo "--- Expected output:\n";
+        echo $expected;
+        echo "--- End expected output\n";
+    }
     return trim($output) == trim($expected);
 }
 
