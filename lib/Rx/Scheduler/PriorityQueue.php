@@ -20,6 +20,10 @@ class PriorityQueue
 
     public function remove($item)
     {
+        if ($this->peek() === $item) {
+            $this->dequeue();
+            return true;
+        }
         $newQueue = new InternalPriorityQueue();
         $removed  = false;
 
