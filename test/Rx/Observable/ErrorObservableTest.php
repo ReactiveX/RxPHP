@@ -14,7 +14,7 @@ class ErrorObservableTest extends TestCase
         $observable = new ErrorObservable($ex);
 
         $recordedException = null;
-        $observable->subscribeCallback(
+        $observable->subscribe(
             function () {
             },
             function ($ex) use (&$recordedException) {

@@ -22,7 +22,7 @@ class ColdObservable extends Observable
         $this->messages  = $messages;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $this->subscriptions[] = new Subscription($this->scheduler->getClock());
         $index                 = count($this->subscriptions) - 1;

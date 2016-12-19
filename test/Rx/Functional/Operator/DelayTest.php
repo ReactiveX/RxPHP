@@ -281,7 +281,7 @@ class DelayTest extends FunctionalTestCase
 
         Observable::create(function ($observer) {
             $observer->onCompleted();
-        })->delay(1, $this->scheduler)->subscribeCallback(
+        })->delay(1, $this->scheduler)->subscribe(
             null,
             null,
             function () use (&$completes) {

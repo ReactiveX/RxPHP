@@ -310,7 +310,7 @@ class ConcatTest extends FunctionalTestCase
         $res       = [];
         $completed = false;
 
-        $sources->concatAll()->subscribeCallback(
+        $sources->concatAll()->subscribe(
             function ($x) use (&$res) {
                 $res[] = $x;
             },
@@ -341,7 +341,7 @@ class ConcatTest extends FunctionalTestCase
         $error     = false;
         $completed = false;
 
-        $sources->concatAll()->subscribeCallback(
+        $sources->concatAll()->subscribe(
             function ($x) use (&$res) {
                 $res[] = $x;
             },

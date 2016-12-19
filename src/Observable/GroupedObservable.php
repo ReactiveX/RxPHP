@@ -37,7 +37,7 @@ class GroupedObservable extends Observable
         return $this->key;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->underlyingObservable->subscribe($observer);
     }

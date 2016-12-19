@@ -40,7 +40,7 @@ class PromiseFactoryTest extends FunctionalTestCase
 
         $theException = null;
 
-        $source->subscribeCallback(
+        $source->subscribe(
             [$this, 'fail'],
             function ($err) use (&$theException) {
                 $theException = $err;
@@ -68,7 +68,7 @@ class PromiseFactoryTest extends FunctionalTestCase
 
         $theException = null;
 
-        $source->subscribeCallback(
+        $source->subscribe(
             [$this, 'fail'],
             function ($err) use (&$theException) {
                 $theException = $err;

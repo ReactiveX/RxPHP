@@ -56,7 +56,7 @@ class AsyncSubject extends Subject
         parent::onCompleted();
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $this->assertNotDisposed();
 

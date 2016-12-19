@@ -39,7 +39,7 @@ class ConnectableObservable extends Observable
         $this->hasSubscription  = false;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->subject->subscribe($observer);
     }

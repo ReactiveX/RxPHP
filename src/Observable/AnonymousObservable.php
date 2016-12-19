@@ -17,7 +17,7 @@ class AnonymousObservable extends Observable
         $this->subscribeAction = $subscribeAction;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $subscribeAction = $this->subscribeAction;
 

@@ -273,7 +273,7 @@ class SkipUntilTest extends FunctionalTestCase
 
         Observable::of(1)
             ->skipUntil(Observable::of(1))
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$emitted) {
                     if ($emitted !== null) {
                         $this->fail('emitted should be null');

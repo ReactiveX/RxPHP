@@ -41,7 +41,7 @@ class HotObservable extends Observable
         }
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $currentObservable = $this;
 

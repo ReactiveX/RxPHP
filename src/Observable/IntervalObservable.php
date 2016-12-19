@@ -26,7 +26,7 @@ class IntervalObservable extends Observable
         $this->scheduler = $scheduler ?? Scheduler::getAsync();
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
 
         $counter = 0;

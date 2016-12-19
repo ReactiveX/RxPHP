@@ -5,8 +5,11 @@ namespace Rx;
 interface ObservableInterface
 {
     /**
-     * @param ObserverInterface $observer
+     * @param callable|ObserverInterface|null $onNextOrObserver
+     * @param callable|null $onError
+     * @param callable|null $onCompleted
      * @return DisposableInterface
+     * @throws \InvalidArgumentException
      */
-    public function subscribe(ObserverInterface $observer): DisposableInterface;
+    public function subscribe($onNextOrObserver = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface;
 }

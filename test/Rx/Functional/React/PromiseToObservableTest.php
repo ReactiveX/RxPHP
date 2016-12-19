@@ -188,7 +188,7 @@ class PromiseToObservableTest extends FunctionalTestCase
         
         $results = new MockObserver($this->scheduler);
 
-        $s = $o->subscribe($results, $this->scheduler);
+        $s = $o->subscribe($results);
 
         $this->scheduler->schedule(function () use ($s) {
             $s->dispose();

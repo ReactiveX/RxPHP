@@ -20,7 +20,7 @@ class ReturnObservable extends Observable
         $this->scheduler = $scheduler ?: Scheduler::getDefault();
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $disposable = new CompositeDisposable();
 

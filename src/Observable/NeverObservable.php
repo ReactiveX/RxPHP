@@ -9,7 +9,7 @@ use Rx\ObserverInterface;
 
 class NeverObservable extends Observable
 {
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return new EmptyDisposable();
     }

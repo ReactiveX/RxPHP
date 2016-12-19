@@ -76,10 +76,33 @@ class Observable implements ObservableInterface
     protected $started = false;
 
     /**
+     * @param callable|ObserverInterface|null $onNextOrObserver
+     * @param callable|null $onError
+     * @param callable|null $onCompleted
+     * @return DisposableInterface
+     * @throws \InvalidArgumentException
+     *
+     * @operator
+     * @reactivex subscribe
+     */
+    public function subscribe($onNextOrObserver = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface
+    {
+        if ($onNextOrObserver instanceof ObserverInterface) {
+            return $this->_subscribe($onNextOrObserver);
+        } elseif ($onNextOrObserver !== null && !is_callable($onNextOrObserver)) {
+            throw new \InvalidArgumentException('The first argument needs to be a "callable" or "Observer"');
+        }
+
+        $observer = new CallbackObserver($onNextOrObserver, $onError, $onCompleted);
+
+        return $this->_subscribe($observer);
+    }
+
+    /**
      * @param ObserverInterface $observer
      * @return DisposableInterface
      */
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $this->observers[] = $observer;
         $this->started     = true;
@@ -89,6 +112,14 @@ class Observable implements ObservableInterface
         });
     }
 
+    /**
+     * @deprecated
+     *
+     * @param callable|null $onNext
+     * @param callable|null $onError
+     * @param callable|null $onCompleted
+     * @return DisposableInterface
+     */
     public function subscribeCallback(callable $onNext = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface
     {
         $observer = new CallbackObserver($onNext, $onError, $onCompleted);
@@ -300,15 +331,16 @@ class Observable implements ObservableInterface
      * Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
      *
      * @param callable $factory
-     * @return \Rx\Observable\AnonymousObservable
+     * @param SchedulerInterface $scheduler
+     * @return AnonymousObservable
      *
      * @demo defer/defer.php
      * @operator
      * @reactivex defer
      */
-    public static function defer(callable $factory): AnonymousObservable
+    public static function defer(callable $factory, SchedulerInterface $scheduler = null): AnonymousObservable
     {
-        return (new EmptyObservable())->lift(function () use ($factory) {
+        return (new EmptyObservable($scheduler))->lift(function () use ($factory) {
             return new DeferOperator($factory);
         });
     }

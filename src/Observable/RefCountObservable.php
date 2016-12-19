@@ -29,7 +29,7 @@ class RefCountObservable extends Observable
         $this->count  = 0;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $this->count++;
         $shouldConnect = $this->count === 1;

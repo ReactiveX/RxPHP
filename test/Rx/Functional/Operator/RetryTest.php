@@ -333,7 +333,7 @@ class RetryTest extends FunctionalTestCase
 
         $xs = (new ReturnObservable(1, $scheduler1))->retry(3);
 
-        $xs->subscribeCallback(function () {
+        $xs->subscribe(function () {
             throw new \Exception();
         });
 
@@ -349,7 +349,7 @@ class RetryTest extends FunctionalTestCase
 
         $ys = (new ErrorObservable(new \Exception(), $scheduler2))->retry(100);
 
-        $d = $ys->subscribeCallback(null, function ($err) {
+        $d = $ys->subscribe(null, function ($err) {
             throw $err;
         });
 
@@ -363,7 +363,7 @@ class RetryTest extends FunctionalTestCase
 
         $zs = (new ReturnObservable(1, $scheduler3))->retry(100);
 
-        $zs->subscribeCallback(null, null, function () {
+        $zs->subscribe(null, null, function () {
             throw new \Exception();
         });
 

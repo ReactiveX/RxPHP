@@ -16,7 +16,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
     protected $isStopped = false;
     protected $observers = [];
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $this->assertNotDisposed();
 

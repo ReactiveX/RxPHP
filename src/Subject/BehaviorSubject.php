@@ -26,9 +26,9 @@ class BehaviorSubject extends Subject
         parent::onNext($value);
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-        $disposable = parent::subscribe($observer);
+        $disposable = parent::_subscribe($observer);
 
         $observer->onNext($this->value);
 

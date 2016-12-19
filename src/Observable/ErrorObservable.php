@@ -20,7 +20,7 @@ class ErrorObservable extends Observable
         $this->scheduler = $scheduler ?: Scheduler::getImmediate();
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->scheduler->schedule(function () use ($observer) {
             $observer->onError($this->error);

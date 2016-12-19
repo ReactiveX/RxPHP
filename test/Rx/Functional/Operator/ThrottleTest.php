@@ -277,6 +277,6 @@ class ThrottleTest extends FunctionalTestCase
         
         Observable::of(1, $scheduler)
             ->throttle(100, $scheduler)
-            ->subscribeCallback(null, null, null, new ImmediateScheduler());
+            ->subscribe();
     }
 }

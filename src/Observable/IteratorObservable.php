@@ -24,7 +24,7 @@ class IteratorObservable extends Observable
      * @param ObserverInterface $observer
      * @return \Rx\Disposable\CompositeDisposable|\Rx\DisposableInterface
      */
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $key = 0;
 

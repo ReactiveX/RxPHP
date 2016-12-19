@@ -16,7 +16,7 @@ class RecursiveReturnObservable extends Observable
         $this->value = $value;
     }
 
-    public function subscribe(\Rx\ObserverInterface $observer): \Rx\DisposableInterface
+    public function _subscribe(\Rx\ObserverInterface $observer): \Rx\DisposableInterface
     {
         return \Rx\Scheduler::getDefault()->scheduleRecursive(function ($reschedule) use ($observer) {
             $observer->onNext($this->value);

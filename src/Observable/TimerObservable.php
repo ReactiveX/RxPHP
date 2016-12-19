@@ -22,7 +22,7 @@ class TimerObservable extends Observable
         $this->scheduler = $scheduler;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $scheduler = $this->scheduler ?? Scheduler::getAsync();
 

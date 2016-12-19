@@ -27,7 +27,7 @@ class TestSubject extends Subject
         $this->subscribeCount = 0;
     }
 
-    public function subscribe(ObserverInterface $observer): DisposableInterface
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
 
         $this->subscribeCount++;

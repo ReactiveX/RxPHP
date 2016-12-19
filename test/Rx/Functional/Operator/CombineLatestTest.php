@@ -920,7 +920,7 @@ class CombineLatestTest extends FunctionalTestCase
                 $completed = true;
             }
 
-        ), $scheduler);
+        ));
 
         $loop->run();
 

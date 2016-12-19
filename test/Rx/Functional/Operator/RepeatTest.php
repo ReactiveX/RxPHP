@@ -147,14 +147,15 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_throws_2()
     {
         $scheduler2 = new TestScheduler();
-        $xs         = (new ErrorObservable(new \Exception()))->repeat();
+
+        $xs = (new ErrorObservable(new \Exception(), $scheduler2))->repeat();
 
         $xs->subscribe(new CallbackObserver(
             null,
             function ($x) {
                 throw new \Exception();
             }
-        ), $scheduler2);
+        ));
 
         $scheduler2->start();
     }
@@ -173,7 +174,7 @@ class RepeatTest extends FunctionalTestCase
             function () {
                 throw new \Exception;
             }
-        ), $scheduler3);
+        ));
 
         $scheduler3->scheduleAbsolute(210, function () use ($disp) {
             $disp->dispose();
