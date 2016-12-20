@@ -7,6 +7,7 @@ use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
+use Rx\Observable\ForkJoinObservable;
 use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
@@ -231,6 +232,23 @@ class Observable implements ObservableInterface
         return (new EmptyObservable())->lift(function () use ($sources) {
             return new MergeAllOperator($sources);
         });
+    }
+
+    /**
+     * Runs all observable sequences in parallel and collect their last elements.
+     *
+     * @param array $observables
+     * @param callable|null $resultSelector
+     * @param SchedulerInterface|null $scheduler
+     * @return ForkJoinObservable
+     *
+     * @demo forkJoin-observable/forkJoin-observable.php
+     * @operator
+     * @reactivex forkJoin
+     */
+    public static function forkJoin(array $observables, callable $resultSelector = null, SchedulerInterface $scheduler = null)
+    {
+        return new ForkJoinObservable($observables, $resultSelector, $scheduler);
     }
 
     /**
