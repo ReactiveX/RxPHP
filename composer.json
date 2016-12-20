@@ -36,7 +36,8 @@
         "react/promise": "For converting promises to and from observables."
     },
     "autoload": {
-        "psr-4": { "Rx\\": "src" }
+        "psr-4": { "Rx\\": "src" },
+        "files" : ["src/bootstrap.php"]
     },
     "extra": {
         "branch-alias": {

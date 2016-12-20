@@ -4,13 +4,13 @@ namespace Rx\Functional\Promise;
 
 use Exception;
 use Interop\Async\Loop;
-use Interop\Async\Loop\Test\DummyDriver;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Promise\Promise;
 
 class ToPromiseTest extends FunctionalTestCase
 {
+
     /**
      * @test
      *
@@ -45,11 +45,6 @@ class ToPromiseTest extends FunctionalTestCase
      */
     public function promise_error_handler()
     {
-        $driver  = new DummyDriver();
-        $factory = $this->getMockBuilder(Loop\DriverFactory::class)->getMock();
-        $factory->method('create')->willReturn($driver);
-        Loop::setFactory($factory);
-
         Loop::setErrorHandler(function (\Exception $e) use (&$thrownError) {
             $thrownError = $e;
         });

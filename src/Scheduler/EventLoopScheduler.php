@@ -3,9 +3,7 @@
 namespace Rx\Scheduler;
 
 use Interop\Async\Loop;
-use React\EventLoop\StreamSelectLoop;
 use Rx\DisposableInterface;
-use WyriHaximus\React\AsyncInteropLoop\ReactDriverFactory;
 
 final class EventLoopScheduler extends VirtualTimeScheduler
 {
@@ -13,17 +11,12 @@ final class EventLoopScheduler extends VirtualTimeScheduler
 
     private $insideInvoke = false;
 
-    private static $loopSet = false;
-
     public function __construct()
     {
         parent::__construct($this->now(), function ($a, $b) {
             return $a - $b;
         });
-
-        static::registerLoopRunner();
     }
-
 
     public function scheduleAbsoluteWithState($state, int $dueTime, callable $action): DisposableInterface
     {
@@ -62,32 +55,5 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     public function now(): int
     {
         return (int)floor(microtime(true) * 1000);
-    }
-
-    static private function registerLoopRunner()
-    {
-        $hasBeenRun = false;
-
-        if (!static::$loopSet){
-            try {
-                $driver = ReactDriverFactory::createFactoryFromLoop(StreamSelectLoop::class);
-                Loop::setFactory($driver);
-                static::$loopSet = true;
-            } catch (\RuntimeException $e) {
-                //Intentionally Left Blank
-            }
-
-        }
-
-
-        register_shutdown_function(function () use (&$hasBeenRun) {
-            if (!$hasBeenRun) {
-                Loop::get()->run();
-            }
-        });
-
-        Loop::get()->defer(function () use (&$hasBeenRun) {
-            $hasBeenRun = true;
-        });
     }
 }
