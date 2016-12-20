@@ -21,7 +21,8 @@
     ],
     "require": {
         "php": "~7.0",
-        "wyrihaximus/react-async-interop-loop": "dev-master"
+        "wyrihaximus/react-async-interop-loop": "dev-master",
+        "async-interop/promise": "^0.2.0"
     },
     "require-dev": {
         "react/event-loop": "~0.4.1",

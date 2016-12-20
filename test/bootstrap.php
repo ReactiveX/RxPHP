@@ -13,6 +13,7 @@ if (file_exists($file = __DIR__ . '/../vendor/autoload.php')) {
     $loader = require $file;
     $loader->add('Rx', __DIR__);
     require_once __DIR__ . '/helper-functions.php';
+    require_once __DIR__ . '/../vendor/async-interop/event-loop/test/DummyDriver.php';
 } else {
     throw new RuntimeException('Install dependencies to run test suite.');
 }

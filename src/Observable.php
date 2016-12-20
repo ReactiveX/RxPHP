@@ -2,11 +2,13 @@
 
 namespace Rx;
 
+use Interop\Async\Promise;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
+use Rx\Observable\FromPromiseObservable;
 use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
@@ -63,6 +65,7 @@ use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
+use Rx\Promise\Promise as RxPromise;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
@@ -1913,5 +1916,29 @@ class Observable implements ObservableInterface
         return $this->lift(function () use ($throttleDuration, $scheduler) {
             return new ThrottleOperator($throttleDuration, $scheduler);
         });
+    }
+
+    /**
+     * @param Promise $promise
+     * @param SchedulerInterface|null $scheduler
+     * @return FromPromiseObservable
+     *
+     * @demo promise/fromPromise.php
+     * @operator
+     * @reactivex from
+     */
+    public static function fromPromise(Promise $promise, SchedulerInterface $scheduler = null): FromPromiseObservable
+    {
+        return new FromPromiseObservable($promise, $scheduler);
+    }
+
+    /**
+     * Converts Observable into Async Interop Promise
+     *
+     * @return Promise
+     */
+    public function toPromise(): Promise
+    {
+        return new RxPromise($this);
     }
 }
