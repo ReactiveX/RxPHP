@@ -933,7 +933,7 @@ class Observable implements ObservableInterface
      */
     public function doOnEach(ObserverInterface $observer): AnonymousObservable
     {
-        return $this->doOnEach($observer);
+        return $this->do($observer);
     }
 
     /**
