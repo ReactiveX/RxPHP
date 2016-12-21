@@ -12,7 +12,7 @@ $scheduler = new EventLoopScheduler($loop);
 $times = [
     ['value' => 0, 'time' => 100],
     ['value' => 1, 'time' => 600],
-    ['value' => 2, 'time' => 400],
+    ['value' => 2, 'time' => 150],
     ['value' => 3, 'time' => 900],
     ['value' => 4, 'time' => 200]
 ];
