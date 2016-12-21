@@ -16,7 +16,7 @@ class TakeTest extends FunctionalTestCase
      */
     public function it_throws_an_exception_on_negative_amounts()
     {
-        $observable = new ReturnObservable(42);
+        $observable = new ReturnObservable(42, $this->scheduler);
         $result     = $observable->take(-1);
 
         $result->subscribe(new CallbackObserver());

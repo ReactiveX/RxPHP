@@ -3,6 +3,7 @@
 namespace Rx\Observable;
 
 use Rx\Observer\CallbackObserver;
+use Rx\Scheduler;
 
 class ArrayObservableTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +14,7 @@ class ArrayObservableTest extends \PHPUnit_Framework_TestCase
     {
         $a = [1,2,3];
 
-        $o = new ArrayObservable($a);
+        $o = new ArrayObservable($a, Scheduler::getDefault());
 
         $goodCount = 0;
 
@@ -37,7 +38,7 @@ class ArrayObservableTest extends \PHPUnit_Framework_TestCase
     public function testRange()
     {
         //todo: refactor
-        $observable = new ArrayObservable(range(1, 10));
+        $observable = new ArrayObservable(range(1, 10), Scheduler::getDefault());
 
         $record = array();
         $observable->subscribe(function($v) use (&$record) {$record[] = $v; });
@@ -48,7 +49,7 @@ class ArrayObservableTest extends \PHPUnit_Framework_TestCase
     public function testOnCompleteIsCalled()
     {
         //todo: refactor
-        $observable = new ArrayObservable(array());
+        $observable = new ArrayObservable(array(), Scheduler::getDefault());
 
         $isCalled = false;
         $observable->subscribe(null, null, function() use (&$isCalled) { $isCalled = true; });

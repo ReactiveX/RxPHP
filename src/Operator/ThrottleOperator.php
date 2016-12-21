@@ -10,7 +10,6 @@ use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class ThrottleOperator implements OperatorInterface
@@ -23,15 +22,12 @@ class ThrottleOperator implements OperatorInterface
 
     private $scheduler;
 
-    public function __construct(int $debounceTime, SchedulerInterface $scheduler = null)
+    public function __construct(int $debounceTime, SchedulerInterface $scheduler)
     {
         $this->throttleTime = $debounceTime;
-        $this->scheduler    = $scheduler ?: Scheduler::getDefault();
+        $this->scheduler    = $scheduler;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $innerDisp = new SerialDisposable();

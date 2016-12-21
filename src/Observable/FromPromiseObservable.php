@@ -7,7 +7,6 @@ use Rx\Disposable\SingleAssignmentDisposable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class FromPromiseObservable extends Observable
@@ -16,10 +15,10 @@ class FromPromiseObservable extends Observable
 
     private $scheduler;
 
-    public function __construct(Promise $promise, SchedulerInterface $scheduler = null)
+    public function __construct(Promise $promise, SchedulerInterface $scheduler)
     {
         $this->promise   = $promise;
-        $this->scheduler = $scheduler ?: Scheduler::getDefault();
+        $this->scheduler = $scheduler;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface

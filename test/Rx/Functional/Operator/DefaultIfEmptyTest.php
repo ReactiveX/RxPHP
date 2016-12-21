@@ -22,7 +22,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->defaultIfEmpty(new EmptyObservable());
+            return $xs->defaultIfEmpty(new EmptyObservable($this->scheduler));
         });
 
         $this->assertMessages([
@@ -48,7 +48,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->defaultIfEmpty(new ReturnObservable(-1));
+            return $xs->defaultIfEmpty(new ReturnObservable(-1, $this->scheduler));
         });
 
         $this->assertMessages([

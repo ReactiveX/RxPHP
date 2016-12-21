@@ -5,7 +5,6 @@ namespace Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class ArrayObservable extends Observable
@@ -14,10 +13,10 @@ class ArrayObservable extends Observable
 
     private $scheduler;
 
-    public function __construct(array $data, SchedulerInterface $scheduler = null)
+    public function __construct(array $data, SchedulerInterface $scheduler)
     {
         $this->data      = $data;
-        $this->scheduler = $scheduler ?: Scheduler::getDefault();
+        $this->scheduler = $scheduler;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface

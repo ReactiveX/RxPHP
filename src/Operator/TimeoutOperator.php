@@ -9,7 +9,6 @@ use Rx\Observable\ErrorObservable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class TimeoutOperator implements OperatorInterface
@@ -20,14 +19,14 @@ class TimeoutOperator implements OperatorInterface
 
     private $timeoutObservable;
 
-    public function __construct(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null)
+    public function __construct(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler)
     {
         $this->timeout           = $timeout;
-        $this->scheduler         = $scheduler ?: Scheduler::getAsync();
+        $this->scheduler         = $scheduler;
         $this->timeoutObservable = $timeoutObservable;
 
         if ($this->timeoutObservable === null) {
-            $this->timeoutObservable = new ErrorObservable(new \Exception('timeout'));
+            $this->timeoutObservable = new ErrorObservable(new \Exception('timeout'), $scheduler);
         }
     }
 

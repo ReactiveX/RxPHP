@@ -88,7 +88,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex subscribe
      */
-    public function subscribe($onNextOrObserver = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface
+    public function subscribe($onNextOrObserver = null, callable $onError = null, callable $onCompleted = null): DisposableInterface
     {
         if ($onNextOrObserver instanceof ObserverInterface) {
             return $this->_subscribe($onNextOrObserver);
@@ -123,7 +123,7 @@ class Observable implements ObservableInterface
      * @param callable|null $onCompleted
      * @return DisposableInterface
      */
-    public function subscribeCallback(callable $onNext = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface
+    public function subscribeCallback(callable $onNext = null, callable $onError = null, callable $onCompleted = null): DisposableInterface
     {
         $observer = new CallbackObserver($onNext, $onError, $onCompleted);
 
@@ -177,7 +177,7 @@ class Observable implements ObservableInterface
      */
     public static function interval(int $interval, $scheduler = null): IntervalObservable
     {
-        return new IntervalObservable($interval, $scheduler);
+        return new IntervalObservable($interval, $scheduler ?: Scheduler::getAsync());
     }
 
     /**
@@ -193,7 +193,7 @@ class Observable implements ObservableInterface
      */
     public static function of($value, SchedulerInterface $scheduler = null): ReturnObservable
     {
-        return new ReturnObservable($value, $scheduler);
+        return new ReturnObservable($value, $scheduler ?: Scheduler::getDefault());
     }
 
     /**
@@ -220,7 +220,7 @@ class Observable implements ObservableInterface
      */
     public static function empty(SchedulerInterface $scheduler = null): EmptyObservable
     {
-        return new EmptyObservable($scheduler);
+        return new EmptyObservable($scheduler ?: Scheduler::getDefault());
     }
 
     /**
@@ -261,7 +261,7 @@ class Observable implements ObservableInterface
      */
     public static function error(\Exception $error, SchedulerInterface $scheduler = null): ErrorObservable
     {
-        return new ErrorObservable($error, $scheduler);
+        return new ErrorObservable($error, $scheduler ?: Scheduler::getImmediate());
     }
 
     /**
@@ -312,7 +312,7 @@ class Observable implements ObservableInterface
      */
     public static function fromArray(array $array, SchedulerInterface $scheduler = null): ArrayObservable
     {
-        return new ArrayObservable($array, $scheduler);
+        return new ArrayObservable($array, $scheduler ?: Scheduler::getDefault());
     }
 
     /**
@@ -343,9 +343,10 @@ class Observable implements ObservableInterface
      */
     public static function defer(callable $factory, SchedulerInterface $scheduler = null): AnonymousObservable
     {
-        return (new EmptyObservable($scheduler))->lift(function () use ($factory) {
-            return new DeferOperator($factory);
-        });
+        return (new EmptyObservable($scheduler ?: Scheduler::getDefault()))
+            ->lift(function () use ($factory) {
+                return new DeferOperator($factory);
+            });
     }
 
     /**
@@ -364,7 +365,7 @@ class Observable implements ObservableInterface
      */
     public static function range(int $start, int $count, SchedulerInterface $scheduler = null): RangeObservable
     {
-        return new RangeObservable($start, $count, $scheduler);
+        return new RangeObservable($start, $count, $scheduler ?: Scheduler::getDefault());
     }
 
     /**
@@ -558,7 +559,6 @@ class Observable implements ObservableInterface
      * new one.
      *
      * @param callable $selector - A transform function to apply to each source element.
-     * @param SchedulerInterface $scheduler
      * @return AnonymousObservable - An observable sequence which transforms the items emitted by an Observable into
      * Observables, and mirror those items emitted by the most-recently transformed Observable.
      *
@@ -566,9 +566,9 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function flatMapLatest(callable $selector, SchedulerInterface $scheduler = null): AnonymousObservable
+    public function flatMapLatest(callable $selector): AnonymousObservable
     {
-        return $this->map($selector)->switch($scheduler);
+        return $this->map($selector)->switch();
     }
 
     /**
@@ -641,7 +641,7 @@ class Observable implements ObservableInterface
     public function take(int $count): Observable
     {
         if ($count === 0) {
-            return new EmptyObservable();
+            return new EmptyObservable(Scheduler::getDefault());
         }
 
         return $this->lift(function () use ($count) {
@@ -1074,7 +1074,7 @@ class Observable implements ObservableInterface
      */
     public static function timer(int $dueTime, SchedulerInterface $scheduler = null): TimerObservable
     {
-        return new TimerObservable($dueTime, $scheduler);
+        return new TimerObservable($dueTime, $scheduler ?: Scheduler::getAsync());
     }
 
     /**
@@ -1213,20 +1213,19 @@ class Observable implements ObservableInterface
      *
      * @param \Rx\Subject\Subject $subject
      * @param callable|null $selector
-     * @param SchedulerInterface $scheduler
      * @return ConnectableObservable|MulticastObservable
      *
      * @demo multicast/multicast.php
      * @operator
      * @reactivex publish
      */
-    public function multicast(Subject $subject, callable $selector = null, SchedulerInterface $scheduler = null): Observable
+    public function multicast(Subject $subject, callable $selector = null): Observable
     {
         return $selector ?
             new MulticastObservable($this, function () use ($subject) {
                 return $subject;
             }, $selector) :
-            new ConnectableObservable($this, $subject, $scheduler);
+            new ConnectableObservable($this, $subject);
     }
 
     /**
@@ -1357,7 +1356,7 @@ class Observable implements ObservableInterface
      */
     public function replay(callable $selector = null, int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler = null): Observable
     {
-        return $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler), $selector);
+        return $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler ?: Scheduler::getDefault()), $selector);
     }
 
     /**
@@ -1490,8 +1489,8 @@ class Observable implements ObservableInterface
      */
     public function repeat(int $count = -1): Observable
     {
-        if ($count == 0) {
-            return new EmptyObservable();
+        if ($count === 0) {
+            return new EmptyObservable(Scheduler::getDefault());
         }
 
         return $this->lift(function () use ($count) {
@@ -1547,7 +1546,7 @@ class Observable implements ObservableInterface
     public function delay(int $delay, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($delay, $scheduler) {
-            return new DelayOperator($delay, $scheduler);
+            return new DelayOperator($delay, $scheduler ?: Scheduler::getAsync());
         });
     }
 
@@ -1564,7 +1563,7 @@ class Observable implements ObservableInterface
     public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
-            return new TimeoutOperator($timeout, $timeoutObservable, $scheduler);
+            return new TimeoutOperator($timeout, $timeoutObservable, $scheduler ?: Scheduler::getAsync());
         });
     }
 
@@ -1647,7 +1646,7 @@ class Observable implements ObservableInterface
     public function startWithArray(array $startArray, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($startArray, $scheduler) {
-            return new StartWithArrayOperator($startArray, $scheduler);
+            return new StartWithArrayOperator($startArray, $scheduler ?: Scheduler::getDefault());
         });
     }
 
@@ -1730,7 +1729,7 @@ class Observable implements ObservableInterface
     public function timestamp(SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($scheduler) {
-            return new TimestampOperator($scheduler);
+            return new TimestampOperator($scheduler ?: Scheduler::getDefault());
         });
     }
 
@@ -1825,7 +1824,7 @@ class Observable implements ObservableInterface
             return $observables[0];
         }
 
-        return (new ArrayObservable($observables, $scheduler))->lift(function () {
+        return (new ArrayObservable($observables, $scheduler ?: Scheduler::getDefault()))->lift(function () {
             return new RaceOperator();
         });
     }
@@ -1914,7 +1913,7 @@ class Observable implements ObservableInterface
     public function throttle(int $throttleDuration, SchedulerInterface $scheduler = null): AnonymousObservable
     {
         return $this->lift(function () use ($throttleDuration, $scheduler) {
-            return new ThrottleOperator($throttleDuration, $scheduler);
+            return new ThrottleOperator($throttleDuration, $scheduler ?: Scheduler::getDefault());
         });
     }
 
@@ -1929,7 +1928,7 @@ class Observable implements ObservableInterface
      */
     public static function fromPromise(Promise $promise, SchedulerInterface $scheduler = null): FromPromiseObservable
     {
-        return new FromPromiseObservable($promise, $scheduler);
+        return new FromPromiseObservable($promise, $scheduler ?: Scheduler::getDefault());
     }
 
     /**

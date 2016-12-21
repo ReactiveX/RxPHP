@@ -5,7 +5,6 @@ namespace Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class IntervalObservable extends Observable
@@ -20,15 +19,14 @@ class IntervalObservable extends Observable
      * @param $interval
      * @param SchedulerInterface $scheduler
      */
-    public function __construct($interval, SchedulerInterface $scheduler = null)
+    public function __construct(int $interval, SchedulerInterface $scheduler)
     {
         $this->interval  = $interval;
-        $this->scheduler = $scheduler ?? Scheduler::getAsync();
+        $this->scheduler = $scheduler;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-
         $counter = 0;
 
         return $this->scheduler->schedulePeriodic(

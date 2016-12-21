@@ -9,7 +9,6 @@ use Rx\Observable\AnonymousObservable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 use Rx\Timestamped;
 
@@ -27,11 +26,11 @@ class DelayOperator implements OperatorInterface
     /** @var SchedulerInterface */
     private $scheduler;
 
-    public function __construct(int $delayTime, SchedulerInterface $scheduler = null)
+    public function __construct(int $delayTime, SchedulerInterface $scheduler)
     {
         $this->delayTime = $delayTime;
         $this->queue     = new \SplQueue();
-        $this->scheduler = $scheduler ?: Scheduler::getAsync();
+        $this->scheduler = $scheduler;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface

@@ -6,7 +6,6 @@ use Rx\Disposable\CompositeDisposable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class ReturnObservable extends Observable
@@ -14,10 +13,10 @@ class ReturnObservable extends Observable
     private $value;
     private $scheduler;
 
-    public function __construct($value, SchedulerInterface $scheduler = null)
+    public function __construct($value, SchedulerInterface $scheduler)
     {
         $this->value     = $value;
-        $this->scheduler = $scheduler ?: Scheduler::getDefault();
+        $this->scheduler = $scheduler;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface

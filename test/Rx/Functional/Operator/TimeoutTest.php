@@ -54,7 +54,7 @@ class TimeoutTest extends FunctionalTestCase
 
         $this->assertMessages(
             [
-                onError(400, new \Exception())
+                onError(401, new \Exception())
             ],
             $results->getMessages()
         );
@@ -72,7 +72,7 @@ class TimeoutTest extends FunctionalTestCase
      */
     public function timeout_relative_time_timeout_occurs_with_custom_error()
     {
-        $errObs = new ErrorObservable(new \Exception());
+        $errObs = new ErrorObservable(new \Exception(), $this->scheduler);
 
         $xs = $this->createHotObservable([
             onNext(410, 1)
@@ -84,7 +84,7 @@ class TimeoutTest extends FunctionalTestCase
 
         $this->assertMessages(
             [
-                onError(400, new \Exception())
+                onError(401, new \Exception())
             ],
             $results->getMessages()
         );

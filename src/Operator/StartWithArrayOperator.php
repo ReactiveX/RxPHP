@@ -13,7 +13,7 @@ class StartWithArrayOperator implements OperatorInterface
     private $startArray;
     private $scheduler;
 
-    public function __construct(array $startArray, SchedulerInterface $scheduler = null)
+    public function __construct(array $startArray, SchedulerInterface $scheduler)
     {
         $this->startArray = $startArray;
         $this->scheduler  = $scheduler;
