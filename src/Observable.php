@@ -343,7 +343,7 @@ class Observable implements ObservableInterface
      */
     public static function defer(callable $factory, SchedulerInterface $scheduler = null): AnonymousObservable
     {
-        return (new EmptyObservable($scheduler ?: Scheduler::getDefault()))
+        return static::empty($scheduler)
             ->lift(function () use ($factory) {
                 return new DeferOperator($factory);
             });
@@ -641,7 +641,7 @@ class Observable implements ObservableInterface
     public function take(int $count): Observable
     {
         if ($count === 0) {
-            return new EmptyObservable(Scheduler::getDefault());
+            return self::empty();
         }
 
         return $this->lift(function () use ($count) {
@@ -703,7 +703,7 @@ class Observable implements ObservableInterface
     {
         $index = 0;
         return $this->takeWhile(function ($value) use ($predicate, &$index) {
-            return call_user_func_array($predicate, [$index++, $value]);
+            return $predicate($index++, $value);
         });
     }
 
@@ -1490,7 +1490,7 @@ class Observable implements ObservableInterface
     public function repeat(int $count = -1): Observable
     {
         if ($count === 0) {
-            return new EmptyObservable(Scheduler::getDefault());
+            return self::empty();
         }
 
         return $this->lift(function () use ($count) {
@@ -1506,7 +1506,7 @@ class Observable implements ObservableInterface
      * resubscribe to the source observable.
      *
      * @param callable $notifier
-     * @return AnonymousObservable|EmptyObservable
+     * @return AnonymousObservable
      *
      * @demo repeat/repeatWhen.php
      * @operator
@@ -1824,7 +1824,7 @@ class Observable implements ObservableInterface
             return $observables[0];
         }
 
-        return (new ArrayObservable($observables, $scheduler ?: Scheduler::getDefault()))->lift(function () {
+        return static::fromArray($observables, $scheduler)->lift(function () {
             return new RaceOperator();
         });
     }
