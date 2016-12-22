@@ -2,7 +2,6 @@
 
 namespace Rx\Testing;
 
-use Exception;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
@@ -29,7 +28,7 @@ class MockObserver implements ObserverInterface
         );
     }
 
-    public function onError(Exception $error)
+    public function onError(\Throwable $error)
     {
         $this->messages[] = new Recorded(
             $this->scheduler->getClock(),

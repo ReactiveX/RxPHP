@@ -2,7 +2,6 @@
 
 namespace Rx\Subject;
 
-use Exception;
 use Rx\Disposable\CallbackDisposable;
 use Rx\DisposableInterface;
 use Rx\Observer\ScheduledObserver;
@@ -121,7 +120,7 @@ class ReplaySubject extends Subject
         $this->observers = [];
     }
 
-    public function onError(Exception $exception)
+    public function onError(\Throwable $exception)
     {
         $this->assertNotDisposed();
 

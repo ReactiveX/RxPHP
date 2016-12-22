@@ -34,7 +34,7 @@ final class ScanOperator implements OperatorInterface
                     $accumulation    = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
                     $hasAccumulation = true;
                 }
-                if ($accumulation instanceof \Exception) {
+                if ($accumulation instanceof \Throwable) {
                     $observer->onError($accumulation);
                     return;
                 }
@@ -57,7 +57,7 @@ final class ScanOperator implements OperatorInterface
         return function ($x, $y) use ($functionToWrap) {
             try {
                 return $functionToWrap($x, $y);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 return $e;
             }
         };

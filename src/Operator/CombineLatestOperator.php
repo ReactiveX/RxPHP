@@ -69,7 +69,7 @@ final class CombineLatestOperator implements OperatorInterface
                         try {
                             $result = call_user_func_array($this->resultSelector, $values);
                             $observer->onNext($result);
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             $observer->onError($e);
                         }
                     }

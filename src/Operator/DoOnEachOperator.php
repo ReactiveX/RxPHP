@@ -22,7 +22,7 @@ final class DoOnEachOperator implements OperatorInterface
             function ($x) use ($observer) {
                 try {
                     $this->onEachObserver->onNext($x);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return $observer->onError($e);
                 }
                 $observer->onNext($x);
@@ -31,7 +31,7 @@ final class DoOnEachOperator implements OperatorInterface
             function ($err) use ($observer) {
                 try {
                     $this->onEachObserver->onError($err);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return $observer->onError($e);
                 }
                 $observer->onError($err);
@@ -39,7 +39,7 @@ final class DoOnEachOperator implements OperatorInterface
             function () use ($observer) {
                 try {
                     $this->onEachObserver->onCompleted();
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return $observer->onError($e);
                 }
                 $observer->onCompleted();

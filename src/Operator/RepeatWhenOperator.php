@@ -92,7 +92,7 @@ final class RepeatWhenOperator implements OperatorInterface
 
             $handledDisposable = $handled->subscribe($this->notifier);
             $this->disposable->add($handledDisposable);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $observer->onError($e);
             return new EmptyDisposable();
         }

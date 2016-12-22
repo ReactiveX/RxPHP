@@ -2,7 +2,6 @@
 
 namespace Rx\Notification;
 
-use Exception;
 use Rx\ObserverInterface;
 use Rx\Notification;
 
@@ -10,7 +9,7 @@ class OnErrorNotification extends Notification
 {
     private $exception;
 
-    public function __construct(Exception $exception)
+    public function __construct(\Throwable $exception)
     {
         parent::__construct('E');
 

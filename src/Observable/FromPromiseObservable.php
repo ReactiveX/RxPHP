@@ -25,7 +25,7 @@ class FromPromiseObservable extends Observable
     {
         $disposable = new SingleAssignmentDisposable();
 
-        $this->promise->when(function (\Exception $ex = null, $value) use ($disposable, $observer) {
+        $this->promise->when(function (\Throwable $ex = null, $value) use ($disposable, $observer) {
 
             $this->scheduler->schedule(function () use ($observer, $ex, $value) {
                 if ($ex) {

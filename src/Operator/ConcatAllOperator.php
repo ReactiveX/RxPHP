@@ -89,7 +89,7 @@ final class ConcatAllOperator implements OperatorInterface
 
                     $subscribeToInner($innerObservable);
 
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
             },

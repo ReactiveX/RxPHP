@@ -29,7 +29,7 @@ final class RetryWhenOperator implements OperatorInterface
 
         try {
             $when = call_user_func($this->notificationHandler, $errors->asObservable());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $observer->onError($e);
             return new EmptyDisposable();
         }

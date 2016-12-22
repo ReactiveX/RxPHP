@@ -24,7 +24,7 @@ final class DeferOperator implements OperatorInterface
 
         try {
             $result = $factory();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return Observable::error($e)->subscribe($observer);
         }
 

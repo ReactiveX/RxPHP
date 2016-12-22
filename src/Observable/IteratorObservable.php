@@ -43,7 +43,7 @@ class IteratorObservable extends Observable
 
                 $reschedule();
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $observer->onError($e);
             }
         };
@@ -63,7 +63,7 @@ class IteratorObservable extends Observable
                 $observer->onNext($current);
 
                 $reschedule();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $observer->onError($e);
             }
 

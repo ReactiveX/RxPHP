@@ -31,7 +31,7 @@ final class CountOperator implements OperatorInterface
                     if ($predicate($x)) {
                         $this->count++;
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
             },

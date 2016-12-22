@@ -88,7 +88,7 @@ final class ZipOperator implements OperatorInterface
 
                     try {
                         $observer->onNext(call_user_func_array($this->resultSelector, $params));
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $observer->onError($e);
                     }
                 },

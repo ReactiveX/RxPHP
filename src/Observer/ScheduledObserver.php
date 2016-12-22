@@ -2,7 +2,6 @@
 
 namespace Rx\Observer;
 
-use Exception;
 use Rx\Disposable\SerialDisposable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
@@ -54,7 +53,7 @@ class ScheduledObserver extends AbstractObserver
         };
     }
 
-    protected function error(Exception $error)
+    protected function error(\Throwable $error)
     {
         $this->queue[] = function () use ($error) {
             $this->observer->onError($error);
@@ -86,13 +85,13 @@ class ScheduledObserver extends AbstractObserver
                     }
                     try {
                         if (!is_callable($work)) {
-                            throw new Exception("work is not callable");
+                            throw new \Exception('work is not callable');
                         }
                         $res = $work();
-                    } catch (Exception $e) {
+                    } catch (\Throwable $e) {
                         $res = $e;
                     }
-                    if ($res instanceof Exception) {
+                    if ($res instanceof \Throwable) {
                         $parent->queue      = [];
                         $parent->hasFaulted = true;
                         throw $res;

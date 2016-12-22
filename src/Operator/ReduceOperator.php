@@ -42,7 +42,7 @@ final class ReduceOperator implements OperatorInterface
                         $accumulation    = $this->hasSeed ? call_user_func($this->accumulator, $this->seed, $x) : $x;
                         $hasAccumulation = true;
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
             },

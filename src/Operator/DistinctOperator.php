@@ -49,7 +49,7 @@ final class DistinctOperator implements OperatorInterface
                     $values[] = $key;
                     $observer->onNext($value);
 
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     return $observer->onError($e);
                 }
             },

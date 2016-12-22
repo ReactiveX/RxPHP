@@ -57,7 +57,7 @@ final class ThrottleOperator implements OperatorInterface
 
                 $innerDisp->setDisposable($newDisp);
             },
-            function (\Exception $e) use ($observer, $innerDisp) {
+            function (\Throwable $e) use ($observer, $innerDisp) {
                 $innerDisp->dispose();
                 $observer->onError($e);
             },

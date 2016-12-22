@@ -38,13 +38,13 @@ final class ConcatMapOperator implements OperatorInterface
 
                 if ($this->resultSelector) {
                     return $result->mapWithIndex(function ($innerIndex, $innerValue) use ($value, $index) {
-                        return call_user_func_array($this->resultSelector, [$value, $innerValue, $index, $innerIndex]);
+                        return call_user_func($this->resultSelector, $value, $innerValue, $index, $innerIndex);
                     });
                 }
 
                 return $result;
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $observer->onError($e);
             }
         })

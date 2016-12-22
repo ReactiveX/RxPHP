@@ -35,7 +35,7 @@ final class SkipWhileOperator implements OperatorInterface
                         $observer->onNext($value);
                     }
 
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
             },

@@ -29,7 +29,7 @@ final class MapOperator implements OperatorInterface
                 $value = null;
                 try {
                     $value = call_user_func_array($this->selector, [$nextValue]);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
                 if (!$disposed) {

@@ -2,7 +2,6 @@
 
 namespace Rx\Subject;
 
-use Exception;
 use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Observable;
@@ -72,7 +71,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         $this->observers = [];
     }
 
-    public function onError(Exception $exception)
+    public function onError(\Throwable $exception)
     {
         $this->assertNotDisposed();
 
@@ -113,7 +112,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
 
     public function removeObserver(ObserverInterface $observer): bool
     {
-        $key = array_search($observer, $this->observers);
+        $key = array_search($observer, $this->observers, true);
 
         if (false === $key) {
             return false;

@@ -26,7 +26,7 @@ final class CatchErrorOperator implements OperatorInterface
         $isDisposed = false;
         $disposable = new CompositeDisposable();
 
-        $onError = function (\Exception $e) use (&$isDisposed, $observer, $observable, $disposable) {
+        $onError = function (\Throwable $e) use (&$isDisposed, $observer, $observable, $disposable) {
 
             if ($isDisposed) {
                 return;
@@ -40,15 +40,15 @@ final class CatchErrorOperator implements OperatorInterface
 
                 $disposable->add($subscription);
 
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $observer->onError($e);
             }
         };
 
         $callbackObserver = new CallbackObserver(
-            [$observer, "onNext"],
+            [$observer, 'onNext'],
             $onError,
-            [$observer, "onCompleted"]
+            [$observer, 'onCompleted']
         );
 
         $subscription = $observable->subscribe($callbackObserver);

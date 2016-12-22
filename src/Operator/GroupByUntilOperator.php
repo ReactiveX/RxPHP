@@ -12,7 +12,6 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
-use Exception;
 
 final class GroupByUntilOperator implements OperatorInterface
 {
@@ -72,7 +71,7 @@ final class GroupByUntilOperator implements OperatorInterface
                 try {
                     $key           = $keySelector($value);
                     $serializedKey = $keySerializer($key);
-                } catch (Exception $e) {
+                } catch (\Throwable $e) {
                     foreach ($map as $groupObserver) {
                         $groupObserver->onError($e);
                     }
@@ -90,7 +89,7 @@ final class GroupByUntilOperator implements OperatorInterface
                     }
                     $writer = $map[$serializedKey];
 
-                } catch (Exception $e) {
+                } catch (\Throwable $e) {
                     foreach ($map as $groupObserver) {
                         $groupObserver->onError($e);
                     }
@@ -105,7 +104,7 @@ final class GroupByUntilOperator implements OperatorInterface
 
                     try {
                         $duration = $durationSelector($durationGroup);
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         foreach ($map as $groupObserver) {
                             $groupObserver->onError($e);
                         }
@@ -130,7 +129,7 @@ final class GroupByUntilOperator implements OperatorInterface
                     $callbackObserver = new CallbackObserver(
                         function () {
                         },
-                        function (Exception $exception) use ($map, $observer) {
+                        function (\Throwable $exception) use ($map, $observer) {
                             foreach ($map as $writer) {
                                 $writer->onError($exception);
                             }
@@ -149,7 +148,7 @@ final class GroupByUntilOperator implements OperatorInterface
 
                 try {
                     $element = $elementSelector($value);
-                } catch (Exception $exception) {
+                } catch (\Throwable $exception) {
                     foreach ($map as $writer) {
                         $writer->onError($exception);
                     }
@@ -159,7 +158,7 @@ final class GroupByUntilOperator implements OperatorInterface
                 }
                 $writer->onNext($element);
             },
-            function (Exception $error) use (&$map, $observer) {
+            function (\Throwable $error) use (&$map, $observer) {
                 foreach ($map as $writer) {
                     $writer->onError($error);
                 }

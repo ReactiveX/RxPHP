@@ -2,8 +2,6 @@
 
 namespace Rx\Observer;
 
-use Exception;
-
 class CallbackObserver extends AbstractObserver
 {
     /** @var callable|null */
@@ -35,14 +33,14 @@ class CallbackObserver extends AbstractObserver
         call_user_func($this->onCompleted);
     }
 
-    protected function error(Exception $error)
+    protected function error(\Throwable $error)
     {
-        call_user_func_array($this->onError, [$error]);
+        call_user_func($this->onError, $error);
     }
 
     protected function next($value)
     {
-        call_user_func_array($this->onNext, [$value]);
+        call_user_func($this->onNext, $value);
     }
 
     private function getOrDefault(callable $callback = null, $default = null): callable

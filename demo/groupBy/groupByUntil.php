@@ -41,7 +41,7 @@ $subscription = $source->subscribe(new CallbackObserver(
                 echo 'Count: ', $x, PHP_EOL;
             }));
     },
-    function (Exception $err) {
+    function (Throwable $err) {
         echo 'Error', $err->getMessage(), PHP_EOL;
     },
     function () {

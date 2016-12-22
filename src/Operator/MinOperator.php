@@ -41,7 +41,7 @@ final class MinOperator implements OperatorInterface
                     if ($result < 0) {
                         $previousMin = $x;
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
             },
@@ -53,7 +53,7 @@ final class MinOperator implements OperatorInterface
                     return;
                 }
 
-                $observer->onError(new \Exception("Empty"));
+                $observer->onError(new \Exception('Empty'));
             }
         ));
     }

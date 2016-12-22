@@ -389,7 +389,7 @@ class Observable implements ObservableInterface
             $result = null;
             try {
                 $result = call_user_func($action);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $subject->onError($e);
                 return;
             }

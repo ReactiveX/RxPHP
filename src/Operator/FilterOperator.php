@@ -23,7 +23,7 @@ final class FilterOperator implements OperatorInterface
                 $shouldFire = false;
                 try {
                     $shouldFire = call_user_func($this->predicate, $nextValue);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
 

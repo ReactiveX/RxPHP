@@ -2,7 +2,6 @@
 
 namespace Rx\Observer;
 
-use Exception;
 use Rx\ObserverInterface;
 
 abstract class AbstractObserver implements ObserverInterface
@@ -19,7 +18,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->completed();
     }
 
-    public function onError(Exception $error)
+    public function onError(\Throwable $error)
     {
         if ($this->isStopped) {
             return;
@@ -42,5 +41,5 @@ abstract class AbstractObserver implements ObserverInterface
 
     abstract protected function next($value);
 
-    abstract protected function error(Exception $error);
+    abstract protected function error(\Throwable $error);
 }

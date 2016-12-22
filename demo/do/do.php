@@ -7,7 +7,7 @@ $source = \Rx\Observable::range(0, 3)
         function ($x) {
             echo 'Do Next:', $x, PHP_EOL;
         },
-        function (Exception $err) {
+        function (Throwable $err) {
             echo 'Do Error:', $err->getMessage(), PHP_EOL;
         },
         function () {

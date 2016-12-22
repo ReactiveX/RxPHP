@@ -5,7 +5,7 @@ require_once __DIR__ . '/../bootstrap.php';
 $obs2 = Rx\Observable::of(42);
 
 $source = \Rx\Observable::error(new Exception('Some error'))
-    ->catch(function (Exception $e, \Rx\Observable $sourceObs) use ($obs2) {
+    ->catch(function (Throwable $e, \Rx\Observable $sourceObs) use ($obs2) {
         return $obs2;
     });
 

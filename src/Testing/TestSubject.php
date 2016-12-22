@@ -60,9 +60,9 @@ class TestSubject extends Subject
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      */
-    public function onError(\Exception $exception)
+    public function onError(\Throwable $exception)
     {
         $this->observer->onError($exception);
     }

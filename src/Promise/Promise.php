@@ -35,7 +35,7 @@ final class Promise implements InteropPromise
                 function ($v) use (&$value) {
                     $value = $v;
                 },
-                function (\Exception $e) use (&$value, $onResolved) {
+                function (\Throwable $e) use (&$value, $onResolved) {
                     try {
                         $onResolved($e, $value);
                     } catch (\Throwable $ex) {

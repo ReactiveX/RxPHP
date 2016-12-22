@@ -2,7 +2,6 @@
 
 namespace Rx\Observer;
 
-use Exception;
 use Rx\ObserverInterface;
 
 class DoObserver implements ObserverInterface
@@ -35,14 +34,14 @@ class DoObserver implements ObserverInterface
         call_user_func($this->onCompleted);
     }
 
-    public function onError(Exception $error)
+    public function onError(\Throwable $error)
     {
-        call_user_func_array($this->onError, [$error]);
+        call_user_func($this->onError, $error);
     }
 
     public function onNext($value)
     {
-        call_user_func_array($this->onNext, [$value]);
+        call_user_func($this->onNext, $value);
     }
 
     private function getOrDefault(callable $callback = null, $default = null): callable

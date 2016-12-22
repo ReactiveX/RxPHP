@@ -25,7 +25,7 @@ final class TakeWhileOperator implements OperatorInterface
                 } else {
                     $observer->onCompleted();
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $observer->onError($e);
             }
         };

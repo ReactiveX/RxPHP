@@ -2,7 +2,6 @@
 
 namespace Rx\Observer;
 
-use Exception;
 use Rx\Disposable\EmptyDisposable;
 use Rx\ObserverInterface;
 use Rx\DisposableInterface;
@@ -11,6 +10,8 @@ use Rx\Disposable\SingleAssignmentDisposable;
 class AutoDetachObserver extends AbstractObserver
 {
     private $observer;
+
+    private $disposable;
 
     public function __construct(ObserverInterface $observer)
     {
@@ -29,18 +30,18 @@ class AutoDetachObserver extends AbstractObserver
     {
         try {
             $this->observer->onCompleted();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
         } finally {
             $this->dispose();
         }
     }
 
-    protected function error(Exception $exception)
+    protected function error(\Throwable $exception)
     {
         try {
             $this->observer->onError($exception);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             throw $e;
         } finally {
             $this->dispose();
@@ -51,7 +52,7 @@ class AutoDetachObserver extends AbstractObserver
     {
         try {
             $this->observer->onNext($value);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $this->dispose();
             throw $e;
         }
