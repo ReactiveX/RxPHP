@@ -22,7 +22,8 @@
     "require": {
         "php": "~7.0",
         "async-interop/promise": "^0.2.0",
-        "async-interop/event-loop": "^0.3"
+        "async-interop/event-loop": "^0.3",
+        "async-interop/event-loop-implementation": "^0.3"
     },
     "require-dev": {
         "wyrihaximus/react-async-interop-loop": "dev-master",
