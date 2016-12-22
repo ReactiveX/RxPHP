@@ -14,7 +14,7 @@ use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 use Exception;
 
-class GroupByUntilOperator implements OperatorInterface
+final class GroupByUntilOperator implements OperatorInterface
 {
     /** @var callable */
     private $keySelector;

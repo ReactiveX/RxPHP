@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class BufferWithCountOperator implements OperatorInterface
+final class BufferWithCountOperator implements OperatorInterface
 {
     /** @var int */
     private $count;

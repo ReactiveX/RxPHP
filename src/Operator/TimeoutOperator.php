@@ -11,7 +11,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class TimeoutOperator implements OperatorInterface
+final class TimeoutOperator implements OperatorInterface
 {
     private $timeout;
 

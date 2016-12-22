@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class DistinctUntilChangedOperator implements OperatorInterface
+final class DistinctUntilChangedOperator implements OperatorInterface
 {
     protected $keySelector;
 

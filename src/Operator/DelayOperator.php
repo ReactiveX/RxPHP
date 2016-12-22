@@ -12,7 +12,7 @@ use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 use Rx\Timestamped;
 
-class DelayOperator implements OperatorInterface
+final class DelayOperator implements OperatorInterface
 {
     /** @var int */
     private $delayTime;

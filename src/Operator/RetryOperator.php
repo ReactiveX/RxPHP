@@ -9,7 +9,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class RetryOperator implements OperatorInterface
+final class RetryOperator implements OperatorInterface
 {
     private $retryCount;
 

@@ -8,7 +8,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class TakeUntilOperator implements OperatorInterface
+final class TakeUntilOperator implements OperatorInterface
 {
     private $other;
 

@@ -10,7 +10,7 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class SubscribeOnOperator implements OperatorInterface
+final class SubscribeOnOperator implements OperatorInterface
 {
     private $scheduler;
 

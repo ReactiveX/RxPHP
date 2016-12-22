@@ -8,7 +8,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class CombineLatestOperator implements OperatorInterface
+final class CombineLatestOperator implements OperatorInterface
 {
     /** @var ObservableInterface[] */
     private $observables;

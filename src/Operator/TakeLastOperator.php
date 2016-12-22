@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class TakeLastOperator implements OperatorInterface
+final class TakeLastOperator implements OperatorInterface
 {
     /** @var integer */
     private $count;

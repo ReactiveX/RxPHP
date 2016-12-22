@@ -10,7 +10,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
-class RetryWhenOperator implements OperatorInterface
+final class RetryWhenOperator implements OperatorInterface
 {
     private $notificationHandler;
 

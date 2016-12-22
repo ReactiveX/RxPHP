@@ -10,7 +10,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class CatchErrorOperator implements OperatorInterface
+final class CatchErrorOperator implements OperatorInterface
 {
 
     /** @var callable */

@@ -6,7 +6,7 @@ use Rx\DisposableInterface;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
-class AsObservableOperator implements OperatorInterface
+final class AsObservableOperator implements OperatorInterface
 {
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {

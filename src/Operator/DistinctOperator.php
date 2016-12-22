@@ -8,7 +8,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class DistinctOperator implements OperatorInterface
+final class DistinctOperator implements OperatorInterface
 {
 
     /** @var callable */

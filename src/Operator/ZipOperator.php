@@ -8,7 +8,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class ZipOperator implements OperatorInterface
+final class ZipOperator implements OperatorInterface
 {
     /** @var ObservableInterface[] */
     private $sources;

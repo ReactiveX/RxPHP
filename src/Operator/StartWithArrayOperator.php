@@ -8,7 +8,7 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class StartWithArrayOperator implements OperatorInterface
+final class StartWithArrayOperator implements OperatorInterface
 {
     private $startArray;
     private $scheduler;

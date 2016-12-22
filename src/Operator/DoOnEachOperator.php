@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Observer\CallbackObserver;
 
-class DoOnEachOperator implements OperatorInterface
+final class DoOnEachOperator implements OperatorInterface
 {
     private $onEachObserver;
 

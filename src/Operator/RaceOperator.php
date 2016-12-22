@@ -10,7 +10,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class RaceOperator implements OperatorInterface
+final class RaceOperator implements OperatorInterface
 {
 
     /** @var bool */

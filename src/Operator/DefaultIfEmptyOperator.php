@@ -8,7 +8,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class DefaultIfEmptyOperator implements OperatorInterface
+final class DefaultIfEmptyOperator implements OperatorInterface
 {
     /** @var  ObservableInterface */
     private $observable;

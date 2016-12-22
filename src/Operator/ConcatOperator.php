@@ -8,7 +8,7 @@ use Rx\Observer\AutoDetachObserver;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class ConcatOperator implements OperatorInterface
+final class ConcatOperator implements OperatorInterface
 {
     /** @var \Rx\ObservableInterface */
     private $subsequentObservable;

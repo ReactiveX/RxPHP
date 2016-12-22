@@ -8,8 +8,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-
-class DematerializeOperator implements OperatorInterface
+final class DematerializeOperator implements OperatorInterface
 {
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {

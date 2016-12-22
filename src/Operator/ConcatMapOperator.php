@@ -7,7 +7,7 @@ use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
-class ConcatMapOperator implements OperatorInterface
+final class ConcatMapOperator implements OperatorInterface
 {
     /** @var int */
     private $count;

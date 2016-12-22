@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class FilterOperator implements OperatorInterface
+final class FilterOperator implements OperatorInterface
 {
     private $predicate;
 

@@ -10,7 +10,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class SwitchLatestOperator implements OperatorInterface
+final class SwitchLatestOperator implements OperatorInterface
 {
     /** @var bool */
     private $hasLatest;

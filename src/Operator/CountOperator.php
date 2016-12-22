@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class CountOperator implements OperatorInterface
+final class CountOperator implements OperatorInterface
 {
     private $count = 0;
     private $predicate;

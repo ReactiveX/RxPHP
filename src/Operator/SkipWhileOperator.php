@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class SkipWhileOperator implements OperatorInterface
+final class SkipWhileOperator implements OperatorInterface
 {
     /** @var callable */
     private $predicate;

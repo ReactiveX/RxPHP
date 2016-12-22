@@ -12,7 +12,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class ConcatAllOperator implements OperatorInterface
+final class ConcatAllOperator implements OperatorInterface
 {
     /** @var  array */
     private $buffer;

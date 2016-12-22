@@ -9,7 +9,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class MapOperator implements OperatorInterface
+final class MapOperator implements OperatorInterface
 {
     private $selector;
 

@@ -9,7 +9,7 @@ use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 use Rx\Timestamped;
 
-class TimestampOperator implements OperatorInterface
+final class TimestampOperator implements OperatorInterface
 {
     private $scheduler;
 

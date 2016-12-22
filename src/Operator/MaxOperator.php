@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class MaxOperator implements OperatorInterface
+final class MaxOperator implements OperatorInterface
 {
     private $comparer;
 

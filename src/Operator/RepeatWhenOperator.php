@@ -11,7 +11,7 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
-class RepeatWhenOperator implements OperatorInterface
+final class RepeatWhenOperator implements OperatorInterface
 {
     /** @var callable */
     private $notificationHandler;

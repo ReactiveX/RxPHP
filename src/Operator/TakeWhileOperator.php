@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class TakeWhileOperator implements OperatorInterface
+final class TakeWhileOperator implements OperatorInterface
 {
     private $predicate;
 

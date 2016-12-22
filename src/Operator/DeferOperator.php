@@ -7,7 +7,7 @@ use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
-class DeferOperator implements OperatorInterface
+final class DeferOperator implements OperatorInterface
 {
 
     /* @var Callable */

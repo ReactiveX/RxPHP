@@ -12,7 +12,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class ThrottleOperator implements OperatorInterface
+final class ThrottleOperator implements OperatorInterface
 {
     private $nextSend = 0;
 

@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class ScanOperator implements OperatorInterface
+final class ScanOperator implements OperatorInterface
 {
     private $accumulator;
 

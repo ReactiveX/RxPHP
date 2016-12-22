@@ -9,7 +9,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class SkipUntilOperator implements OperatorInterface
+final class SkipUntilOperator implements OperatorInterface
 {
     private $other;
 

@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class ToArrayOperator implements OperatorInterface
+final class ToArrayOperator implements OperatorInterface
 {
     /** @var array */
     private $arr = [];

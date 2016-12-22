@@ -9,7 +9,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class RepeatOperator implements OperatorInterface
+final class RepeatOperator implements OperatorInterface
 {
     private $repeatCount;
 

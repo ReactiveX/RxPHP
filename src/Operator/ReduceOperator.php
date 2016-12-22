@@ -7,7 +7,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-class ReduceOperator implements OperatorInterface
+final class ReduceOperator implements OperatorInterface
 {
     /** @var  callable */
     protected $accumulator;
