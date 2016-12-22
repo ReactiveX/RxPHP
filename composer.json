@@ -21,20 +21,24 @@
     ],
     "require": {
         "php": "~7.0",
-        "wyrihaximus/react-async-interop-loop": "dev-master",
-        "async-interop/promise": "^0.2.0"
+        "async-interop/promise": "^0.2.0",
+        "async-interop/event-loop": "^0.3"
     },
     "require-dev": {
+        "wyrihaximus/react-async-interop-loop": "dev-master",
         "satooshi/php-coveralls": "~1.0",
         "phpunit/phpcov": "^3.1",
         "phpunit/phpunit": "^5.5"
     },
     "suggest": {
-        "react/event-loop": "For using event-loop based scheduling.",
-        "react/promise": "For converting promises to and from observables."
+        "wyrihaximus/react-async-interop-loop": "ReactPHP Event Loop",
+        "amphp/loop": "AmpPHP Event Loop",
+        "koolkode/async": "KoolKode Event Loop"
     },
     "autoload": {
-        "psr-4": { "Rx\\": "src" },
+        "psr-4": { "Rx\\": "src" }
+    },
+    "autoload-dev": {
         "files" : ["src/bootstrap.php"]
     },
     "extra": {
