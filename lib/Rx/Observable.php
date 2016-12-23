@@ -712,8 +712,11 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * This method allows the use of custom operators by adding an operator class
-     * with the namespace format: Rx\Custom\Operator\OperatorNameOperator
+     * This method allows the use of extra operators with the namespace:
+     * Rx\Operator
+     * and also custom operators by adding an operator class with the
+     * namespace format:
+     * CustomNamespace\Rx\Operator\OperatorNameOperator
      *
      * @param $name
      * @param $arguments
@@ -721,7 +724,13 @@ class Observable implements ObservableInterface
      */
     public function __call($name, $arguments)
     {
-        $className = 'Rx\Custom\Operator\\' . ucfirst($name) . 'Operator';
+        $fullNamespace = 'Rx\\Operator\\';
+        if ($name[0] === '_') {
+            list($_, $namespace, $methodName) = explode('_', $name);
+            $name = $methodName;
+            $fullNamespace = $namespace . '\\' . $fullNamespace;
+        }
+        $className = $fullNamespace . ucfirst($name) . 'Operator';
 
         return $this->lift(function () use ($className, $arguments) {
             return (new \ReflectionClass($className))->newInstanceArgs($arguments);

@@ -1,11 +1,9 @@
 <?php
 
-namespace Rx\Custom\Operator;
+namespace Rx\Operator;
 
-use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
-use Rx\Operator\OperatorInterface;
 use Rx\SchedulerInterface;
 
 class CustomTestOperator implements OperatorInterface

@@ -19,4 +19,17 @@ class CustomTest extends FunctionalTestCase
             onCompleted(201)
         ], $results->getMessages());
     }
+
+    public function testExternalNamespacedOperator()
+    {
+        $results = $this->scheduler->startWithCreate(function () {
+            return Observable::just(1)
+                ->_CustomOperatorTest_test(2);
+        });
+
+        $this->assertMessages([
+            onNext(201, 2),
+            onCompleted(201)
+        ], $results->getMessages());
+    }
 }
