@@ -713,6 +713,34 @@ class Observable implements ObservableInterface
     }
 
     /**
+     * This method allows the use of extra operators with the namespace:
+     * Rx\Operator
+     * and also custom operators by adding an operator class with the
+     * namespace format:
+     * CustomNamespace\Rx\Operator\OperatorNameOperator
+     *
+     * @param $name
+     * @param $arguments
+     * @return Observable
+     * 
+     * @demo custom-operator/rot13.php
+     */
+    public function __call($name, $arguments)
+    {
+        $fullNamespace = 'Rx\\Operator\\';
+        if ($name[0] === '_') {
+            list($_, $namespace, $methodName) = explode('_', $name);
+            $name = $methodName;
+            $fullNamespace = $namespace . '\\' . $fullNamespace;
+        }
+        $className = $fullNamespace . ucfirst($name) . 'Operator';
+
+        return $this->lift(function () use ($className, $arguments) {
+            return (new \ReflectionClass($className))->newInstanceArgs($arguments);
+        });
+    }
+
+    /**
      * Applies an accumulator function over an observable sequence,
      * returning the result of the aggregation as a single element in the result sequence.
      * The specified seed value is used as the initial accumulator value.
