@@ -21,7 +21,9 @@ class Rot13Operator implements OperatorInterface
         return $observable->subscribe(new CallbackObserver(
             function ($json) use ($observer) {
                 $observer->onNext(str_rot13($json));
-            }
+            },
+            [$observer, 'onError'],
+            [$observer, 'onCompleted']
         ));
     }
 }
