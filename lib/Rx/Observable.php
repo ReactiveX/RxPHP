@@ -721,6 +721,8 @@ class Observable implements ObservableInterface
      * @param $name
      * @param $arguments
      * @return Observable
+     * 
+     * @demo custom-operator/rot13.php
      */
     public function __call($name, $arguments)
     {
