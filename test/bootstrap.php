@@ -12,6 +12,7 @@
 if (file_exists($file = __DIR__ . '/../vendor/autoload.php')) {
     $loader = require $file;
     $loader->add('Rx', __DIR__);
+    $loader->addPsr4('CustomOperatorTest\\Rx\\Operator\\', __DIR__ . '/CustomOperatorTest');
     require_once __DIR__ . '/helper-functions.php';
     require_once __DIR__ . '/../vendor/async-interop/event-loop/test/DummyDriver.php';
 } else {

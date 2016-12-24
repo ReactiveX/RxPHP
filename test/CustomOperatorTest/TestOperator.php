@@ -1,13 +1,13 @@
 <?php
 
-namespace Rx\Custom\Operator;
+namespace CustomOperatorTest\Rx\Operator;
 
 use Rx\DisposableInterface;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Operator\OperatorInterface;
 
-class CustomTestOperator implements OperatorInterface
+class TestOperator implements OperatorInterface
 {
     private $mapTo;
 
@@ -16,6 +16,9 @@ class CustomTestOperator implements OperatorInterface
         $this->mapTo = $mapTo;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return $observable
