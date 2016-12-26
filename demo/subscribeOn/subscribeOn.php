@@ -14,7 +14,7 @@ $observable = Rx\Observable::create(function (ObserverInterface $observer) {
     };
 
     // Change scheduler for here
-    $timer = Loop::get()->delay(1, $handler);
+    $timer = Loop::delay(1, $handler);
 
     return new CallbackDisposable(function () use ($timer) {
         // And change scheduler for here

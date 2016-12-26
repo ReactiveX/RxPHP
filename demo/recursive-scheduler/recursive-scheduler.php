@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
+use Interop\Async\Loop;
 use Rx\Observable;
 
 class RecursiveReturnObservable extends Observable
@@ -31,16 +32,14 @@ $observable->subscribe($stdoutObserver);
 $observable = new RecursiveReturnObservable(21);
 $disposable = $observable->subscribe($stdoutObserver);
 
-$loop = \Interop\Async\Loop::get();
-
-$loop->repeat(100, function () {
+Loop::repeat(100, function () {
     $memory    = memory_get_usage() / 1024;
     $formatted = number_format($memory, 3) . 'K';
     echo "Current memory usage: {$formatted}\n";
 });
 
 // after a second we'll dispose the 21 observable
-$loop->delay(1000, function () use ($disposable) {
+Loop::delay(1000, function () use ($disposable) {
     echo "Disposing 21 observable.\n";
     $disposable->dispose();
 });
