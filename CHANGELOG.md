@@ -1,6 +1,28 @@
+# 1.5.0
+
+### Bug Fixes
+
+- Fixed throttle.php demo ([cee42e2](https://github.com/ReactiveX/RxPHP/commit/cee42e2f04dd1df23c4a5ac013cb017d0af79b78))
+- Fixed Promise::fromObservable() to allow selecting the scheduler ([de88548](https://github.com/ReactiveX/RxPHP/commit/de8854883d8f47d251961503daf6beea1d492959))
+- Fixed VirtualTimeScheduler to use now() method ([d5afdde](https://github.com/ReactiveX/RxPHP/commit/d5afdde8e1913f5e0edee6a9667edfefc49a90ba))
+- Fixed `defer` swallowing errors ([#85](https://github.com/ReactiveX/RxPHP/commit/5332561fe773e61da35adfe92c9766f1594442bb))
+- Fixed phpunit deprecation warnings ([b7f754c](https://github.com/ReactiveX/RxPHP/commit/b7f754c1d5f337ae3a6383316cd3ca4bcec085e9))
+- Fixed scheduler disposable on delay dispose ([#87](https://github.com/ReactiveX/RxPHP/commit/13287702407b77222a5aa0f2599df55c0b4e24a5))
+
+### Features
+
+- Added custom operators ([c7d351d](https://github.com/ReactiveX/RxPHP/commit/c7d351d579f90134eef3701d87eb1ea8cd1e072e))
+- Added output values for failed demos in tests ([c2b4a56](https://github.com/ReactiveX/RxPHP/commit/c2b4a561224b9c8e3c2690b1b71c8aa97a2b7d22))
+- Added `throttle` operator ([b93d296](https://github.com/ReactiveX/RxPHP/commit/b93d296771a199c81e8ff8f21085f73d404c5ad9))
+- Added support for cancellable promises ([a5602ab](https://github.com/ReactiveX/RxPHP/commit/a5602abfc5b27152a509effdaff635e1d1a97419))
+- Added `switchFirst` operator ([620c70f](https://github.com/ReactiveX/RxPHP/commit/620c70f1dd9ebc8bff15a5cd889e84f314437c69)) ([a98c65f](https://github.com/ReactiveX/RxPHP/commit/a98c65f7f73802503939520852747a004f988aa1)) ([fc039fb](https://github.com/ReactiveX/RxPHP/commit/fc039fbf45ac8104b8f71aa0300aeb5e18beba5c)) ([b254d06](https://github.com/ReactiveX/RxPHP/commit/b254d060b6eb80824b0f299d4aacab02f6550ef9)) ([1f13650](https://github.com/ReactiveX/RxPHP/commit/1f136501c1491a9caffade898d099a152d0b3784))
+- Added `DoObserver` ([4807ab1](https://github.com/ReactiveX/RxPHP/commit/4807ab11285bb3f5e665cff2ead766d72f775a87))
+- Added coveralls ([7ed1a86](https://github.com/ReactiveX/RxPHP/commit/7ed1a860546c3b9748ae82e59e5bfa6053f3a95f))
+
 # 1.4.1
 
 ### Bug Fixes
+
 - Fixed EventLoopScheduler ([f0302d2](https://github.com/ReactiveX/RxPHP/commit/680eed0af8596a938871aac967419c150f0302d2))
 
 
