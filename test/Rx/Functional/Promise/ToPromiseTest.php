@@ -4,12 +4,20 @@ namespace Rx\Functional\Promise;
 
 use Exception;
 use Interop\Async\Loop;
+use Interop\Async\Promise\ErrorHandler;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Promise\Promise;
 
 class ToPromiseTest extends FunctionalTestCase
 {
+
+    public function setup()
+    {
+        parent::setup();
+
+        ErrorHandler::set(null);
+    }
 
     /**
      * @test
@@ -45,7 +53,7 @@ class ToPromiseTest extends FunctionalTestCase
      */
     public function promise_error_handler()
     {
-        Loop::setErrorHandler(function (\Exception $e) use (&$thrownError) {
+        ErrorHandler::set(function (\Exception $e) use (&$thrownError) {
             $thrownError = $e;
         });
 
@@ -55,9 +63,26 @@ class ToPromiseTest extends FunctionalTestCase
             throw new Exception('error');
         });
 
-        Loop::get()->run();
-
         $this->assertEquals(new Exception('error'), $thrownError);
+    }
+
+    /**
+     * @test
+     */
+    public function promise_error_no_handler()
+    {
+        $promise = Observable::of(42)->toPromise();
+        $failed  = false;
+
+        try {
+            $promise->when(function (Exception $ex = null, $value) {
+                throw new Exception('error');
+            });
+        } catch (\Throwable $e) {
+            $failed = true;
+        }
+
+        $this->assertTrue($failed);
     }
 
     /**

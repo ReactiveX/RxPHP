@@ -39,18 +39,14 @@ final class Promise implements InteropPromise
                     try {
                         $onResolved($e, $value);
                     } catch (\Throwable $ex) {
-                        Loop::defer(function () use ($ex) {
-                            throw $ex;
-                        });
+                        InteropPromise\ErrorHandler::notify($ex);
                     }
                 },
                 function () use (&$value, $onResolved) {
                     try {
                         $onResolved(null, $value);
                     } catch (\Throwable $ex) {
-                        Loop::defer(function () use ($ex) {
-                            throw $ex;
-                        });
+                        InteropPromise\ErrorHandler::notify($ex);
                     }
                 });
     }
