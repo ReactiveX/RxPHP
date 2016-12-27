@@ -88,7 +88,7 @@ final class RepeatWhenOperator implements OperatorInterface
         $this->disposable->add($notifierDisposable);
 
         try {
-            $handled = call_user_func($this->notificationHandler, $this->completions->asObservable());
+            $handled = ($this->notificationHandler)($this->completions->asObservable());
 
             $handledDisposable = $handled->subscribe($this->notifier);
             $this->disposable->add($handledDisposable);

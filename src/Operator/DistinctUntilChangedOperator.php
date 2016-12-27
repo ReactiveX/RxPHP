@@ -31,7 +31,7 @@ final class DistinctUntilChangedOperator implements OperatorInterface
                 $key = $value;
                 if ($this->keySelector) {
                     try {
-                        $key = call_user_func($this->keySelector, $value);
+                        $key = ($this->keySelector)($value);
                     } catch (\Throwable $e) {
                         return $observer->onError($e);
                     }
@@ -40,7 +40,7 @@ final class DistinctUntilChangedOperator implements OperatorInterface
                 $comparerEquals = null;
                 if ($hasCurrentKey) {
                     try {
-                        $comparerEquals = call_user_func($this->comparer, $currentKey, $key);
+                        $comparerEquals = ($this->comparer)($currentKey, $key);
                     } catch (\Throwable $e) {
                         return $observer->onError($e);
                     }

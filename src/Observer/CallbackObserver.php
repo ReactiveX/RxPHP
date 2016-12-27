@@ -30,17 +30,17 @@ class CallbackObserver extends AbstractObserver
     protected function completed()
     {
         // Cannot use $foo() here, see: https://bugs.php.net/bug.php?id=47160
-        call_user_func($this->onCompleted);
+        ($this->onCompleted)();
     }
 
     protected function error(\Throwable $error)
     {
-        call_user_func($this->onError, $error);
+        ($this->onError)($error);
     }
 
     protected function next($value)
     {
-        call_user_func($this->onNext, $value);
+        ($this->onNext)($value);
     }
 
     private function getOrDefault(callable $callback = null, $default = null): callable

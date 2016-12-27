@@ -37,9 +37,9 @@ final class ReduceOperator implements OperatorInterface
 
                 try {
                     if ($hasAccumulation) {
-                        $accumulation = call_user_func($this->accumulator, $accumulation, $x);
+                        $accumulation = ($this->accumulator)($accumulation, $x);
                     } else {
-                        $accumulation    = $this->hasSeed ? call_user_func($this->accumulator, $this->seed, $x) : $x;
+                        $accumulation    = $this->hasSeed ? ($this->accumulator)($this->seed, $x) : $x;
                         $hasAccumulation = true;
                     }
                 } catch (\Throwable $e) {

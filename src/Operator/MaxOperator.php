@@ -37,7 +37,7 @@ final class MaxOperator implements OperatorInterface
                 }
 
                 try {
-                    $result = call_user_func($this->comparer, $x, $previousMax);
+                    $result = ($this->comparer)($x, $previousMax);
                     if ($result > 0) {
                         $previousMax = $x;
                     }

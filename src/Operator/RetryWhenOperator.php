@@ -28,7 +28,7 @@ final class RetryWhenOperator implements OperatorInterface
         $sourceError      = false;
 
         try {
-            $when = call_user_func($this->notificationHandler, $errors->asObservable());
+            $when = ($this->notificationHandler)($errors->asObservable());
         } catch (\Throwable $e) {
             $observer->onError($e);
             return new EmptyDisposable();

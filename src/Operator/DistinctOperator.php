@@ -2,6 +2,7 @@
 
 namespace Rx\Operator;
 
+use Rx\Disposable\EmptyDisposable;
 use Rx\DisposableInterface;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
@@ -36,10 +37,10 @@ final class DistinctOperator implements OperatorInterface
             function ($value) use ($observer, &$values) {
 
                 try {
-                    $key = $this->keySelector ? call_user_func($this->keySelector, $value) : $value;
+                    $key = $this->keySelector ? ($this->keySelector)($value) : $value;
 
                     foreach ($values as $v) {
-                        $comparerEquals = call_user_func($this->comparer, $key, $v);
+                        $comparerEquals = ($this->comparer)($key, $v);
 
                         if ($comparerEquals) {
                             return;

@@ -31,17 +31,17 @@ class DoObserver implements ObserverInterface
 
     public function onCompleted()
     {
-        call_user_func($this->onCompleted);
+        ($this->onCompleted)();
     }
 
     public function onError(\Throwable $error)
     {
-        call_user_func($this->onError, $error);
+        ($this->onError)($error);
     }
 
     public function onNext($value)
     {
-        call_user_func($this->onNext, $value);
+        ($this->onNext)($value);
     }
 
     private function getOrDefault(callable $callback = null, $default = null): callable

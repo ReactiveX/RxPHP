@@ -28,7 +28,7 @@ final class SkipWhileOperator implements OperatorInterface
                 try {
 
                     if ($this->isSkipping) {
-                        $this->isSkipping = call_user_func_array($this->predicate, [$value, $observable]);
+                        $this->isSkipping = ($this->predicate)($value, $observable);
                     }
 
                     if (!$this->isSkipping) {

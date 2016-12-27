@@ -21,7 +21,6 @@ final class ConcatMapOperator implements OperatorInterface
     public function __construct(callable $selector, callable $resultSelector = null)
     {
         $this->selector       = $selector;
-        $this->count          = 0;
         $this->resultSelector = $resultSelector;
     }
 
@@ -30,7 +29,7 @@ final class ConcatMapOperator implements OperatorInterface
         return $observable->mapWithIndex(function (int $index, $value) use ($observable, $observer) {
 
             try {
-                $result = call_user_func_array($this->selector, [$value, $index, $observable]);
+                $result = ($this->selector)($value, $index, $observable);
 
                 if (!$result instanceof Observable) {
                     throw new \Exception('concatMap Error:  You must return an Observable from the concatMap selector');
@@ -38,7 +37,7 @@ final class ConcatMapOperator implements OperatorInterface
 
                 if ($this->resultSelector) {
                     return $result->mapWithIndex(function ($innerIndex, $innerValue) use ($value, $index) {
-                        return call_user_func($this->resultSelector, $value, $innerValue, $index, $innerIndex);
+                        return ($this->resultSelector)($value, $innerValue, $index, $innerIndex);
                     });
                 }
 

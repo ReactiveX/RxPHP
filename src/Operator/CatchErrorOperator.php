@@ -34,7 +34,7 @@ final class CatchErrorOperator implements OperatorInterface
 
             try {
                 /** @var Observable $result */
-                $result = call_user_func($this->errorSelector, $e, $observable);
+                $result = ($this->errorSelector)($e, $observable);
 
                 $subscription = $result->subscribe($observer);
 

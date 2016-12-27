@@ -37,8 +37,8 @@ class MulticastObservable extends Observable
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-        $connectable = $this->source->multicast(call_user_func($this->fn1));
-        $observable  = call_user_func($this->fn2, $connectable);
+        $connectable = $this->source->multicast(($this->fn1)());
+        $observable  = ($this->fn2)($connectable);
 
         return new BinaryDisposable($observable->subscribe($observer), $connectable->connect());
     }

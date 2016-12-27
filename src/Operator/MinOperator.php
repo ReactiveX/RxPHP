@@ -37,7 +37,7 @@ final class MinOperator implements OperatorInterface
                 }
 
                 try {
-                    $result = call_user_func($this->comparer, $x, $previousMin);
+                    $result = ($this->comparer)($x, $previousMin);
                     if ($result < 0) {
                         $previousMin = $x;
                     }

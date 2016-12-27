@@ -20,7 +20,7 @@ final class TakeWhileOperator implements OperatorInterface
     {
         $onNext = function ($value) use ($observer) {
             try {
-                if (call_user_func($this->predicate, $value)) {
+                if (($this->predicate)($value)) {
                     $observer->onNext($value);
                 } else {
                     $observer->onCompleted();

@@ -22,7 +22,7 @@ final class FilterOperator implements OperatorInterface
             function ($nextValue) use ($observer) {
                 $shouldFire = false;
                 try {
-                    $shouldFire = call_user_func($this->predicate, $nextValue);
+                    $shouldFire = ($this->predicate)($nextValue);
                 } catch (\Throwable $e) {
                     $observer->onError($e);
                 }

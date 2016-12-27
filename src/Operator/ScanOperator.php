@@ -29,9 +29,9 @@ final class ScanOperator implements OperatorInterface
             function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue) {
                 $hasValue = true;
                 if ($hasAccumulation) {
-                    $accumulation = call_user_func($this->tryCatch($this->accumulator), $accumulation, $x);
+                    $accumulation = ($this->tryCatch($this->accumulator))($accumulation, $x);
                 } else {
-                    $accumulation    = $hasSeed ? call_user_func($this->tryCatch($this->accumulator), $this->seed, $x) : $x;
+                    $accumulation    = $hasSeed ? ($this->tryCatch($this->accumulator))($this->seed, $x) : $x;
                     $hasAccumulation = true;
                 }
                 if ($accumulation instanceof \Throwable) {

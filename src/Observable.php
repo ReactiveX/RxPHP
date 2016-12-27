@@ -388,7 +388,7 @@ class Observable implements ObservableInterface
         $scheduler->schedule(function () use ($subject, $action) {
             $result = null;
             try {
-                $result = call_user_func($action);
+                $result = $action();
             } catch (\Throwable $e) {
                 $subject->onError($e);
                 return;
