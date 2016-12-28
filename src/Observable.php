@@ -657,7 +657,7 @@ class Observable implements ObservableInterface
      * @return AnonymousObservable - An observable sequence containing the elements of the source sequence up to the
      * point the other sequence interrupted further propagation.
      *
-     * @demo take/take.php
+     * @demo take/takeUntil.php
      * @operator
      * @reactivex take
      */
