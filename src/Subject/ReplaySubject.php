@@ -148,7 +148,7 @@ class ReplaySubject extends Subject
         return new CallbackDisposable(function () use ($observer, $subject) {
             $observer->dispose();
             if (!$subject->isDisposed()) {
-                array_splice($subject->observers, array_search($observer, $subject->observers), 1);
+                array_splice($subject->observers, array_search($observer, $subject->observers, true), 1);
             }
         });
     }

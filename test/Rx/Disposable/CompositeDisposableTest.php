@@ -179,4 +179,76 @@ class CompositeDisposableTest extends TestCase
         $disposable->dispose();
         $disposable->dispose();
     }
+
+    /**
+     * @test
+     *
+     * see https://github.com/ReactiveX/RxPHP/issues/107
+     */
+    public function it_can_distinguish_and_dispose_of_correct_disposable()
+    {
+        // factory to create 2 disposables that evaluate the same with ==
+        $getSimilarDisposables = function () {
+            $dispA = new SerialDisposable();
+            $dispB = new SerialDisposable();
+
+            return [$dispA, $dispB];
+        };
+
+        /** @var SerialDisposable[] $disposables */
+        $disposables = $getSimilarDisposables();
+        $compositeDisposable = new CompositeDisposable($disposables);
+
+        // all future sets of disp should immediately dispose
+        $compositeDisposable->remove($disposables[0]);
+        $wasDisposed = false;
+        $disposables[0]->setDisposable(new CallbackDisposable(function () use (&$wasDisposed) {
+            $wasDisposed = true;
+        }));
+        $this->assertTrue($wasDisposed);
+
+        // now try with the second one in the array (start from the beginning again)
+        /** @var SerialDisposable[] $disposables */
+        $disposables = $getSimilarDisposables();
+        $compositeDisposable = new CompositeDisposable($disposables);
+
+        // all future sets of disp should immediately dispose
+        $compositeDisposable->remove($disposables[1]);
+        $wasDisposed = false;
+        $disposables[1]->setDisposable(new CallbackDisposable(function () use (&$wasDisposed) {
+            $wasDisposed = true;
+        }));
+        $this->assertTrue($wasDisposed);
+    }
+
+    /**
+     * @test
+     */
+    public function it_knows_what_it_contains()
+    {
+        // factory to create 2 disposables that evaluate the same with ==
+        $getSimilarDisposables = function () {
+            $dispA = new SerialDisposable();
+            $dispB = new SerialDisposable();
+
+            return [$dispA, $dispB];
+        };
+
+        $disposables = $getSimilarDisposables();
+        $compositeDisposable = new CompositeDisposable($disposables);
+
+        $compositeDisposable->remove($disposables[0]);
+        $this->assertFalse($compositeDisposable->contains($disposables[0]));
+        $this->assertTrue($compositeDisposable->contains($disposables[1]));
+        $this->assertFalse($compositeDisposable->contains(new SerialDisposable()));
+
+        // try the second one
+        $disposables = $getSimilarDisposables();
+        $compositeDisposable = new CompositeDisposable($disposables);
+
+        $compositeDisposable->remove($disposables[1]);
+        $this->assertTrue($compositeDisposable->contains($disposables[0]));
+        $this->assertFalse($compositeDisposable->contains($disposables[1]));
+        $this->assertFalse($compositeDisposable->contains(new SerialDisposable()));
+    }
 }
