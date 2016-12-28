@@ -45,7 +45,7 @@ class CompositeDisposable implements DisposableInterface
             return false;
         }
 
-        $key = array_search($disposable, $this->disposables);
+        $key = array_search($disposable, $this->disposables, true);
 
         if (false === $key) {
             return false;
@@ -60,7 +60,7 @@ class CompositeDisposable implements DisposableInterface
 
     public function contains(DisposableInterface $disposable)
     {
-        return false !== array_search($disposable, $this->disposables);
+        return in_array($disposable, $this->disposables, true);
     }
 
     public function count()

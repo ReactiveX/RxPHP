@@ -59,7 +59,7 @@ class HotObservable extends Observable
 
     public function removeObserver(ObserverInterface $observer)
     {
-        $key = array_search($observer, $this->observers);
+        $key = array_search($observer, $this->observers, true);
 
         if (false === $key) {
             return false;
