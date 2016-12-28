@@ -1,3 +1,11 @@
+# 1.5.1
+
+### Bug Fixes
+
+- Fixed non-strict search in CompositeDisposable ([c17fb6c](https://github.com/ReactiveX/RxPHP/commit/c17fb6cbba2ab3ac7c351b0e7c7e74f30b24f3b4))
+- Fixed missing array type hint on Observable::__call ([1672dc1](https://github.com/ReactiveX/RxPHP/commit/1672dc12a3817888dbac8207a324cf14600f6dee))
+
+
 # 1.5.0
 
 ### Bug Fixes
