@@ -725,7 +725,7 @@ class Observable implements ObservableInterface
      * 
      * @demo custom-operator/rot13.php
      */
-    public function __call($name, $arguments)
+    public function __call($name, array $arguments)
     {
         $fullNamespace = 'Rx\\Operator\\';
         if ($name[0] === '_') {
