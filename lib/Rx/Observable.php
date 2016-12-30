@@ -246,7 +246,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex forkJoin
      */
-    public static function forkJoin(array $observables, callable $resultSelector = null, SchedulerInterface $scheduler = null)
+    public static function forkJoin(array $observables = [], callable $resultSelector = null, SchedulerInterface $scheduler = null)
     {
         return new ForkJoinObservable($observables, $resultSelector, $scheduler);
     }

@@ -465,4 +465,62 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onError(220, $error),
         ], $results->getMessages());
     }
+
+    /**
+     * @test
+     */
+    public function forkjoin_throw_inside_selector()
+    {
+        $error = new \Exception();
+
+        $e0 = $this->createHotObservable([
+            onNext(220, 1),
+            onCompleted(230),
+        ]);
+
+        $xs = new ForkJoinObservable([$e0], function() use ($error) {
+            throw $error;
+        });
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs;
+        });
+
+        $this->assertMessages([
+            onError(230, $error),
+        ], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function forkjoin_disposed_after_emit()
+    {
+        $e0 = $this->createHotObservable([
+            onNext(250, 1),
+            onCompleted(350),
+        ]);
+
+        $e1 = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onCompleted(250)
+        ]);
+
+        $xs = new ForkJoinObservable([$e0, $e1]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs) {
+            return $xs;
+        }, 300);
+
+        $this->assertMessages([], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 300)
+        ], $e0->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 300)
+        ], $e1->getSubscriptions());
+    }
 }

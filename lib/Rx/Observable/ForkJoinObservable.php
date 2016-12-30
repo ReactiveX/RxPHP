@@ -65,7 +65,16 @@ class ForkJoinObservable extends Observable {
                     $haveValues = count($this->values);
 
                     if ($haveValues == $len) {
-                        $value = $this->resultSelector ? call_user_func_array($this->resultSelector, $this->values) : $this->values;
+                        if ($this->resultSelector) {
+                            try {
+                                $value = call_user_func_array($this->resultSelector, $this->values);
+                            } catch (\Exception $e) {
+                                $autoObs->onError($e);
+                                return;
+                            }
+                        } else {
+                            $value = $this->values;
+                        }
                         $autoObs->onNext($value);
                     }
 
