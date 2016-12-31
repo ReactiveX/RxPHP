@@ -6,7 +6,7 @@ use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Observer\AutoDetachObserver;
-use Rx\Scheduler\ImmediateScheduler;
+use Rx\Scheduler;
 
 class AnonymousObservable extends Observable
 {
@@ -23,7 +23,7 @@ class AnonymousObservable extends Observable
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         if (null === $scheduler) {
-            $scheduler = new ImmediateScheduler();
+            $scheduler = Scheduler::getDefault();
         }
 
         $subscribeAction = $this->subscribeAction;

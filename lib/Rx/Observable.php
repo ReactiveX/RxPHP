@@ -329,7 +329,7 @@ class Observable implements ObservableInterface
      */
     public static function start(callable $action, SchedulerInterface $scheduler = null)
     {
-        $scheduler = $scheduler ?: new ImmediateScheduler();
+        $scheduler = $scheduler ?: Scheduler::getDefault();
         $subject   = new AsyncSubject();
 
         $scheduler->schedule(function () use ($subject, $action) {

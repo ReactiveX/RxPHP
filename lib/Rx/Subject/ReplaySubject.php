@@ -6,6 +6,7 @@ use Exception;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observer\ScheduledObserver;
 use Rx\ObserverInterface;
+use Rx\Scheduler;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
@@ -56,7 +57,7 @@ class ReplaySubject extends Subject
         }
 
         if (!$scheduler) {
-            $scheduler = new ImmediateScheduler();
+            $scheduler = Scheduler::getDefault();
         }
         $this->scheduler = $scheduler;
     }
