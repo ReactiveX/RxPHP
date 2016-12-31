@@ -9,6 +9,7 @@ use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
 use Rx\Observable\FromPromiseObservable;
+use Rx\Observable\ForkJoinObservable;
 use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
 use Rx\Observable\MulticastObservable;
@@ -297,6 +298,22 @@ class Observable implements ObservableInterface
         return $this->lift(function () {
             return new MergeAllOperator($this);
         });
+    }
+
+    /**
+     * Runs all observable sequences in parallel and collect their last elements.
+     *
+     * @param array $observables
+     * @param callable|null $resultSelector
+     * @return ForkJoinObservable
+     *
+     * @demo forkJoin-observable/forkJoin-observable.php
+     * @operator
+     * @reactivex forkJoin
+     */
+    public static function forkJoin(array $observables = [], callable $resultSelector = null): ForkJoinObservable
+    {
+        return new ForkJoinObservable($observables, $resultSelector);
     }
 
     /**
@@ -793,7 +810,7 @@ class Observable implements ObservableInterface
      * @param $name
      * @param $arguments
      * @return AnonymousObservable
-     * 
+     *
      * @demo custom-operator/rot13.php
      */
     public function __call($name, $arguments): AnonymousObservable
@@ -801,7 +818,7 @@ class Observable implements ObservableInterface
         $fullNamespace = 'Rx\\Operator\\';
         if ($name[0] === '_') {
             list($_, $namespace, $methodName) = explode('_', $name);
-            $name = $methodName;
+            $name          = $methodName;
             $fullNamespace = $namespace . '\\' . $fullNamespace;
         }
         $className = $fullNamespace . ucfirst($name) . 'Operator';
