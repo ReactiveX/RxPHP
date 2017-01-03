@@ -23,10 +23,10 @@
         "php": "~7.0",
         "async-interop/promise": "^0.3",
         "async-interop/event-loop": "^0.4",
-        "async-interop/event-loop-implementation": "^0.3"
+        "async-interop/event-loop-implementation": "^0.4"
     },
     "require-dev": {
-        "wyrihaximus/react-async-interop-loop": "dev-master",
+        "wyrihaximus/react-async-interop-loop": "^0.2.1",
         "satooshi/php-coveralls": "~1.0",
         "phpunit/phpcov": "^3.1",
         "phpunit/phpunit": "^5.5"

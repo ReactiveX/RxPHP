@@ -2,7 +2,6 @@
 
 namespace Rx\Promise;
 
-use Interop\Async\Loop;
 use Interop\Async\Promise as InteropPromise;
 use Rx\Observable;
 
