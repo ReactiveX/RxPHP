@@ -362,7 +362,7 @@ class Observable implements ObservableInterface
     {
         return static::empty($scheduler)
             ->lift(function () use ($factory) {
-                return new DeferOperator($factory);
+                return new DeferOperator(new ReturnsObservable($factory));
             });
     }
 
@@ -526,7 +526,7 @@ class Observable implements ObservableInterface
      */
     public function flatMap(callable $selector): AnonymousObservable
     {
-        return $this->map($selector)->mergeAll();
+        return $this->map(new ReturnsObservable($selector))->mergeAll();
     }
 
     /**
@@ -585,7 +585,7 @@ class Observable implements ObservableInterface
      */
     public function flatMapLatest(callable $selector): AnonymousObservable
     {
-        return $this->map($selector)->switch();
+        return $this->map(new ReturnsObservable($selector))->switch();
     }
 
     /**

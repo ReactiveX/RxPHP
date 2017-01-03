@@ -181,4 +181,30 @@ class SelectManyTest extends FunctionalTestCase
         $this->assertSubscriptions(array(subscribe(200, 510)), $xs->getSubscriptions());
         $this->assertSubscriptions(array(subscribe(300, 510), subscribe(400, 510), subscribe(500, 510)), $ys->getSubscriptions());
     }
+
+    /**
+     * @test
+     */
+    public function flatMap_it_errors_with_bad_return()
+    {
+        $xs = $this->createColdObservable([
+            onNext(100, 4),
+            onNext(200, 2),
+            onNext(300, 3),
+            onNext(400, 1),
+            onCompleted(510)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->flatMap(function () {
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages([
+            onError(300, new Exception()),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([subscribe(200, 300)], $xs->getSubscriptions());
+    }
 }
