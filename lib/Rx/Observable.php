@@ -76,8 +76,9 @@ class Observable implements ObservableInterface
     protected $observers = [];
     protected $started = false;
 
-    public function subscribe(ObserverInterface $observer, $scheduler = null)
+    public function subscribe(ObserverInterface $observer = null, $scheduler = null)
     {
+        $observer          = $observer ? $observer : new CallbackObserver();
         $this->observers[] = $observer;
         $this->started     = true;
 
