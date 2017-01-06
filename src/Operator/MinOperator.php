@@ -53,7 +53,7 @@ final class MinOperator implements OperatorInterface
                     return;
                 }
 
-                $observer->onError(new \Exception('Empty'));
+                $observer->onError(new \Exception('Could not get minimum value because observable was empty.'));
             }
         ));
     }

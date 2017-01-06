@@ -260,7 +260,7 @@ class Observable implements ObservableInterface
      * @operator
      * @reactivex empty-never-throw
      */
-    public static function error(\Exception $error, SchedulerInterface $scheduler = null): ErrorObservable
+    public static function error(\Throwable $error, SchedulerInterface $scheduler = null): ErrorObservable
     {
         return new ErrorObservable($error, $scheduler ?: Scheduler::getImmediate());
     }

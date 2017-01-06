@@ -2,7 +2,6 @@
 
 namespace Rx\Observable;
 
-use Exception;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
@@ -13,7 +12,7 @@ class ErrorObservable extends Observable
     private $error;
     private $scheduler;
 
-    public function __construct(Exception $error, SchedulerInterface $scheduler)
+    public function __construct(\Throwable $error, SchedulerInterface $scheduler)
     {
         $this->error     = $error;
         $this->scheduler = $scheduler;
