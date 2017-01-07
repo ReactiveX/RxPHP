@@ -2,7 +2,7 @@
 
 namespace Rx;
 
-class ObservableFactoryWrapper
+final class ObservableFactoryWrapper
 {
     private $selector;
 
