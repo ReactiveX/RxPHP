@@ -220,7 +220,7 @@ abstract class Observable implements ObservableInterface
     /**
      * Returns an observable sequence that terminates with an exception.
      *
-     * @param \Exception $error
+     * @param \Throwable $error
      * @param SchedulerInterface $scheduler
      * @return ErrorObservable The observable sequence that terminates exceptionally with the specified exception object.
      *
@@ -1139,7 +1139,7 @@ abstract class Observable implements ObservableInterface
     public function concatMap(callable $selector, callable $resultSelector = null): AnonymousObservable
     {
         return $this->lift(function () use ($selector, $resultSelector) {
-            return new ConcatMapOperator($selector, $resultSelector);
+            return new ConcatMapOperator(new ObservableFactoryWrapper($selector), $resultSelector);
         });
     }
 

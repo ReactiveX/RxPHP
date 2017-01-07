@@ -30,9 +30,6 @@ class BinaryDisposable implements DisposableInterface
         $this->second = $second;
     }
 
-    /**
-     *
-     */
     public function dispose()
     {
         if ($this->isDisposed) {
@@ -41,24 +38,14 @@ class BinaryDisposable implements DisposableInterface
 
         $this->isDisposed = true;
 
-        $old1        = $this->first;
-        $this->first = null;
-        if ($old1) {
-            $old1->dispose();
-        }
+        $this->first->dispose();
+        $this->second->dispose();
 
-        $old2         = $this->second;
+        $this->first  = null;
         $this->second = null;
-        if ($old2) {
-            $old2->dispose();
-        }
-
     }
 
-    /**
-     * @return bool
-     */
-    public function isDisposed()
+    public function isDisposed(): bool
     {
         return $this->isDisposed;
     }

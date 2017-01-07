@@ -22,7 +22,7 @@ class OnCompletedNotification extends Notification
         $onCompleted();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'OnCompleted()';
     }

@@ -3,15 +3,11 @@
 namespace Rx\Operator;
 
 use Rx\DisposableInterface;
-use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
 final class ConcatMapOperator implements OperatorInterface
 {
-    /** @var int */
-    private $count;
-
     /** @var callable */
     private $selector;
 
@@ -30,10 +26,6 @@ final class ConcatMapOperator implements OperatorInterface
 
             try {
                 $result = ($this->selector)($value, $index, $observable);
-
-                if (!$result instanceof Observable) {
-                    throw new \Exception('concatMap Error:  You must return an Observable from the concatMap selector');
-                }
 
                 if ($this->resultSelector) {
                     return $result->mapWithIndex(function ($innerIndex, $innerValue) use ($value, $index) {
