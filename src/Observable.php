@@ -71,7 +71,6 @@ use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
 use Rx\Subject\Subject;
-use Rx\Disposable\EmptyDisposable;
 
 abstract class Observable implements ObservableInterface
 {
@@ -332,7 +331,7 @@ abstract class Observable implements ObservableInterface
     {
         return static::empty($scheduler)
             ->lift(function () use ($factory) {
-                return new DeferOperator(new ReturnsObservable($factory));
+                return new DeferOperator(new ObservableFactoryWrapper($factory));
             });
     }
 
@@ -496,7 +495,7 @@ abstract class Observable implements ObservableInterface
      */
     public function flatMap(callable $selector): AnonymousObservable
     {
-        return $this->map(new ReturnsObservable($selector))->mergeAll();
+        return $this->map(new ObservableFactoryWrapper($selector))->mergeAll();
     }
 
     /**
@@ -555,7 +554,7 @@ abstract class Observable implements ObservableInterface
      */
     public function flatMapLatest(callable $selector): AnonymousObservable
     {
-        return $this->map(new ReturnsObservable($selector))->switch();
+        return $this->map(new ObservableFactoryWrapper($selector))->switch();
     }
 
     /**
@@ -1438,7 +1437,7 @@ abstract class Observable implements ObservableInterface
     public function retryWhen(callable $notifier): AnonymousObservable
     {
         return $this->lift(function () use ($notifier) {
-            return new RetryWhenOperator($notifier);
+            return new RetryWhenOperator(new ObservableFactoryWrapper($notifier));
         });
     }
 
@@ -1517,7 +1516,7 @@ abstract class Observable implements ObservableInterface
     public function repeatWhen(callable $notifier): AnonymousObservable
     {
         return $this->lift(function () use ($notifier) {
-            return new RepeatWhenOperator($notifier);
+            return new RepeatWhenOperator(new ObservableFactoryWrapper($notifier));
         });
     }
 
@@ -1603,7 +1602,7 @@ abstract class Observable implements ObservableInterface
     public function catch (callable $selector): AnonymousObservable
     {
         return $this->lift(function () use ($selector) {
-            return new CatchErrorOperator($selector);
+            return new CatchErrorOperator(new ObservableFactoryWrapper($selector));
         });
     }
 
