@@ -291,4 +291,22 @@ class TakeLastTest extends FunctionalTestCase
             subscribe(200, 1000)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function takeLast_invalid_count()
+    {
+        $xs = $this->createHotObservable([
+            onNext(180, 1),
+            onNext(210, 2),
+            onCompleted(250)
+        ]);
+
+        $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->takeLast(-1);
+        });
+    }
 }

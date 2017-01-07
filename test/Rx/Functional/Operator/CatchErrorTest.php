@@ -363,6 +363,36 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function catchError_handler_returns_invalid_string()
+    {
+        $o1 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(210, 2),
+                onNext(220, 3),
+                onError(230, new \Exception())
+            ]
+        );
+
+        $results = $this->scheduler->startWithCreate(function () use ($o1) {
+            return $o1->catch(function () {
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages(
+            [
+                onNext(210, 2),
+                onNext(220, 3),
+                onError(230, new \Exception())
+            ],
+            $results->getMessages()
+        );
+    }
+
+    /**
+     * @test
+     */
     public function catchError_Nested_OuterCatches()
     {
         $error               = new \Exception();

@@ -388,4 +388,29 @@ class RetryWhenTest extends FunctionalTestCase
 
         $this->assertSubscriptions([], $xs->getSubscriptions());
     }
+
+    public function testRetryWhenSelectorReturnsInvalidString()
+    {
+        $error = new \Exception();
+
+        $xs = $this->createColdObservable([
+            onNext(10, 1),
+            onNext(20, 2),
+            onNext(30, 3),
+            onNext(40, 4),
+            onCompleted(50)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs, $error) {
+            return $xs->retryWhen(function () use ($error) {
+                return 'unexpected string';
+            });
+        }, 285);
+
+        $this->assertMessages([
+            onError(200, $error)
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([], $xs->getSubscriptions());
+    }
 }

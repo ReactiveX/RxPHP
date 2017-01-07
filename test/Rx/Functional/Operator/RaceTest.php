@@ -163,4 +163,37 @@ class RaceTest extends FunctionalTestCase
 
         $this->assertFalse($sourceNotDisposed);
     }
+
+    /**
+     * @test
+     */
+    public function race_none()
+    {
+        $results = $this->scheduler->startWithCreate(function () {
+            return Observable::race([], $this->scheduler);
+        });
+
+        $this->assertMessages([onCompleted(201)], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function race_one()
+    {
+        $e = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onCompleted(225)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($e) {
+            return Observable::race([$e], $this->scheduler);
+        });
+
+        $this->assertMessages([
+            onNext(210, 2),
+            onCompleted(225)
+        ], $results->getMessages());
+    }
 }

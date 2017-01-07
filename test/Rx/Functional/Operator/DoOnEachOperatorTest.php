@@ -743,4 +743,25 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         });
 
     }
+
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function do_throws_when_args_invalid()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(220, 3),
+            onNext(230, 4),
+            onNext(240, 5),
+            onCompleted(250)
+        ]);
+
+        $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->do('invalid arg');
+        });
+    }
 }

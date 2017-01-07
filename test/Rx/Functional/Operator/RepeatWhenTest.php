@@ -321,4 +321,58 @@ class RepeatWhenTest extends FunctionalTestCase
             subscribe(200, 260)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     */
+    public function repeatWhen_notifier_throws()
+    {
+        $xs = $this->createColdObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(220, 3),
+            onNext(230, 4),
+            onNext(240, 5),
+            onCompleted(250)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->repeatWhen(function (Observable $attempts) {
+                throw new Exception('error');
+            });
+        });
+
+        $this->assertMessages([
+            onError(200, new Exception('error'))
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([], $xs->getSubscriptions());
+    }
+
+    /**
+     * @test
+     */
+    public function repeatWhen_notifier_returns_invalid_string()
+    {
+        $xs = $this->createColdObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onNext(220, 3),
+            onNext(230, 4),
+            onNext(240, 5),
+            onCompleted(250)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->repeatWhen(function (Observable $attempts) {
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages([
+            onError(200, new Exception('error'))
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([], $xs->getSubscriptions());
+    }
 }

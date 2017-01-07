@@ -125,6 +125,27 @@ class DeferTest extends FunctionalTestCase
 
     /**
      * @test
+     */
+    public function defer_factory_returns_invalid_string()
+    {
+        $invoked = 0;
+
+        $results = $this->scheduler->startWithCreate(function () use (&$invoked) {
+            return Observable::defer(function () use (&$invoked) {
+                $invoked++;
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages([
+            onError(200, new \Exception())
+        ], $results->getMessages());
+
+        $this->assertEquals(1, $invoked);
+    }
+
+    /**
+     * @test
      * @expectedException \Exception
      * @expectedExceptionMessage I take exception
      */

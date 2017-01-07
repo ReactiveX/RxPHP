@@ -1814,12 +1814,13 @@ abstract class Observable implements ObservableInterface
      *
      * @param AnonymousObservable[] $observables
      * @param SchedulerInterface $scheduler
-     * @return AnonymousObservable
+     * @return Observable
+     *
      * @demo race/race.php
      * @operator
      * @reactivex amb
      */
-    public static function race(array $observables, SchedulerInterface $scheduler = null): AnonymousObservable
+    public static function race(array $observables, SchedulerInterface $scheduler = null): Observable
     {
         if (count($observables) === 1) {
             return $observables[0];
