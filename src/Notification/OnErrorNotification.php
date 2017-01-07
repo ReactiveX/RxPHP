@@ -28,7 +28,6 @@ class OnErrorNotification extends Notification
 
     public function __toString()
     {
-        // todo: check message too? other properties?
         return 'OnError(' . get_class($this->exception) . ')';
     }
 }

@@ -726,12 +726,7 @@ abstract class Observable implements ObservableInterface
     public function groupBy(callable $keySelector, callable $elementSelector = null, callable $keySerializer = null): AnonymousObservable
     {
         return $this->groupByUntil($keySelector, $elementSelector, function () {
-
-            // observable that never calls
-            return new AnonymousObservable(function () {
-                // todo?
-                return new EmptyDisposable();
-            });
+            return static::never();
         }, $keySerializer);
     }
 

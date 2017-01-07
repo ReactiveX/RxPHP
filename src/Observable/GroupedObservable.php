@@ -6,6 +6,7 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
 use Rx\Disposable\CompositeDisposable;
+use Rx\Disposable\RefCountDisposable;
 use Rx\DisposableInterface;
 
 class GroupedObservable extends Observable
@@ -13,7 +14,7 @@ class GroupedObservable extends Observable
     private $key;
     private $underlyingObservable;
 
-    public function __construct($key, ObservableInterface $underlyingObservable, DisposableInterface $mergedDisposable = null)
+    public function __construct($key, ObservableInterface $underlyingObservable, RefCountDisposable $mergedDisposable = null)
     {
         $this->key = $key;
 
@@ -22,7 +23,6 @@ class GroupedObservable extends Observable
         } else {
             $this->underlyingObservable = new AnonymousObservable(
                 function ($observer) use ($mergedDisposable, $underlyingObservable) {
-                    // todo, typehint $mergedDisposable?
                     return new CompositeDisposable([
                         $mergedDisposable->getDisposable(),
                         $underlyingObservable->subscribe($observer),
