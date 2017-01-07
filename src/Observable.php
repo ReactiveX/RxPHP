@@ -72,13 +72,9 @@ use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
 use Rx\Subject\Subject;
 use Rx\Disposable\EmptyDisposable;
-use Rx\Disposable\CallbackDisposable;
 
-class Observable implements ObservableInterface
+abstract class Observable implements ObservableInterface
 {
-    protected $observers = [];
-    protected $started = false;
-
     /**
      * @param callable|ObserverInterface|null $onNextOrObserver
      * @param callable|null $onError
@@ -106,15 +102,7 @@ class Observable implements ObservableInterface
      * @param ObserverInterface $observer
      * @return DisposableInterface
      */
-    protected function _subscribe(ObserverInterface $observer): DisposableInterface
-    {
-        $this->observers[] = $observer;
-        $this->started     = true;
-
-        return new CallbackDisposable(function () use ($observer) {
-            $this->removeObserver($observer);
-        });
-    }
+    protected abstract function _subscribe(ObserverInterface $observer): DisposableInterface;
 
     /**
      * @deprecated
@@ -129,25 +117,6 @@ class Observable implements ObservableInterface
         $observer = new CallbackObserver($onNext, $onError, $onCompleted);
 
         return $this->subscribe($observer);
-    }
-
-    /**
-     * @internal
-     *
-     * @param ObserverInterface $observer
-     * @return bool
-     */
-    public function removeObserver(ObserverInterface $observer): bool
-    {
-        $key = array_search($observer, $this->observers, true);
-
-        if (false === $key) {
-            return false;
-        }
-
-        unset($this->observers[$key]);
-
-        return true;
     }
 
     /**

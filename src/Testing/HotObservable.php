@@ -14,6 +14,7 @@ class HotObservable extends Observable
     private $scheduler;
     private $messages;
     private $subscriptions = [];
+    private $observers = [];
 
     public function __construct(TestScheduler $scheduler, array $messages)
     {
