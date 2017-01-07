@@ -52,7 +52,7 @@ class DoOnNextTest extends FunctionalTestCase
                 $messages[] = onNext($this->scheduler->getClock(), $x);
             })
             ->repeat(2)
-            ->subscribeCallback(null, null, null, $this->scheduler);
+            ->subscribe(null, null, null, $this->scheduler);
         
         $this->scheduler->start();
         

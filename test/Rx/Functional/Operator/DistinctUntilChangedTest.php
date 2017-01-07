@@ -18,7 +18,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     {
 
         $results = $this->scheduler->startWithCreate(function () {
-            $o = new EmptyObservable();
+            $o = new EmptyObservable($this->scheduler);
 
             return Observable::never()->distinctUntilChanged();
         });

@@ -3,9 +3,9 @@
 
 namespace Rx\Functional\Operator;
 
-
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
+use Rx\ObserverInterface;
 use Rx\Scheduler\ImmediateScheduler;
 
 class DeferTest extends FunctionalTestCase
@@ -22,8 +22,8 @@ class DeferTest extends FunctionalTestCase
             return Observable::defer(function () use (&$invoked, &$xs) {
                 $invoked++;
                 $xs = $this->createColdObservable([
-                  onNext(100, $this->scheduler->getClock()),
-                  onCompleted(200)
+                    onNext(100, $this->scheduler->getClock()),
+                    onCompleted(200)
                 ]);
 
                 return $xs;
@@ -51,8 +51,8 @@ class DeferTest extends FunctionalTestCase
             return Observable::defer(function () use (&$invoked, &$xs) {
                 $invoked++;
                 $xs = $this->createColdObservable([
-                  onNext(100, $this->scheduler->getClock()),
-                  onError(200, new \Exception("error"))
+                    onNext(100, $this->scheduler->getClock()),
+                    onError(200, new \Exception('error'))
                 ]);
 
                 return $xs;
@@ -80,9 +80,9 @@ class DeferTest extends FunctionalTestCase
             return Observable::defer(function () use (&$invoked, &$xs) {
                 $invoked++;
                 $xs = $this->createColdObservable([
-                  onNext(100, $this->scheduler->getClock()),
-                  onNext(200, $invoked),
-                  onNext(1100, 1000)
+                    onNext(100, $this->scheduler->getClock()),
+                    onNext(200, $invoked),
+                    onNext(1100, 1000)
                 ]);
 
                 return $xs;
@@ -90,7 +90,7 @@ class DeferTest extends FunctionalTestCase
         });
 
 
-        $this->assertMessages([onNext(300, 200),onNext(400, 1)], $results->getMessages());
+        $this->assertMessages([onNext(300, 200), onNext(400, 1)], $results->getMessages());
 
         $this->assertEquals(1, $invoked);
 
@@ -116,11 +116,32 @@ class DeferTest extends FunctionalTestCase
         // explicitly using the immediate scheduler on subscribe internally. When we pass the
         // proper scheduler in, the subscription gets scheduled which requires an extra tick.
         $this->assertMessages([
-            onError(201, new \Exception('error'))
+            onError(200, new \Exception('error'))
         ], $results->getMessages());
 
         $this->assertEquals(1, $invoked);
 
+    }
+
+    /**
+     * @test
+     */
+    public function defer_factory_returns_invalid_string()
+    {
+        $invoked = 0;
+
+        $results = $this->scheduler->startWithCreate(function () use (&$invoked) {
+            return Observable::defer(function () use (&$invoked) {
+                $invoked++;
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages([
+            onError(200, new \Exception())
+        ], $results->getMessages());
+
+        $this->assertEquals(1, $invoked);
     }
 
     /**
@@ -131,10 +152,10 @@ class DeferTest extends FunctionalTestCase
     public function defer_error_while_subscribe_with_immediate_scheduler()
     {
         Observable::defer(function () {
-            return Observable::create(function ($observer, $scheduler = null) {
+            return Observable::create(function (ObserverInterface $observer) {
                 $observer->onError(new \Exception('I take exception'));
             });
-        })->subscribeCallback(null, null, null, new ImmediateScheduler());
+        }, new ImmediateScheduler())->subscribe();
     }
 
     /**
@@ -143,16 +164,16 @@ class DeferTest extends FunctionalTestCase
     public function defer_error_while_subscribe_with_immediate_scheduler_passes_through()
     {
         $onErrorCalled = false;
-        
+
         Observable::defer(function () {
-            return Observable::create(function ($observer, $scheduler = null) {
+            return Observable::create(function (ObserverInterface $observer) {
                 $observer->onError(new \Exception('I take exception'));
             });
-        })->subscribeCallback(null, function (\Exception $e) use (&$onErrorCalled) {
+        }, new ImmediateScheduler())->subscribe(null, function (\Exception $e) use (&$onErrorCalled) {
             $onErrorCalled = true;
             $this->assertEquals('I take exception', $e->getMessage());
-        }, null, new ImmediateScheduler());
-        
+        });
+
         $this->assertTrue($onErrorCalled);
     }
 }

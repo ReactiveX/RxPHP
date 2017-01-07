@@ -19,7 +19,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->retryWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -113,7 +113,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->retryWhen(function () {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -184,7 +184,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $error) {
             return $xs->retryWhen(function (Observable $attempts) {
-                return Observable::emptyObservable();
+                return Observable::empty();
             });
         });
 
@@ -347,7 +347,7 @@ class RetryWhenTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs->retryWhen(function () {
-                return Observable::just(1);
+                return Observable::of(1);
             });
         }, 285);
 
@@ -379,6 +379,31 @@ class RetryWhenTest extends FunctionalTestCase
         $results = $this->scheduler->startWithDispose(function () use ($xs, $error) {
             return $xs->retryWhen(function () use ($error) {
                 throw $error;
+            });
+        }, 285);
+
+        $this->assertMessages([
+            onError(200, $error)
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([], $xs->getSubscriptions());
+    }
+
+    public function testRetryWhenSelectorReturnsInvalidString()
+    {
+        $error = new \Exception();
+
+        $xs = $this->createColdObservable([
+            onNext(10, 1),
+            onNext(20, 2),
+            onNext(30, 3),
+            onNext(40, 4),
+            onCompleted(50)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($xs, $error) {
+            return $xs->retryWhen(function () use ($error) {
+                return 'unexpected string';
             });
         }, 285);
 

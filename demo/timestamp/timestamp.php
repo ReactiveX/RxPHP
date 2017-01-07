@@ -2,11 +2,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop = new \React\EventLoop\StreamSelectLoop();
-
-$scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
-
-$source = \Rx\Observable::interval(1000, $scheduler)
+$source = \Rx\Observable::interval(1000)
     ->timestamp()
     ->map(function (\Rx\Timestamped $x) {
         return $x->getValue() . ':' . $x->getTimestampMillis();
@@ -14,8 +10,6 @@ $source = \Rx\Observable::interval(1000, $scheduler)
     ->take(5);
 
 $source->subscribe($createStdoutObserver());
-
-$loop->run();
 
 // Next value: 0:1460781738354
 // Next value: 1:1460781739358

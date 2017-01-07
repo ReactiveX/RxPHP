@@ -416,7 +416,7 @@ class ZipTest extends FunctionalTestCase
     {
         $scheduler = new ImmediateScheduler();
 
-        $o = new ArrayObservable(range(0, 4));
+        $o = new ArrayObservable(range(0, 4), $scheduler);
 
         $source = $o
             ->zip([
@@ -430,7 +430,7 @@ class ZipTest extends FunctionalTestCase
             function ($x) use (&$result) {
                 $result = $x;
             }
-        ), $scheduler);
+        ));
 
         $this->assertEquals(
             [
@@ -447,7 +447,7 @@ class ZipTest extends FunctionalTestCase
             function ($x) use (&$result) {
                 $result = $x;
             }
-        ), $scheduler);
+        ));
 
         $this->assertEquals(3, $result);
     }

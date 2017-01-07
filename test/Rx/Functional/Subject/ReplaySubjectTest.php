@@ -5,11 +5,12 @@ namespace Rx\Functional\Subject;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\ImmediateScheduler;
 use Rx\Subject\ReplaySubject;
 
 class ReplaySubjectTest extends FunctionalTestCase
 {
-    function testInfinite()
+    public function testInfinite()
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -42,13 +43,13 @@ class ReplaySubjectTest extends FunctionalTestCase
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subscription1, &$subject, &$results1) {
-            $subscription1 = $subject->subscribe($results1, $this->scheduler);
+            $subscription1 = $subject->subscribe($results1);
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subscription2, &$subject, &$results2) {
-            $subscription2 = $subject->subscribe($results2, $this->scheduler);
+            $subscription2 = $subject->subscribe($results2);
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subscription3, &$subject, &$results3) {
-            $subscription3 = $subject->subscribe($results3, $this->scheduler);
+            $subscription3 = $subject->subscribe($results3);
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subscription1) {
@@ -562,8 +563,8 @@ class ReplaySubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_replays_with_no_scheduler() {
-        $rs = new ReplaySubject();
+    public function it_replays_with_immediate_scheduler() {
+        $rs = new ReplaySubject(null, null, new ImmediateScheduler());
 
         $o = Observable::fromArray(range(1,5));
 
@@ -572,11 +573,11 @@ class ReplaySubjectTest extends FunctionalTestCase
         $result = [];
         $completed = false;
 
-        $rs->subscribeCallback(function ($x) use (&$result) {
+        $rs->subscribe(function ($x) use (&$result) {
                 $result[] = $x;
             },
             function ($e) {
-                $this->fail("Should not have failed");
+                $this->fail('Should not have failed');
             },
             function () use (&$result, &$completed) {
                 $completed = true;
@@ -587,4 +588,3 @@ class ReplaySubjectTest extends FunctionalTestCase
         $this->assertTrue($completed);
     }
 }
-

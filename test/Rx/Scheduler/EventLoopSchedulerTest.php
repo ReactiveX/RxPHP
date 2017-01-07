@@ -2,8 +2,7 @@
 
 namespace Rx\Scheduler;
 
-use React\EventLoop\Factory;
-use Rx\Observable;
+use Interop\Async\Loop;
 use Rx\TestCase;
 
 class EventLoopSchedulerTest extends TestCase
@@ -13,10 +12,9 @@ class EventLoopSchedulerTest extends TestCase
      */
     public function now_returns_time_since_epoch_in_ms()
     {
-        $loop      = Factory::create();
-        $scheduler = new EventLoopScheduler($loop);
+        $scheduler = new EventLoopScheduler();
 
-        $this->assertTrue(abs(time() * 1000 - $scheduler->now()) < 1000, "time difference is less than or equal to 1");
+        $this->assertTrue(abs(time() * 1000 - $scheduler->now()) < 1000, 'time difference is less than or equal to 1');
     }
 
     /**
@@ -24,14 +22,14 @@ class EventLoopSchedulerTest extends TestCase
      */
     public function eventloop_schedule()
     {
+        $loop = Loop::get();
 
-        $loop         = Factory::create();
-        $scheduler    = new EventLoopScheduler($loop);
+        $scheduler    = new EventLoopScheduler();
         $actionCalled = false;
 
         $action = function () use (&$actionCalled) {
             $actionCalled = true;
-            return "test";
+            return 'test';
         };
 
         $disposable = $scheduler->schedule($action);
@@ -39,7 +37,11 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertInstanceOf('Rx\DisposableInterface', $disposable);
         $this->assertFalse($actionCalled);
 
-        $loop->tick();
+        $loop->defer(function () use ($loop) {
+            $loop->stop();
+        });
+
+        $loop->run();
 
         $this->assertTrue($actionCalled);
 
@@ -51,8 +53,8 @@ class EventLoopSchedulerTest extends TestCase
     public function eventloop_schedule_recursive()
     {
 
-        $loop         = Factory::create();
-        $scheduler    = new EventLoopScheduler($loop);
+        $loop = Loop::get();
+        $scheduler    = new EventLoopScheduler();
         $actionCalled = false;
         $count        = 0;
 
@@ -73,20 +75,20 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals(0, $count);
 
         $loop->run();
-        
+
         $this->assertEquals(5, $count);
         $this->assertTrue($actionCalled);
     }
-    
+
     public function testDisposedEventDoesNotCauseSkip()
     {
         // create a scheduler - timing is not important for this test
         // so we can just use an empty callable
         $scheduler = new EventLoopScheduler(function () {
         });
-        
+
         $calls = [];
-        
+
         // the way that these are scheduled, if the scheduler runs (by calling start a few times),
         // calls should be [2] because 0 is disposed and 1 shouldn't be called for 10s
         $disposable = $scheduler->schedule(function () use (&$calls) {
@@ -100,26 +102,26 @@ class EventLoopSchedulerTest extends TestCase
         $scheduler->schedule(function () use (&$calls) {
             $calls[] = 2;
         }, 0);
-        
+
         $disposable->dispose();
-        
+
         $scheduler->start();
         $scheduler->start();
         $scheduler->start();
-        
+
         $this->assertEquals([2], $calls);
     }
 
     public function testSchedulerWorkedWithScheduledEventOutsideItself()
     {
-        $loop         = Factory::create();
-        $scheduler    = new EventLoopScheduler($loop);
+        $loop      = Loop::get();
+        $scheduler = new EventLoopScheduler();
 
         $scheduler->start();
-        $start = microtime(true);
+        $start  = microtime(true);
         $called = null;
 
-        $loop->addTimer(0.1, function () use ($scheduler, &$called) {
+        $loop->delay(100, function () use ($scheduler, &$called) {
             $scheduler->schedule(function () use (&$called) {
                 $called = microtime(true);
             }, 100);
@@ -127,6 +129,6 @@ class EventLoopSchedulerTest extends TestCase
 
         $loop->run();
 
-        $this->assertEquals(0.2, $called-$start, '', 0.02);
+        $this->assertEquals(0.2, $called - $start, '', 0.02);
     }
 }

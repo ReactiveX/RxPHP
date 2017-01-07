@@ -23,7 +23,7 @@ class AverageTest extends FunctionalTestCase
         });
 
         $this->assertMessages([
-            onError(251, new \UnderflowException())
+            onError(250, new \UnderflowException())
         ], $results->getMessages());
     }
     

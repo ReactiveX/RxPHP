@@ -4,9 +4,6 @@ use Rx\Observer\CallbackObserver;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop      = \React\EventLoop\Factory::create();
-$scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
-
 $codes = [
     ['id' => 38],
     ['id' => 38],
@@ -44,11 +41,10 @@ $subscription = $source->subscribe(new CallbackObserver(
                 echo 'Count: ', $x, PHP_EOL;
             }));
     },
-    function (Exception $err) {
+    function (Throwable $err) {
         echo 'Error', $err->getMessage(), PHP_EOL;
     },
     function () {
         echo 'Completed', PHP_EOL;
-    }), $scheduler);
+    }));
 
-$loop->run();

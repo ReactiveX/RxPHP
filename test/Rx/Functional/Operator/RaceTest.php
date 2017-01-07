@@ -16,7 +16,7 @@ class RaceTest extends FunctionalTestCase
         $n2 = Observable::never();
 
         $results = $this->scheduler->startWithCreate(function () use ($n1, $n2) {
-            return Observable::race([$n1, $n2]);
+            return Observable::race([$n1, $n2], $this->scheduler);
         });
 
         $this->assertMessages(
@@ -35,7 +35,7 @@ class RaceTest extends FunctionalTestCase
         $n3 = Observable::never();
 
         $results = $this->scheduler->startWithCreate(function () use ($n1, $n2, $n3) {
-            return Observable::race([$n1, $n2, $n3]);
+            return Observable::race([$n1, $n2, $n3], $this->scheduler);
         });
 
         $this->assertMessages(
@@ -56,7 +56,7 @@ class RaceTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($n1, $e) {
-            return Observable::race([$n1, $e]);
+            return Observable::race([$n1, $e], $this->scheduler);
         });
 
         $this->assertMessages(
@@ -79,7 +79,7 @@ class RaceTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($n1, $e) {
-            return Observable::race([$e, $n1]);
+            return Observable::race([$e, $n1], $this->scheduler);
         });
 
         $this->assertMessages(
@@ -114,7 +114,7 @@ class RaceTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return Observable::race([$o1, $o2]);
+            return Observable::race([$o1, $o2], $this->scheduler);
         });
 
         $this->assertMessages(
@@ -151,7 +151,7 @@ class RaceTest extends FunctionalTestCase
         });
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return Observable::race([$o1, $o2]);
+            return Observable::race([$o1, $o2], $this->scheduler);
         });
 
         $this->assertMessages(
@@ -162,5 +162,38 @@ class RaceTest extends FunctionalTestCase
         );
 
         $this->assertFalse($sourceNotDisposed);
+    }
+
+    /**
+     * @test
+     */
+    public function race_none()
+    {
+        $results = $this->scheduler->startWithCreate(function () {
+            return Observable::race([], $this->scheduler);
+        });
+
+        $this->assertMessages([onCompleted(201)], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function race_one()
+    {
+        $e = $this->createHotObservable([
+            onNext(150, 1),
+            onNext(210, 2),
+            onCompleted(225)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($e) {
+            return Observable::race([$e], $this->scheduler);
+        });
+
+        $this->assertMessages([
+            onNext(210, 2),
+            onCompleted(225)
+        ], $results->getMessages());
     }
 }

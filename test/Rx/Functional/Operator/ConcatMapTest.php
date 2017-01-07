@@ -14,13 +14,13 @@ class ConcatMapTest extends FunctionalTestCase
     public function concatMapTo_Then_Complete_Task()
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
-        $ys = Observable::just(42);
+        $ys = Observable::of(42);
 
         $results   = [];
         $completed = false;
 
         $xs->concatMapTo($ys)
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$results) {
                     $results[] = $x;
                 },
@@ -42,20 +42,20 @@ class ConcatMapTest extends FunctionalTestCase
     public function concatMapTo_Then_Error_Task()
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
-        $ys = Observable::error(new \Exception("test"));
+        $ys = Observable::error(new \Exception('test'));
 
         $results   = [];
         $completed = false;
         $error     = false;
 
         $xs->concatMapTo($ys)
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$results) {
                     $results[] = $x;
                 },
                 function (\Exception $e) use (&$results, &$error) {
                     $error = true;
-                    $this->assertSame("test", $e->getMessage());
+                    $this->assertSame('test', $e->getMessage());
                 },
                 function () use (&$completed) {
                     $completed = true;
@@ -78,13 +78,13 @@ class ConcatMapTest extends FunctionalTestCase
 
         $xs->concatMap(
             function ($x, $i) {
-                return Observable::just($x + $i);
+                return Observable::of($x + $i);
             },
             function ($x, $y, $oi, $ii) {
                 $this->assertEquals(0, $ii);
                 return $x + $y + $oi;
             })
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$results) {
                     $results[] = $x;
                 },
@@ -114,12 +114,12 @@ class ConcatMapTest extends FunctionalTestCase
 
         $xs->concatMap(
             function ($x, $i) {
-                return Observable::just($x + $i);
+                return Observable::of($x + $i);
             },
             function ($x, $y, $i) use ($error) {
                 throw $error;
             })
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$results) {
                     $results[] = $x;
                 },
@@ -147,9 +147,9 @@ class ConcatMapTest extends FunctionalTestCase
         $completed = false;
 
         $xs->concatMap(function ($x, $i) {
-            return Observable::just($x + $i);
+            return Observable::of($x + $i);
         })
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$results) {
                     $results[] = $x;
                 },
@@ -179,7 +179,7 @@ class ConcatMapTest extends FunctionalTestCase
         $xs->concatMap(function ($x, $i) {
             return Observable::error(new Exception($x + $i));
         })
-            ->subscribeCallback(
+            ->subscribe(
                 function ($x) use (&$results) {
                     $results[] = $x;
                 },

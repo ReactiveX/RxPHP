@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
+use Interop\Async\Loop;
 use Rx\Observable;
 
 class RecursiveReturnObservable extends Observable
@@ -16,37 +17,32 @@ class RecursiveReturnObservable extends Observable
         $this->value = $value;
     }
 
-    public function subscribe(\Rx\ObserverInterface $observer, $scheduler = null)
+    public function _subscribe(\Rx\ObserverInterface $observer): \Rx\DisposableInterface
     {
-        return $scheduler->scheduleRecursive(function ($reschedule) use ($observer) {
+        return \Rx\Scheduler::getDefault()->scheduleRecursive(function ($reschedule) use ($observer) {
             $observer->onNext($this->value);
             $reschedule();
         });
     }
 }
 
-$loop      = React\EventLoop\Factory::create();
-$scheduler = new Rx\Scheduler\EventLoopScheduler($loop);
-
 $observable = new RecursiveReturnObservable(42);
-$observable->subscribe($stdoutObserver, $scheduler);
+$observable->subscribe($stdoutObserver);
 
 $observable = new RecursiveReturnObservable(21);
-$disposable = $observable->subscribe($stdoutObserver, $scheduler);
+$disposable = $observable->subscribe($stdoutObserver);
 
-$loop->addPeriodicTimer(0.01, function () {
+Loop::repeat(100, function () {
     $memory    = memory_get_usage() / 1024;
     $formatted = number_format($memory, 3) . 'K';
     echo "Current memory usage: {$formatted}\n";
 });
 
 // after a second we'll dispose the 21 observable
-$loop->addTimer(1.0, function () use ($disposable) {
+Loop::delay(1000, function () use ($disposable) {
     echo "Disposing 21 observable.\n";
     $disposable->dispose();
 });
-
-$loop->run();
 
 
 // After one second...

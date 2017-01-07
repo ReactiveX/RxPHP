@@ -31,7 +31,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -61,7 +61,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -92,7 +92,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -126,7 +126,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -164,7 +164,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -199,7 +199,7 @@ class CatchErrorTest extends FunctionalTestCase
         $o2 = Observable::never();
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -233,7 +233,7 @@ class CatchErrorTest extends FunctionalTestCase
         $o2 = Observable::never();
 
         $results = $this->scheduler->startWithDispose(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         }, 212);
@@ -270,7 +270,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         });
@@ -310,7 +310,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithDispose(function () use ($o1, $o2) {
-            return $o1->catchError(function () use ($o2) {
+            return $o1->catch(function () use ($o2) {
                 return $o2;
             });
         }, 225);
@@ -344,7 +344,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $error2) {
-            return $o1->catchError(function () use ($error2) {
+            return $o1->catch(function () use ($error2) {
                 throw $error2;
 
             });
@@ -355,6 +355,36 @@ class CatchErrorTest extends FunctionalTestCase
                 onNext(210, 2),
                 onNext(220, 3),
                 onError(230, $error2)
+            ],
+            $results->getMessages()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function catchError_handler_returns_invalid_string()
+    {
+        $o1 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(210, 2),
+                onNext(220, 3),
+                onError(230, new \Exception())
+            ]
+        );
+
+        $results = $this->scheduler->startWithCreate(function () use ($o1) {
+            return $o1->catch(function () {
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages(
+            [
+                onNext(210, 2),
+                onNext(220, 3),
+                onError(230, new \Exception())
             ],
             $results->getMessages()
         );
@@ -393,11 +423,11 @@ class CatchErrorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2, $o3, &$firstHandlerCalled, &$secondHandlerCalled) {
             return $o1
-                ->catchError(function () use ($o2, &$firstHandlerCalled) {
+                ->catch(function () use ($o2, &$firstHandlerCalled) {
                     $firstHandlerCalled = true;
                     return $o2;
                 })
-                ->catchError(function () use ($o3, &$secondHandlerCalled) {
+                ->catch(function () use ($o3, &$secondHandlerCalled) {
                     $secondHandlerCalled = true;
                     return $o3;
                 });
@@ -451,13 +481,13 @@ class CatchErrorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $o2, $o3, &$firstHandlerCalled, &$secondHandlerCalled, $error, $error2) {
             return $o1
-                ->catchError(function ($e) use ($o2, &$firstHandlerCalled, $error) {
+                ->catch(function ($e) use ($o2, &$firstHandlerCalled, $error) {
                     $firstHandlerCalled = true;
                     $this->assertSame($e, $error);
 
                     return $o2;
                 })
-                ->catchError(function ($e) use ($o3, &$secondHandlerCalled, $error2) {
+                ->catch(function ($e) use ($o3, &$secondHandlerCalled, $error2) {
                     $secondHandlerCalled = true;
                     $this->assertSame($e, $error2);
 
@@ -509,7 +539,7 @@ class CatchErrorTest extends FunctionalTestCase
         $subscribes   = 0;
         $unsubscribes = 0;
 
-        $s = $tracer->catchError(function () {
+        $s = $tracer->catch(function () {
             return Observable::never();
         })->subscribe(new CallbackObserver());
 

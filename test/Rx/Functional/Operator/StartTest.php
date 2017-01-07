@@ -2,10 +2,8 @@
 
 namespace Rx\Functional\Operator;
 
-use React\EventLoop\Factory;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-use Rx\Scheduler\EventLoopScheduler;
 
 class StartTest extends FunctionalTestCase
 {

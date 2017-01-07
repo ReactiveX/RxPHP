@@ -17,6 +17,6 @@ $observable
             return $key;
         }
     )
-    ->subscribeCallback(function ($groupedObserver) use ($createStdoutObserver) {
+    ->subscribe(function ($groupedObserver) use ($createStdoutObserver) {
         $groupedObserver->subscribe($createStdoutObserver($groupedObserver->getKey() . ": "));
     });

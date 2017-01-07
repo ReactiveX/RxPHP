@@ -27,7 +27,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -52,7 +52,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([], $results->getMessages());
@@ -73,7 +73,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -104,7 +104,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -133,7 +133,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -163,7 +163,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         }, 420);
 
         $this->assertMessages([
@@ -192,7 +192,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         }, 460);
 
         $this->assertMessages([
@@ -217,7 +217,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -250,7 +250,7 @@ class ThrottleTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->throttle(200);
+            return $xs->throttle(200, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -275,8 +275,8 @@ class ThrottleTest extends FunctionalTestCase
             ->method('schedule')
             ->willReturn(new EmptyDisposable());
         
-        Observable::just(1)
+        Observable::of(1, $scheduler)
             ->throttle(100, $scheduler)
-            ->subscribeCallback(null, null, null, new ImmediateScheduler());
+            ->subscribe();
     }
 }

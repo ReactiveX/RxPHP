@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Rx\Functional\Operator;
 
 use Rx\Disposable\CallbackDisposable;
@@ -270,14 +269,14 @@ class SkipUntilTest extends FunctionalTestCase
     public function testCanCompleteInSubscribeAction()
     {
         $completed = false;
-        $emitted = null;
+        $emitted   = null;
 
-        Observable::just(1)
-            ->skipUntil(Observable::just(1))
-            ->subscribeCallback(
+        Observable::of(1)
+            ->skipUntil(Observable::of(1))
+            ->subscribe(
                 function ($x) use (&$emitted) {
                     if ($emitted !== null) {
-                        $this->fail("emitted should be null");
+                        $this->fail('emitted should be null');
                     }
                     $emitted = $x;
                 },

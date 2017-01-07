@@ -10,7 +10,7 @@ class CustomTest extends FunctionalTestCase
     public function testCustomOperator()
     {
         $results = $this->scheduler->startWithCreate(function () {
-            return Observable::just(1)
+            return Observable::of(1, $this->scheduler)
                 ->customTest(2);
         });
         
@@ -23,7 +23,7 @@ class CustomTest extends FunctionalTestCase
     public function testExternalNamespacedOperator()
     {
         $results = $this->scheduler->startWithCreate(function () {
-            return Observable::just(1)
+            return Observable::of(1, $this->scheduler)
                 ->_CustomOperatorTest_test(2);
         });
 
@@ -32,4 +32,5 @@ class CustomTest extends FunctionalTestCase
             onCompleted(201)
         ], $results->getMessages());
     }
+
 }

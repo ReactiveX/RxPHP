@@ -223,4 +223,40 @@ class BufferWithCountTest extends FunctionalTestCase
             subscribe(200, 370)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function bufferWithCount_invalid_skip()
+    {
+        $xs = $this->createHotObservable([
+            onNext(100, 1),
+            onNext(210, 2),
+            onCompleted(300)
+        ]);
+
+        $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->bufferWithCount(0, 1);
+        });
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function bufferWithCount_invalid_count()
+    {
+        $xs = $this->createHotObservable([
+            onNext(100, 1),
+            onNext(210, 2),
+            onCompleted(300)
+        ]);
+
+        $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->bufferWithCount(1, 0);
+        });
+    }
 }

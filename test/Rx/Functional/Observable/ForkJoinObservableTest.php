@@ -3,7 +3,7 @@
 namespace Rx\Functional\Observable;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Observable\ForkJoinObservable;
+use Rx\Observable;
 
 class ForkJoinObservableTest extends FunctionalTestCase
 {
@@ -33,7 +33,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(400)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1, $e2]);
+        $xs = Observable::forkJoin([$e0, $e1, $e2]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -70,7 +70,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(400)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1, $e2]);
+        $xs = Observable::forkJoin([$e0, $e1, $e2]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -107,7 +107,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(400)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1, $e2], function($a, $b, $c) {
+        $xs = Observable::forkJoin([$e0, $e1, $e2], function ($a, $b, $c) {
             return implode('', [$a, $b, $c]);
         });
 
@@ -134,7 +134,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(420)
         ]);
 
-        $xs = new ForkJoinObservable([$e0]);
+        $xs = Observable::forkJoin([$e0]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -159,7 +159,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(420)
         ]);
 
-        $xs = new ForkJoinObservable([$e0], function($a) {
+        $xs = Observable::forkJoin([$e0], function ($a) {
             return $a . $a;
         });
 
@@ -196,7 +196,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(270)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1, $e2]);
+        $xs = Observable::forkJoin([$e0, $e1, $e2]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -222,7 +222,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -240,7 +240,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
      */
     public function forkjoin_none()
     {
-        $xs = new ForkJoinObservable();
+        $xs = Observable::forkJoin();
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs;
@@ -267,7 +267,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -296,7 +296,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -326,7 +326,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -358,7 +358,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -389,7 +389,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -421,7 +421,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -453,7 +453,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1], function($a, $b) {
+        $xs = Observable::forkJoin([$e0, $e1], function ($a, $b) {
             return $a + $b;
         });
 
@@ -478,7 +478,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(230),
         ]);
 
-        $xs = new ForkJoinObservable([$e0], function() use ($error) {
+        $xs = Observable::forkJoin([$e0], function () use ($error) {
             throw $error;
         });
 
@@ -507,7 +507,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(250)
         ]);
 
-        $xs = new ForkJoinObservable([$e0, $e1]);
+        $xs = Observable::forkJoin([$e0, $e1]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
             return $xs;

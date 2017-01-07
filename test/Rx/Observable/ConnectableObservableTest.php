@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Rx\Observable;
 
 use Rx\Functional\FunctionalTestCase;
@@ -19,7 +18,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     {
         $y   = 0;
         $s2  = new Subject();
-        $co2 = new ConnectableObservable(Observable::just(1), $s2);
+        $co2 = new ConnectableObservable(Observable::of(1), $s2);
 
         $co2->subscribe(new CallbackObserver(function ($x) use (&$y) {
             $y = $x;

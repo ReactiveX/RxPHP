@@ -51,7 +51,7 @@ class DoOnErrorTest extends FunctionalTestCase
                 $messages[] = onError($this->scheduler->getClock(), $x);
             })
             ->retry(2)
-            ->subscribeCallback(null, function () {}, null, $this->scheduler);
+            ->subscribe(null, function () {}, null, $this->scheduler);
 
         $this->scheduler->start();
 

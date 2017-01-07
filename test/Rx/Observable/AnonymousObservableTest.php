@@ -3,7 +3,6 @@
 namespace Rx\Observable;
 
 use Rx\TestCase;
-use Rx\Observable;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\EmptyDisposable;
 
@@ -43,5 +42,18 @@ class AnonymousObservableTest extends TestCase
         $disposable->dispose();
 
         $this->assertTrue($disposed);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function it_throws_when_args_invalid()
+    {
+        $observable = new AnonymousObservable(function () {
+        });
+
+        $observable->subscribe('invalid arg');
     }
 }

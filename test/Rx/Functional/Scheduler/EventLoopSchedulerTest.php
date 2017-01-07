@@ -2,24 +2,19 @@
 
 namespace Rx\Functional\Scheduler;
 
-use React\EventLoop\Factory;
+use Interop\Async\Loop;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
-use Rx\Scheduler\EventLoopScheduler;
 
 class EventLoopSchedulerTest extends FunctionalTestCase
 {
     public function testDisposeInsideFirstSchedulePeriodicAction()
     {
-        $loop = Factory::create();
-
-        $scheduler = new EventLoopScheduler($loop);
-
         $completed = false;
         $nextCount = 0;
 
-        Observable::interval(50, $scheduler)
+        Observable::interval(50)
             ->take(1)
             ->subscribe(new CallbackObserver(
                 function ($x) use (&$nextCount) {
@@ -33,7 +28,7 @@ class EventLoopSchedulerTest extends FunctionalTestCase
                 }
             ));
 
-        $loop->run();
+        Loop::get()->run();
 
         $this->assertTrue($completed);
         $this->assertEquals(1, $nextCount);

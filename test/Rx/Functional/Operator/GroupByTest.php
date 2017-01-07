@@ -225,7 +225,7 @@ class GroupByTest extends FunctionalTestCase
 
         $innerSubscriptions = array();
         $scheduler = $this->scheduler;
-        $observable->subscribeCallback(function(GroupedObservable $observable) use (&$innerSubscriptions, $scheduler) {
+        $observable->subscribe(function(GroupedObservable $observable) use (&$innerSubscriptions, $scheduler) {
             $observer = new MockObserver($scheduler);
             $observable->subscribe($observer);
 

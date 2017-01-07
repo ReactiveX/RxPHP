@@ -41,7 +41,7 @@ class SwitchLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->switchLatest();
+            return $xs->switch();
         });
 
         $this->assertMessages(
@@ -98,7 +98,7 @@ class SwitchLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->switchLatest();
+            return $xs->switch();
         });
 
         $this->assertMessages(
@@ -144,7 +144,7 @@ class SwitchLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->switchLatest();
+            return $xs->switch();
         });
 
         $this->assertMessages(
@@ -172,7 +172,7 @@ class SwitchLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->switchLatest();
+            return $xs->switch();
         });
 
         $this->assertMessages(
@@ -204,7 +204,7 @@ class SwitchLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->switchLatest();
+            return $xs->switch();
         });
 
         $this->assertMessages(
@@ -255,7 +255,7 @@ class SwitchLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs->switchLatest();
+            return $xs->switch();
         }, 500);
 
         $this->assertMessages(

@@ -2,10 +2,7 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$loop      = \React\EventLoop\Factory::create();
-$scheduler = new \Rx\Scheduler\EventLoopScheduler($loop);
-
-$source = Rx\Observable::just(42)
+$source = Rx\Observable::of(42)
     ->repeatWhen(function (\Rx\Observable $notifications) {
         return $notifications
             ->scan(function ($acc, $x) {
@@ -20,6 +17,4 @@ $source = Rx\Observable::just(42)
             });
     });
 
-$subscription = $source->subscribe($createStdoutObserver(), $scheduler);
-
-$loop->run();
+$subscription = $source->subscribe($createStdoutObserver());

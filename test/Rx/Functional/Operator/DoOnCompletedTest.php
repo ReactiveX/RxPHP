@@ -46,7 +46,7 @@ class DoOnCompletedTest extends FunctionalTestCase
                 $messages[] = onCompleted($this->scheduler->getClock());
             })
             ->repeat(2)
-            ->subscribeCallback(null, null, null, $this->scheduler);
+            ->subscribe(null, null, null, $this->scheduler);
 
         $this->scheduler->start();
 

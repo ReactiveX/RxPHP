@@ -2,32 +2,32 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
+use Interop\Async\Loop;
+use Rx\Disposable\CallbackDisposable;
 use Rx\ObserverInterface;
 use Rx\Scheduler\EventLoopScheduler;
 
-$loop       = \React\EventLoop\Factory::create();
-$observable = Rx\Observable::create(function (ObserverInterface $observer) use ($loop) {
+$observable = Rx\Observable::create(function (ObserverInterface $observer) {
     $handler = function () use ($observer) {
         $observer->onNext(42);
         $observer->onCompleted();
     };
 
     // Change scheduler for here
-    $timer = $loop->addTimer(1, $handler);
+    $timer = Loop::delay(1, $handler);
 
-    return new \Rx\Disposable\CallbackDisposable(function () use ($timer) {
+    return new CallbackDisposable(function () use ($timer) {
         // And change scheduler for here
         if ($timer) {
-            $timer->cancel();
+            Loop::cancel($timer);
         }
     });
 });
 
 $observable
-    ->subscribeOn(new EventLoopScheduler($loop))
+    ->subscribeOn(new EventLoopScheduler())
     ->subscribe($stdoutObserver);
 
-$loop->run();
 
 //Next value: 42
 //Complete!

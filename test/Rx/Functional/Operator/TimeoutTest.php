@@ -3,10 +3,7 @@
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
-use Rx\Notification\OnErrorNotification;
 use Rx\Observable\ErrorObservable;
-use Rx\Observer\TestException;
-use Rx\Testing\Recorded;
 
 class TimeoutTest extends FunctionalTestCase
 {
@@ -26,7 +23,7 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->timeout(500);
+            return $xs->timeout(500, null, $this->scheduler);
         });
 
         $this->assertMessages(
@@ -52,12 +49,12 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->timeout(200);
+            return $xs->timeout(200, null, $this->scheduler);
         });
 
         $this->assertMessages(
             [
-                onError(400, new \Exception())
+                onError(401, new \Exception())
             ],
             $results->getMessages()
         );
@@ -75,19 +72,19 @@ class TimeoutTest extends FunctionalTestCase
      */
     public function timeout_relative_time_timeout_occurs_with_custom_error()
     {
-        $errObs = new ErrorObservable(new TestException());
+        $errObs = new ErrorObservable(new \Exception(), $this->scheduler);
 
         $xs = $this->createHotObservable([
             onNext(410, 1)
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $errObs) {
-            return $xs->timeout(200, $errObs);
+            return $xs->timeout(200, $errObs, $this->scheduler);
         });
 
         $this->assertMessages(
             [
-                onError(400, new TestException())
+                onError(401, new \Exception())
             ],
             $results->getMessages()
         );
@@ -120,7 +117,7 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->timeout(205);
+            return $xs->timeout(205, null, $this->scheduler);
         });
 
         $this->assertMessages(
@@ -164,7 +161,7 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $xy) {
-            return $xs->timeout(100, $xy);
+            return $xs->timeout(100, $xy, $this->scheduler);
         });
 
         $this->assertMessages(
@@ -214,7 +211,7 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $xy) {
-            return $xs->timeout(100, $xy);
+            return $xs->timeout(100, $xy, $this->scheduler);
         });
 
         $this->assertMessages(
@@ -261,7 +258,7 @@ class TimeoutTest extends FunctionalTestCase
         $xy = $this->createColdObservable([]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $xy) {
-            return $xs->timeout(100, $xy);
+            return $xs->timeout(100, $xy, $this->scheduler);
         });
 
         $this->assertMessages(
@@ -301,7 +298,7 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ys) {
-            return $xs->timeout(100, $ys);
+            return $xs->timeout(100, $ys, $this->scheduler);
         });
 
         $this->assertMessages(
@@ -340,7 +337,7 @@ class TimeoutTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ys) {
-            return $xs->timeout(100, $ys);
+            return $xs->timeout(100, $ys, $this->scheduler);
         });
 
         $this->assertMessages(

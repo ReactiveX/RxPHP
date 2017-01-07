@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
@@ -271,7 +270,7 @@ class ConcatTest extends FunctionalTestCase
             onCompleted(50)
         ]);
         $results = $this->scheduler->startWithCreate(function () use ($xs1, $xs2, $xs3) {
-            return (new EmptyObservable())->concat($xs1)->concat($xs2)->concat($xs3);
+            return (new EmptyObservable($this->scheduler))->concat($xs1)->concat($xs2)->concat($xs3);
         });
 
         // Note: these tests differ from the RxJS tests that they were based on because RxJS was
@@ -298,21 +297,20 @@ class ConcatTest extends FunctionalTestCase
 
     }
 
-
     public function testConcatAll()
     {
 
         $sources = Observable::fromArray([
-            Observable::just(0),
-            Observable::just(1),
-            Observable::just(2),
-            Observable::just(3),
+            Observable::of(0),
+            Observable::of(1),
+            Observable::of(2),
+            Observable::of(3),
         ]);
 
         $res       = [];
         $completed = false;
 
-        $sources->concatAll()->subscribeCallback(
+        $sources->concatAll()->subscribe(
             function ($x) use (&$res) {
                 $res[] = $x;
             },
@@ -333,17 +331,17 @@ class ConcatTest extends FunctionalTestCase
     {
 
         $sources = Observable::fromArray([
-            Observable::just(0),
+            Observable::of(0),
             Observable::error(new \Exception()),
-            Observable::just(2),
-            Observable::just(3),
+            Observable::of(2),
+            Observable::of(3),
         ]);
 
         $res       = [];
         $error     = false;
         $completed = false;
 
-        $sources->concatAll()->subscribeCallback(
+        $sources->concatAll()->subscribe(
             function ($x) use (&$res) {
                 $res[] = $x;
             },

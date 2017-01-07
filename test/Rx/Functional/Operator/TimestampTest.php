@@ -43,7 +43,7 @@ class TimestampTest extends FunctionalTestCase
     public function timestamp_empty()
     {
         $results = $this->scheduler->startWithCreate(function () {
-            return Observable::emptyObservable($this->scheduler)->timestamp($this->scheduler);
+            return Observable::empty($this->scheduler)->timestamp($this->scheduler);
         });
 
         $this->assertMessages([
@@ -59,7 +59,7 @@ class TimestampTest extends FunctionalTestCase
         $error = new \Exception();
 
         $results = $this->scheduler->startWithCreate(function () use ($error) {
-            return Observable::error($error)->timestamp($this->scheduler);
+            return Observable::error($error, $this->scheduler)->timestamp($this->scheduler);
         });
 
         $this->assertMessages([

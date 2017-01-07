@@ -9,5 +9,3 @@ $subscription = $source->subscribe($stdoutObserver);
 $subject->subscribe($stdoutObserver);
 
 $connected = $source->connect();
-
-$subscription->dispose();
