@@ -159,7 +159,7 @@ abstract class Observable implements ObservableInterface
      *
      * @demo of/of.php
      * @operator
-     * @reactivex of
+     * @reactivex just
      */
     public static function of($value, SchedulerInterface $scheduler = null): ReturnObservable
     {
@@ -565,7 +565,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex skip
      */
-    public function skip($count): AnonymousObservable
+    public function skip(int $count): AnonymousObservable
     {
         return $this->lift(function () use ($count) {
             return new SkipOperator($count);
@@ -782,7 +782,7 @@ abstract class Observable implements ObservableInterface
      *
      * @demo custom-operator/rot13.php
      */
-    public function __call($name, $arguments): AnonymousObservable
+    public function __call($name, array $arguments): AnonymousObservable
     {
         $fullNamespace = 'Rx\\Operator\\';
         if ($name[0] === '_') {
@@ -1578,7 +1578,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex buffer
      */
-    public function bufferWithCount(int $count, $skip = null): AnonymousObservable
+    public function bufferWithCount(int $count, int $skip = null): AnonymousObservable
     {
         return $this->lift(function () use ($count, $skip) {
             return new BufferWithCountOperator($count, $skip);
