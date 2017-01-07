@@ -305,15 +305,16 @@ abstract class Observable implements ObservableInterface
      * Converts an Iterator into an observable sequence
      *
      * @param \Iterator $iterator
+     * @param SchedulerInterface $scheduler
      * @return IteratorObservable
      *
      * @demo iterator/iterator.php
      * @operator
      * @reactivex from
      */
-    public static function fromIterator(\Iterator $iterator): IteratorObservable
+    public static function fromIterator(\Iterator $iterator, SchedulerInterface $scheduler = null): IteratorObservable
     {
-        return new IteratorObservable($iterator);
+        return new IteratorObservable($iterator, $scheduler ?: Scheduler::getDefault());
     }
 
     /**

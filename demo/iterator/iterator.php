@@ -2,14 +2,14 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-function gen_one_to_three()
-{
+$generator = function () {
     for ($i = 1; $i <= 3; $i++) {
         yield $i;
     }
-}
 
-$generator = gen_one_to_three();
-$source    = new \Rx\Observable\IteratorObservable($generator);
+    return 4;
+};
+
+$source = Rx\Observable::fromIterator($generator());
 
 $source->subscribe($stdoutObserver);

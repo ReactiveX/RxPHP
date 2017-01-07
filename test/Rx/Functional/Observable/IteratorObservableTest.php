@@ -3,6 +3,7 @@
 namespace Rx\Functional\Observable;
 
 use Rx\Functional\FunctionalTestCase;
+use Rx\Observable;
 use Rx\Observable\IteratorObservable;
 
 class IteratorObservableTest extends FunctionalTestCase
@@ -54,10 +55,8 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         $generator = $this->genOne();
 
-        $xs = new IteratorObservable($generator, $this->scheduler);
-
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs;
+        $results = $this->scheduler->startWithCreate(function () use ($generator) {
+            return Observable::fromIterator($generator, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -74,10 +73,8 @@ class IteratorObservableTest extends FunctionalTestCase
         $error     = new \Exception();
         $generator = $this->genError($error);
 
-        $xs = new IteratorObservable($generator, $this->scheduler);
-
-        $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs;
+        $results = $this->scheduler->startWithCreate(function () use ($generator) {
+            return Observable::fromIterator($generator, $this->scheduler);
         });
 
         $this->assertMessages([
@@ -92,14 +89,32 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         $generator = $this->genOneToThree();
 
-        $xs = new IteratorObservable($generator, $this->scheduler);
-
-        $results = $this->scheduler->startWithDispose(function () use ($xs) {
-            return $xs;
+        $results = $this->scheduler->startWithDispose(function () use ($generator) {
+            return Observable::fromIterator($generator, $this->scheduler);
         }, 202);
 
         $this->assertMessages([
             onNext(201, 1)
+        ], $results->getMessages());
+    }
+
+    /**
+     * @test
+     */
+    public function it_schedules_all_elements_from_the_generator_with_return()
+    {
+        $generator = $this->genOneToThreeAndReturn();
+
+        $results = $this->scheduler->startWithCreate(function () use ($generator) {
+            return Observable::fromIterator($generator, $this->scheduler);
+        });
+
+        $this->assertMessages([
+            onNext(201, 1),
+            onNext(202, 2),
+            onNext(203, 3),
+            onNext(204, 10),
+            onCompleted(204),
         ], $results->getMessages());
     }
 
@@ -124,5 +139,14 @@ class IteratorObservableTest extends FunctionalTestCase
     {
         throw $e;
         yield;
+    }
+
+    private function genOneToThreeAndReturn()
+    {
+        for ($i = 1; $i <= 3; $i++) {
+            yield $i;
+        }
+
+        return 10;
     }
 }

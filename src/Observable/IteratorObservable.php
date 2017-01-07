@@ -5,7 +5,6 @@ namespace Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 class IteratorObservable extends Observable
@@ -17,20 +16,21 @@ class IteratorObservable extends Observable
     public function __construct(\Iterator $items, SchedulerInterface $scheduler = null)
     {
         $this->items     = $items;
-        $this->scheduler = $scheduler ?: Scheduler::getDefault();
+        $this->scheduler = $scheduler;
     }
 
-    /**
-     * @param ObserverInterface $observer
-     * @return \Rx\Disposable\CompositeDisposable|\Rx\DisposableInterface
-     */
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $key = 0;
 
-        $defaultFn = function ($reschedule) use (&$observer, &$key) {
+        $action = function ($reschedule) use (&$observer, &$key) {
             try {
                 if (null === $key) {
+
+                    if ($this->items instanceof \Generator && $this->items->getReturn()) {
+                        $observer->onNext($this->items->getReturn());
+                    }
+
                     $observer->onCompleted();
                     return;
                 }
@@ -48,31 +48,6 @@ class IteratorObservable extends Observable
             }
         };
 
-        $hhvmFn = function ($reschedule) use (&$observer, &$key) {
-            try {
-                //HHVM requires you to call next() before current()
-                $this->items->next();
-                $key = $this->items->key();
-
-                if (null === $key) {
-                    $observer->onCompleted();
-                    return;
-                }
-
-                $current = $this->items->current();
-                $observer->onNext($current);
-
-                $reschedule();
-            } catch (\Throwable $e) {
-                $observer->onError($e);
-            }
-
-        };
-
-        return $this->scheduler->scheduleRecursive(
-            defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.11.0', 'lt')
-                ? $hhvmFn
-                : $defaultFn
-        );
+        return $this->scheduler->scheduleRecursive($action);
     }
 }
