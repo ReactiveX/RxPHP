@@ -899,25 +899,34 @@ abstract class Observable implements ObservableInterface
      * This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to
      * run arbitrary actions for messages on the pipeline.
      *
-     * When using doOnEach, it is important to note that the Observer may receive additional
-     * events after a stream has completed or errored (such as when useing a repeat or resubscribing).
+     * When using do, it is important to note that the Observer may receive additional
+     * events after a stream has completed or errored (such as when using a repeat or resubscribing).
      * If you are using an Observable that extends the AbstractObservable, you will not receive these
      * events. For this special case, use the DoObserver.
      *
      * doOnNext, doOnError, and doOnCompleted uses the DoObserver internally and will receive these
      * additional events.
      *
-     * @param ObserverInterface $observer
-     *
-     * @return \Rx\Observable\AnonymousObservable
+     * @param callable|ObserverInterface $onNextOrObserver
+     * @param callable $onError
+     * @param callable $onCompleted
+     * @return AnonymousObservable
+     * @throws \InvalidArgumentException
      *
      * @demo do/do.php
      * @operator
      * @reactivex do
-     *
      */
-    public function do(ObserverInterface $observer): AnonymousObservable
+    public function do($onNextOrObserver = null, callable $onError = null, callable $onCompleted = null): AnonymousObservable
     {
+        if ($onNextOrObserver instanceof ObserverInterface) {
+            $observer = $onNextOrObserver;
+        } elseif (is_callable($onNextOrObserver)) {
+            $observer = new DoObserver($onNextOrObserver, $onError, $onCompleted);
+        } else {
+            throw new \InvalidArgumentException('The first argument needs to be a "callable" or "Observer"');
+        }
+
         return $this->lift(function () use ($observer) {
             return new DoOnEachOperator($observer);
         });
