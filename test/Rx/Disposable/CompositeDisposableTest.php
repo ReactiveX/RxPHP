@@ -70,6 +70,31 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
+    public function disposing_disposes_all_disposables_only_once()
+    {
+        $disposed1 = 0;
+        $disposed2 = 0;
+        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1++; });
+        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2++; });
+        $disposable = new CompositeDisposable(array($d1, $d2));
+
+        $this->assertEquals(0, $disposed1);
+        $this->assertEquals(0, $disposed2);
+
+        $disposable->dispose();
+
+        $this->assertEquals(1, $disposed1);
+        $this->assertEquals(1, $disposed2);
+
+        $disposable->dispose();
+
+        $this->assertEquals(1, $disposed1);
+        $this->assertEquals(1, $disposed2);
+    }
+
+    /**
+     * @test
+     */
     public function it_disposes_newly_added_disposables_when_already_disposed()
     {
         $disposed1 = false;
@@ -124,9 +149,11 @@ class CompositeDisposableTest extends TestCase
         $disposed1 = false;
         $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
 
-        $disposable->remove($d1);
+        $removed = $disposable->remove($d1);
 
         $this->assertFalse($disposed1);
+
+        $this->assertFalse($removed);
     }
 
     /**
@@ -139,9 +166,11 @@ class CompositeDisposableTest extends TestCase
         $disposed1 = false;
         $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
 
-        $disposable->remove($d1);
+        $removed = $disposable->remove($d1);
 
         $this->assertFalse($disposed1);
+
+        $this->assertFalse($removed);
     }
 
     /**

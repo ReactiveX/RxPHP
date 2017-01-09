@@ -11,7 +11,7 @@ class OnNextNotification extends Notification
 
     public function __construct($value)
     {
-        parent::__construct('N', true);
+        parent::__construct('N');
 
         $this->value = $value;
     }
@@ -26,19 +26,19 @@ class OnNextNotification extends Notification
         $onNext($this->value);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'OnNext(' . json_encode($this->value) . ')';
     }
-    
-    public function equals($other)
+
+    public function equals($other): bool
     {
         if (($other instanceof $this) && is_object($this->value) && is_object($other->value)) {
             if ($this->value instanceof $other->value && method_exists($this->value, "equals")) {
                 return $this->value->equals($other->value);
             }
         }
-        
+
         return (string)$this === (string)$other;
     }
 }

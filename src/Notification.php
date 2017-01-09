@@ -8,16 +8,13 @@ namespace Rx;
 abstract class Notification
 {
     private $kind;
-    private $hasValue;
 
     /**
      * @param mixed $kind Kind of notification
-     * @param boolean $hasValue If the notification has a value
      */
-    public function __construct($kind, $hasValue = false)
+    public function __construct($kind)
     {
-        $this->kind     = $kind;
-        $this->hasValue = $hasValue;
+        $this->kind = $kind;
     }
 
     public function accept($observerOrOnNext, $onError = null, $onCompleted = null)
@@ -31,7 +28,7 @@ abstract class Notification
         return $this->doAccept($observerOrOnNext, $onError, $onCompleted);
     }
 
-    public function equals($other)
+    public function equals($other): bool
     {
         return (string)$this === (string)$other;
     }

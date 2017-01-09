@@ -39,7 +39,7 @@ class CompositeDisposable implements DisposableInterface
         }
     }
 
-    public function remove(DisposableInterface $disposable)
+    public function remove(DisposableInterface $disposable): bool
     {
         if ($this->isDisposed) {
             return false;
@@ -58,7 +58,7 @@ class CompositeDisposable implements DisposableInterface
         return true;
     }
 
-    public function contains(DisposableInterface $disposable)
+    public function contains(DisposableInterface $disposable): bool
     {
         return in_array($disposable, $this->disposables, true);
     }

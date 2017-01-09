@@ -1071,4 +1071,64 @@ class ConcatMapTest extends FunctionalTestCase
             subscribe(200, 290)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     */
+    public function concatMap_return_invalid_string()
+    {
+        $xs = $this->createHotObservable([
+            onNext(5, $this->createColdObservable([
+                onError(1, new Exception('ex1'))
+            ])),
+            onNext(105, $this->createColdObservable([
+                onError(1, new Exception('ex2'))
+            ])),
+            onNext(300, $this->createColdObservable([
+                onNext(10, 102),
+                onNext(90, 103),
+                onNext(110, 104),
+                onNext(190, 105),
+                onNext(440, 106),
+                onCompleted(460)
+            ])),
+            onNext(400, $this->createColdObservable([
+                onNext(180, 202),
+                onNext(190, 203),
+                onCompleted(205)
+            ])),
+            onNext(550, $this->createColdObservable([
+                onNext(10, 301),
+                onNext(50, 302),
+                onNext(70, 303),
+                onNext(260, 304),
+                onNext(310, 305),
+                onCompleted(410)
+            ])),
+            onNext(750, $this->createColdObservable([
+                onCompleted(40)
+            ])),
+            onNext(850, $this->createColdObservable([
+                onNext(80, 401),
+                onNext(90, 402),
+                onCompleted(100)
+            ])),
+            onCompleted(900)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->concatMap(function (Observable $obs) {
+                return 'unexpected string';
+            });
+        });
+
+        $this->assertMessages(
+            [
+                onError(300, new Exception())
+            ],
+            $results->getMessages()
+        );
+
+        $this->assertSubscriptions([subscribe(200, 300)], $xs->getSubscriptions());
+    }
 }
