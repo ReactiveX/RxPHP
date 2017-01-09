@@ -10,6 +10,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
+use Rx\TimeoutException;
 
 final class TimeoutOperator implements OperatorInterface
 {
@@ -26,7 +27,7 @@ final class TimeoutOperator implements OperatorInterface
         $this->timeoutObservable = $timeoutObservable;
 
         if ($this->timeoutObservable === null) {
-            $this->timeoutObservable = new ErrorObservable(new \Exception('timeout'), $scheduler);
+            $this->timeoutObservable = new ErrorObservable(new TimeoutException('timeout'), $scheduler);
         }
     }
 
