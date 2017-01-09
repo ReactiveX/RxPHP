@@ -4,7 +4,7 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\ErrorObservable;
-use Rx\TimeoutException;
+use Rx\Exception\TimeoutException;
 
 class TimeoutTest extends FunctionalTestCase
 {

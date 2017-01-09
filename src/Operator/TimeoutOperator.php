@@ -10,7 +10,7 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
-use Rx\TimeoutException;
+use Rx\Exception\TimeoutException;
 
 final class TimeoutOperator implements OperatorInterface
 {
