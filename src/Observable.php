@@ -1552,6 +1552,9 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * Errors the observable sequence if no item is emitted in the specified time.
+     * When a timeout occurs, this operator errors with an instance of Rx\Exception\TimeoutException
+     *
      * @param $timeout
      * @param ObservableInterface $timeoutObservable
      * @param SchedulerInterface $scheduler

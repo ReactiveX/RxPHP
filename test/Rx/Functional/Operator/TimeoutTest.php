@@ -4,6 +4,7 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\ErrorObservable;
+use Rx\Exception\TimeoutException;
 
 class TimeoutTest extends FunctionalTestCase
 {
@@ -54,7 +55,7 @@ class TimeoutTest extends FunctionalTestCase
 
         $this->assertMessages(
             [
-                onError(401, new \Exception())
+                onError(401, new TimeoutException())
             ],
             $results->getMessages()
         );
