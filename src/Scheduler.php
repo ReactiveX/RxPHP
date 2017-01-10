@@ -22,6 +22,9 @@ class Scheduler
 
     public static function setDefault(SchedulerInterface $scheduler)
     {
+        if (static::$default !== null) {
+            throw new \Exception("Scheduler can only be set once. (Are you calling set after get?)");
+        }
         static::$default = $scheduler;
     }
 
@@ -43,11 +46,17 @@ class Scheduler
 
     public static function setAsync($async)
     {
+        if (static::$async !== null) {
+            throw new \Exception("Scheduler can only be set once. (Are you calling set after get?)");
+        }
         self::$async = $async;
     }
 
     public static function setImmediate($immediate)
     {
+        if (static::$immediate !== null) {
+            throw new \Exception("Scheduler can only be set once. (Are you calling set after get?)");
+        }
         self::$immediate = $immediate;
     }
 }
