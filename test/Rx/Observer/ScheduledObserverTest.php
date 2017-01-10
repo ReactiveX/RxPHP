@@ -340,5 +340,30 @@ class ScheduledObserverTest extends TestCase
 
         $this->assertFalse($called);
     }
+
+    /**
+     * @test
+     * @expectedException \Exception
+     * @expectedExceptionMessage onNext(0) exception
+     */
+    public function throw_inside_onnext_throws()
+    {
+        $scheduler = new TestScheduler();
+
+        $scheduledObserver = new ScheduledObserver(
+            $scheduler,
+            new CallbackObserver(
+                function ($x) {
+                    throw new Exception("onNext($x) exception");
+                }
+            )
+        );
+
+        $scheduledObserver->onNext(0);
+
+        $scheduledObserver->ensureActive();
+
+        $scheduler->start();
+    }
 }
 

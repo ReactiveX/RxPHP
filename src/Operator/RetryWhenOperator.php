@@ -34,15 +34,7 @@ final class RetryWhenOperator implements OperatorInterface
             return new EmptyDisposable();
         }
 
-        $subscribeToSource = function () use (
-            $observer,
-            $disposable,
-            $observable,
-            &$sourceError,
-            $errors,
-            &$sourceDisposable,
-            &$innerCompleted
-        ) {
+        $subscribeToSource = function () use ($observer, $disposable, $observable, &$sourceError, $errors, &$sourceDisposable, &$innerCompleted) {
             $sourceError      = false;
             $sourceDisposable = $observable->subscribe(new CallbackObserver(
                 [$observer, 'onNext'],

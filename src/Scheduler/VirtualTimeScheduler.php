@@ -38,10 +38,6 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function scheduleRecursive(callable $action): DisposableInterface
     {
-        if (!is_callable($action)) {
-            throw new \InvalidArgumentException('Action should be a callable.');
-        }
-
         $goAgain    = true;
         $disposable = new SerialDisposable();
 
