@@ -416,4 +416,27 @@ class RepeatTest extends FunctionalTestCase
 
         $xss->subscribe(new CallbackObserver());
     }
+
+    /**
+     * @test
+     */
+    public function repeat_returns_empty_when_count_is_zero()
+    {
+        $xs = $this->createColdObservable([
+            onNext(5, 1),
+            onNext(10, 2),
+            onNext(15, 3),
+            onCompleted(20)
+        ]);
+
+        $result = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->repeat(0);
+        });
+
+        $this->assertMessages([
+            onCompleted(200)
+        ], $result->getMessages());
+
+        $this->assertSubscriptions([], $xs->getSubscriptions());
+    }
 }

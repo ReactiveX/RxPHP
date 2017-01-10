@@ -6,11 +6,9 @@ use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\SerialDisposable;
 use Rx\DisposableInterface;
-use Rx\Observable;
 use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
-use Rx\SchedulerInterface;
 
 final class ConcatAllOperator implements OperatorInterface
 {

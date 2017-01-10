@@ -83,6 +83,80 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function groupByUntilWithKeyComparerDefaultDurationSelector()
+    {
+        $keyInvoked = 0;
+
+        $xs = $this->createHotObservable(
+            [
+                onNext(90, new \Exception()),
+                onNext(110, new \Exception()),
+                onNext(130, new \Exception()),
+                onNext(220, '  foo'),
+                onNext(240, ' FoO '),
+                onNext(270, 'baR  '),
+                onNext(310, 'foO '),
+                onNext(350, ' Baz   '),
+                onNext(360, '  qux '),
+                onNext(390, '   bar'),
+                onNext(420, ' BAR  '),
+                onNext(470, 'FOO '),
+                onNext(480, 'baz  '),
+                onNext(510, ' bAZ '),
+                onNext(530, '    fOo    '),
+                onCompleted(570),
+                onNext(580, new \Exception()),
+                onCompleted(600),
+                onError(650, new \Exception())
+            ]
+        );
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs, &$keyInvoked) {
+            return $xs->groupByUntil(
+                function ($x) use (&$keyInvoked) {
+                    $keyInvoked++;
+                    return trim(strtolower($x));
+                },
+                function ($x) {
+                    return $x;
+                }
+            )->map(function (GroupedObservable $x) {
+                return $x->getKey();
+            });
+        });
+
+        $this->assertMessages(
+            [
+                onNext(220, 'foo'),
+                onNext(240, 'foo'),
+                onNext(270, 'bar'),
+                onNext(310, 'foo'),
+                onNext(350, 'baz'),
+                onNext(360, 'qux'),
+                onNext(390, 'bar'),
+                onNext(420, 'bar'),
+                onNext(470, 'foo'),
+                onNext(480, 'baz'),
+                onNext(510, 'baz'),
+                onNext(530, 'foo'),
+                onCompleted(570)
+            ],
+            $results->getMessages()
+        );
+
+        $this->assertSubscriptions(
+            [
+                subscribe(200, 570)
+            ],
+            $xs->getSubscriptions()
+        );
+
+        $this->assertEquals(12, $keyInvoked);
+    }
+
+    /**
+     * @test
+     */
     public function groupByUntilOuterComplete()
     {
         $keyInvoked = 0;

@@ -6,7 +6,7 @@ use Rx\Disposable\SerialDisposable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class ScheduledObserver extends AbstractObserver
+final class ScheduledObserver extends AbstractObserver
 {
     /** @var SchedulerInterface */
     private $scheduler;
@@ -15,13 +15,13 @@ class ScheduledObserver extends AbstractObserver
     private $observer;
 
     /** @var bool */
-    public $isAcquired = false;
+    private $isAcquired = false;
 
     /** @var bool */
     private $hasFaulted = false;
 
     /** @var \Closure[] */
-    public $queue = [];
+    private $queue = [];
 
     /** @var SerialDisposable */
     private $disposable;
@@ -84,17 +84,12 @@ class ScheduledObserver extends AbstractObserver
                         return;
                     }
                     try {
-                        if (!is_callable($work)) {
-                            throw new \Exception('work is not callable');
-                        }
-                        $res = $work();
+                        $work();
                     } catch (\Throwable $e) {
-                        $res = $e;
-                    }
-                    if ($res instanceof \Throwable) {
                         $parent->queue      = [];
                         $parent->hasFaulted = true;
-                        throw $res;
+
+                        throw $e;
                     }
                     $recurse($parent);
                 }

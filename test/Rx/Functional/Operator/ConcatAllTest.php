@@ -32,4 +32,31 @@ class ConcatAllTest extends FunctionalTestCase
             onCompleted(216)
         ], $results->getMessages());
     }
+
+    /**
+     * @test
+     */
+    public function concatAll_errors_when_exception_during_inner_subscribe()
+    {
+        $o1 = Observable::create(function () {
+            throw new \Exception("Exception in inner subscribe");
+        });
+
+        $xs = $this->createHotObservable([
+            onNext(300, $o1),
+            onCompleted(400)
+        ]);
+
+        $result = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->concatAll();
+        });
+
+        $this->assertMessages([
+            onError(300, new \Exception())
+        ], $result->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 300)
+        ], $xs->getSubscriptions());
+    }
 }

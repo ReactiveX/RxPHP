@@ -109,4 +109,23 @@ class PriorityQueueTest extends TestCase
         $this->assertSame($scheduledItem2, $queue->dequeue());
         $this->assertSame($scheduledItem3, $queue->dequeue());
     }
+
+    /**
+     * @test
+     */
+    public function can_remove_scheduled_items_out_of_order()
+    {
+        $queue          = new PriorityQueue();
+        $scheduledItem  = $this->createScheduledItem(1);
+        $scheduledItem2 = $this->createScheduledItem(2);
+        $scheduledItem3 = $this->createScheduledItem(3);
+
+        $queue->enqueue($scheduledItem);
+        $queue->enqueue($scheduledItem2);
+        $queue->enqueue($scheduledItem3);
+
+        $queue->remove($scheduledItem2);
+        $this->assertSame($scheduledItem, $queue->dequeue());
+        $this->assertSame($scheduledItem3, $queue->dequeue());
+    }
 }

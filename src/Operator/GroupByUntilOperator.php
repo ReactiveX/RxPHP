@@ -82,21 +82,11 @@ final class GroupByUntilOperator implements OperatorInterface
 
                 $fireNewMapEntry = false;
 
-                try {
-                    if (!isset($map[$serializedKey])) {
-                        $map[$serializedKey] = new Subject();
-                        $fireNewMapEntry     = true;
-                    }
-                    $writer = $map[$serializedKey];
-
-                } catch (\Throwable $e) {
-                    foreach ($map as $groupObserver) {
-                        $groupObserver->onError($e);
-                    }
-                    $observer->onError($e);
-
-                    return;
+                if (!isset($map[$serializedKey])) {
+                    $map[$serializedKey] = new Subject();
+                    $fireNewMapEntry     = true;
                 }
+                $writer = $map[$serializedKey];
 
                 if ($fireNewMapEntry) {
                     $group         = new GroupedObservable($key, $writer, $refCountDisposable);
