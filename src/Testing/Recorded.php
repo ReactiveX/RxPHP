@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Rx\Testing;
 
 class Recorded
 {
-    public function __construct($time, $value, $comparer = null)
+    public function __construct(int $time, $value, callable $comparer = null)
     {
         $this->time     = $time;
         $this->value    = $value;

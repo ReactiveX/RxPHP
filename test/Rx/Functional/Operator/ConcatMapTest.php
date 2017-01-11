@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Rx\Functional\Operator;
 
@@ -177,7 +177,7 @@ class ConcatMapTest extends FunctionalTestCase
         $error     = false;
 
         $xs->concatMap(function ($x, $i) {
-            return Observable::error(new Exception($x + $i));
+            return Observable::error(new Exception((string)($x + $i)));
         })
             ->subscribe(
                 function ($x) use (&$results) {

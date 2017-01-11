@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Rx\Subject;
 
@@ -32,18 +32,16 @@ class ReplaySubject extends Subject
     /** @var SchedulerInterface */
     private $scheduler;
 
-    public function __construct(int $bufferSize = null, $windowSize = null, SchedulerInterface $scheduler)
+    public function __construct(int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler)
     {
-        if ($bufferSize === null || !is_int($bufferSize)) {
-            $bufferSize = $this->maxSafeInt;
-        }
+        $bufferSize = $bufferSize ?? $this->maxSafeInt;
+
         if ($bufferSize >= 0) {
             $this->bufferSize = $bufferSize;
         }
 
-        if ($windowSize === null || !is_int($windowSize)) {
-            $windowSize = $this->maxSafeInt;
-        }
+        $windowSize = $windowSize ?? $this->maxSafeInt;
+
         if ($windowSize >= 0) {
             $this->windowSize = $windowSize;
         }
@@ -148,7 +146,7 @@ class ReplaySubject extends Subject
         return new CallbackDisposable(function () use ($observer, $subject) {
             $observer->dispose();
             if (!$subject->isDisposed()) {
-                array_splice($subject->observers, array_search($observer, $subject->observers, true), 1);
+                array_splice($subject->observers, (int)array_search($observer, $subject->observers, true), 1);
             }
         });
     }
