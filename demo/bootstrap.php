@@ -19,6 +19,8 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 function asString($value) {
     if (is_array($value)) {
         return json_encode($value);
+    } elseif (is_bool($value)) {
+        return (string)(integer)$value;
     }
     return (string) $value;
 }
