@@ -33,6 +33,7 @@ use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
 use Rx\Operator\GroupByUntilOperator;
+use Rx\Operator\IsEmptyOperator;
 use Rx\Operator\MapOperator;
 use Rx\Operator\FilterOperator;
 use Rx\Operator\MinOperator;
@@ -1847,6 +1848,23 @@ class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($throttleDuration, $scheduler) {
             return new ThrottleOperator($throttleDuration, $scheduler);
+        });
+    }
+
+    /**
+     * If the source Observable is empty it returns an Observable that emits true, otherwise it emits false.
+     *
+     * @return AnonymousObservable
+     *
+     * @demo isEmpty/isEmpty.php
+     * @demo isEmpty/isEmpty-false.php
+     * @operator
+     * @reactivex contains
+     */
+    public function isEmpty()
+    {
+        return $this->lift(function() {
+            return new IsEmptyOperator();
         });
     }
 }
