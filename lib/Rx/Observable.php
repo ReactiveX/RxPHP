@@ -1859,7 +1859,7 @@ class Observable implements ObservableInterface
      * @demo isEmpty/isEmpty.php
      * @demo isEmpty/isEmpty-false.php
      * @operator
-     * @reactivex isEmpty
+     * @reactivex contains
      */
     public function isEmpty()
     {
