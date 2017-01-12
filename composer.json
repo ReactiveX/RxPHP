@@ -35,7 +35,14 @@
         "psr-4": { "Rx\\": "src" }
     },
     "autoload-dev": {
-        "files" : ["src/bootstrap.php"]
+        "files": [
+            "test/loop-auto-start.php",
+            "test/helper-functions.php"
+        ],
+        "psr-4": {
+            "CustomOperatorTest\\Rx\\Operator\\": "test/CustomOperatorTest",
+            "Rx\\": "test/Rx"
+        }
     },
     "extra": {
         "branch-alias": {
