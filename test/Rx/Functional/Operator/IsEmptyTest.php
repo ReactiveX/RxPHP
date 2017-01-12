@@ -58,6 +58,30 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
+    public function should_return_true_if_source_emits_before_subscription()
+    {
+        $xs = $this->createHotObservable([
+            onNext(150, 'a'),
+            onCompleted(300)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function() use ($xs) {
+            return $xs->isEmpty();
+        });
+
+        $this->assertMessages([
+            onNext(300, true),
+            onCompleted(300),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 300),
+        ], $xs->getSubscriptions());
+    }
+
+    /**
+     * @test
+     */
     public function should_raise_error_if_source_raise_error()
     {
         $e = new \Exception();
@@ -82,7 +106,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_not_completes_if_source_never_emits()
+    public function should_not_complete_if_source_never_emits()
     {
         $xs = $this->createHotObservable([]);
 

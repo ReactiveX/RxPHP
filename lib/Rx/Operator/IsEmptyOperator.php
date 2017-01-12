@@ -2,11 +2,9 @@
 
 namespace Rx\Operator;
 
-use Rx\Observer\CallbackObserver;
-use Rx\Operator\OperatorInterface;
 use Rx\ObservableInterface;
+use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
-use Rx\Scheduler\ImmediateScheduler;
 use Rx\SchedulerInterface;
 
 class IsEmptyOperator implements OperatorInterface
@@ -19,7 +17,7 @@ class IsEmptyOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
-        return $observable->subscribeCallback(
+        $cbObserver = new CallbackObserver(
             function() use ($observer) {
                 $observer->onNext(false);
                 $observer->onCompleted();
@@ -28,8 +26,9 @@ class IsEmptyOperator implements OperatorInterface
             function() use ($observer) {
                 $observer->onNext(true);
                 $observer->onCompleted();
-            },
-            $scheduler
+            }
         );
+
+        return $observable->subscribe($cbObserver, $scheduler);
     }
 }
