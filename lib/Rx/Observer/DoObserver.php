@@ -7,13 +7,13 @@ use Rx\ObserverInterface;
 
 class DoObserver implements ObserverInterface
 {
-    /** @var callable|null  */
+    /** @var callable  */
     private $onNext;
 
-    /** @var callable|null  */
+    /** @var callable  */
     private $onError;
 
-    /** @var callable|null  */
+    /** @var callable  */
     private $onCompleted;
 
     /**
@@ -36,7 +36,7 @@ class DoObserver implements ObserverInterface
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function onCompleted()
     {
@@ -44,7 +44,7 @@ class DoObserver implements ObserverInterface
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function onError(Exception $error)
     {
@@ -52,7 +52,7 @@ class DoObserver implements ObserverInterface
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function onNext($value)
     {

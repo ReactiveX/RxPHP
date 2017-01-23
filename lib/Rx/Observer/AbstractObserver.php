@@ -11,7 +11,7 @@ abstract class AbstractObserver implements ObserverInterface
     private $isStopped = false;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function onCompleted()
     {
@@ -24,7 +24,7 @@ abstract class AbstractObserver implements ObserverInterface
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function onError(Exception $error)
     {
@@ -37,7 +37,7 @@ abstract class AbstractObserver implements ObserverInterface
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     public function onNext($value)
     {
@@ -54,11 +54,13 @@ abstract class AbstractObserver implements ObserverInterface
     abstract protected function completed();
 
     /**
+     * @param mixed $value
      * @return void
      */
     abstract protected function next($value);
 
     /**
+     * @param \Exception $error
      * @return void
      */
     abstract protected function error(Exception $error);

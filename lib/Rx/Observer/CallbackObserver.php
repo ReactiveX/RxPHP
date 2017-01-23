@@ -6,13 +6,13 @@ use Exception;
 
 class CallbackObserver extends AbstractObserver
 {
-    /** @var callable|null  */
+    /** @var callable  */
     private $onNext;
 
-    /** @var callable|null  */
+    /** @var callable  */
     private $onError;
 
-    /** @var callable|null  */
+    /** @var callable  */
     private $onCompleted;
 
     /**
@@ -35,7 +35,7 @@ class CallbackObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function completed()
     {
@@ -44,7 +44,7 @@ class CallbackObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function error(Exception $error)
     {
@@ -52,7 +52,7 @@ class CallbackObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function next($value)
     {

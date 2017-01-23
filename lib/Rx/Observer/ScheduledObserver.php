@@ -40,7 +40,7 @@ class ScheduledObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function completed()
     {
@@ -50,7 +50,7 @@ class ScheduledObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function next($value)
     {
@@ -60,7 +60,7 @@ class ScheduledObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function error(Exception $error)
     {

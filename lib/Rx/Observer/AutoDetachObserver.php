@@ -13,6 +13,9 @@ class AutoDetachObserver extends AbstractObserver
     /** @var ObserverInterface */
     private $observer;
 
+    /** @var SingleAssignmentDisposable */
+    private $disposable;
+
     /**
      * @param ObserverInterface $observer
      */
@@ -34,7 +37,7 @@ class AutoDetachObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      * @throws Exception
      */
     protected function completed()
@@ -49,7 +52,7 @@ class AutoDetachObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      * @throws Exception
      */
     protected function error(Exception $exception)
@@ -64,7 +67,7 @@ class AutoDetachObserver extends AbstractObserver
     }
 
     /**
-     * @return void
+     * @inheritdoc
      * @throws Exception
      */
     protected function next($value)
