@@ -6,16 +6,29 @@ use Rx\DisposableInterface;
 
 class RefCountDisposable implements DisposableInterface
 {
+    /** @var int */
     private $count = 0;
+
+    /** @var DisposableInterface */
     private $disposable;
+
+    /** @var bool */
     private $isDisposed = false;
+
+    /** @var bool */
     private $isPrimaryDisposed = false;
 
+    /**
+     * @param DisposableInterface $disposable
+     */
     public function __construct(DisposableInterface $disposable)
     {
         $this->disposable = $disposable;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function dispose()
     {
         if ($this->isDisposed) {
@@ -30,6 +43,9 @@ class RefCountDisposable implements DisposableInterface
         }
     }
 
+    /**
+     * @return CallbackDisposable
+     */
     public function getDisposable()
     {
         if (!$this->isDisposed) {
@@ -40,16 +56,25 @@ class RefCountDisposable implements DisposableInterface
         }); // no op
     }
 
+    /**
+     * @return bool
+     */
     public function isDisposed()
     {
         return $this->isDisposed;
     }
 
+    /**
+     * @return bool
+     */
     public function isPrimaryDisposed()
     {
         return $this->isPrimaryDisposed;
     }
 
+    /**
+     * @return CallbackDisposable
+     */
     private function createInnerDisposable()
     {
         $count = &$this->count;

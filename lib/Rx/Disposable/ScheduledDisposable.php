@@ -16,12 +16,19 @@ class ScheduledDisposable implements DisposableInterface
     /** @var bool */
     protected $isDisposed = false;
 
+    /**
+     * @param SchedulerInterface $scheduler
+     * @param DisposableInterface $disposable
+     */
     public function __construct(SchedulerInterface $scheduler, DisposableInterface $disposable)
     {
         $this->scheduler  = $scheduler;
         $this->disposable = $disposable;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function dispose()
     {
         if ($this->isDisposed) {

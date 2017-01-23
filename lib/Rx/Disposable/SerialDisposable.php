@@ -13,9 +13,12 @@ class SerialDisposable implements DisposableInterface
     /** @var bool */
     private $isDisposed = false;
 
-    /** @var DisposableInterface */
+    /** @var null|DisposableInterface */
     private $disposable = null;
 
+    /**
+     * @inheritdoc
+     */
     public function dispose()
     {
         if ($this->isDisposed) {
@@ -32,7 +35,7 @@ class SerialDisposable implements DisposableInterface
     }
 
     /**
-     * @return DisposableInterface
+     * @return null|DisposableInterface
      */
     public function getDisposable()
     {
