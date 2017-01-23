@@ -17,6 +17,9 @@ class ForkJoinObservable extends Observable {
      */
     private $observables;
 
+    /**
+     * @var array
+     */
     private $values = [];
 
     private $completed = 0;

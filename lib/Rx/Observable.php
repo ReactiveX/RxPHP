@@ -74,10 +74,18 @@ use Rx\Disposable\CallbackDisposable;
 
 class Observable implements ObservableInterface
 {
+    /** @var ObserverInterface[] */
     protected $observers = [];
+
+    /** @var bool */
     protected $started = false;
 
-    public function subscribe(ObserverInterface $observer, $scheduler = null)
+    /**
+     * @param ObserverInterface $observer
+     * @param SchedulerInterface|null $scheduler
+     * @return DisposableInterface
+     */
+    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $this->observers[] = $observer;
         $this->started     = true;
@@ -89,6 +97,7 @@ class Observable implements ObservableInterface
 
     /**
      * @internal
+     * @return bool
      */
     public function removeObserver(ObserverInterface $observer)
     {
@@ -103,6 +112,13 @@ class Observable implements ObservableInterface
         return true;
     }
 
+    /**
+     * @param callable|null $onNext
+     * @param callable|null $onError
+     * @param callable|null $onCompleted
+     * @param SchedulerInterface|null $scheduler
+     * @return DisposableInterface
+     */
     public function subscribeCallback(callable $onNext = null, callable  $onError = null, callable $onCompleted = null, SchedulerInterface $scheduler = null)
     {
         $observer = new CallbackObserver($onNext, $onError, $onCompleted);
@@ -128,7 +144,7 @@ class Observable implements ObservableInterface
     /**
      * Returns an Observable that emits an infinite sequence of ascending integers starting at 0, with a constant interval of time of your choosing between emissions.
      *
-     * @param $interval int Period for producing the values in the resulting sequence (specified as an integer denoting milliseconds).
+     * @param int $interval Period for producing the values in the resulting sequence (specified as an integer denoting milliseconds).
      * @param SchedulerInterface|null $scheduler
      * @return IntervalObservable An observable sequence that produces a value after each period.
      *
@@ -187,7 +203,7 @@ class Observable implements ObservableInterface
     /**
      * Returns an observable sequence that terminates with an exception.
      *
-     * @param $error
+     * @param \Exception $error
      * @return ErrorObservable The observable sequence that terminates exceptionally with the specified exception object.
      *
      * @demo error-observable/error-observable.php
@@ -312,8 +328,8 @@ class Observable implements ObservableInterface
      * Generates an observable sequence of integral numbers within a specified range, using the specified scheduler to
      * send out observer messages.
      *
-     * @param $start
-     * @param $count
+     * @param int $start
+     * @param int $count
      * @return RangeObservable
      *
      * @demo range/range.php
@@ -395,7 +411,7 @@ class Observable implements ObservableInterface
     /**
      * Maps every value to the same value every time
      *
-     * @param $value
+     * @param mixed $value
      * @return AnonymousObservable
      *
      * @demo map/mapTo.php
@@ -492,13 +508,13 @@ class Observable implements ObservableInterface
     /**
      * Alias for flatMap
      *
-     * @param $selector
+     * @param callable $selector
      * @return AnonymousObservable
      *
      * @operator
      * @reactivex flatMap
      */
-    public function selectMany($selector)
+    public function selectMany(callable $selector)
     {
         return $this->flatMap($selector);
     }
@@ -667,7 +683,7 @@ class Observable implements ObservableInterface
     /**
      * Returns a specified number of contiguous elements from the end of an observable sequence.
      *
-     * @param $count
+     * @param int $count
      * @return AnonymousObservable
      *
      * @demo take/takeLast.php
@@ -747,8 +763,8 @@ class Observable implements ObservableInterface
      * namespace format:
      * CustomNamespace\Rx\Operator\OperatorNameOperator
      *
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param array $arguments
      * @return Observable
      * 
      * @demo custom-operator/rot13.php
@@ -945,8 +961,8 @@ class Observable implements ObservableInterface
      * Applies an accumulator function over an observable sequence and returns each intermediate result.
      * The optional seed value is used as the initial accumulator value.
      *
-     * @param $accumulator
-     * @param null $seed
+     * @param callable $accumulator
+     * @param mixed|null $seed
      * @return AnonymousObservable
      *
      * @demo scan/scan.php
@@ -1283,7 +1299,7 @@ class Observable implements ObservableInterface
      * from zero to one, then shares that subscription with all subsequent observers until the number of observers
      * returns to zero, at which point the subscription is disposed.
      *
-     * @param $initialValue
+     * @param int $initialValue
      * @return \Rx\Observable\RefCountObservable
      *
      * @demo share/shareValue.php
@@ -1327,7 +1343,7 @@ class Observable implements ObservableInterface
      *
      * @param integer $bufferSize
      * @param integer $windowSize
-     * @param $scheduler
+     * @param SchedulerInterface|null $scheduler
      * @return \Rx\Observable\RefCountObservable
      *
      * @demo share/shareReplay.php
@@ -1493,7 +1509,7 @@ class Observable implements ObservableInterface
     /**
      * Time shifts the observable sequence by dueTime. The relative time intervals between the values are preserved.
      *
-     * @param $delay
+     * @param int $delay
      * @param SchedulerInterface|null $scheduler
      * @return AnonymousObservable
      *
@@ -1509,7 +1525,7 @@ class Observable implements ObservableInterface
     }
 
     /**
-     * @param $timeout
+     * @param int $timeout
      * @param ObservableInterface $timeoutObservable
      * @param SchedulerInterface $scheduler
      * @return AnonymousObservable
@@ -1529,7 +1545,7 @@ class Observable implements ObservableInterface
      * Projects each element of an observable sequence into zero or more buffers which are produced based on
      * element count information.
      *
-     * @param $count
+     * @param int $count
      * @param int $skip
      * @return AnonymousObservable
      *
@@ -1836,15 +1852,15 @@ class Observable implements ObservableInterface
      * If items are emitted on the source observable prior to the expiration of the time period,
      * the last item emitted on the source observable will be emitted.
      *
-     * @param $throttleDuration
-     * @param null $scheduler
+     * @param int $throttleDuration
+     * @param SchedulerInterface|null $scheduler
      * @return AnonymousObservable
      *
      * @demo throttle/throttle.php
      * @operator
      * @reactivex debounce
      */
-    public function throttle($throttleDuration, $scheduler = null)
+    public function throttle($throttleDuration, SchedulerInterface $scheduler = null)
     {
         return $this->lift(function () use ($throttleDuration, $scheduler) {
             return new ThrottleOperator($throttleDuration, $scheduler);

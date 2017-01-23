@@ -8,13 +8,15 @@ use Rx\SchedulerInterface;
 
 class IntervalObservable extends Observable
 {
+    /** @var int */
     private $interval;
 
     /** @var SchedulerInterface */
     private $scheduler;
 
     /**
-     * IntervalObservable constructor.
+     * @param int $interval
+     * @param SchedulerInterface|null $scheduler
      */
     public function __construct($interval, SchedulerInterface $scheduler = null)
     {
@@ -22,7 +24,9 @@ class IntervalObservable extends Observable
         $this->scheduler = $scheduler;
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         if ($this->scheduler !== null) {

@@ -10,6 +10,7 @@ use Rx\SchedulerInterface;
 
 class ReturnObservable extends Observable
 {
+    /** @var mixed */
     private $value;
 
     /**
@@ -20,6 +21,11 @@ class ReturnObservable extends Observable
         $this->value = $value;
     }
 
+    /**
+     * @param ObserverInterface $observer
+     * @param SchedulerInterface|null $scheduler
+     * @return CompositeDisposable
+     */
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         $value     = $this->value;

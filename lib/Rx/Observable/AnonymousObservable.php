@@ -10,15 +10,19 @@ use Rx\Scheduler\ImmediateScheduler;
 
 class AnonymousObservable extends Observable
 {
+    /** @var callable */
     private $subscribeAction;
 
+    /**
+     * @param callable $subscribeAction
+     */
     public function __construct(callable $subscribeAction)
     {
         $this->subscribeAction = $subscribeAction;
     }
 
     /**
-     * @override
+     * @inheritdoc
      */
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {

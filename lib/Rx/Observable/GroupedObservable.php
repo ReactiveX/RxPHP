@@ -11,9 +11,17 @@ use Rx\DisposableInterface;
 
 class GroupedObservable extends Observable
 {
+    /** @var string|int */
     private $key;
+
+    /** @var ObservableInterface  */
     private $underlyingObservable;
 
+    /**
+     * @param string|int $key
+     * @param ObservableInterface $underlyingObservable
+     * @param DisposableInterface|null $mergedDisposable
+     */
     public function __construct($key, ObservableInterface $underlyingObservable, DisposableInterface $mergedDisposable = null)
     {
         $this->key = $key;
@@ -33,11 +41,17 @@ class GroupedObservable extends Observable
         }
     }
 
+    /**
+     * @return int|string
+     */
     public function getKey()
     {
         return $this->key;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         return $this->underlyingObservable->subscribe($observer, $scheduler);

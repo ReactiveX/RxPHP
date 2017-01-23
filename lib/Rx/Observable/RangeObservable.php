@@ -15,14 +15,14 @@ class RangeObservable extends Observable
     /** @var integer */
     private $count;
 
-    /** @var SchedulerInterface */
+    /** @var SchedulerInterface|null */
     private $scheduler;
 
     /**
      * SkipLastOperator constructor.
-     * @param $start
-     * @param $count
-     * @param SchedulerInterface $scheduler
+     * @param int $start
+     * @param int $count
+     * @param SchedulerInterface|null $scheduler
      */
     public function __construct($start, $count, SchedulerInterface $scheduler = null)
     {
@@ -36,6 +36,9 @@ class RangeObservable extends Observable
 
     }
 
+    /**
+     * @inheritdoc
+     */
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
 

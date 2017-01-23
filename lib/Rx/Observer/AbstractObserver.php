@@ -7,8 +7,12 @@ use Rx\ObserverInterface;
 
 abstract class AbstractObserver implements ObserverInterface
 {
+    /** @var bool */
     private $isStopped = false;
 
+    /**
+     * @return void
+     */
     public function onCompleted()
     {
         if ($this->isStopped) {
@@ -19,6 +23,9 @@ abstract class AbstractObserver implements ObserverInterface
         $this->completed();
     }
 
+    /**
+     * @return void
+     */
     public function onError(Exception $error)
     {
         if ($this->isStopped) {
@@ -29,6 +36,9 @@ abstract class AbstractObserver implements ObserverInterface
         $this->error($error);
     }
 
+    /**
+     * @return void
+     */
     public function onNext($value)
     {
         if ($this->isStopped) {
@@ -38,9 +48,18 @@ abstract class AbstractObserver implements ObserverInterface
         $this->next($value);
     }
 
+    /**
+     * @return void
+     */
     abstract protected function completed();
 
+    /**
+     * @return void
+     */
     abstract protected function next($value);
 
+    /**
+     * @return void
+     */
     abstract protected function error(Exception $error);
 }
