@@ -35,6 +35,7 @@ use Rx\Operator\DematerializeOperator;
 use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
+use Rx\Operator\FinallyOperator;
 use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\IsEmptyOperator;
 use Rx\Operator\MapOperator;
@@ -1937,6 +1938,24 @@ abstract class Observable implements ObservableInterface
     {
         return $this->lift(function () {
             return new IsEmptyOperator();
+        });
+    }
+
+    /**
+     * Will call a specified function when the source terminates on complete or error.
+     *
+     * @param callable $callback
+     * @return Observable
+     *
+     * @demo finally/finally.php
+     * @demo finally/finally-error.php
+     * @operator
+     * @reactivex do
+     */
+    public function finally(callable $callback): Observable
+    {
+        return $this->lift(function() use ($callback) {
+            return new FinallyOperator($callback);
         });
     }
 

@@ -2,13 +2,13 @@
 
 namespace Rx\Operator;
 
+use Rx\DisposableInterface;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\BinaryDisposable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
-use Rx\SchedulerInterface;
 
-class FinallyCallOperator implements OperatorInterface
+class FinallyOperator implements OperatorInterface
 {
     /** @var callable */
     private $callback;
@@ -24,13 +24,12 @@ class FinallyCallOperator implements OperatorInterface
     /**
      * @param \Rx\ObservableInterface $observable
      * @param \Rx\ObserverInterface $observer
-     * @param \Rx\SchedulerInterface $scheduler
      * @return \Rx\DisposableInterface
      */
-    public function __invoke(ObservableInterface $observable, ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return new BinaryDisposable(
-            $observable->subscribe($observer, $scheduler),
+            $observable->subscribe($observer),
             new CallbackDisposable($this->callback)
         );
     }
