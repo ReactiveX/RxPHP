@@ -32,7 +32,7 @@ use Rx\Operator\DematerializeOperator;
 use Rx\Operator\DistinctOperator;
 use Rx\Operator\DistinctUntilChangedOperator;
 use Rx\Operator\DoOnEachOperator;
-use Rx\Operator\FinallyCallOperator;
+use Rx\Operator\DoFinallyOperator;
 use Rx\Operator\GroupByUntilOperator;
 use Rx\Operator\IsEmptyOperator;
 use Rx\Operator\MapOperator;
@@ -1876,15 +1876,15 @@ class Observable implements ObservableInterface
      * @param callable $callback
      * @return AnonymousObservable
      *
-     * @demo finally/finally.php
-     * @demo finally/finally-error.php
+     * @demo do/doFinally.php
+     * @demo do/doFinally-error.php
      * @operator
      * @reactivex do
      */
-    public function finallyCall(callable $callback)
+    public function doFinally(callable $callback)
     {
         return $this->lift(function() use ($callback) {
-            return new FinallyCallOperator($callback);
+            return new DoFinallyOperator($callback);
         });
     }
 }

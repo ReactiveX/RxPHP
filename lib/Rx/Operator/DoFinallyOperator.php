@@ -8,7 +8,7 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
-class FinallyCallOperator implements OperatorInterface
+class DoFinallyOperator implements OperatorInterface
 {
     /** @var callable */
     private $callback;
