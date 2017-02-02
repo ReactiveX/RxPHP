@@ -1887,4 +1887,17 @@ class Observable implements ObservableInterface
             return new DoFinallyOperator($callback);
         });
     }
+
+    /**
+     * Will apply given function to the source observable.
+     *
+     * @param callable $thru function that applies operators to source observable. Must return observable.
+     * @return Observable
+     *
+     * @demo thru/thru.php
+     */
+    public function thru(callable $thru)
+    {
+        return $thru($this);
+    }
 }
