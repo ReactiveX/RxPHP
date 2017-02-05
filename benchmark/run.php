@@ -73,7 +73,8 @@ Observable::just($files)
         printf(' - %d', count($result['durations']));
     })
     ->map(function($result) { // Calculate the standard deviance
-        $mean = array_sum($result['durations']) / count($result['durations']);
+        $count = count($result['durations']);
+        $mean = array_sum($result['durations']) / $count;
 
         $variance = array_sum(array_map(function($duration) use ($mean) {
             return pow($mean - $duration, 2);
@@ -82,7 +83,7 @@ Observable::just($files)
         return [
             'file' => $result['file'],
             'mean' => $mean,
-            'standard_variance' => pow($variance, 0.5),
+            'standard_variance' => pow($variance / $count, 0.5),
         ];
     })
     ->subscribe(new CallbackObserver(
