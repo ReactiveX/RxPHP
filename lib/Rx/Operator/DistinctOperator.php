@@ -18,8 +18,13 @@ class DistinctOperator implements OperatorInterface
 
     public function __construct(callable $keySelector = null, callable $comparer = null)
     {
-        $this->comparer = $comparer;
+
+        $this->comparer = $comparer ?: function ($x, $y) {
+            return $x == $y;
+        };
+
         $this->keySelector = $keySelector;
+
     }
 
     /**
@@ -38,22 +43,15 @@ class DistinctOperator implements OperatorInterface
                 try {
                     $key = $this->keySelector ? call_user_func($this->keySelector, $value) : $value;
 
-                    if ($this->comparer) {
-                        foreach ($values as $v) {
-                            $comparerEquals = call_user_func($this->comparer, $key, $v);
+                    foreach ($values as $v) {
+                        $comparerEquals = call_user_func($this->comparer, $key, $v);
 
-                            if ($comparerEquals) {
-                                return;
-                            }
-                        }
-                        $values[] = $key;
-                    } else {
-                        if (array_key_exists($key, $values)) {
+                        if ($comparerEquals) {
                             return;
                         }
-                        $values[$key] = null;
                     }
 
+                    $values[] = $key;
                     $observer->onNext($value);
 
                 } catch (\Exception $e) {
