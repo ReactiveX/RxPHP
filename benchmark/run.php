@@ -22,19 +22,20 @@ if ($_SERVER['argc'] == 1) {
     }, array_slice($_SERVER['argv'], 1));
 }
 
+
 Observable::just($files)
     ->doOnNext(function(array $files) {
         printf("Benchmarking %d file/s (min %ds each)\n", count($files), MIN_TOTAL_DURATION);
         printf("script_name - total_runs (single_run_mean ±standard_variant)\n");
         printf("============================================================\n");
     })
-    ->concatMap(function($files) { // flatten the array
+    ->concatMap(function($files) { // Flatten the array
         return Observable::fromArray($files);
     })
     ->doOnNext(function($file) {
         printf('%s', pathinfo($file, PATHINFO_FILENAME));
     })
-    ->map(function($file) { // run benchmark
+    ->map(function($file) { // Run benchmark
         $totalDuration = 0.0;
         $durations = [];
 
@@ -69,10 +70,10 @@ Observable::just($files)
             'durations' => $durations,
         ];
     })
-    ->doOnNext(function($result) { // Print the number of successful runs
+    ->doOnNext(function(array $result) { // Print the number of successful runs
         printf(' - %d', count($result['durations']));
     })
-    ->map(function($result) { // Calculate the standard deviance
+    ->map(function(array $result) { // Calculate the standard deviance
         $count = count($result['durations']);
         $mean = array_sum($result['durations']) / $count;
 
@@ -87,7 +88,7 @@ Observable::just($files)
         ];
     })
     ->subscribe(new CallbackObserver(
-        function($result) {
+        function(array $result) {
             printf(" (%.2fms ±%.2fms)\n", $result['mean'], $result['standard_variance']);
         },
         function(\Exception $error) {
@@ -98,9 +99,3 @@ Observable::just($files)
             printf("total duration: %.2fs\n", microtime(true) - $start);
         }
     ));
-
-
-//$dirIter = new RecursiveDirectoryIterator($dir);
-//$iter = new RecursiveIteratorIterator($dirIter);
-//$iter = new DirectoryIterator($dir);
-//$iter = new RegexIterator($iter, $pattern, RegexIterator::GET_MATCH);
