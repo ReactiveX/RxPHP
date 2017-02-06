@@ -12,6 +12,9 @@ class IteratorObservable extends Observable
     /** @var \Iterator */
     private $items;
 
+    /**
+     * @param \Iterator $items
+     */
     public function __construct(\Iterator $items)
     {
         $this->items = $items;

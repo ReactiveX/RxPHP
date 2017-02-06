@@ -11,13 +11,20 @@ use Rx\SchedulerInterface;
 
 class ErrorObservable extends Observable
 {
+    /** @var \Exception */
     private $error;
 
+    /**
+     * @param \Exception $error
+     */
     public function __construct(Exception $error)
     {
         $this->error = $error;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
 

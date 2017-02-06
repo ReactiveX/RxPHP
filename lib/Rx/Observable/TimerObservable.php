@@ -25,6 +25,12 @@ class TimerObservable extends Observable
         $this->scheduler = $scheduler;
     }
 
+    /**
+     * @param ObserverInterface $observer
+     * @param SchedulerInterface|null $scheduler
+     * @return \Rx\DisposableInterface
+     * @throws \Exception
+     */
     public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
     {
         if ($this->scheduler !== null) {

@@ -7,15 +7,20 @@ use Rx\ObserverInterface;
 
 class DoObserver implements ObserverInterface
 {
-    /** @var callable|null  */
+    /** @var callable  */
     private $onNext;
 
-    /** @var callable|null  */
+    /** @var callable  */
     private $onError;
 
-    /** @var callable|null  */
+    /** @var callable  */
     private $onCompleted;
 
+    /**
+     * @param callable|null $onNext
+     * @param callable|null $onError
+     * @param callable|null $onCompleted
+     */
     public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
     {
         $default = function () {
@@ -29,22 +34,36 @@ class DoObserver implements ObserverInterface
 
         $this->onCompleted = $this->getOrDefault($onCompleted, $default);
     }
-    
+
+    /**
+     * @inheritdoc
+     */
     public function onCompleted()
     {
         call_user_func($this->onCompleted);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onError(Exception $error)
     {
         call_user_func_array($this->onError, [$error]);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onNext($value)
     {
         call_user_func_array($this->onNext, [$value]);
     }
 
+    /**
+     * @param callable|null $callback
+     * @param null $default
+     * @return callable|null
+     */
     private function getOrDefault(callable $callback = null, $default = null)
     {
         if (null === $callback) {

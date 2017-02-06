@@ -39,7 +39,9 @@ class ScheduledObserver extends AbstractObserver
         $this->disposable = new SerialDisposable();
     }
 
-
+    /**
+     * @inheritdoc
+     */
     protected function completed()
     {
         $this->queue[] = function () {
@@ -47,6 +49,9 @@ class ScheduledObserver extends AbstractObserver
         };
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function next($value)
     {
         $this->queue[] = function () use ($value) {
@@ -54,6 +59,9 @@ class ScheduledObserver extends AbstractObserver
         };
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function error(Exception $error)
     {
         $this->queue[] = function () use ($error) {
@@ -61,6 +69,9 @@ class ScheduledObserver extends AbstractObserver
         };
     }
 
+    /**
+     * @return void
+     */
     public function ensureActive()
     {
         $isOwner = false;
@@ -103,6 +114,9 @@ class ScheduledObserver extends AbstractObserver
         );
     }
 
+    /**
+     * @return void
+     */
     public function dispose()
     {
         $this->disposable->dispose();

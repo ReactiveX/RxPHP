@@ -7,9 +7,15 @@ use Rx\DisposableInterface;
 
 class SingleAssignmentDisposable implements DisposableInterface
 {
+    /** @var DisposableInterface|null */
     private $current;
+
+    /** @var bool */
     private $isDisposed = false;
 
+    /**
+     * @inheritdoc
+     */
     public function dispose()
     {
         $old = null;
@@ -25,6 +31,10 @@ class SingleAssignmentDisposable implements DisposableInterface
         }
     }
 
+    /**
+     * @param DisposableInterface|null $disposable
+     * @return void
+     */
     public function setDisposable(DisposableInterface $disposable = null)
     {
         if ($this->current) {
@@ -40,11 +50,17 @@ class SingleAssignmentDisposable implements DisposableInterface
         }
     }
 
+    /**
+     * @return null|DisposableInterface
+     */
     public function getDisposable()
     {
         return $this->current;
     }
 
+    /**
+     * @return bool
+     */
     public function isDisposed()
     {
         return $this->isDisposed;
