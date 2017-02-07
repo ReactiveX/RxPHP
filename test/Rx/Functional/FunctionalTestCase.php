@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Functional;
 
 use PHPUnit_Framework_ExpectationFailedException;

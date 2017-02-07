@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Observer;
 
 class CallbackObserver extends AbstractObserver
