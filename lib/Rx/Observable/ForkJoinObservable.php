@@ -28,7 +28,7 @@ class ForkJoinObservable extends Observable {
         $this->resultSelector = $resultSelector;
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $disposable = new CompositeDisposable();
 

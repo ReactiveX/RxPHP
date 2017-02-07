@@ -11,7 +11,7 @@ use Rx\SchedulerInterface;
 class EmptyObservable extends Observable
 {
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $scheduler = $scheduler?: new ImmediateScheduler();
 

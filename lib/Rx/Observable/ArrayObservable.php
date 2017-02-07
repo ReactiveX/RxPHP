@@ -16,7 +16,7 @@ class ArrayObservable extends Observable
         $this->data = $data;
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $values    = &$this->data;
         $max       = count($values);

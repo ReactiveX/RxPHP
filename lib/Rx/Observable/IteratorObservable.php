@@ -22,7 +22,7 @@ class IteratorObservable extends Observable
      * @param SchedulerInterface|null $scheduler
      * @return \Rx\Disposable\CompositeDisposable|\Rx\DisposableInterface
      */
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $scheduler = $scheduler ?: new ImmediateScheduler();
         

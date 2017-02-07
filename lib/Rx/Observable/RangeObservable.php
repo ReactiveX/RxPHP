@@ -36,7 +36,7 @@ class RangeObservable extends Observable
 
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
 
         if ($this->scheduler !== null) {
