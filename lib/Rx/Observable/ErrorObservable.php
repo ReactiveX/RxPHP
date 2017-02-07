@@ -18,7 +18,7 @@ class ErrorObservable extends Observable
         $this->error = $error;
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
 
         $scheduler = $scheduler?: new ImmediateScheduler();

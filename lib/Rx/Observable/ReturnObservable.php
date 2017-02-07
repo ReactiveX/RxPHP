@@ -20,7 +20,7 @@ class ReturnObservable extends Observable
         $this->value = $value;
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $value     = $this->value;
 
