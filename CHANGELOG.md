@@ -1,3 +1,18 @@
+# 1.5.2
+
+### Bug Fixes
+
+- Fix interface mismatch on subscribe type hints ([b817619](https://github.com/ReactiveX/RxPHP/commit/b8176196a9bb836579838966b0b89dcfcbc48dd1))
+- Fix `IteratorObservable` to check if the key is valid instead of null ([dafb14b](https://github.com/ReactiveX/RxPHP/commit/dafb14bc8f0bd22550325419f7ab2e98a454659b))
+
+### Features
+
+- Optimized `distinct` operator ([462d433](https://github.com/ReactiveX/RxPHP/commit/462d433a9268d1de60e7fcd1a9af19a2cac5f164))
+- Added `finally` operator ([e2cfdb2](https://github.com/ReactiveX/RxPHP/commit/e2cfdb2f8b374b0687d64c9e774a8557dbe77b5c))
+- Added `isEmpty` operator ([2429fb7](https://github.com/ReactiveX/RxPHP/commit/2429fb719de6c499db5da6cede086725bf82ece9))
+- Added `forkJoin` operator ([9fb9197](https://github.com/ReactiveX/RxPHP/commit/9fb9197d04e47cd68363c0d4de845519ae2e2a66))
+- Refactored `mergeAll` to be consistent with RxJS and `switchLatest` ([7aeb8ce](https://github.com/ReactiveX/RxPHP/commit/7aeb8cef74b29bdaa09ea969daf78577299a2aad))
+
 # 1.5.1
 
 ### Bug Fixes
