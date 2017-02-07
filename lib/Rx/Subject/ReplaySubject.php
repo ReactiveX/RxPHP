@@ -61,7 +61,7 @@ class ReplaySubject extends Subject
         $this->scheduler = $scheduler;
     }
 
-    public function subscribe(ObserverInterface $observer, SchedulerInterface $scheduler = null)
+    public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
         $this->assertNotDisposed();
 
