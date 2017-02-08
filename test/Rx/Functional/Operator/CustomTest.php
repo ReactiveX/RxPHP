@@ -13,7 +13,7 @@ class CustomTest extends FunctionalTestCase
             return Observable::just(1)
                 ->customTest(2);
         });
-        
+
         $this->assertMessages([
             onNext(201, 2),
             onCompleted(201)
@@ -25,6 +25,19 @@ class CustomTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::just(1)
                 ->_CustomOperatorTest_test(2);
+        });
+
+        $this->assertMessages([
+            onNext(201, 2),
+            onCompleted(201)
+        ], $results->getMessages());
+    }
+
+    public function testExternalNestedNamespacedOperator()
+    {
+        $results = $this->scheduler->startWithCreate(function () {
+            return Observable::just(1)
+                ->_CustomOperatorTest_SubNamespace_test(2);
         });
 
         $this->assertMessages([
