@@ -2,8 +2,12 @@
 
 use Rx\Observable;
 
-return function() use ($dummyObserver) {
-    Observable::range(1, pow(10, 3))
+$source = array_map(function($val) {
+    return $val % 3;
+}, range(0, 25));
+
+return function() use ($source, $dummyObserver) {
+    Observable::fromArray($source)
         ->distinct()
         ->subscribe($dummyObserver);
 };
