@@ -13,21 +13,26 @@ use Rx\Observer\CallbackObserver;
 define('MIN_TOTAL_DURATION', 5);
 $start = microtime(true);
 
-if ($_SERVER['argc'] == 1) {
+if ($_SERVER['argc'] === 1) {
     $files = glob(__DIR__ . '/**/*.php');
 } else {
-    // Force absolute path
-    $files = array_map(function($file) {
-        return $file[0] == DIRECTORY_SEPARATOR ? $file : $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $file;
-    }, array_slice($_SERVER['argv'], 1));
+    $files = [];
+    foreach (array_slice($_SERVER['argv'], 1) as $fileOrDir) {
+        if (is_dir($fileOrDir)) {
+            $files = array_merge($files, glob($fileOrDir . '/*.php'));
+        } else {
+            // Force absolute path
+            $files[] = $file[0] === DIRECTORY_SEPARATOR ? $file : $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $file;
+        }
+    }
 }
 
 
 Observable::just($files)
     ->doOnNext(function(array $files) {
         printf("Benchmarking %d file/s (min %ds each)\n", count($files), MIN_TOTAL_DURATION);
-        printf("script_name - total_runs (single_run_mean ±standard_variant)\n");
-        printf("============================================================\n");
+        printf("script_name - total_runs (single_run_mean ±standard_deviation)\n");
+        printf("==============================================================\n");
     })
     ->concatMap(function($files) { // Flatten the array
         return Observable::fromArray($files);
@@ -73,7 +78,7 @@ Observable::just($files)
     ->doOnNext(function(array $result) { // Print the number of successful runs
         printf(' - %d', count($result['durations']));
     })
-    ->map(function(array $result) { // Calculate the standard deviance
+    ->map(function(array $result) { // Calculate the standard deviation
         $count = count($result['durations']);
         $mean = array_sum($result['durations']) / $count;
 
@@ -84,12 +89,12 @@ Observable::just($files)
         return [
             'file' => $result['file'],
             'mean' => $mean,
-            'standard_variance' => pow($variance / $count, 0.5),
+            'standard_deviation' => pow($variance / $count, 0.5),
         ];
     })
     ->subscribe(new CallbackObserver(
         function(array $result) {
-            printf(" (%.2fms ±%.2fms)\n", $result['mean'], $result['standard_variance']);
+            printf(" (%.2fms ±%.2fms)\n", $result['mean'], $result['standard_deviation']);
         },
         function(\Exception $error) {
             printf("\nError: %s\n", $error->getMessage());
