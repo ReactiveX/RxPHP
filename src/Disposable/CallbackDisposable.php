@@ -9,6 +9,7 @@ use Rx\DisposableInterface;
 class CallbackDisposable implements DisposableInterface
 {
     private $action;
+    private $disposed = false;
 
     public function __construct(callable $action)
     {
@@ -17,6 +18,10 @@ class CallbackDisposable implements DisposableInterface
 
     public function dispose()
     {
+        if ($this->disposed) {
+            return;
+        }
+        $this->disposed = true;
         $call = $this->action;
         $call();
     }
