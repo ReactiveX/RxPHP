@@ -6,6 +6,8 @@ use Exception;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
+use Rx\Notification\OnNextObservableNotification;
+use Rx\Observable;
 use Rx\ObserverInterface;
 
 /**
@@ -13,26 +15,38 @@ use Rx\ObserverInterface;
  */
 class MockObserver implements ObserverInterface
 {
+    /** @var TestScheduler */
     private $scheduler;
+
+    /** @var Recorded[] */
     private $messages = [];
 
-    public function __construct($scheduler)
+    private $startTime = 0;
+
+    public function __construct($scheduler, $startTime = 0)
     {
         $this->scheduler = $scheduler;
+        $this->startTime = $startTime;
     }
 
     public function onNext($value)
     {
+        if ($value instanceof Observable) {
+            $notification = new OnNextObservableNotification($value, $this->scheduler, $this->scheduler->getClock());
+        } else {
+            $notification = new OnNextNotification($value);
+        }
+
         $this->messages[] = new Recorded(
-            $this->scheduler->getClock(),
-            new OnNextNotification($value)
+            $this->scheduler->getClock() - $this->startTime,
+            $notification
         );
     }
 
     public function onError(Exception $error)
     {
         $this->messages[] = new Recorded(
-            $this->scheduler->getClock(),
+            $this->scheduler->getClock() - $this->startTime,
             new OnErrorNotification($error)
         );
     }
@@ -40,7 +54,7 @@ class MockObserver implements ObserverInterface
     public function onCompleted()
     {
         $this->messages[] = new Recorded(
-            $this->scheduler->getClock(),
+            $this->scheduler->getClock() - $this->startTime,
             new OnCompletedNotification()
         );
     }

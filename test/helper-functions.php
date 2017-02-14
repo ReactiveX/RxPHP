@@ -1,10 +1,13 @@
 <?php
 
+use Rx\Observable;
 use Rx\Testing\Recorded;
 use Rx\Testing\Subscription;
+use Rx\Testing\TestScheduler;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
+use Rx\Notification\OnNextObservableNotification;
 
 function onError($dueTime, $error, $comparer = null) {
     return new Recorded($dueTime, new OnErrorNotification($error), $comparer);
@@ -12,6 +15,10 @@ function onError($dueTime, $error, $comparer = null) {
 
 function onNext($dueTime, $value, $comparer = null) {
     return new Recorded($dueTime, new OnNextNotification($value), $comparer);
+}
+
+function onNextObservable($dueTime, $value, $comparer = null) {
+    return new Recorded($dueTime, new OnNextObservableNotification($value), $comparer);
 }
 
 function onCompleted($dueTime, $comparer = null) {
@@ -25,3 +32,4 @@ function subscribe($start, $end = null) {
 function RxIdentity($x) {
     return $x;
 }
+

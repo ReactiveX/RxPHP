@@ -22,12 +22,12 @@ class ColdObservable extends Observable
 
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
-        $this->subscriptions[] = new Subscription($this->scheduler->getClock());
+        $scheduler             = $scheduler ?: $this->scheduler;
+        $this->subscriptions[] = new Subscription($scheduler->getClock());
         $index                 = count($this->subscriptions) - 1;
 
         $currentObservable = $this;
         $disposable        = new CompositeDisposable();
-        $scheduler         = $this->scheduler;
         $isDisposed        = false;
 
         foreach ($this->messages as $message) {
