@@ -11,14 +11,14 @@ class OnNextObservableNotification extends OnNextNotification
     /** @var MockHigherOrderObserver */
     private $observer;
 
-    public function __construct($value, TestScheduler $scheduler = null, $startTime = 0)
+    public function __construct($value, TestScheduler $scheduler = null)
     {
         parent::__construct($value);
         if (!$scheduler) {
             $scheduler = new TestScheduler();
         }
 
-        $this->observer = new MockHigherOrderObserver($scheduler, $startTime);
+        $this->observer = new MockHigherOrderObserver($scheduler, $scheduler->getClock());
 
         /** @var Observable $value */
         $value->subscribe($this->observer, $scheduler);
