@@ -32,7 +32,7 @@ class MockObserver implements ObserverInterface
     public function onNext($value)
     {
         if ($value instanceof Observable) {
-            $notification = new OnNextObservableNotification($value, $this->scheduler, $this->scheduler->getClock());
+            $notification = new OnNextObservableNotification($value, $this->scheduler);
         } else {
             $notification = new OnNextNotification($value);
         }

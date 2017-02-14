@@ -3,7 +3,6 @@
 use Rx\Observable;
 use Rx\Testing\Recorded;
 use Rx\Testing\Subscription;
-use Rx\Testing\TestScheduler;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
@@ -33,4 +32,3 @@ function subscribe($start, $end = null) {
 function RxIdentity($x) {
     return $x;
 }
-
