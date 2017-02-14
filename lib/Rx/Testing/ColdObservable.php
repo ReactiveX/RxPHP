@@ -22,13 +22,16 @@ class ColdObservable extends Observable
 
     public function subscribe(ObserverInterface $observer, $scheduler = null)
     {
-        $scheduler             = $scheduler ?: $this->scheduler;
-        $this->subscriptions[] = new Subscription($scheduler->getClock());
-        $index                 = count($this->subscriptions) - 1;
-
+        $scheduler         = $scheduler ?: $this->scheduler;
         $currentObservable = $this;
         $disposable        = new CompositeDisposable();
         $isDisposed        = false;
+        $index             = null;
+
+        if (!($observer instanceof MockHigherOrderObserver)) {
+            $this->subscriptions[] = new Subscription($scheduler->getClock());
+            $index = count($this->subscriptions) - 1;
+        }
 
         foreach ($this->messages as $message) {
             $notification = $message->getValue();
@@ -50,7 +53,9 @@ class ColdObservable extends Observable
 
         return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
             $isDisposed            = true;
-            $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
+            if (!($observer instanceof MockHigherOrderObserver)) {
+                $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
+            }
         });
 
     }

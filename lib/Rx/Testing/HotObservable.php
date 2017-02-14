@@ -43,17 +43,22 @@ class HotObservable extends Observable
     {
         $currentObservable = $this;
 
-        $this->observers[]     = $observer;
-        $this->subscriptions[] = new Subscription($this->scheduler->getClock());
+        $this->observers[] = $observer;
+        $subscriptions     = &$this->subscriptions;
+        $index             = null;
 
-        $subscriptions = &$this->subscriptions;
+        if (!($observer instanceof MockHigherOrderObserver)) {
+            $this->subscriptions[] = new Subscription($this->scheduler->getClock());
+            $index = count($this->subscriptions) - 1;
+        }
 
-        $index     = count($this->subscriptions) - 1;
         $scheduler = $this->scheduler;
 
         return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
             $currentObservable->removeObserver($observer);
-            $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
+            if (!($observer instanceof MockHigherOrderObserver)) {
+                $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
+            }
         });
     }
 

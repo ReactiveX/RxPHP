@@ -14,11 +14,12 @@ function onError($dueTime, $error, $comparer = null) {
 }
 
 function onNext($dueTime, $value, $comparer = null) {
-    return new Recorded($dueTime, new OnNextNotification($value), $comparer);
-}
-
-function onNextObservable($dueTime, $value, $comparer = null) {
-    return new Recorded($dueTime, new OnNextObservableNotification($value), $comparer);
+    if ($value instanceof Observable) {
+        $notification = new OnNextObservableNotification($value);
+    } else {
+        $notification = new OnNextNotification($value);
+    }
+    return new Recorded($dueTime, $notification, $comparer);
 }
 
 function onCompleted($dueTime, $comparer = null) {

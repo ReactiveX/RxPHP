@@ -31,13 +31,13 @@ class RecordedTest extends FunctionalTestCase
      */
     public function compare_cold_observables()
     {
-        $records1 = onNextObservable(100, $this->createColdObservable([
+        $records1 = onNext(100, $this->createColdObservable([
             onNext(150, 1),
             onNext(200, 2),
             onNext(250, 3),
             onCompleted(300),
         ]));
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(150, 1),
             onNext(200, 2),
             onNext(250, 3),
@@ -53,8 +53,8 @@ class RecordedTest extends FunctionalTestCase
      */
     public function compare_with_range_cold_observable()
     {
-        $records1 = onNextObservable(100, Observable::range(1, 3));
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records1 = onNext(100, Observable::range(1, 3));
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(1, 1),
             onNext(2, 2),
             onNext(3, 3),
@@ -69,14 +69,14 @@ class RecordedTest extends FunctionalTestCase
      */
     public function compare_with_delayed_range_cold_observable()
     {
-        $records1 = onNextObservable(100, $this->createColdObservable([
+        $records1 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
             onNext(150, 3),
             onCompleted(200)
         ])->delay(100));
 
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(150, 1),
             onNext(200, 2),
             onNext(250, 3),
@@ -91,11 +91,11 @@ class RecordedTest extends FunctionalTestCase
      */
     public function observables_at_different_time_with_same_records_arent_equal()
     {
-        $records1 = onNextObservable(50, $this->createColdObservable([
+        $records1 = onNext(50, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
         ]));
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
         ]));
@@ -109,11 +109,11 @@ class RecordedTest extends FunctionalTestCase
      */
     public function observables_with_inner_records_at_different_time_arent_equal()
     {
-        $records1 = onNextObservable(100, $this->createColdObservable([
+        $records1 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(150, 2),
         ]));
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
         ]));
@@ -127,25 +127,25 @@ class RecordedTest extends FunctionalTestCase
      */
     public function observables_with_more_nested_inner_observables()
     {
-        $records1 = onNextObservable(100, $this->createColdObservable([
+        $records1 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
-            onNextObservable(150, $this->createColdObservable([
+            onNext(150, $this->createColdObservable([
                 onNext(10, 3),
                 onNext(20, 4),
-                onNextObservable(30, $this->createColdObservable([
+                onNext(30, $this->createColdObservable([
                     onNext(10, 5),
                     onNext(20, 6),
                 ])),
             ])->delay(100)),
         ]));
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
-            onNextObservable(150, $this->createColdObservable([
+            onNext(150, $this->createColdObservable([
                 onNext(110, 3),
                 onNext(120, 4),
-                onNextObservable(130, $this->createColdObservable([
+                onNext(130, $this->createColdObservable([
                     onNext(10, 5),
                     onNext(20, 6),
                 ])),
@@ -173,13 +173,13 @@ class RecordedTest extends FunctionalTestCase
                 ])),
             ])->delay(100)),
         ]));
-        $records2 = onNextObservable(100, $this->createColdObservable([
+        $records2 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
             onNext(100, 2),
-            onNextObservable(150, $this->createColdObservable([
+            onNext(150, $this->createColdObservable([
                 onNext(110, 3),
                 onNext(120, 4),
-                onNextObservable(130, $this->createColdObservable([
+                onNext(130, $this->createColdObservable([
                     onNext(10, 5),
                     onNext(20, 42), // this is wrong
                 ])),

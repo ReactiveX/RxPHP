@@ -3,13 +3,12 @@
 namespace Rx\Notification;
 
 use Rx\Observable;
-use Rx\SchedulerInterface;
-use Rx\Testing\MockObserver;
+use Rx\Testing\MockHigherOrderObserver;
 use Rx\Testing\TestScheduler;
 
 class OnNextObservableNotification extends OnNextNotification
 {
-    /** @var MockObserver */
+    /** @var MockHigherOrderObserver */
     private $observer;
 
     public function __construct($value, TestScheduler $scheduler = null, $startTime = 0)
@@ -19,7 +18,7 @@ class OnNextObservableNotification extends OnNextNotification
             $scheduler = new TestScheduler();
         }
 
-        $this->observer = new MockObserver($scheduler, $startTime);
+        $this->observer = new MockHigherOrderObserver($scheduler, $startTime);
 
         /** @var Observable $value */
         $value->subscribe($this->observer, $scheduler);
