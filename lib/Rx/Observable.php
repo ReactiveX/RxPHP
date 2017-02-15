@@ -1891,13 +1891,13 @@ class Observable implements ObservableInterface
     /**
      * Will apply given function to the source observable.
      *
-     * @param callable $thru function that applies operators to source observable. Must return observable.
+     * @param callable $compose function that applies operators to source observable. Must return observable.
      * @return Observable
      *
-     * @demo thru/thru.php
+     * @demo compose/compose.php
      */
-    public function thru(callable $thru)
+    public function compose(callable $compose)
     {
-        return $thru($this);
+        return $compose($this);
     }
 }

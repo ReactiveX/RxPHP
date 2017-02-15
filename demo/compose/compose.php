@@ -13,7 +13,7 @@ $process = function ($observable) {
 };
 
 $source = Observable::fromArray(range(1, 10))
-        ->thru($process);
+        ->compose($process);
 
 $subscription = $source->subscribe($stdoutObserver);
 
