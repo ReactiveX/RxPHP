@@ -1998,7 +1998,7 @@ abstract class Observable implements ObservableInterface
      *
      * @demo compose/compose.php
      */
-    public function compose(callable $compose)
+    public function compose(callable $compose): Observable
     {
         return $compose($this);
     }
