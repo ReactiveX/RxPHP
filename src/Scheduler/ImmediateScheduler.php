@@ -31,8 +31,8 @@ class ImmediateScheduler implements SchedulerInterface
         $recursiveAction = function () use ($action, &$goAgain, $disposable) {
             while ($goAgain) {
                 $goAgain = false;
-                $disposable->add($this->schedule(function () use ($action, &$goAgain, $disposable) {
-                    return $action(function () use (&$goAgain, $action) {
+                $disposable->add($this->schedule(function () use ($action, &$goAgain) {
+                    return $action(function () use (&$goAgain) {
                         $goAgain = true;
                     });
                 }));
