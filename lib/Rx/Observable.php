@@ -1818,6 +1818,11 @@ class Observable implements ObservableInterface
      */
     public function pluck($property)
     {
+        $args = func_get_args();
+        if (count($args) > 1) {
+            return call_user_func_array([$this->pluck(array_shift($args)), 'pluck'], $args);
+        }
+
         return $this->map(function ($x) use ($property) {
             if (is_array($x) && isset($x[$property])) {
                 return $x[$property];
