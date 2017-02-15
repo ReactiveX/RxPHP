@@ -1887,4 +1887,17 @@ class Observable implements ObservableInterface
             return new DoFinallyOperator($callback);
         });
     }
+
+    /**
+     * Will apply given function to the source observable.
+     *
+     * @param callable $compose function that applies operators to source observable. Must return observable.
+     * @return Observable
+     *
+     * @demo compose/compose.php
+     */
+    public function compose(callable $compose)
+    {
+        return $compose($this);
+    }
 }
