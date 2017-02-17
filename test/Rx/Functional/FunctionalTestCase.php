@@ -16,6 +16,8 @@ abstract class FunctionalTestCase extends TestCase
     /** @var  TestScheduler */
     protected $scheduler;
 
+    const TIME_FACTOR = 10;
+
     public function setup()
     {
         $this->scheduler = $this->createTestScheduler();
@@ -140,35 +142,45 @@ abstract class FunctionalTestCase extends TestCase
     {
         /** @var Recorded $events */
         $events = [];
-        $zero = 0;
+        $groupTime = -1;
+
+        // calculate subscription time
+        $timeOffset = $subscribePoint;
+        $subMarker = strpos($marbles, '^');
+        if ($subMarker !== false) {
+            $timeOffset -= $subMarker * self::TIME_FACTOR;
+        }
 
         for ($i = 0; $i < strlen($marbles); $i++) {
+            $now = $groupTime === -1 ? $timeOffset + $i * self::TIME_FACTOR : $groupTime++;
+
             switch ($marbles[$i]) {
                 case ' ':
+                case '^':
                 case '-': // nothing
                     continue;
                 case '#': // error
-                    $events[] = onError($i * 10, $customError ?? new \Exception());
+                    $events[] = onError($now, $customError ?? new \Exception());
                     continue;
-                case '^': // this is the subscribe point
-                    $zero = $i * 10;
+                case '|':
+                    $events[] = onCompleted($now);
                     continue;
-                case '|': //
-                    $events[] = onCompleted($i * 10);
+                case '(':
+                    if ($groupTime !== -1) {
+                        throw new MarbleDiagramError('We\'re already inside a group');
+                    }
+                    $groupTime = $now;
+                    continue;
+                case ')':
+                    if ($groupTime === -1) {
+                        throw new MarbleDiagramError('We\'re already outside of a group');
+                    }
+                    $groupTime = -1;
                     continue;
                 default:
                     $eventKey = $marbles[$i];
-                    $events[] = onNext($i * 10, isset($eventMap[$eventKey]) ? $eventMap[$eventKey] : $marbles[$i]);
+                    $events[] = onNext($now, isset($eventMap[$eventKey]) ? $eventMap[$eventKey] : $marbles[$i]);
                     continue;
-            }
-        }
-
-        if ($subscribePoint != 0) { // zero is cold
-            $oldEvents = $events;
-            $events = [];
-            /** @var Recorded $event */
-            foreach ($oldEvents as $event) {
-                $events[] = new Recorded($event->getTime() + $subscribePoint - $zero, $event->getValue());
             }
         }
 
@@ -185,7 +197,7 @@ abstract class FunctionalTestCase extends TestCase
             $time = $message->getTime();
             /** @var Notification $value */
             $value = $message->getValue();
-            $output .= str_repeat('-', floor(($time - $lastTime - 1) / 10));
+            $output .= str_repeat('-', (int)(($time - $lastTime - 1) / self::TIME_FACTOR));
 
             $lastTime = $time;
 
@@ -209,23 +221,38 @@ abstract class FunctionalTestCase extends TestCase
     {
         $latestSubscription = null;
         $events = [];
+        $groupTime = -1;
 
         for ($i = 0; $i < strlen($marbles); $i++) {
+            $now = $groupTime === -1 ? $startTime + $i * self::TIME_FACTOR : $groupTime++;
+
             switch ($marbles[$i]) {
                 case ' ':
                 case '-':
-                    break;
+                    continue;
+                case '(':
+                    if ($groupTime !== -1) {
+                        throw new MarbleDiagramError('We\'re already inside a group');
+                    }
+                    $groupTime = $now;
+                    continue;
+                case ')':
+                    if ($groupTime === -1) {
+                        throw new MarbleDiagramError('We\'re already outside of a group');
+                    }
+                    $groupTime = -1;
+                    continue;
                 case '^': // subscribe
                     if ($latestSubscription) {
                         throw new MarbleDiagramError('Trying to subscribe before unsubscribing the previous subscription.');
                     }
-                    $latestSubscription = $startTime + $i * 10;
+                    $latestSubscription = $now;
                     continue;
                 case '!': // unsubscribe
                     if (!$latestSubscription) {
                         throw new MarbleDiagramError('Trying to unsubscribe before subscribing.');
                     }
-                    $events[] = new Subscription($latestSubscription, $startTime + $i * 10);
+                    $events[] = new Subscription($latestSubscription, $now);
                     $latestSubscription = null;
                     break;
                 default:

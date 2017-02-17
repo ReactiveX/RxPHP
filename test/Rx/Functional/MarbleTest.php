@@ -2,6 +2,7 @@
 
 namespace Rx\Functional;
 
+use Rx\Exception\Exception;
 use Rx\Testing\Subscription;
 
 class MarbleTest extends FunctionalTestCase
@@ -125,6 +126,69 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
+    public function testGroupedMarbleValues()
+    {
+        $marbles = '---(abc)--|';
+
+        $messages = $this->convertMarblesToMessages($marbles);
+
+        $this->assertMessages([
+            onNext(30, 'a'),
+            onNext(31, 'b'),
+            onNext(32, 'c'),
+            onCompleted(100)
+        ], $messages);
+    }
+
+    public function testMultipleGroupedMarbleValues()
+    {
+        $marbles = '--(abc)---(dfa)--|';
+        $values = [
+            'a' => 42,
+        ];
+
+        $messages = $this->convertMarblesToMessages($marbles, $values);
+
+        $this->assertMessages([
+            onNext(20, 42),
+            onNext(21, 'b'),
+            onNext(22, 'c'),
+            onNext(100, 'd'),
+            onNext(101, 'f'),
+            onNext(102, 42),
+            onCompleted(170)
+        ], $messages);
+    }
+
+    public function testGroupedMarkerAndComplete()
+    {
+        $marbles = '--a---b--(c|)';
+
+        $messages = $this->convertMarblesToMessages($marbles);
+
+        $this->assertMessages([
+            onNext(20, 'a'),
+            onNext(60, 'b'),
+            onNext(90, 'c'),
+            onCompleted(91)
+        ], $messages);
+    }
+
+    public function testGroupedMarkerAndError()
+    {
+        $marbles = '--a---(b#)--c--|';
+
+        $messages = $this->convertMarblesToMessages($marbles);
+
+        $this->assertMessages([
+            onNext(20, 'a'),
+            onNext(60, 'b'),
+            onError(61, new \Exception()),
+            onNext(120, 'c'),
+            onCompleted(150),
+        ], $messages);
+    }
+
     public function testSubscriptions()
     {
         $marbles = '--^-----!---^!--';
@@ -143,6 +207,17 @@ class MarbleTest extends FunctionalTestCase
         $subscriptions = $this->convertMarblesToSubscriptions($marbles);
         $this->assertSubscriptions([
             new Subscription(20),
+        ], $subscriptions);
+    }
+
+    public function testSubscriptionsGroup()
+    {
+        $marbles = '--(^!)';
+
+        $subscriptions = $this->convertMarblesToSubscriptions($marbles);
+
+        $this->assertSubscriptions([
+            new Subscription(20, 21),
         ], $subscriptions);
     }
 
