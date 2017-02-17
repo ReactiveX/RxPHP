@@ -751,16 +751,21 @@ class Observable implements ObservableInterface
      * @param $name
      * @param $arguments
      * @return Observable
-     * 
+     *
      * @demo custom-operator/rot13.php
      */
     public function __call($name, array $arguments)
     {
         $fullNamespace = 'Rx\\Operator\\';
         if ($name[0] === '_') {
-            list($_, $namespace, $methodName) = explode('_', $name);
+            $parts = explode('_', $name);
+            array_shift($parts);
+
+            $methodName = array_pop($parts);
+            $namespace = implode('\\', $parts);
+
             $name = $methodName;
-            $fullNamespace = $namespace . '\\' . $fullNamespace;
+            $fullNamespace = '\\' . $namespace . '\\' . $fullNamespace;
         }
         $className = $fullNamespace . ucfirst($name) . 'Operator';
 
