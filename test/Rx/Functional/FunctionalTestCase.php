@@ -185,7 +185,7 @@ abstract class FunctionalTestCase extends TestCase
             $time = $message->getTime();
             /** @var Notification $value */
             $value = $message->getValue();
-            $output .= str_repeat('-', ($time - $lastTime - 1) / 10);
+            $output .= str_repeat('-', floor(($time - $lastTime - 1) / 10));
 
             $lastTime = $time;
 
