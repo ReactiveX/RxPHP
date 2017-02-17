@@ -2,11 +2,9 @@
 
 namespace Rx\Functional;
 
-use PHPUnit_Framework_ExpectationFailedException;
 use Rx\Notification;
-use Rx\Observable;
-use Rx\Scheduler\VirtualTimeScheduler;
 use Rx\TestCase;
+use Rx\MarbleDiagramError;
 use Rx\Testing\ColdObservable;
 use Rx\Testing\HotObservable;
 use Rx\Testing\Recorded;
@@ -23,6 +21,10 @@ abstract class FunctionalTestCase extends TestCase
         $this->scheduler = $this->createTestScheduler();
     }
 
+    /**
+     * @param Recorded[] $expected
+     * @param Recorded[] $recorded
+     */
     public function assertMessages(array $expected, array $recorded)
     {
         if (count($expected) !== count($recorded)) {
@@ -36,6 +38,27 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         $this->assertTrue(true); // success
+    }
+
+    /**
+     * @param Recorded[] $expected
+     * @param Recorded[] $recorded
+     */
+    public function assertMessagesNotEqual(array $expected, array $recorded)
+    {
+        if (count($expected) !== count($recorded)) {
+            $this->assertTrue(true);
+            return;
+        }
+
+        for ($i = 0, $count = count($expected); $i < $count; $i++) {
+            if (!$expected[$i]->equals($recorded[$i])) {
+                $this->assertTrue(true);
+                return;
+            }
+        }
+
+        $this->fail('Expected messages do match the actual');
     }
 
     public function assertSubscription(HotObservable $observable, Subscription $expected)
@@ -115,13 +138,13 @@ abstract class FunctionalTestCase extends TestCase
 
     protected function convertMarblesToMessages(string $marbles, array $eventMap = [], \Exception $customError = null, $subscribePoint = 0)
     {
-        var_dump($eventMap);
         /** @var Recorded $events */
         $events = [];
         $zero = 0;
 
         for ($i = 0; $i < strlen($marbles); $i++) {
             switch ($marbles[$i]) {
+                case ' ':
                 case '-': // nothing
                     continue;
                 case '#': // error
@@ -134,7 +157,8 @@ abstract class FunctionalTestCase extends TestCase
                     $events[] = onCompleted($i * 10);
                     continue;
                 default:
-                    $events[] = onNext($i * 10, isset($eventMap[$i]) ? $eventMap[$i] : $marbles[$i]);
+                    $eventKey = $marbles[$i];
+                    $events[] = onNext($i * 10, isset($eventMap[$eventKey]) ? $eventMap[$eventKey] : $marbles[$i]);
                     continue;
             }
         }
@@ -179,5 +203,39 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         return $output;
+    }
+
+    protected function convertMarblesToSubscriptions(string $marbles, $startTime = 0)
+    {
+        $latestSubscription = null;
+        $events = [];
+
+        for ($i = 0; $i < strlen($marbles); $i++) {
+            switch ($marbles[$i]) {
+                case ' ':
+                case '-':
+                    break;
+                case '^': // subscribe
+                    if ($latestSubscription) {
+                        throw new MarbleDiagramError('Trying to subscribe before unsubscribing the previous subscription.');
+                    }
+                    $latestSubscription = $startTime + $i * 10;
+                    continue;
+                case '!': // unsubscribe
+                    if (!$latestSubscription) {
+                        throw new MarbleDiagramError('Trying to unsubscribe before subscribing.');
+                    }
+                    $events[] = new Subscription($latestSubscription, $startTime + $i * 10);
+                    $latestSubscription = null;
+                    break;
+                default:
+                    throw new MarbleDiagramError('Only "^" and "!" markers are allowed in this diagram.');
+                    continue;
+            }
+        }
+        if ($latestSubscription) {
+            $events[] = new Subscription($latestSubscription);
+        }
+        return $events;
     }
 }
