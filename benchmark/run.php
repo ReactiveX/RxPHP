@@ -10,6 +10,12 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 
+// Check whether XDebug is enabled
+if (in_array('Xdebug', get_loaded_extensions(true))) {
+    printf("Please, disable Xdebug extension before running RxPHP benchmarks.\n");
+    exit(1);
+}
+
 define('MIN_TOTAL_DURATION', 5);
 $start = microtime(true);
 
