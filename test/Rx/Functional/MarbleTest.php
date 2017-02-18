@@ -247,4 +247,20 @@ class MarbleTest extends FunctionalTestCase
         $marbles = '--^---!-!-';
         $this->convertMarblesToSubscriptions($marbles);
     }
+
+    public function testMapMarble()
+    {
+        $cold     = '--1--2--|';
+        $subs     = '^       !';
+        $expected = '--x--y--|';
+
+        $e1 = $this->createCold($cold);
+
+        $r = $e1->map(function ($x) {
+            return $x + 1;
+        });
+
+        $this->expectObservable($r)->toBe($expected, ['x' => 2, 'y' => 3]);
+        $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
+    }
 }

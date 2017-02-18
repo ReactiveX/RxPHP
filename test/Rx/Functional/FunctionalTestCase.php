@@ -3,6 +3,7 @@
 namespace Rx\Functional;
 
 use Rx\Notification;
+use Rx\Observable;
 use Rx\TestCase;
 use Rx\MarbleDiagramError;
 use Rx\Testing\ColdObservable;
@@ -264,5 +265,56 @@ abstract class FunctionalTestCase extends TestCase
             $events[] = new Subscription($latestSubscription);
         }
         return $events;
+    }
+
+
+    public function expectObservable(Observable $observable): FunctionalTestCase
+    {
+        $results = $this->scheduler->startWithCreate(function () use ($observable) {
+            return $observable;
+        });
+
+        $messages = $results->getMessages();
+
+        return new class($messages) extends FunctionalTestCase
+        {
+            private $messages;
+
+            public function __construct(array $messages)
+            {
+                parent::__construct();
+                $this->messages = $messages;
+            }
+
+            public function toBe(string $expected, array $values = [])
+            {
+                $this->assertEquals(
+                    $this->convertMarblesToMessages($expected, $values, null, 200),
+                    $this->messages
+                );
+            }
+        };
+    }
+
+    public function expectSubscriptions(array $subscriptions): FunctionalTestCase
+    {
+        return new class($subscriptions) extends FunctionalTestCase
+        {
+            private $subscriptions;
+
+            public function __construct(array $subscriptions)
+            {
+                parent::__construct();
+                $this->subscriptions = $subscriptions;
+            }
+
+            public function toBe(string $subscriptionsMarbles)
+            {
+                $this->assertEquals(
+                    $this->convertMarblesToSubscriptions($subscriptionsMarbles, 200),
+                    $this->subscriptions
+                );
+            }
+        };
     }
 }
