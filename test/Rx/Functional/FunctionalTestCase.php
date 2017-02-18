@@ -268,7 +268,7 @@ abstract class FunctionalTestCase extends TestCase
     }
 
 
-    public function expectObservable(Observable $observable): FunctionalTestCase
+    public function expectObservable(Observable $observable)
     {
         $results = $this->scheduler->startWithCreate(function () use ($observable) {
             return $observable;
@@ -286,17 +286,19 @@ abstract class FunctionalTestCase extends TestCase
                 $this->messages = $messages;
             }
 
-            public function toBe(string $expected, array $values = [])
+            public function toBe(string $expected, array $values = [], string $errorMessage = null)
             {
+                $error = $errorMessage ? new \Exception($errorMessage) : null;
+
                 $this->assertEquals(
-                    $this->convertMarblesToMessages($expected, $values, null, 200),
+                    $this->convertMarblesToMessages($expected, $values, $error, 200),
                     $this->messages
                 );
             }
         };
     }
 
-    public function expectSubscriptions(array $subscriptions): FunctionalTestCase
+    public function expectSubscriptions(array $subscriptions)
     {
         return new class($subscriptions) extends FunctionalTestCase
         {
