@@ -267,12 +267,43 @@ abstract class FunctionalTestCase extends TestCase
         return $events;
     }
 
-
-    public function expectObservable(Observable $observable)
+    protected function convertMarblesToDisposeTime(string $marbles, $startTime = 0)
     {
-        $results = $this->scheduler->startWithCreate(function () use ($observable) {
-            return $observable;
-        });
+        $groupTime = -1;
+        $disposeAt = 1000;
+
+        for ($i = 0; $i < strlen($marbles); $i++) {
+            $now = $groupTime === -1 ? $startTime + $i * self::TIME_FACTOR : $groupTime++;
+
+            switch ($marbles[$i]) {
+                case ' ':
+                    continue;
+                case '!': // unsubscribe
+                    $disposeAt = $now;
+                    break;
+                default:
+                    throw new MarbleDiagramError('Only " " and "!" markers are allowed in this diagram.');
+                    continue;
+            }
+        }
+
+        return $disposeAt;
+    }
+
+    public function expectObservable(Observable $observable, string $disposeMarble = null)
+    {
+
+        if ($disposeMarble) {
+            $disposeAt = $this->convertMarblesToDisposeTime($disposeMarble, 200);
+
+            $results = $this->scheduler->startWithDispose(function () use ($observable) {
+                return $observable;
+            }, $disposeAt);
+        } else {
+            $results = $this->scheduler->startWithCreate(function () use ($observable) {
+                return $observable;
+            });
+        }
 
         $messages = $results->getMessages();
 
