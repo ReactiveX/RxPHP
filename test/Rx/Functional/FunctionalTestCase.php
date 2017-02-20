@@ -290,9 +290,8 @@ abstract class FunctionalTestCase extends TestCase
         return $disposeAt;
     }
 
-    public function expectObservable(Observable $observable, string $disposeMarble = null)
+    public function expectObservable(Observable $observable, string $disposeMarble = null): ExpectObservableToBe
     {
-
         if ($disposeMarble) {
             $disposeAt = $this->convertMarblesToDisposeTime($disposeMarble, 200);
 
@@ -307,7 +306,7 @@ abstract class FunctionalTestCase extends TestCase
 
         $messages = $results->getMessages();
 
-        return new class($messages) extends FunctionalTestCase
+        return new class($messages) extends FunctionalTestCase implements ExpectObservableToBe
         {
             private $messages;
 
@@ -329,9 +328,9 @@ abstract class FunctionalTestCase extends TestCase
         };
     }
 
-    public function expectSubscriptions(array $subscriptions)
+    public function expectSubscriptions(array $subscriptions): ExpectSubscriptionsToBe
     {
-        return new class($subscriptions) extends FunctionalTestCase
+        return new class($subscriptions) extends FunctionalTestCase implements ExpectSubscriptionsToBe
         {
             private $subscriptions;
 
@@ -350,4 +349,14 @@ abstract class FunctionalTestCase extends TestCase
             }
         };
     }
+}
+
+interface ExpectSubscriptionsToBe
+{
+    public function toBe(string $subscriptionsMarbles);
+}
+
+interface ExpectObservableToBe
+{
+    public function toBe(string $expected, array $values = [], string $errorMessage = null);
 }
