@@ -222,7 +222,7 @@ class MarbleTest extends FunctionalTestCase
     }
 
     /**
-     * @expectedException \Rx\MarbleDiagramError
+     * @expectedException \Rx\MarbleDiagramException
      */
     public function testSubscriptionsInvalidMarkers()
     {
@@ -231,7 +231,7 @@ class MarbleTest extends FunctionalTestCase
     }
 
     /**
-     * @expectedException \Rx\MarbleDiagramError
+     * @expectedException \Rx\MarbleDiagramException
      */
     public function testSubscriptionsMultipleSubscribeMarkers()
     {
@@ -240,7 +240,7 @@ class MarbleTest extends FunctionalTestCase
     }
 
     /**
-     * @expectedException \Rx\MarbleDiagramError
+     * @expectedException \Rx\MarbleDiagramException
      */
     public function testSubscriptionsMultipleUnsubscribeMarkers()
     {

@@ -5,7 +5,7 @@ namespace Rx\Functional;
 use Rx\Notification;
 use Rx\Observable;
 use Rx\TestCase;
-use Rx\MarbleDiagramError;
+use Rx\MarbleDiagramException;
 use Rx\Testing\ColdObservable;
 use Rx\Testing\HotObservable;
 use Rx\Testing\Recorded;
@@ -168,13 +168,13 @@ abstract class FunctionalTestCase extends TestCase
                     continue;
                 case '(':
                     if ($groupTime !== -1) {
-                        throw new MarbleDiagramError('We\'re already inside a group');
+                        throw new MarbleDiagramException('We\'re already inside a group');
                     }
                     $groupTime = $now;
                     continue;
                 case ')':
                     if ($groupTime === -1) {
-                        throw new MarbleDiagramError('We\'re already outside of a group');
+                        throw new MarbleDiagramException('We\'re already outside of a group');
                     }
                     $groupTime = -1;
                     continue;
@@ -233,31 +233,31 @@ abstract class FunctionalTestCase extends TestCase
                     continue;
                 case '(':
                     if ($groupTime !== -1) {
-                        throw new MarbleDiagramError('We\'re already inside a group');
+                        throw new MarbleDiagramException('We\'re already inside a group');
                     }
                     $groupTime = $now;
                     continue;
                 case ')':
                     if ($groupTime === -1) {
-                        throw new MarbleDiagramError('We\'re already outside of a group');
+                        throw new MarbleDiagramException('We\'re already outside of a group');
                     }
                     $groupTime = -1;
                     continue;
                 case '^': // subscribe
                     if ($latestSubscription) {
-                        throw new MarbleDiagramError('Trying to subscribe before unsubscribing the previous subscription.');
+                        throw new MarbleDiagramException('Trying to subscribe before unsubscribing the previous subscription.');
                     }
                     $latestSubscription = $now;
                     continue;
                 case '!': // unsubscribe
                     if (!$latestSubscription) {
-                        throw new MarbleDiagramError('Trying to unsubscribe before subscribing.');
+                        throw new MarbleDiagramException('Trying to unsubscribe before subscribing.');
                     }
                     $events[] = new Subscription($latestSubscription, $now);
                     $latestSubscription = null;
                     break;
                 default:
-                    throw new MarbleDiagramError('Only "^" and "!" markers are allowed in this diagram.');
+                    throw new MarbleDiagramException('Only "^" and "!" markers are allowed in this diagram.');
                     continue;
             }
         }
@@ -282,7 +282,7 @@ abstract class FunctionalTestCase extends TestCase
                     $disposeAt = $now;
                     break;
                 default:
-                    throw new MarbleDiagramError('Only " " and "!" markers are allowed in this diagram.');
+                    throw new MarbleDiagramException('Only " " and "!" markers are allowed in this diagram.');
                     continue;
             }
         }
