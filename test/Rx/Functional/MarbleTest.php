@@ -134,8 +134,8 @@ class MarbleTest extends FunctionalTestCase
 
         $this->assertMessages([
             onNext(30, 'a'),
-            onNext(31, 'b'),
-            onNext(32, 'c'),
+            onNext(30, 'b'),
+            onNext(30, 'c'),
             onCompleted(100)
         ], $messages);
     }
@@ -151,11 +151,11 @@ class MarbleTest extends FunctionalTestCase
 
         $this->assertMessages([
             onNext(20, 42),
-            onNext(21, 'b'),
-            onNext(22, 'c'),
+            onNext(20, 'b'),
+            onNext(20, 'c'),
             onNext(100, 'd'),
-            onNext(101, 'f'),
-            onNext(102, 42),
+            onNext(100, 'f'),
+            onNext(100, 42),
             onCompleted(170)
         ], $messages);
     }
@@ -170,7 +170,7 @@ class MarbleTest extends FunctionalTestCase
             onNext(20, 'a'),
             onNext(60, 'b'),
             onNext(90, 'c'),
-            onCompleted(91)
+            onCompleted(90)
         ], $messages);
     }
 
@@ -183,7 +183,7 @@ class MarbleTest extends FunctionalTestCase
         $this->assertMessages([
             onNext(20, 'a'),
             onNext(60, 'b'),
-            onError(61, new \Exception()),
+            onError(60, new \Exception()),
             onNext(120, 'c'),
             onCompleted(150),
         ], $messages);
@@ -217,7 +217,7 @@ class MarbleTest extends FunctionalTestCase
         $subscriptions = $this->convertMarblesToSubscriptions($marbles);
 
         $this->assertSubscriptions([
-            new Subscription(20, 21),
+            new Subscription(20, 20),
         ], $subscriptions);
     }
 
@@ -294,6 +294,18 @@ class MarbleTest extends FunctionalTestCase
         });
 
         $this->expectObservable($r, $unsub)->toBe($expected, ['x' => '1!', 'y' => '2!']);
+        $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
+    }
+
+    public function testCountMarble()
+    {
+        $cold     = '--a--b--c--|';
+        $subs     = '^          !';
+        $expected = '-----------(x|)';
+
+        $e1 = $this->createCold($cold);
+
+        $this->expectObservable($e1->count())->toBe($expected, ['x' => 3]);
         $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
     }
 }

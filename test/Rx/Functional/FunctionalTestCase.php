@@ -153,7 +153,7 @@ abstract class FunctionalTestCase extends TestCase
         }
 
         for ($i = 0; $i < strlen($marbles); $i++) {
-            $now = $groupTime === -1 ? $timeOffset + $i * self::TIME_FACTOR : $groupTime++;
+            $now = $groupTime === -1 ? $timeOffset + $i * self::TIME_FACTOR : $groupTime;
 
             switch ($marbles[$i]) {
                 case ' ':
