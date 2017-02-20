@@ -159,29 +159,29 @@ abstract class FunctionalTestCase extends TestCase
                 case ' ':
                 case '^':
                 case '-': // nothing
-                    continue;
+                    continue 2;
                 case '#': // error
                     $events[] = onError($now, $customError ?? new \Exception());
-                    continue;
+                    continue 2;
                 case '|':
                     $events[] = onCompleted($now);
-                    continue;
+                    continue 2;
                 case '(':
                     if ($groupTime !== -1) {
                         throw new MarbleDiagramException('We\'re already inside a group');
                     }
                     $groupTime = $now;
-                    continue;
+                    continue 2;
                 case ')':
                     if ($groupTime === -1) {
                         throw new MarbleDiagramException('We\'re already outside of a group');
                     }
                     $groupTime = -1;
-                    continue;
+                    continue 2;
                 default:
                     $eventKey = $marbles[$i];
                     $events[] = onNext($now, isset($eventMap[$eventKey]) ? $eventMap[$eventKey] : $marbles[$i]);
-                    continue;
+                    continue 2;
             }
         }
 
@@ -230,25 +230,25 @@ abstract class FunctionalTestCase extends TestCase
             switch ($marbles[$i]) {
                 case ' ':
                 case '-':
-                    continue;
+                    continue 2;
                 case '(':
                     if ($groupTime !== -1) {
                         throw new MarbleDiagramException('We\'re already inside a group');
                     }
                     $groupTime = $now;
-                    continue;
+                    continue 2;
                 case ')':
                     if ($groupTime === -1) {
                         throw new MarbleDiagramException('We\'re already outside of a group');
                     }
                     $groupTime = -1;
-                    continue;
+                    continue 2;
                 case '^': // subscribe
                     if ($latestSubscription) {
                         throw new MarbleDiagramException('Trying to subscribe before unsubscribing the previous subscription.');
                     }
                     $latestSubscription = $now;
-                    continue;
+                    continue 2;
                 case '!': // unsubscribe
                     if (!$latestSubscription) {
                         throw new MarbleDiagramException('Trying to unsubscribe before subscribing.');
@@ -258,7 +258,6 @@ abstract class FunctionalTestCase extends TestCase
                     break;
                 default:
                     throw new MarbleDiagramException('Only "^" and "!" markers are allowed in this diagram.');
-                    continue;
             }
         }
         if ($latestSubscription) {
@@ -277,13 +276,12 @@ abstract class FunctionalTestCase extends TestCase
 
             switch ($marbles[$i]) {
                 case ' ':
-                    continue;
+                    continue 2;
                 case '!': // unsubscribe
                     $disposeAt = $now;
                     break;
                 default:
                     throw new MarbleDiagramException('Only " " and "!" markers are allowed in this diagram.');
-                    continue;
             }
         }
 
