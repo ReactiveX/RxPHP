@@ -225,7 +225,7 @@ abstract class FunctionalTestCase extends TestCase
         $groupTime = -1;
 
         for ($i = 0; $i < strlen($marbles); $i++) {
-            $now = $groupTime === -1 ? $startTime + $i * self::TIME_FACTOR : $groupTime++;
+            $now = $groupTime === -1 ? $startTime + $i * self::TIME_FACTOR : $groupTime;
 
             switch ($marbles[$i]) {
                 case ' ':
