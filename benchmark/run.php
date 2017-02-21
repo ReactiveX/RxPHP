@@ -28,7 +28,7 @@ if ($_SERVER['argc'] === 1) {
             $files = array_merge($files, glob($fileOrDir . '/*.php'));
         } else {
             // Force absolute path
-            $files[] = $file[0] === DIRECTORY_SEPARATOR ? $file : $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $file;
+            $files[] = $fileOrDir[0] === DIRECTORY_SEPARATOR ? $fileOrDir : $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $fileOrDir;
         }
     }
 }
@@ -37,7 +37,7 @@ if ($_SERVER['argc'] === 1) {
 Observable::just($files)
     ->doOnNext(function(array $files) {
         printf("Benchmarking %d file/s (min %ds each)\n", count($files), MIN_TOTAL_DURATION);
-        printf("script_name - total_runs (single_run_mean ±standard_deviation)\n");
+        printf("script_name - total_runs (single_run_mean ±standard_deviation) - mem_start [mem_100_iter] mem_end\n");
         printf("==============================================================\n");
     })
     ->concatMap(function($files) { // Flatten the array
@@ -63,6 +63,8 @@ Observable::just($files)
             throw new Exception("Unable to load file \"$file\"");
         }
 
+        $memoryUsage = [memory_get_usage()];
+
         while ($totalDuration < MIN_TOTAL_DURATION) {
             $start = microtime(true);
 
@@ -72,13 +74,20 @@ Observable::just($files)
 
             $durations[] = $duration * 1000;
             $totalDuration += $duration;
+
+            if (count($durations) === 100) {
+                $memoryUsage[] = memory_get_usage();
+            }
         }
+
+        $memoryUsage[] = memory_get_usage();
 
         ob_end_clean();
 
         return [
             'file' => $file,
             'durations' => $durations,
+            'memory_usage' => $memoryUsage,
         ];
     })
     ->doOnNext(function(array $result) { // Print the number of successful runs
@@ -94,13 +103,18 @@ Observable::just($files)
 
         return [
             'file' => $result['file'],
+            'memory_usage' => $result['memory_usage'],
             'mean' => $mean,
             'standard_deviation' => pow($variance / $count, 0.5),
         ];
     })
     ->subscribe(new CallbackObserver(
         function(array $result) {
-            printf(" (%.2fms ±%.2fms)\n", $result['mean'], $result['standard_deviation']);
+            printf(" (%.2fms ±%.2fms) - ", $result['mean'], $result['standard_deviation']);
+            foreach ($result['memory_usage'] as $memory) {
+                printf("%.2fMB ", $memory / pow(10, 6));
+            }
+            printf("\n");
         },
         function(\Exception $error) {
             printf("\nError: %s\n", $error->getMessage());
