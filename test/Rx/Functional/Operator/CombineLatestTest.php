@@ -5,12 +5,9 @@ declare(strict_types = 1);
 
 namespace Rx\Functional\Operator;
 
-use Interop\Async\Loop;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observable\NeverObservable;
-use Rx\Observer\CallbackObserver;
-use Rx\Scheduler\EventLoopScheduler;
 
 class CombineLatestTest extends FunctionalTestCase
 {

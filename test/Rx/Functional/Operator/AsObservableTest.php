@@ -6,13 +6,11 @@ declare(strict_types = 1);
 namespace Rx\Functional\Operator;
 
 use Exception;
-use Interop\Async\Loop;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable;
 use Rx\Observable\EmptyObservable;
-use Rx\Observer\CallbackObserver;
 
 class AsObservableTest extends FunctionalTestCase
 {

@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Rx\Functional\Promise;
 
 use Exception;
-use Interop\Async\Loop;
 use Interop\Async\Promise\ErrorHandler;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;

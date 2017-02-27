@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Rx\Scheduler;
 
-use Interop\Async\Loop;
 use React\EventLoop\Factory;
 use Rx\TestCase;
 
