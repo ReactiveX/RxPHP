@@ -22,3 +22,5 @@ if (file_exists($file = __DIR__ . '/../vendor/autoload.php')) {
  * For testing we need to block at `subscribe`, so we need to switch the default to the ImmediateScheduler.
  */
 \Rx\Scheduler::setDefault(new \Rx\Scheduler\ImmediateScheduler());
+
+require 'loop-auto-start.php';

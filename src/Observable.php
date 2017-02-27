@@ -1070,14 +1070,14 @@ abstract class Observable implements ObservableInterface
      * Returns an observable sequence that produces a value after dueTime has elapsed.
      *
      * @param integer $dueTime - milliseconds
-     * @param SchedulerInterface $scheduler
+     * @param AsyncSchedulerInterface $scheduler
      * @return TimerObservable
      *
      * @demo timer/timer.php
      * @operator
      * @reactivex timer
      */
-    public static function timer(int $dueTime, SchedulerInterface $scheduler = null): TimerObservable
+    public static function timer(int $dueTime, AsyncSchedulerInterface $scheduler = null): TimerObservable
     {
         return new TimerObservable($dueTime, $scheduler ?: Scheduler::getAsync());
     }
@@ -1561,14 +1561,14 @@ abstract class Observable implements ObservableInterface
      *
      * @param $timeout
      * @param ObservableInterface $timeoutObservable
-     * @param SchedulerInterface $scheduler
+     * @param AsyncSchedulerInterface $scheduler
      * @return Observable
      *
      * @demo timeout/timeout.php
      * @operator
      * @reactivex timeout
      */
-    public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, SchedulerInterface $scheduler = null): Observable
+    public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, AsyncSchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
             return new TimeoutOperator($timeout, $timeoutObservable, $scheduler ?: Scheduler::getAsync());

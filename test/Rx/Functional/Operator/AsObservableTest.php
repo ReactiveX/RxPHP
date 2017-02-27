@@ -134,22 +134,4 @@ class AsObservableTest extends FunctionalTestCase
 
         $this->assertTrue($subscribed);
     }
-
-    public function testAsObservablePassThroughScheduler()
-    {
-        $gotValue = false;
-        Observable::interval(10)
-            ->asObservable()
-            ->take(1)
-            ->subscribe(new CallbackObserver(
-                function ($x) use (&$gotValue) {
-                    $this->assertEquals(0, $x);
-                    $gotValue = true;
-                }
-            ));
-
-        Loop::get()->run();
-
-        $this->assertTrue($gotValue);
-    }
 }

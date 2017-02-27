@@ -2,8 +2,13 @@
 
 declare(strict_types = 1);
 
-use Interop\Async\Loop;
+use React\EventLoop\Factory;
+use Rx\Scheduler;
 
-register_shutdown_function(function () {
-    Loop::execute(function () {}, Loop::get());
+$loop      = Factory::create();
+$scheduler = new Scheduler\EventLoopScheduler($loop);
+Scheduler::setAsync($scheduler);
+
+register_shutdown_function(function () use ($loop) {
+    $loop->run();
 });

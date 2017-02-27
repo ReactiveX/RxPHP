@@ -26,7 +26,11 @@ class SchedulerTest extends TestCase
         $this->resetStaticScheduler();
     }
 
-    public function testGetDefaultConstructsEventLoopScheduler()
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please set a default scheduler (for react: Scheduler::setDefault(new EventLoopScheduler($loop));
+     */
+    public function testGetDefaultThrowsIfNotSet()
     {
         $scheduler = Scheduler::getDefault();
 
@@ -63,11 +67,13 @@ class SchedulerTest extends TestCase
     /**
      * @expectedException \Exception
      */
-    public function testSetDefaultTwiceThrowsException()
+    public function testSetDefaultAfterDefaultStartThrowsException()
     {
         $scheduler = new TestScheduler();
 
         Scheduler::setDefault($scheduler);
+
+        $scheduler->start();
 
         $scheduler2 = new TestScheduler();
         
@@ -100,5 +106,23 @@ class SchedulerTest extends TestCase
         $scheduler2 = new ImmediateScheduler();
 
         Scheduler::setImmediate($scheduler2);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Please set an async scheduler (for react: Scheduler::setAsync(new EventLoopScheduler($loop));
+     */
+    public function testGetAsyncBeforeSet()
+    {
+        Scheduler::getAsync();
+    }
+
+    public function testGetAsyncAfterSettingDefaultToAsync()
+    {
+        $asyncScheduler = new EventLoopScheduler(function () {});
+
+        Scheduler::setDefault($asyncScheduler);
+
+        $this->assertSame($asyncScheduler, Scheduler::getAsync());
     }
 }

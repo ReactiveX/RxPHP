@@ -9,6 +9,9 @@
  * file that was distributed with this source code.
  */
 
+use React\EventLoop\Factory;
+use Rx\Scheduler;
+
 if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
     $autoload = require_once $file;
     $autoload->addPsr4('Vendor\\Rx\\Operator\\', __DIR__ . '/custom-operator');
@@ -33,5 +36,10 @@ $createStdoutObserver = function ($prefix = '') {
     );
 };
 
-
 $stdoutObserver = $createStdoutObserver();
+
+$loop = Factory::create();
+Scheduler::setDefault(new Scheduler\EventLoopScheduler($loop));
+register_shutdown_function(function () use ($loop) {
+    $loop->run();
+});

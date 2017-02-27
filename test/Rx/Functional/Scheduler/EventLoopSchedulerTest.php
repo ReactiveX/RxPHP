@@ -5,9 +5,11 @@ declare(strict_types = 1);
 namespace Rx\Functional\Scheduler;
 
 use Interop\Async\Loop;
+use React\EventLoop\Factory;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
+use Rx\Scheduler\EventLoopScheduler;
 
 class EventLoopSchedulerTest extends FunctionalTestCase
 {
@@ -16,7 +18,9 @@ class EventLoopSchedulerTest extends FunctionalTestCase
         $completed = false;
         $nextCount = 0;
 
-        Observable::interval(50)
+        $loop = Factory::create();
+
+        Observable::interval(50, new EventLoopScheduler($loop))
             ->take(1)
             ->subscribe(new CallbackObserver(
                 function ($x) use (&$nextCount) {
@@ -30,7 +34,7 @@ class EventLoopSchedulerTest extends FunctionalTestCase
                 }
             ));
 
-        Loop::get()->run();
+        $loop->run();
 
         $this->assertTrue($completed);
         $this->assertEquals(1, $nextCount);
