@@ -141,14 +141,14 @@ abstract class Observable implements ObservableInterface
      * Returns an Observable that emits an infinite sequence of ascending integers starting at 0, with a constant interval of time of your choosing between emissions.
      *
      * @param $interval int Period for producing the values in the resulting sequence (specified as an integer denoting milliseconds).
-     * @param SchedulerInterface|null $scheduler
+     * @param null|AsyncSchedulerInterface|SchedulerInterface $scheduler
      * @return IntervalObservable An observable sequence that produces a value after each period.
      *
      * @demo interval/interval.php
      * @operator
      * @reactivex interval
      */
-    public static function interval(int $interval, $scheduler = null): IntervalObservable
+    public static function interval(int $interval, AsyncSchedulerInterface $scheduler = null): IntervalObservable
     {
         return new IntervalObservable($interval, $scheduler ?: Scheduler::getAsync());
     }
@@ -1541,14 +1541,14 @@ abstract class Observable implements ObservableInterface
      * Time shifts the observable sequence by dueTime. The relative time intervals between the values are preserved.
      *
      * @param $delay
-     * @param SchedulerInterface|null $scheduler
+     * @param AsyncSchedulerInterface|null $scheduler
      * @return Observable
      *
      * @demo delay/delay.php
      * @operator
      * @reactivex delay
      */
-    public function delay(int $delay, SchedulerInterface $scheduler = null): Observable
+    public function delay(int $delay, AsyncSchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($delay, $scheduler) {
             return new DelayOperator($delay, $scheduler ?: Scheduler::getAsync());
