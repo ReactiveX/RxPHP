@@ -2,30 +2,16 @@
 
 namespace Rx\Scheduler;
 
-use React\EventLoop\LoopInterface;
+use Interop\Async\Loop;
 
 final class EventLoopScheduler extends VirtualTimeScheduler
 {
-    /** @var callable */
-    private $timerCallable;
-
     private $nextTimer = PHP_INT_MAX;
-    
+
     private $insideInvoke = false;
 
-    /**
-     * NewEventLoopScheduler constructor.
-     * @param callable|LoopInterface $timerCallableOrLoop
-     */
-    public function __construct($timerCallableOrLoop)
+    public function __construct()
     {
-        // passing a loop directly into the scheduler will be deprecated in the next major release
-        $this->timerCallable = $timerCallableOrLoop instanceof LoopInterface ?
-            function ($ms, $callable) use ($timerCallableOrLoop) {
-                $timerCallableOrLoop->addTimer($ms / 1000, $callable);
-            } :
-            $timerCallableOrLoop;
-
         parent::__construct($this->now(), function ($a, $b) {
             return $a - $b;
         });
@@ -34,11 +20,11 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     public function scheduleAbsoluteWithState($state, $dueTime, callable $action)
     {
         $disp = parent::scheduleAbsoluteWithState($state, $dueTime, $action);
-        
+
         if (!$this->insideInvoke) {
-            call_user_func($this->timerCallable, 0, [$this, 'start']);
+            Loop::delay(0, [$this, 'start']);
         }
-        
+
         return $disp;
     }
 
@@ -52,8 +38,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
             if ($next !== null) {
                 if ($next->getDueTime() > $this->clock) {
                     $this->nextTimer = $next->getDueTime();
-                    $timerCallable   = $this->timerCallable;
-                    $timerCallable($this->nextTimer - $this->clock, [$this, "start"]);
+                    Loop::delay($this->nextTimer - $this->clock, [$this, "start"]);
                     break;
                 }
 
