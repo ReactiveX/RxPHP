@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Observable;
 
 use Rx\Disposable\BinaryDisposable;
@@ -39,15 +41,7 @@ class RefCountObservable extends Observable
             $this->connectableSubscription = $this->source->connect();
         }
 
-        $isDisposed = false;
-
-        return new CallbackDisposable(function () use ($subscription, &$isDisposed) {
-            if ($isDisposed) {
-                return;
-            }
-
-            $isDisposed = true;
-
+        return new CallbackDisposable(function () use ($subscription) {
             $subscription->dispose();
 
             $this->count--;

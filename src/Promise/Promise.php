@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Promise;
 
 use Interop\Async\Promise as InteropPromise;

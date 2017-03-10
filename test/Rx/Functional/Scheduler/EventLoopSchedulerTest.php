@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Functional\Scheduler;
 
 use Interop\Async\Loop;

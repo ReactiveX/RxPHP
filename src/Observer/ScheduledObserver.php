@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Observer;
 
 use Rx\Disposable\SerialDisposable;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx;
 
 use Interop\Async\Promise;
@@ -1890,6 +1892,11 @@ abstract class Observable implements ObservableInterface
      */
     public function pluck($property): Observable
     {
+        $args = func_get_args();
+        if (count($args) > 1) {
+            return call_user_func_array([$this->pluck(array_shift($args)), 'pluck'], $args);
+        }
+
         return $this->map(function ($x) use ($property) {
             if (is_array($x) && isset($x[$property])) {
                 return $x[$property];
@@ -1981,5 +1988,18 @@ abstract class Observable implements ObservableInterface
     public function toPromise(): Promise
     {
         return new RxPromise($this);
+    }
+
+    /**
+     * Will apply given function to the source observable.
+     *
+     * @param callable $compose function that applies operators to source observable. Must return observable.
+     * @return Observable
+     *
+     * @demo compose/compose.php
+     */
+    public function compose(callable $compose): Observable
+    {
+        return $compose($this);
     }
 }

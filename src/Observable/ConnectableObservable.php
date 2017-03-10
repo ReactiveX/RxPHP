@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Observable;
 
 use Rx\Disposable\BinaryDisposable;
@@ -52,13 +54,7 @@ class ConnectableObservable extends Observable
 
         $this->hasSubscription = true;
 
-        $isDisposed = false;
-
-        $connectableDisposable = new CallbackDisposable(function () use (&$isDisposed) {
-            if ($isDisposed) {
-                return;
-            }
-            $isDisposed            = true;
+        $connectableDisposable = new CallbackDisposable(function () {
             $this->hasSubscription = false;
         });
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace CustomOperatorTest\Rx\Operator;
 
 use Rx\DisposableInterface;

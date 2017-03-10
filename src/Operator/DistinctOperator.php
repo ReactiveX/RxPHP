@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Operator;
 
 use Rx\Disposable\EmptyDisposable;
@@ -20,13 +22,8 @@ final class DistinctOperator implements OperatorInterface
 
     public function __construct(callable $keySelector = null, callable $comparer = null)
     {
-
-        $this->comparer = $comparer ?: function ($x, $y) {
-            return $x == $y;
-        };
-
+        $this->comparer = $comparer;
         $this->keySelector = $keySelector;
-
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -39,15 +36,22 @@ final class DistinctOperator implements OperatorInterface
                 try {
                     $key = $this->keySelector ? ($this->keySelector)($value) : $value;
 
-                    foreach ($values as $v) {
-                        $comparerEquals = ($this->comparer)($key, $v);
+                    if ($this->comparer) {
+                        foreach ($values as $v) {
+                            $comparerEquals = call_user_func($this->comparer, $key, $v);
 
-                        if ($comparerEquals) {
+                            if ($comparerEquals) {
+                                return;
+                            }
+                        }
+                        $values[] = $key;
+                    } else {
+                        if (array_key_exists($key, $values)) {
                             return;
                         }
+                        $values[$key] = null;
                     }
 
-                    $values[] = $key;
                     $observer->onNext($value);
 
                 } catch (\Throwable $e) {

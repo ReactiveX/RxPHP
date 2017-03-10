@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
@@ -349,6 +351,45 @@ class DistinctTest extends FunctionalTestCase
 
         $this->assertSubscriptions([
             subscribe(200, 380)
+        ], $xs->getSubscriptions());
+
+    }
+
+    /**
+     * @test
+     */
+    public function distinct_CustomKey_and_CustomComparer_some_duplicates()
+    {
+
+        $xs = $this->createHotObservable([
+            onNext(280, ['id' => 4]),
+            onNext(300, ['id' => 2]),
+            onNext(350, ['id' => 12]),
+            onNext(380, ['id' => 3]),
+            onNext(400, ['id' => 24]),
+            onCompleted(420)
+        ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->distinctKey(
+                function ($x) {
+                    return $x['id'];
+                },
+                $this->modComparer(10)
+            )->map(function ($x) {
+                return $x['id'];
+            });
+        });
+
+        $this->assertMessages([
+            onNext(280, 4),
+            onNext(300, 2),
+            onNext(380, 3),
+            onCompleted(420)
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 420)
         ], $xs->getSubscriptions());
 
     }

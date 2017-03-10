@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Rx\Subject;
 
 use Rx\Disposable\EmptyDisposable;
