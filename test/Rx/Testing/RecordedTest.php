@@ -46,8 +46,30 @@ class RecordedTest extends FunctionalTestCase
             onCompleted(300),
         ]));
 
-        $this->assertTrue($records1->equals($records2));
         $this->assertMessages([$records1], [$records2]);
+        $this->assertTrue($records1->equals($records2));
+    }
+
+    /**
+     * @test
+     */
+    public function compare_cold_observables_not_equal()
+    {
+        $records1 = onNext(100, $this->createColdObservable([
+            onNext(150, 1),
+            onNext(200, 42), // this is wrong
+            onNext(250, 3),
+            onCompleted(300),
+        ]));
+        $records2 = onNext(100, $this->createColdObservable([
+            onNext(150, 1),
+            onNext(200, 2),
+            onNext(250, 3),
+            onCompleted(300),
+        ]));
+
+        $this->assertMessagesNotEqual([$records1], [$records2]);
+        $this->assertFalse($records1->equals($records2));
     }
 
     /**
@@ -73,8 +95,8 @@ class RecordedTest extends FunctionalTestCase
             onCompleted(300),
         ]));
 
-        $this->assertTrue($records->equals($expected));
         $this->assertMessages([$records], [$expected]);
+        $this->assertTrue($records->equals($expected));
 
         $this->assertSubscriptions([], $inner->getSubscriptions());
     }
@@ -84,7 +106,7 @@ class RecordedTest extends FunctionalTestCase
      */
     public function compare_with_range_cold_observable()
     {
-        $records1 = onNext(100, Observable::range(1, 3));
+        $records1 = onNext(100, Observable::range(1, 3, $this->scheduler));
         $records2 = onNext(100, $this->createColdObservable([
             onNext(1, 1),
             onNext(2, 2),
@@ -105,7 +127,7 @@ class RecordedTest extends FunctionalTestCase
             onNext(100, 2),
             onNext(150, 3),
             onCompleted(200)
-        ])->delay(100));
+        ])->delay(100, $this->scheduler));
 
         $records2 = onNext(100, $this->createColdObservable([
             onNext(150, 1),
@@ -131,6 +153,8 @@ class RecordedTest extends FunctionalTestCase
             onNext(100, 2),
         ]));
 
+        $this->scheduler->start();
+
         $this->assertFalse($records1->equals($records2));
         $this->assertEquals('[OnNext(1)@50, OnNext(2)@100]@50', $records1->__toString());
     }
@@ -148,6 +172,8 @@ class RecordedTest extends FunctionalTestCase
             onNext(50, 1),
             onNext(100, 2),
         ]));
+
+        $this->scheduler->start();
 
         $this->assertFalse($records1->equals($records2));
         $this->assertEquals('[OnNext(1)@50, OnNext(2)@150]@100', $records1->__toString());
@@ -168,7 +194,7 @@ class RecordedTest extends FunctionalTestCase
                     onNext(10, 5),
                     onNext(20, 6),
                 ])),
-            ])->delay(100)),
+            ])->delay(100, $this->scheduler)),
         ]));
         $records2 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
@@ -183,8 +209,8 @@ class RecordedTest extends FunctionalTestCase
             ])),
         ]));
 
-        $this->assertTrue($records1->equals($records2));
         $this->assertMessages([$records1], [$records2]);
+        $this->assertTrue($records1->equals($records2));
     }
 
     /**
@@ -202,7 +228,7 @@ class RecordedTest extends FunctionalTestCase
                     onNext(10, 5),
                     onNext(20, 6),
                 ])),
-            ])->delay(100)),
+            ])->delay(100, $this->scheduler)),
         ]));
         $records2 = onNext(100, $this->createColdObservable([
             onNext(50, 1),
@@ -217,6 +243,7 @@ class RecordedTest extends FunctionalTestCase
             ])),
         ]));
 
+        $this->scheduler->start();
         $this->assertFalse($records1->equals($records2));
     }
 

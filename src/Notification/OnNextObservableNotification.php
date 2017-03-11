@@ -3,6 +3,8 @@
 namespace Rx\Notification;
 
 use Rx\Observable;
+use Rx\Testing\ColdObservable;
+use Rx\Testing\HotObservable;
 use Rx\Testing\MockHigherOrderObserver;
 use Rx\Testing\TestScheduler;
 
@@ -11,18 +13,12 @@ class OnNextObservableNotification extends OnNextNotification
     /** @var MockHigherOrderObserver */
     private $observer;
 
-    public function __construct(Observable $value, TestScheduler $scheduler = null)
+    public function __construct(Observable $value, TestScheduler $scheduler)
     {
         parent::__construct($value);
-        if (!$scheduler) {
-            $scheduler = new TestScheduler();
-        }
 
         $this->observer = new MockHigherOrderObserver($scheduler, $scheduler->getClock());
-
         $value->subscribe($this->observer);
-
-        $scheduler->start();
     }
 
     public function equals($other): bool

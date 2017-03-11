@@ -5,6 +5,7 @@ declare(strict_types = 1);
 use Rx\Observable;
 use Rx\Testing\Recorded;
 use Rx\Testing\Subscription;
+use Rx\Functional\FunctionalTestCase;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
@@ -19,7 +20,7 @@ function onNext(int $dueTime, $value, callable $comparer = null)
 {
     if ($value instanceof Observable) {
         try {
-            $notification = new OnNextObservableNotification($value);
+            $notification = new OnNextObservableNotification($value, FunctionalTestCase::getScheduler());
         } catch (Throwable $e) {
             $notification = new OnErrorNotification($e);
         }
