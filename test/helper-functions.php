@@ -10,7 +10,6 @@ use Rx\Functional\FunctionalTestCase;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
-use Rx\Timestamped;
 
 function onError(int $dueTime, $error, callable $comparer = null)
 {
