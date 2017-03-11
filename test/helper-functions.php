@@ -9,7 +9,7 @@ use Rx\Functional\FunctionalTestCase;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
-use Rx\Notification\OnNextObservableNotification;
+use Rx\Timestamped;
 
 function onError(int $dueTime, $error, callable $comparer = null)
 {
@@ -18,16 +18,7 @@ function onError(int $dueTime, $error, callable $comparer = null)
 
 function onNext(int $dueTime, $value, callable $comparer = null)
 {
-    if ($value instanceof Observable) {
-        try {
-            $notification = new OnNextObservableNotification($value, FunctionalTestCase::getScheduler());
-        } catch (Throwable $e) {
-            $notification = new OnErrorNotification($e);
-        }
-    } else {
-        $notification = new OnNextNotification($value);
-    }
-    return new Recorded($dueTime, $notification, $comparer);
+    return new Recorded($dueTime, new OnNextNotification($value), $comparer);
 }
 
 function onCompleted(int $dueTime, callable $comparer = null)
@@ -43,4 +34,24 @@ function subscribe(int $start, int $end = PHP_INT_MAX)
 function RxIdentity($x)
 {
     return $x;
+}
+
+function materializeObservable(Observable $observable): array
+{
+    $messages  = [];
+    $startTime = FunctionalTestCase::getScheduler()->getClock();
+
+    $sub = $observable
+        ->materialize()
+        ->timestamp(FunctionalTestCase::getScheduler())
+        ->subscribe(
+            function (Timestamped $ts) use (&$messages, $startTime) {
+                $messages[] = new Recorded($ts->getTimestampMillis() - $startTime, $ts->getValue());
+            });
+
+    FunctionalTestCase::getScheduler()->start();
+
+    $sub->dispose();
+
+    return $messages;
 }

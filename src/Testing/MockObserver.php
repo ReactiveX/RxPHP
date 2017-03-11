@@ -7,8 +7,6 @@ namespace Rx\Testing;
 use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
-use Rx\Notification\OnNextObservableNotification;
-use Rx\Observable;
 use Rx\ObserverInterface;
 
 /**
@@ -28,15 +26,9 @@ class MockObserver implements ObserverInterface
 
     public function onNext($value)
     {
-        if ($value instanceof Observable) {
-            $notification = new OnNextObservableNotification($value, $this->scheduler);
-        } else {
-            $notification = new OnNextNotification($value);
-        }
-
         $this->messages[] = new Recorded(
             $this->scheduler->getClock() - $this->startTime,
-            $notification
+            new OnNextNotification($value)
         );
     }
 
