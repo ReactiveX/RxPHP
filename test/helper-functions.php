@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use Rx\Observable;
+use Rx\Testing\MockObserver;
 use Rx\Testing\Recorded;
 use Rx\Testing\Subscription;
 use Rx\Functional\FunctionalTestCase;
@@ -38,20 +39,15 @@ function RxIdentity($x)
 
 function materializeObservable(Observable $observable): array
 {
-    $messages  = [];
     $startTime = FunctionalTestCase::getScheduler()->getClock();
 
-    $sub = $observable
-        ->materialize()
-        ->timestamp(FunctionalTestCase::getScheduler())
-        ->subscribe(
-            function (Timestamped $ts) use (&$messages, $startTime) {
-                $messages[] = new Recorded($ts->getTimestampMillis() - $startTime, $ts->getValue());
-            });
+    $observer = new MockObserver(FunctionalTestCase::getScheduler(), $startTime);
+
+    $sub = $observable->subscribe($observer);
 
     FunctionalTestCase::getScheduler()->start();
 
     $sub->dispose();
 
-    return $messages;
+    return $observer->getMessages();
 }
