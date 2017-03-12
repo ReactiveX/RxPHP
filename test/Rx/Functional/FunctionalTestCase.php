@@ -328,7 +328,7 @@ abstract class FunctionalTestCase extends TestCase
             {
                 $error = $errorMessage ? new \Exception($errorMessage) : null;
 
-                $this->assertEquals(
+                $this->assertMessages(
                     $this->convertMarblesToMessages($expected, $values, $error, 200),
                     $this->messages
                 );
@@ -350,7 +350,7 @@ abstract class FunctionalTestCase extends TestCase
 
             public function toBe(string $subscriptionsMarbles)
             {
-                $this->assertEquals(
+                $this->assertMessages(
                     $this->convertMarblesToSubscriptions($subscriptionsMarbles, 200),
                     $this->subscriptions
                 );
