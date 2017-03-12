@@ -75,35 +75,6 @@ class RecordedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function automatic_mock_observer_doesnt_create_loggable_subscription()
-    {
-        $inner = $this->createColdObservable([
-            onNext(150, 1),
-            onNext(200, 2),
-            onNext(250, 3),
-            onCompleted(300),
-        ]);
-        // Thanks to OnNextObservableNotification this internally creates
-        // an instance of MockHigherOrderObserver which is not logged
-        // by the ColdObservable::subscribe() method.
-        $records = onNext(100, $inner);
-
-        $expected = onNext(100, $this->createColdObservable([
-            onNext(150, 1),
-            onNext(200, 2),
-            onNext(250, 3),
-            onCompleted(300),
-        ]));
-
-        $this->assertMessages([$records], [$expected]);
-        $this->assertTrue($records->equals($expected));
-
-        $this->assertSubscriptions([], $inner->getSubscriptions());
-    }
-
-    /**
-     * @test
-     */
     public function compare_with_range_cold_observable()
     {
         $records1 = onNext(100, Observable::range(1, 3, $this->scheduler));
@@ -153,8 +124,6 @@ class RecordedTest extends FunctionalTestCase
             onNext(100, 2),
         ]));
 
-        $this->scheduler->start();
-
         $this->assertFalse($records1->equals($records2));
         $this->assertEquals('[OnNext(1)@50, OnNext(2)@100]@50', $records1->__toString());
     }
@@ -172,8 +141,6 @@ class RecordedTest extends FunctionalTestCase
             onNext(50, 1),
             onNext(100, 2),
         ]));
-
-        $this->scheduler->start();
 
         $this->assertFalse($records1->equals($records2));
         $this->assertEquals('[OnNext(1)@50, OnNext(2)@150]@100', $records1->__toString());

@@ -40,8 +40,6 @@ abstract class FunctionalTestCase extends TestCase
      */
     public function assertMessages(array $expected, array $recorded)
     {
-        $this->scheduler->start();
-
         if (count($expected) !== count($recorded)) {
             $this->fail(sprintf('Expected message count %d does not match actual count %d.', count($expected), count($recorded)));
         }
@@ -61,8 +59,6 @@ abstract class FunctionalTestCase extends TestCase
      */
     public function assertMessagesNotEqual(array $expected, array $recorded)
     {
-        $this->scheduler->start();
-
         if (count($expected) !== count($recorded)) {
             $this->assertTrue(true);
             return;
@@ -80,8 +76,6 @@ abstract class FunctionalTestCase extends TestCase
 
     public function assertSubscription(HotObservable $observable, Subscription $expected)
     {
-        $this->scheduler->start();
-
         $subscriptionCount = count($observable->getSubscriptions());
 
         if ($subscriptionCount === 0) {
@@ -103,8 +97,6 @@ abstract class FunctionalTestCase extends TestCase
 
     public function assertSubscriptions(array $expected, array $recorded)
     {
-        $this->scheduler->start();
-
         if (count($expected) !== count($recorded)) {
             $this->fail(sprintf('Expected subscription count %d does not match actual count %d.', count($expected), count($recorded)));
         }
