@@ -46,22 +46,13 @@ $ php demo/interval/interval.php
 
 Have fun running the demos in `/demo`.
 
-note:  The demos are automatically run within `Loop::execute`.  When using RxPHP within your own project, you'll need to install a [loop implementation](https://packagist.org/providers/async-interop/event-loop-implementation).  
+note:  When running the demos, the scheduler is automatically bootstrapped.  When using RxPHP within your own project, you'll need to set the default scheduler; 
 
 ## Installation
-1. Install one [async-interop event loop](https://packagist.org/providers/async-interop/event-loop-implementation) implementation.
+1. Install an event loop.  Any event loop should work, but the ReactPHP event loop is recommended.
 
-With ReactPHP:
 ```bash
-$ composer require wyrihaximus/react-async-interop-loop
-```
-With amphp:
-```bash
-$ composer require amphp/loop:dev-master
-```
-With KoolKode:
-```bash
-$ composer require koolkode/async
+$ composer require react/event-loop
 ```
 
 2. Install RxPHP using [composer](https://getcomposer.org).
@@ -70,7 +61,7 @@ $ composer require koolkode/async
 $ composer require reactivex/rxphp:2.x-dev
 ```
 
-3. Write some code
+3. Write some code.
 
 ```PHP
 <?php
@@ -78,20 +69,26 @@ $ composer require reactivex/rxphp:2.x-dev
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Rx\Observable;
-use Interop\Async\Loop;
+use React\EventLoop\Factory;
+use Rx\Scheduler;
 
-Loop::execute(function () {
+$loop      = Factory::create();
+$scheduler = new Scheduler\EventLoopScheduler($loop);
 
-    Observable::interval(1000)
-        ->take(5)
-        ->flatMap(function ($i) {
-            return Observable::of($i + 1);
-        })
-        ->subscribe(function ($e) {
-            echo $e, PHP_EOL;
-        });
+//You only need to set the default scheduler once
+Scheduler::setDefault($scheduler);
 
-});
+Observable::interval(1000)
+    ->take(5)
+    ->flatMap(function ($i) {
+        return Observable::of($i + 1);
+    })
+    ->subscribe(function ($e) {
+        echo $e, PHP_EOL;
+    });
+
+$loop->run();
+
 ```
 ## Working with Promises
 

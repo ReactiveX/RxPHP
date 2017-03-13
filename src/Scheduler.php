@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Rx;
 
-use Rx\Scheduler\EventLoopScheduler;
 use Rx\Scheduler\ImmediateScheduler;
 
 class Scheduler
