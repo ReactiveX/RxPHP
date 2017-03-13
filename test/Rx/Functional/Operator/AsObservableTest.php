@@ -6,13 +6,11 @@ declare(strict_types = 1);
 namespace Rx\Functional\Operator;
 
 use Exception;
-use Interop\Async\Loop;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable;
 use Rx\Observable\EmptyObservable;
-use Rx\Observer\CallbackObserver;
 
 class AsObservableTest extends FunctionalTestCase
 {
@@ -133,23 +131,5 @@ class AsObservableTest extends FunctionalTestCase
         });
 
         $this->assertTrue($subscribed);
-    }
-
-    public function testAsObservablePassThroughScheduler()
-    {
-        $gotValue = false;
-        Observable::interval(10)
-            ->asObservable()
-            ->take(1)
-            ->subscribe(new CallbackObserver(
-                function ($x) use (&$gotValue) {
-                    $this->assertEquals(0, $x);
-                    $gotValue = true;
-                }
-            ));
-
-        Loop::get()->run();
-
-        $this->assertTrue($gotValue);
     }
 }

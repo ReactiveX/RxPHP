@@ -5,12 +5,9 @@ declare(strict_types = 1);
 
 namespace Rx\Functional\Operator;
 
-use Interop\Async\Loop;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observable\NeverObservable;
-use Rx\Observer\CallbackObserver;
-use Rx\Scheduler\EventLoopScheduler;
 
 class CombineLatestTest extends FunctionalTestCase
 {
@@ -901,33 +898,20 @@ class CombineLatestTest extends FunctionalTestCase
      */
     public function combineLatest_delay()
     {
-        $loop      = Loop::get();
-        $scheduler = new EventLoopScheduler($loop);
-
-        $source1 = Observable::timer(100);
-        $source2 = Observable::timer(120);
-        $source3 = Observable::timer(140);
+        $source1 = Observable::timer(100, $this->scheduler);
+        $source2 = Observable::timer(120, $this->scheduler);
+        $source3 = Observable::timer(140, $this->scheduler);
 
         $source = $source1->combineLatest([$source2, $source3]);
 
-        $result    = null;
-        $completed = false;
+        $result = $this->scheduler->startWithCreate(function () use ($source) {
+            return $source;
+        });
 
-        $source->subscribe(new CallbackObserver(
-            function ($x) use (&$result) {
-                $result = $x;
-            },
-            null,
-            function () use (&$completed) {
-                $completed = true;
-            }
-
-        ));
-
-        $loop->run();
-
-        $this->assertEquals([0, 0, 0], $result);
-        $this->assertTrue($completed);
+        $this->assertMessages([
+            onNext(340, [0, 0, 0]),
+            onCompleted(340)
+        ], $result->getMessages());
     }
 
     /**

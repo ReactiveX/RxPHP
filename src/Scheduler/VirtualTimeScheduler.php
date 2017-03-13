@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace Rx\Scheduler;
 
+use Rx\AsyncSchedulerInterface;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\SerialDisposable;
 use Rx\DisposableInterface;
-use Rx\SchedulerInterface;
 
-class VirtualTimeScheduler implements SchedulerInterface
+class VirtualTimeScheduler implements AsyncSchedulerInterface
 {
     protected $clock;
     protected $comparer;

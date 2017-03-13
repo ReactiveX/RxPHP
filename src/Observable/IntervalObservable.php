@@ -7,21 +7,21 @@ namespace Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\SchedulerInterface;
+use Rx\AsyncSchedulerInterface;
 
 class IntervalObservable extends Observable
 {
     private $interval;
 
-    /** @var SchedulerInterface */
+    /** @var AsyncSchedulerInterface */
     private $scheduler;
 
     /**
      * IntervalObservable constructor.
      * @param $interval
-     * @param SchedulerInterface $scheduler
+     * @param AsyncSchedulerInterface $scheduler
      */
-    public function __construct(int $interval, SchedulerInterface $scheduler)
+    public function __construct(int $interval, AsyncSchedulerInterface $scheduler)
     {
         $this->interval  = $interval;
         $this->scheduler = $scheduler;

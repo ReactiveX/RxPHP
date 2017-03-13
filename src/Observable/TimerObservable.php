@@ -7,7 +7,7 @@ namespace Rx\Observable;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
-use Rx\SchedulerInterface;
+use Rx\AsyncSchedulerInterface;
 
 class TimerObservable extends Observable
 {
@@ -15,7 +15,7 @@ class TimerObservable extends Observable
 
     private $scheduler;
 
-    public function __construct(int $dueTime, SchedulerInterface $scheduler)
+    public function __construct(int $dueTime, AsyncSchedulerInterface $scheduler)
     {
         $this->dueTime   = $dueTime;
         $this->scheduler = $scheduler;

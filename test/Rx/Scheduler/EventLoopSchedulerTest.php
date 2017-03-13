@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Rx\Scheduler;
 
-use Interop\Async\Loop;
+use React\EventLoop\Factory;
 use Rx\TestCase;
 
 class EventLoopSchedulerTest extends TestCase
@@ -14,7 +14,7 @@ class EventLoopSchedulerTest extends TestCase
      */
     public function now_returns_time_since_epoch_in_ms()
     {
-        $scheduler = new EventLoopScheduler();
+        $scheduler = new EventLoopScheduler(function () {});
 
         $this->assertTrue(abs(time() * 1000 - $scheduler->now()) < 1000, 'time difference is less than or equal to 1');
     }
@@ -24,9 +24,9 @@ class EventLoopSchedulerTest extends TestCase
      */
     public function eventloop_schedule()
     {
-        $loop = Loop::get();
+        $loop = Factory::create();
 
-        $scheduler    = new EventLoopScheduler();
+        $scheduler    = new EventLoopScheduler($loop);
         $actionCalled = false;
 
         $action = function () use (&$actionCalled) {
@@ -39,7 +39,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertInstanceOf('Rx\DisposableInterface', $disposable);
         $this->assertFalse($actionCalled);
 
-        $loop->defer(function () use ($loop) {
+        $loop->futureTick(function () use ($loop) {
             $loop->stop();
         });
 
@@ -55,8 +55,8 @@ class EventLoopSchedulerTest extends TestCase
     public function eventloop_schedule_recursive()
     {
 
-        $loop = Loop::get();
-        $scheduler    = new EventLoopScheduler();
+        $loop = Factory::create();
+        $scheduler    = new EventLoopScheduler($loop);
         $actionCalled = false;
         $count        = 0;
 
@@ -116,14 +116,13 @@ class EventLoopSchedulerTest extends TestCase
 
     public function testSchedulerWorkedWithScheduledEventOutsideItself()
     {
-        $loop      = Loop::get();
-        $scheduler = new EventLoopScheduler();
+        $loop      = Factory::create();
+        $scheduler = new EventLoopScheduler($loop);
 
         $scheduler->start();
-        $start  = microtime(true);
         $called = null;
 
-        $loop->delay(100, function () use ($scheduler, &$called) {
+        $loop->addTimer(0.100, function () use ($scheduler, &$called) {
             $scheduler->schedule(function () use (&$called) {
                 $called = microtime(true);
             }, 100);

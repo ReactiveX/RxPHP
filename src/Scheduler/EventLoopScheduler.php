@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Rx\Scheduler;
 
-use Interop\Async\Loop;
+use React\EventLoop\LoopInterface;
 use Rx\DisposableInterface;
 
 final class EventLoopScheduler extends VirtualTimeScheduler
@@ -13,8 +13,20 @@ final class EventLoopScheduler extends VirtualTimeScheduler
 
     private $insideInvoke = false;
 
-    public function __construct()
+    private $delayCallback;
+
+    /**
+     * EventLoopScheduler constructor.
+     * @param callable|LoopInterface $timerCallableOrLoop
+     */
+    public function __construct($timerCallableOrLoop)
     {
+        $this->delayCallback = $timerCallableOrLoop instanceof LoopInterface ?
+            function ($ms, $callable) use ($timerCallableOrLoop) {
+                $timerCallableOrLoop->addTimer($ms / 1000, $callable);
+            } :
+            $timerCallableOrLoop;
+
         parent::__construct($this->now(), function ($a, $b) {
             return $a - $b;
         });
@@ -25,7 +37,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         $disp = parent::scheduleAbsoluteWithState($state, $dueTime, $action);
 
         if (!$this->insideInvoke) {
-            Loop::delay(0, [$this, 'start']);
+            call_user_func($this->delayCallback, 0, [$this, 'start']);
         }
 
         return $disp;
@@ -41,7 +53,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
             if ($next !== null) {
                 if ($next->getDueTime() > $this->clock) {
                     $this->nextTimer = $next->getDueTime();
-                    Loop::delay($this->nextTimer - $this->clock, [$this, "start"]);
+                    call_user_func($this->delayCallback, $this->nextTimer - $this->clock, [$this, "start"]);
                     break;
                 }
 

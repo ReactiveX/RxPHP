@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-use Interop\Async\Loop;
 use Rx\Observable;
 
 class RecursiveReturnObservable extends Observable

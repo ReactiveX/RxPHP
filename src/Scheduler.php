@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Rx;
 
-use Rx\Scheduler\EventLoopScheduler;
 use Rx\Scheduler\ImmediateScheduler;
 
 class Scheduler
@@ -15,27 +14,39 @@ class Scheduler
 
     public static function getDefault(): SchedulerInterface
     {
-        if (!static::$default) {
-            static::$default = new EventLoopScheduler();
+        if (static::$default) {
+            return static::$default;
         }
 
-        return static::$default;
+        throw new \Exception(
+            "Please set a default scheduler (for react: Scheduler::setDefault(new EventLoopScheduler(\$loop));"
+        );
     }
 
     public static function setDefault(SchedulerInterface $scheduler)
     {
         if (static::$default !== null) {
-            throw new \Exception("Scheduler can only be set once. (Are you calling set after get?)");
+            throw new \Exception("Scheduler can only be set once.");
         }
+
         static::$default = $scheduler;
     }
 
-    public static function getAsync(): SchedulerInterface
+    public static function getAsync(): AsyncSchedulerInterface
     {
-        if (!static::$async) {
-            static::$async = new EventLoopScheduler();
+        if (static::$async) {
+            return static::$async;
         }
-        return self::$async;
+
+        if (static::$default instanceof AsyncSchedulerInterface) {
+            static::$async = static::$default;
+
+            return static::$async;
+        }
+
+        throw new \Exception(
+            "Please set an async scheduler (for react: Scheduler::setAsync(new EventLoopScheduler(\$loop));"
+        );
     }
 
     public static function getImmediate(): ImmediateScheduler
@@ -46,18 +57,18 @@ class Scheduler
         return self::$immediate;
     }
 
-    public static function setAsync($async)
+    public static function setAsync(AsyncSchedulerInterface $async)
     {
         if (static::$async !== null) {
-            throw new \Exception("Scheduler can only be set once. (Are you calling set after get?)");
+            throw new \Exception("Scheduler can only be set once.");
         }
         self::$async = $async;
     }
 
-    public static function setImmediate($immediate)
+    public static function setImmediate(SchedulerInterface $immediate)
     {
         if (static::$immediate !== null) {
-            throw new \Exception("Scheduler can only be set once. (Are you calling set after get?)");
+            throw new \Exception("Scheduler can only be set once.");
         }
         self::$immediate = $immediate;
     }
