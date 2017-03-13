@@ -72,11 +72,12 @@ use Rx\Observable;
 use React\EventLoop\Factory;
 use Rx\Scheduler;
 
-$loop      = Factory::create();
-$scheduler = new Scheduler\EventLoopScheduler($loop);
+$loop = Factory::create();
 
 //You only need to set the default scheduler once
-Scheduler::setDefault($scheduler);
+Scheduler::setDefaultFactory(function() use($loop){
+    return new Scheduler\EventLoopScheduler($loop);
+});
 
 Observable::interval(1000)
     ->take(5)

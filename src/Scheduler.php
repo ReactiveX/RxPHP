@@ -11,6 +11,8 @@ class Scheduler
     private static $default;
     private static $async;
     private static $immediate;
+    private static $defaultFactory;
+    private static $asyncFactory;
 
     public static function getDefault(): SchedulerInterface
     {
@@ -18,18 +20,22 @@ class Scheduler
             return static::$default;
         }
 
-        throw new \Exception(
-            "Please set a default scheduler (for react: Scheduler::setDefault(new EventLoopScheduler(\$loop));"
-        );
-    }
-
-    public static function setDefault(SchedulerInterface $scheduler)
-    {
-        if (static::$default !== null) {
-            throw new \Exception("Scheduler can only be set once.");
+        if (static::$defaultFactory === null) {
+            throw new \Exception('Please set a default scheduler factory');
         }
 
-        static::$default = $scheduler;
+        static::$default = call_user_func(static::$defaultFactory);
+
+        return static::$default;
+    }
+
+    public static function setDefaultFactory(callable $factory)
+    {
+        if (static::$default !== null) {
+            throw new \Exception("The default factory can not be set after the scheduler has been created");
+        }
+
+        static::$defaultFactory = $factory;
     }
 
     public static function getAsync(): AsyncSchedulerInterface
@@ -38,15 +44,27 @@ class Scheduler
             return static::$async;
         }
 
-        if (static::$default instanceof AsyncSchedulerInterface) {
+        if (static::$asyncFactory === null && static::getDefault() instanceof AsyncSchedulerInterface) {
             static::$async = static::$default;
-
             return static::$async;
         }
 
-        throw new \Exception(
-            "Please set an async scheduler (for react: Scheduler::setAsync(new EventLoopScheduler(\$loop));"
-        );
+        if (static::$asyncFactory === null) {
+            throw new \Exception('Please set an async scheduler factory');
+        }
+
+        static::$async = call_user_func(static::$asyncFactory);
+
+        return static::$async;
+    }
+
+    public static function setAsyncFactory(callable $factory)
+    {
+        if (static::$async !== null) {
+            throw new \Exception("The async factory can not be set after the scheduler has been created");
+        }
+
+        static::$asyncFactory = $factory;
     }
 
     public static function getImmediate(): ImmediateScheduler
@@ -55,21 +73,5 @@ class Scheduler
             static::$immediate = new ImmediateScheduler();
         }
         return self::$immediate;
-    }
-
-    public static function setAsync(AsyncSchedulerInterface $async)
-    {
-        if (static::$async !== null) {
-            throw new \Exception("Scheduler can only be set once.");
-        }
-        self::$async = $async;
-    }
-
-    public static function setImmediate(SchedulerInterface $immediate)
-    {
-        if (static::$immediate !== null) {
-            throw new \Exception("Scheduler can only be set once.");
-        }
-        self::$immediate = $immediate;
     }
 }
