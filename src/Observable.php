@@ -4,7 +4,8 @@ declare(strict_types = 1);
 
 namespace Rx;
 
-use Interop\Async\Promise;
+use React\Promise\Deferred;
+use React\Promise\PromiseInterface;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
@@ -70,7 +71,7 @@ use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\ZipOperator;
-use Rx\Promise\Promise as RxPromise;
+use Rx\React\Promise;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
@@ -1961,33 +1962,37 @@ abstract class Observable implements ObservableInterface
      */
     public function finally(callable $callback): Observable
     {
-        return $this->lift(function() use ($callback) {
+        return $this->lift(function () use ($callback) {
             return new FinallyOperator($callback);
         });
     }
 
     /**
-     * @param Promise $promise
-     * @param SchedulerInterface|null $scheduler
-     * @return FromPromiseObservable
+     * Converts a promise into an observable
+     *
+     * @param PromiseInterface $promise
+     * @return Observable
+     * @throws \InvalidArgumentException
      *
      * @demo promise/fromPromise.php
      * @operator
      * @reactivex from
      */
-    public static function fromPromise(Promise $promise, SchedulerInterface $scheduler = null): FromPromiseObservable
+    public static function fromPromise(PromiseInterface $promise): Observable
     {
-        return new FromPromiseObservable($promise, $scheduler ?: Scheduler::getDefault());
+        return Promise::toObservable($promise);
     }
 
     /**
-     * Converts Observable into Async Interop Promise
+     * Converts Observable into a Promise
      *
-     * @return Promise
+     * @param Deferred $deferred
+     * @return PromiseInterface
+     * @throws \InvalidArgumentException
      */
-    public function toPromise(): Promise
+    public function toPromise(Deferred $deferred = null): PromiseInterface
     {
-        return new RxPromise($this);
+        return Promise::fromObservable($this, $deferred);
     }
 
     /**

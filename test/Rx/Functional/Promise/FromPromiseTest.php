@@ -7,8 +7,7 @@ namespace Rx\Functional\Promise;
 use Exception;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-use Rx\Observer\CallbackObserver;
-use Rx\Promise\Promise;
+use Rx\React\RejectedPromiseException;
 use Rx\Testing\MockObserver;
 
 class FromPromiseTest extends FunctionalTestCase
@@ -19,11 +18,11 @@ class FromPromiseTest extends FunctionalTestCase
      */
     public function from_promise_success()
     {
-        $p = new Promise(Observable::of(42));
+        $p = \React\Promise\resolve(42);
 
         $source = Observable::fromPromise($p);
 
-        $source->subscribe(new CallbackObserver(
+        $source->subscribe(
             function ($x) {
                 $this->assertEquals(42, $x);
             },
@@ -32,7 +31,7 @@ class FromPromiseTest extends FunctionalTestCase
             },
             function () {
                 $this->assertTrue(true);
-            }));
+            });
     }
 
     /**
@@ -41,20 +40,20 @@ class FromPromiseTest extends FunctionalTestCase
      */
     public function from_promise_failure()
     {
-        $p = new Promise(Observable::error(new Exception('error')));
+        $p = \React\Promise\reject('error');
 
         $source = Observable::fromPromise($p);
 
-        $source->subscribe(new CallbackObserver(
+        $source->subscribe(
             function ($x) {
                 $this->assertFalse(true);
             },
-            function ($error) {
-                $this->assertEquals($error, new Exception('error'));
+            function (Exception $error) {
+                $this->assertInstanceOf(RejectedPromiseException::class, $error);
             },
             function () {
                 $this->assertFalse(true);
-            }));
+            });
     }
 
     /**
@@ -62,7 +61,7 @@ class FromPromiseTest extends FunctionalTestCase
      */
     public function two_observables_one_delayed()
     {
-        $p = new Promise(Observable::of(1));
+        $p = \React\Promise\resolve(1);
 
         $o1 = Observable::fromPromise($p);
         $o2 = Observable::fromPromise($p)->delay(200, $this->scheduler);
@@ -85,6 +84,5 @@ class FromPromiseTest extends FunctionalTestCase
             onNext(200, 1),
             onCompleted(200)
         ], $results2->getMessages());
-
     }
 }

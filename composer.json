@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": "~7.0",
-        "async-interop/promise": "^0.3"
+        "react/promise": "~2.2"
     },
     "require-dev": {
         "satooshi/php-coveralls": "~1.0",
