@@ -7,7 +7,9 @@ use Rx\Scheduler;
 
 $loop      = Factory::create();
 $scheduler = new Scheduler\EventLoopScheduler($loop);
-Scheduler::setAsync($scheduler);
+Scheduler::setAsyncFactory(function () use ($scheduler) {
+    return $scheduler;
+});
 
 register_shutdown_function(function () use ($loop) {
     $loop->run();

@@ -13,7 +13,7 @@ class SchedulerTest extends TestCase
     private function resetStaticScheduler()
     {
         $ref = new \ReflectionClass(Scheduler::class);
-        foreach (['default', 'async', 'immediate'] as $propertyName) {
+        foreach (['default', 'async', 'immediate', 'defaultFactory', 'asyncFactory'] as $propertyName) {
             $prop = $ref->getProperty($propertyName);
             $prop->setAccessible(true);
             $prop->setValue(null);
@@ -28,7 +28,7 @@ class SchedulerTest extends TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Please set a default scheduler (for react: Scheduler::setDefault(new EventLoopScheduler($loop));
+     * @expectedExceptionMessage Please set a default scheduler factory
      */
     public function testGetDefaultThrowsIfNotSet()
     {
@@ -41,44 +41,76 @@ class SchedulerTest extends TestCase
     {
         $scheduler = new TestScheduler();
 
-        Scheduler::setDefault($scheduler);
+        Scheduler::setDefaultFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
 
         $this->assertSame($scheduler, Scheduler::getDefault());
+    }
+
+    public function testSetDefaultTwiceBeforeGet()
+    {
+        $scheduler = new TestScheduler();
+
+        Scheduler::setDefaultFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
+
+        $scheduler2 = new TestScheduler();
+
+        Scheduler::setDefaultFactory(function () use ($scheduler2) {
+            return $scheduler2;
+        });
+
+        $this->assertSame($scheduler2, Scheduler::getDefault());
     }
 
     public function testSetAsync()
     {
         $scheduler = new TestScheduler();
 
-        Scheduler::setAsync($scheduler);
+        Scheduler::setAsyncFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
 
         $this->assertSame($scheduler, Scheduler::getAsync());
     }
 
-    public function testSetImmediate()
+    public function testSetAsyncTwiceBeforeGet()
     {
-        $scheduler = new ImmediateScheduler();
+        $scheduler = new TestScheduler();
 
-        Scheduler::setImmediate($scheduler);
+        Scheduler::setAsyncFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
 
-        $this->assertSame($scheduler, Scheduler::getImmediate());
+        $scheduler2 = new TestScheduler();
+
+        Scheduler::setAsyncFactory(function () use ($scheduler2) {
+            return $scheduler2;
+        });
+
+        $this->assertSame($scheduler2, Scheduler::getAsync());
     }
 
     /**
      * @expectedException \Exception
      */
-    public function testSetDefaultAfterDefaultStartThrowsException()
+    public function testSetDefaultTwiceThrowsException()
     {
         $scheduler = new TestScheduler();
 
-        Scheduler::setDefault($scheduler);
+        Scheduler::setDefaultFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
 
-        $scheduler->start();
+        Scheduler::getDefault();
 
-        $scheduler2 = new TestScheduler();
-        
-        Scheduler::setDefault($scheduler2);
+        Scheduler::setDefaultFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
     }
+
 
     /**
      * @expectedException \Exception
@@ -87,30 +119,20 @@ class SchedulerTest extends TestCase
     {
         $scheduler = new TestScheduler();
 
-        Scheduler::setAsync($scheduler);
+        Scheduler::setAsyncFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
 
-        $scheduler2 = new TestScheduler();
+        Scheduler::getAsync();
 
-        Scheduler::setAsync($scheduler2);
+        Scheduler::setAsyncFactory(function () use ($scheduler) {
+            return $scheduler;
+        });
     }
 
     /**
      * @expectedException \Exception
-     */
-    public function testSetImmediateTwiceThrowsException()
-    {
-        $scheduler = new ImmediateScheduler();
-
-        Scheduler::setImmediate($scheduler);
-
-        $scheduler2 = new ImmediateScheduler();
-
-        Scheduler::setImmediate($scheduler2);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Please set an async scheduler (for react: Scheduler::setAsync(new EventLoopScheduler($loop));
+     * @expectedExceptionMessage Please set a default scheduler factory
      */
     public function testGetAsyncBeforeSet()
     {
@@ -119,10 +141,52 @@ class SchedulerTest extends TestCase
 
     public function testGetAsyncAfterSettingDefaultToAsync()
     {
-        $asyncScheduler = new EventLoopScheduler(function () {});
+        $asyncScheduler = new EventLoopScheduler(function () {
+        });
 
-        Scheduler::setDefault($asyncScheduler);
+        Scheduler::setDefaultFactory(function () use ($asyncScheduler) {
+            return $asyncScheduler;
+        });
 
         $this->assertSame($asyncScheduler, Scheduler::getAsync());
+    }
+
+    /**
+     * @expectedException \Throwable
+     * @expectedExceptionMessage Return value of Rx\Scheduler::getAsync() must implement interface Rx\AsyncSchedulerInterface, instance of Rx\Scheduler\ImmediateScheduler returned
+     */
+    public function testAsyncSchedulerFactorReturnsNonAsyncScheduler()
+    {
+        Scheduler::setAsyncFactory(function () {
+            return new ImmediateScheduler();
+        });
+
+        Scheduler::getAsync();
+    }
+
+    /**
+     * @expectedException \Throwable
+     * @expectedExceptionMessage Return value of Rx\Scheduler::getDefault() must implement interface Rx\SchedulerInterface, instance of stdClass returned
+     */
+    public function testDefaultSchedulerFactorReturnsNonScheduler()
+    {
+        Scheduler::setDefaultFactory(function () {
+            return new \stdClass();
+        });
+
+        Scheduler::getDefault();
+    }
+
+    /**
+     * @expectedException \Throwable
+     * @expectedExceptionMessage Please set an async scheduler factory
+     */
+    public function testAsyncSchedulerFactorThrowsNonAsyncDefaultScheduler()
+    {
+        Scheduler::setDefaultFactory(function () {
+            return new ImmediateScheduler();
+        });
+
+        Scheduler::getAsync();
     }
 }
