@@ -5,21 +5,11 @@ declare(strict_types = 1);
 namespace Rx\Functional\Promise;
 
 use Exception;
-use Interop\Async\Promise\ErrorHandler;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-use Rx\Promise\Promise;
 
 class ToPromiseTest extends FunctionalTestCase
 {
-
-    public function setup()
-    {
-        parent::setup();
-
-        ErrorHandler::set(null);
-    }
-
     /**
      * @test
      *
@@ -28,10 +18,13 @@ class ToPromiseTest extends FunctionalTestCase
     {
         $promise = Observable::of(42)->toPromise();
 
-        $promise->when(function (Exception $ex = null, $value) {
-            $this->assertEquals(null, $ex);
-            $this->assertEquals(42, $value);
+        $result = null;
+
+        $promise->then(function ($value) use (&$result) {
+            $result = $value;
         });
+
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -42,48 +35,16 @@ class ToPromiseTest extends FunctionalTestCase
     {
         $promise = Observable::error(new Exception('some error'))->toPromise();
 
-        $promise->when(function (Exception $ex = null, $value) {
-            $this->assertEquals(new Exception('some error'), $ex);
-            $this->assertEquals(null, $value);
-        });
-    }
+        $error = null;
 
-    /**
-     * @test
-     *
-     */
-    public function promise_error_handler()
-    {
-        ErrorHandler::set(function (\Exception $e) use (&$thrownError) {
-            $thrownError = $e;
-        });
-
-        $promise = Observable::of(42)->toPromise();
-
-        $promise->when(function (Exception $ex = null, $value) {
-            throw new Exception('error');
-        });
-
-        $this->assertEquals(new Exception('error'), $thrownError);
-    }
-
-    /**
-     * @test
-     */
-    public function promise_error_no_handler()
-    {
-        $promise = Observable::of(42)->toPromise();
-        $failed  = false;
-
-        try {
-            $promise->when(function (Exception $ex = null, $value) {
-                throw new Exception('error');
+        $promise->then(
+            function () {
+            },
+            function ($ex) use (&$error) {
+                $error = $ex;
             });
-        } catch (\Throwable $e) {
-            $failed = true;
-        }
 
-        $this->assertTrue($failed);
+        $this->assertEquals(new Exception('some error'), $error);
     }
 
     /**
@@ -92,14 +53,17 @@ class ToPromiseTest extends FunctionalTestCase
      */
     public function promise_within_promise_success()
     {
-        $promise1 = new Promise(Observable::of(42));
+        $promise1 = \React\Promise\resolve(42);
 
         $promise2 = Observable::of($promise1)->toPromise();
 
-        $promise2->when(function (Exception $ex = null, $value) {
-            $this->assertEquals(null, $ex);
-            $this->assertEquals(42, $value);
+        $result = null;
+
+        $promise2->then(function ($value) use (&$result) {
+            $result = $value;
         });
+
+        $this->assertEquals(42, $result);
     }
 
     /**
@@ -108,13 +72,19 @@ class ToPromiseTest extends FunctionalTestCase
      */
     public function promise_within_promise_failure()
     {
-        $promise1 = new Promise(Observable::error(new Exception('some error')));
+        $promise1 = \React\Promise\reject(new Exception('some error'));
 
         $promise2 = Observable::of($promise1)->toPromise();
 
-        $promise2->when(function (Exception $ex = null, $value) {
-            $this->assertEquals(new Exception('some error'), $ex);
-            $this->assertEquals(null, $value);
-        });
+        $error = null;
+
+        $promise2->then(
+            function () {
+            },
+            function (Exception $ex) use (&$error) {
+                $error = $ex;
+            });
+
+        $this->assertEquals(new Exception('some error'), $error);
     }
 }
