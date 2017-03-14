@@ -1,3 +1,11 @@
+# 1.5.3
+
+### Features
+
+- Added `compose` operator ([140e21a](https://github.com/ReactiveX/RxPHP/commit/140e21a61c2bcd6e2572d3b6d51d3309934b29d1))
+- Added plucking for multiple items at once ([11b86c9](https://github.com/ReactiveX/RxPHP/commit/11b86c9eccc2dfb7d767b7cc4986d4f2d4ff548e))
+- Added custom operators in nested namespace ([897b747](https://github.com/ReactiveX/RxPHP/commit/897b74795d42b94fef3242ca9534345fcb45ed7e))
+
 # 1.5.2
 
 ### Bug Fixes
