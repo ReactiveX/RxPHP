@@ -1,3 +1,48 @@
+# 2.0.0
+
+### Changes and Additions
+- Added global static `Scheduler` class that allows setting scheduler factory callables
+- Schedulers are now passed in during `Observable` construction or into operators as needed
+- Static Observable constructors and operators will get scheduler from global static `Scheduler` if not specified
+- PHP 7 is required
+- HHVM support was removed
+- All files now `declare(strict_types=1)`
+- `ObserverInterface::onError` now takes a `Throwable` parameter instead of `Exception`
+- `subscribeCallback` has been deprecated in favor of `subscribe` which now takes callables or an `ObserverInterface` implementation
+- `doOnNext` and `doOnEach` have been deprecated in favor of `do` and follows the same syntax as `subscribe`
+- `catchError` has been deprecated in favor of `catch`
+- `just` has been deprecated in favor of `of`
+- `emptyObservable` has been deprecated in favor of `empty`
+- `switchLatest` has been deprecated in favor of `switch`
+- `Observable` is now abstract and requires subclasses to define `_subscribe`
+- Added `toPromise` operator
+- Marble tests are now supported
+- `timeout` now throws `TimeoutException` to allow detection of timeouts down stream
+- Parameter and return types have been added
+
+# 1.5.3
+
+### Features
+
+- Added `compose` operator ([140e21a](https://github.com/ReactiveX/RxPHP/commit/140e21a61c2bcd6e2572d3b6d51d3309934b29d1))
+- Added plucking for multiple items at once ([11b86c9](https://github.com/ReactiveX/RxPHP/commit/11b86c9eccc2dfb7d767b7cc4986d4f2d4ff548e))
+- Added custom operators in nested namespace ([897b747](https://github.com/ReactiveX/RxPHP/commit/897b74795d42b94fef3242ca9534345fcb45ed7e))
+
+# 1.5.2
+
+### Bug Fixes
+
+- Fix interface mismatch on subscribe type hints ([b817619](https://github.com/ReactiveX/RxPHP/commit/b8176196a9bb836579838966b0b89dcfcbc48dd1))
+- Fix `IteratorObservable` to check if the key is valid instead of null ([dafb14b](https://github.com/ReactiveX/RxPHP/commit/dafb14bc8f0bd22550325419f7ab2e98a454659b))
+
+### Features
+
+- Optimized `distinct` operator ([462d433](https://github.com/ReactiveX/RxPHP/commit/462d433a9268d1de60e7fcd1a9af19a2cac5f164))
+- Added `finally` operator ([e2cfdb2](https://github.com/ReactiveX/RxPHP/commit/e2cfdb2f8b374b0687d64c9e774a8557dbe77b5c))
+- Added `isEmpty` operator ([2429fb7](https://github.com/ReactiveX/RxPHP/commit/2429fb719de6c499db5da6cede086725bf82ece9))
+- Added `forkJoin` operator ([9fb9197](https://github.com/ReactiveX/RxPHP/commit/9fb9197d04e47cd68363c0d4de845519ae2e2a66))
+- Refactored `mergeAll` to be consistent with RxJS and `switchLatest` ([7aeb8ce](https://github.com/ReactiveX/RxPHP/commit/7aeb8cef74b29bdaa09ea969daf78577299a2aad))
+
 # 1.5.1
 
 ### Bug Fixes
