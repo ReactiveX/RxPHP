@@ -5,7 +5,6 @@ namespace Rx\Functional\Operator;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
-use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 use Rx\Testing\Subscription;
 
