@@ -280,9 +280,9 @@ abstract class Observable implements ObservableInterface
      * @param callable|null $resultSelector
      * @return ForkJoinObservable
      *
-     * @demo forkJoin-observable/forkJoin-observable.php
+     * @demo forkJoin/forkJoin.php
      * @operator
-     * @reactivex forkJoin
+     * @reactivex zip
      */
     public static function forkJoin(array $observables = [], callable $resultSelector = null): ForkJoinObservable
     {
@@ -512,7 +512,7 @@ abstract class Observable implements ObservableInterface
      *
      * @return Observable
      *
-     * @demo concat/flatMapTo.php
+     * @demo concat/concatMapTo.php
      * @operator
      * @reactivex flatMap
      */
