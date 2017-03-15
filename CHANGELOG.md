@@ -15,7 +15,7 @@
 - `emptyObservable` has been deprecated in favor of `empty`
 - `switchLatest` has been deprecated in favor of `switch`
 - `Observable` is now abstract and requires subclasses to define `_subscribe`
-- Added `toPromise` operator
+- Added `toPromise` and `fromPromise` operators
 - Marble tests are now supported
 - `timeout` now throws `TimeoutException` to allow detection of timeouts down stream
 - Parameter and return types have been added
