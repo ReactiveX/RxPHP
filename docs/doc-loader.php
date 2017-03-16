@@ -7,19 +7,22 @@ class DocumentedMethod
     public $description;
     public $demos;
     public $isObservable;
+    public $isDeprecated;
 
     private function __construct(
         $methodName,
         $reactivexId,
         $description,
         $demos,
-        $isObservable
+        $isObservable,
+        $isDeprecated
     ) {
         $this->methodName = $methodName;
         $this->reactivexId = $reactivexId;
         $this->description = $description;
         $this->demos = $demos;
         $this->isObservable = $isObservable;
+        $this->isDeprecated = $isDeprecated;
     }
 
     public static function fromReflectionMethod(
@@ -34,6 +37,7 @@ class DocumentedMethod
         $description = extract_doc_description($docComment);
 
         $isObservable = Str::contains($docComment, '@observable');
+        $isDeprecated = Str::contains($docComment, '@deprecated');
 
         $demos = array_map(
             function($path) { return Demo::fromPath($path); },
@@ -45,7 +49,8 @@ class DocumentedMethod
             $reactivexId,
             $description,
             $demos,
-            $isObservable
+            $isObservable,
+            $isDeprecated
         );
     }
 }

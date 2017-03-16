@@ -34,7 +34,11 @@ function run_lint() {
 }
 
 function run_reactivex() {
-    $docs = load_all_docs();
+    $allDocs = load_all_docs();
+
+    $docs = array_filter($allDocs, function ($doc) {
+        return !$doc->isDeprecated;
+    });
 
     $repoRoot = __DIR__ . '/reactivex.github.io';
     $docsPath = $repoRoot . '/documentation/operators/';

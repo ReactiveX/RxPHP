@@ -1,14 +1,14 @@
 RxPHP
 ======
 
-## This is the development branch for RxPHP v2 and is not stable.  For production, use [v1](https://github.com/reactivex/rxphp) instead.
-
 Reactive extensions for PHP. The reactive extensions for PHP are a set of
 libraries to compose asynchronous and event-based programs using observable
 collections and LINQ-style query operators in PHP.
 
 [![Build Status](https://secure.travis-ci.org/ReactiveX/RxPHP.png?branch=master)](https://travis-ci.org/ReactiveX/RxPHP)
 [![Coverage Status](https://coveralls.io/repos/github/ReactiveX/RxPHP/badge.svg?branch=master)](https://coveralls.io/github/ReactiveX/RxPHP?branch=master)
+
+note:  This repo is for v2.x, the latest version of RxPHP, not [v1.x](https://github.com/ReactiveX/RxPHP/tree/1.x).
 
 ## Example
 
@@ -46,7 +46,7 @@ $ php demo/interval/interval.php
 
 Have fun running the demos in `/demo`.
 
-note:  When running the demos, the scheduler is automatically bootstrapped.  When using RxPHP within your own project, you'll need to set the default scheduler; 
+note:  When running the demos, the scheduler is automatically bootstrapped.  When using RxPHP within your own project, you'll need to set the default scheduler. 
 
 ## Installation
 1. Install an event loop.  Any event loop should work, but the ReactPHP event loop is recommended.
@@ -58,7 +58,7 @@ $ composer require react/event-loop
 2. Install RxPHP using [composer](https://getcomposer.org).
 
 ```bash
-$ composer require reactivex/rxphp:2.x-dev
+$ composer require reactivex/rxphp
 ```
 
 3. Write some code.
@@ -93,14 +93,14 @@ $loop->run();
 ```
 ## Working with Promises
 
-Some async PHP frameworks have yet to fully embrace the awesome power of observables.  To help ease the transition, RxPHP has support for promise libraries that implement the async-interop promise [specification](https://github.com/async-interop/promise).
+Some async PHP frameworks have yet to fully embrace the awesome power of observables.  To help ease the transition, RxPHP has built in support for [ReactPHP promises](https://github.com/reactphp/promise).
 
 Mixing a promise into an observable stream:
 
 ```PHP
 Observable::interval(1000)
     ->flatMap(function ($i) {
-        return Observable::fromPromise(new Resolved($i));
+        return Observable::fromPromise(\React\Promise\resolve(42 + $i));
     })
     ->subscribe(function ($v) {
         echo $v . PHP_EOL;
@@ -116,6 +116,36 @@ $observable = Observable::interval(1000)
 
 $promise = $observable->toPromise();
 ```
+
+## Working with [Amphp](https://github.com/amphp)
+
+Since RxPHP has support for promises, it can play nicely with async frameworks like Amphp:
+
+```PHP
+<?php
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+//This only needs to be set once
+\Rx\Scheduler::setDefaultFactory(function () {
+    return new \Rx\Scheduler\EventLoopScheduler('Amp\Loop::delay');
+});
+
+Amp\Loop::run(function () {
+    echo yield \Rx\Observable::interval(1000)
+        ->take(1)
+        ->toPromise();
+});
+
+```
+
+Amp expects a promise to be yielded, so you need to pick a single value from the observable stream.  In this case we use the `take(1)` operator to take the first value.
+
+
+## Additional Information
+- [The Official Reactive Extensions Documentation](http://reactivex.io/documentation/observable.html)
+- [A Simple Introduction to Observables](https://www.youtube.com/watch?v=uQ1zhJHclvs)(video)
+
 
 ## License
 
