@@ -37,7 +37,6 @@ function run_reactivex() {
     $allDocs = load_all_docs();
 
     $docs = array_filter($allDocs, function ($doc) {
-        echo "d ", $doc->isDeprecated;
         return !$doc->isDeprecated;
     });
 
