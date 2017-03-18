@@ -7,12 +7,13 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-return function() use ($dummyObserver, $scheduler, $loop) {
-    Observable::range(0, 25)
-        ->zip([Observable::range(0, 25)], function($a, $b) {
-            return $a + $b;
-        })
-        ->subscribe($dummyObserver, $scheduler);
+$source = Observable::range(0, 25, $scheduler)
+    ->zip([Observable::range(0, 25, $scheduler)], function($a, $b) {
+        return $a + $b;
+    });
 
-    $loop->run();
+$factory = function() use ($source) {
+    return $source;
 };
+
+return [$factory, $loop];
