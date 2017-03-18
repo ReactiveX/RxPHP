@@ -9,6 +9,7 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
+use React\EventLoop\LoopInterface;
 
 // Check whether XDebug is enabled
 if (in_array('Xdebug', get_loaded_extensions(true))) {
@@ -47,36 +48,63 @@ Observable::just($files)
         printf('%s', pathinfo($file, PATHINFO_FILENAME));
     })
     ->map(function($file) { // Run benchmark
-        $totalDuration = 0.0;
         $durations = [];
+        /** @var Observable $observable */
+        $observable = null;
+        /** @var LoopInterface $loop */
+        $loop = null;
+        /** @var callable(): Observable $sourceFactory */
+        $sourceFactory = null;
 
         ob_start();
 
-        $dummyObserver = new Rx\Observer\CallbackObserver(
-            function ($value) { },
-            function ($error) { },
-            function () { }
-        );
+        $testDef = @include $file;
 
-        $testClosure = @include $file;
-        if (!$testClosure) {
-            throw new Exception("Unable to load file \"$file\"");
+        if (is_array($testDef)) {
+            $sourceFactory = $testDef[0];
+            $loop = $testDef[1];
+        } elseif (is_callable($testDef)) {
+            $sourceFactory = $testDef;
+        } else {
+            throw new Exception("File \"$file\" doesn't contain a valid benchmark");
         }
 
         $memoryUsage = [memory_get_usage()];
 
-        while ($totalDuration < MIN_TOTAL_DURATION) {
+        $benchmarkLoop = function(Observable $observable) use (&$durations, &$memoryUsage) {
+            $dummyObserver = new Rx\Observer\CallbackObserver(
+                function ($value) { },
+                function ($error) { },
+                function () use (&$start, &$durations) {
+                    $durations[] = (microtime(true) - $start) * 1000;
+                }
+            );
+
             $start = microtime(true);
-
-            $testClosure();
-
-            $duration = microtime(true) - $start;
-
-            $durations[] = $duration * 1000;
-            $totalDuration += $duration;
+            $observable->subscribe($dummyObserver);
 
             if (count($durations) === 100) {
                 $memoryUsage[] = memory_get_usage();
+            }
+        };
+
+        $stopStartTime = microtime(true) + MIN_TOTAL_DURATION;
+
+        if ($loop) {
+            $reschedule = function() use (&$reschedule, $benchmarkLoop, $sourceFactory, $loop, $stopStartTime) {
+                $loop->futureTick(function () use (&$reschedule, $benchmarkLoop, $stopStartTime, $sourceFactory) {
+                    $benchmarkLoop($sourceFactory());
+                    if ($stopStartTime > microtime(true)) {
+                        $reschedule();
+                    }
+                });
+            };
+
+            $reschedule();
+            $loop->run();
+        } else {
+            while ($stopStartTime > microtime(true)) {
+                $benchmarkLoop($sourceFactory());
             }
         }
 

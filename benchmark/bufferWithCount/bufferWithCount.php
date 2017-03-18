@@ -2,8 +2,9 @@
 
 use Rx\Observable;
 
-return function() use ($dummyObserver) {
-    Observable::range(0, 25)
-        ->bufferWithCount(5)
-        ->subscribe($dummyObserver);
+$source = Observable::range(0, 25)
+    ->bufferWithCount(5);
+
+return function() use ($source) {
+    return $source;
 };

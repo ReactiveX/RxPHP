@@ -7,10 +7,11 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-return function() use ($dummyObserver, $scheduler, $loop) {
-    Observable::range(0, 500)
-        ->skipLast(50)
-        ->subscribe($dummyObserver, $scheduler);
+$source = Observable::range(0, 500, $scheduler)
+    ->skipLast(50);
 
-    $loop->run();
+$factory = function() use ($source) {
+    return $source;
 };
+
+return [$factory, $loop];
