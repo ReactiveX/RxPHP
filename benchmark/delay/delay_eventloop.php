@@ -10,7 +10,7 @@ $scheduler = new EventLoopScheduler($loop);
 $source = Observable::just(25)
     ->delay(0, $scheduler);
 
-$factory = function() use ($source, $scheduler) {
+$factory = function() use ($source) {
     return $source;
 };
 
