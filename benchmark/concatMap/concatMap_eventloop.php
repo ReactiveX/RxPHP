@@ -7,10 +7,12 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-$source = Observable::just(25)
-    ->delay(0, $scheduler);
+$source = Observable::range(1, 25, $scheduler)
+    ->concatMap(function($x) use ($scheduler) {
+        return Observable::range($x, 25, $scheduler);
+    });
 
-$factory = function() use ($source, $scheduler) {
+$factory = function() use ($source) {
     return $source;
 };
 
