@@ -171,6 +171,7 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * @deprecated Use `of`
      * Alias for of
      *
      * @param $value
@@ -198,6 +199,7 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * @deprecated Use `empty`
      * Alias for empty
      *
      * @param SchedulerInterface|null $scheduler
@@ -932,6 +934,7 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * @deprecated Use `do`
      * Alias for do
      *
      * @param ObserverInterface $observer
@@ -943,6 +946,7 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * @deprecated Use `do`
      * @param callable $onNext
      * @return Observable
      *
@@ -1615,6 +1619,7 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * @deprecated Use `catch`
      * Alias for catch
      *
      * @param callable $selector
@@ -1761,6 +1766,7 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * @deprecated Use `switch`
      * Alias for switch
      *
      * @return Observable
