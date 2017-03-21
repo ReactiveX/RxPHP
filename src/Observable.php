@@ -276,22 +276,6 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
-     * Runs all observable sequences in parallel and collect their last elements.
-     *
-     * @param array $observables
-     * @param callable|null $resultSelector
-     * @return ForkJoinObservable
-     *
-     * @demo forkJoin/forkJoin.php
-     * @operator
-     * @reactivex zip
-     */
-    public static function forkJoin(array $observables = [], callable $resultSelector = null): ForkJoinObservable
-    {
-        return new ForkJoinObservable($observables, $resultSelector);
-    }
-
-    /**
      * Converts an array to an observable sequence
      *
      * @param array $array
@@ -1411,6 +1395,22 @@ abstract class Observable implements ObservableInterface
         return $this->lift(function () use ($observables, $selector) {
             return new ZipOperator($observables, $selector);
         });
+    }
+
+    /**
+     * Runs all observable sequences in parallel and collect their last elements.
+     *
+     * @param array $observables
+     * @param callable|null $resultSelector
+     * @return ForkJoinObservable
+     *
+     * @demo forkJoin/forkJoin.php
+     * @operator
+     * @reactivex zip
+     */
+    public static function forkJoin(array $observables = [], callable $resultSelector = null): ForkJoinObservable
+    {
+        return new ForkJoinObservable($observables, $resultSelector);
     }
 
     /**
