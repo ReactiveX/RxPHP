@@ -61,8 +61,7 @@ Observable::just($files)
         $testDef = @include $file;
 
         if (is_array($testDef)) {
-            $sourceFactory = $testDef[0];
-            $loop = $testDef[1];
+            list($sourceFactory, $loop) = $testDef;
         } elseif (is_callable($testDef)) {
             $sourceFactory = $testDef;
         } else {
@@ -91,6 +90,7 @@ Observable::just($files)
         $stopStartTime = microtime(true) + MIN_TOTAL_DURATION;
 
         if ($loop) {
+            // Run all tests inside the loop to avoid starting it over and over again
             $reschedule = function() use (&$reschedule, $benchmarkLoop, $sourceFactory, $loop, $stopStartTime) {
                 $loop->futureTick(function () use (&$reschedule, $benchmarkLoop, $stopStartTime, $sourceFactory) {
                     $benchmarkLoop($sourceFactory());
