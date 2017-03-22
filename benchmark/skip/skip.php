@@ -2,8 +2,8 @@
 
 use Rx\Observable;
 
-$source = Observable::range(0, 25)
-    ->concat(Observable::range(0, 25));
+$source = Observable::range(0, 50)
+    ->skip(25);
 
 return function() use ($source) {
     return $source;

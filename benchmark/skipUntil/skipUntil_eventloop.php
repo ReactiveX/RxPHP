@@ -7,8 +7,9 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-$source = Observable::range(0, 500, $scheduler)
-    ->takeLast(50);
+$range = Observable::range(0, 25, $scheduler);
+$source = $range
+    ->skipUntil($range->take(3));
 
 $factory = function() use ($source) {
     return $source;

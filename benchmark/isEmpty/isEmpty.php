@@ -2,8 +2,8 @@
 
 use Rx\Observable;
 
-$source = Observable::range(0, 25)
-    ->concat(Observable::range(0, 25));
+$source = Observable::just(25)
+    ->isEmpty();
 
 return function() use ($source) {
     return $source;
