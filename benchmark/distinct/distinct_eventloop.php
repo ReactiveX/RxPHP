@@ -8,11 +8,10 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-$range = array_map(function($val) {
-    return $val % 3;
-}, range(0, 25));
-
-$source = (new ArrayObservable($range, $scheduler))
+$source = Observable::range(0, 25, $scheduler)
+    ->map(function($i) {
+        return $i % 3;
+    })
     ->distinct();
 
 $factory = function() use ($source) {

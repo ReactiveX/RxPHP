@@ -7,9 +7,9 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-$source = Observable::range(0, 25)
-    ->map(function() {
-        return Observable::range(0, 25);
+$source = Observable::range(0, 25, $scheduler)
+    ->map(function() use ($scheduler) {
+        return Observable::range(0, 25, $scheduler);
     })
     ->mergeAll();
 
