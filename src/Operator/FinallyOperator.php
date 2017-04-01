@@ -8,7 +8,7 @@ use Rx\Disposable\BinaryDisposable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
-class FinallyOperator implements OperatorInterface
+final class FinallyOperator implements OperatorInterface
 {
     /** @var callable */
     private $callback;
