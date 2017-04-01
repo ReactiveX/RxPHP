@@ -6,7 +6,7 @@ namespace Rx;
 
 use Rx\Scheduler\ImmediateScheduler;
 
-class Scheduler
+final class Scheduler
 {
     private static $default;
     private static $async;
