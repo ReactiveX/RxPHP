@@ -1,3 +1,9 @@
+# 2.0.1
+
+### Bug Fixes
+
+- Fix `concat` to dispose of current observable ([1eadb7b](https://github.com/ReactiveX/RxPHP/commit/1eadb7be7e026a07331f12d585d47e86cbd818bb))
+
 # 2.0.0
 
 ### Changes and Additions
