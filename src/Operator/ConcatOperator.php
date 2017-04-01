@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Rx\Operator;
 
+use Rx\Disposable\SerialDisposable;
 use Rx\DisposableInterface;
 use Rx\ObservableInterface;
-use Rx\Observer\AutoDetachObserver;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
@@ -29,15 +29,18 @@ final class ConcatOperator implements OperatorInterface
      */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
+        $disp = new SerialDisposable();
+
         $cbObserver = new CallbackObserver(
             [$observer, 'onNext'],
             [$observer, 'onError'],
-            function () use ($observer) {
-                $o = new AutoDetachObserver($observer);
-                $o->setDisposable($this->subsequentObservable->subscribe($o));
+            function () use ($observer, $disp) {
+                $disp->setDisposable($this->subsequentObservable->subscribe($observer));
             }
         );
 
-        return $observable->subscribe($cbObserver);
+        $disp->setDisposable($observable->subscribe($cbObserver));
+
+        return $disp;
     }
 }

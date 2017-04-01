@@ -360,4 +360,37 @@ class ConcatTest extends FunctionalTestCase
         $this->assertFalse($completed);
 
     }
+
+    public function testConcatDispose()
+    {
+        $o1 = $this->createHotObservable([
+            onNext(250, 1),
+            onNext(300, 2),
+            onCompleted(325)
+        ]);
+
+        $o2 = $this->createHotObservable([
+            onNext(350, 3),
+            onNext(400, 4),
+            onCompleted(450)
+        ]);
+
+        $results = $this->scheduler->startWithDispose(function () use ($o1, $o2) {
+            return $o1->concat($o2);
+        }, 375);
+
+        $this->assertMessages([
+            onNext(250, 1),
+            onNext(300, 2),
+            onNext(350, 3),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 325)
+        ], $o1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(325, 375)
+        ], $o2->getSubscriptions());
+    }
 }
