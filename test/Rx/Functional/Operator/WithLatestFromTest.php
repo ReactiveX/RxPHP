@@ -93,6 +93,14 @@ class WithLatestFromTest extends FunctionalTestCase
         });
 
         $this->assertMessages([onCompleted(210)], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 210)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 210)
+        ], $e2->getSubscriptions());
     }
 
 
@@ -121,6 +129,14 @@ class WithLatestFromTest extends FunctionalTestCase
         });
 
         $this->assertMessages([onCompleted(210)], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 210)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 210)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -148,6 +164,14 @@ class WithLatestFromTest extends FunctionalTestCase
         });
 
         $this->assertMessages([onCompleted(220)], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
     }
 
     /**
@@ -170,6 +194,10 @@ class WithLatestFromTest extends FunctionalTestCase
         });
 
         $this->assertMessages([onCompleted(220)], $results->getMessages());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
     }
 
     /**
@@ -226,6 +254,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -260,6 +296,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -293,6 +337,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -326,6 +378,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -360,6 +420,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -394,6 +462,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -428,6 +504,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -463,6 +547,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -498,6 +590,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -588,6 +688,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -622,6 +730,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -656,6 +772,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -733,6 +857,10 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 250)
+        ], $e1->getSubscriptions());
     }
 
     /**
@@ -769,6 +897,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 240)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 240)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -805,6 +941,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 240)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 240)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -842,6 +986,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -918,6 +1070,14 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 220)
+        ], $e2->getSubscriptions());
     }
 
     /**
@@ -951,5 +1111,168 @@ class WithLatestFromTest extends FunctionalTestCase
             ],
             $results->getMessages()
         );
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e2->getSubscriptions());
+    }
+
+    public function testWithLatestFrom_multiple_dispose_no_selector()
+    {
+        $e1 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(220, 2),
+                onCompleted(230)
+            ]
+        );
+
+        $e2 = $this->createHotObservable(
+            [
+                onNext(150, 30),
+                onNext(215, 40),
+                onCompleted(240)
+            ]
+        );
+
+        $e3 = $this->createHotObservable(
+            [
+                onNext(160, 500),
+                onNext(217, 600),
+                onCompleted(240)
+            ]
+        );
+
+        $results = $this->scheduler->startWithDispose(function () use ($e1, $e2, $e3) {
+            return $e1->withLatestFrom([$e2, $e3]);
+        }, 225);
+
+        $this->assertMessages(
+            [
+                onNext(220, [2, 40, 600])
+            ],
+            $results->getMessages()
+        );
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e2->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e3->getSubscriptions());
+    }
+
+    public function testWithLatestFrom_multiple_dispose_with_selector()
+    {
+        $e1 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(220, 2),
+                onCompleted(230)
+            ]
+        );
+
+        $e2 = $this->createHotObservable(
+            [
+                onNext(150, 30),
+                onNext(215, 40),
+                onCompleted(240)
+            ]
+        );
+
+        $e3 = $this->createHotObservable(
+            [
+                onNext(160, 500),
+                onNext(217, 600),
+                onCompleted(240)
+            ]
+        );
+
+        $results = $this->scheduler->startWithDispose(function () use ($e1, $e2, $e3) {
+            return $e1->withLatestFrom([$e2, $e3], function ($a, $b, $c) {
+                return $a + $b + $c;
+            });
+        }, 225);
+
+        $this->assertMessages(
+            [
+                onNext(220, 642)
+            ],
+            $results->getMessages()
+        );
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e2->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 225)
+        ], $e3->getSubscriptions());
+    }
+
+    public function testWithLatestFrom_multiple_with_selector()
+    {
+        $e1 = $this->createHotObservable(
+            [
+                onNext(150, 1),
+                onNext(220, 2),
+                onCompleted(230)
+            ]
+        );
+
+        $e2 = $this->createHotObservable(
+            [
+                onNext(150, 30),
+                onNext(215, 40),
+                onCompleted(240)
+            ]
+        );
+
+        $e3 = $this->createHotObservable(
+            [
+                onNext(160, 500),
+                onNext(217, 600),
+                onCompleted(240)
+            ]
+        );
+
+        $results = $this->scheduler->startWithCreate(function () use ($e1, $e2, $e3) {
+            return $e1->withLatestFrom([$e2, $e3], function ($a, $b, $c) {
+                return $a + $b + $c;
+            });
+        });
+
+        $this->assertMessages(
+            [
+                onNext(220, 642),
+                onCompleted(230)
+            ],
+            $results->getMessages()
+        );
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e1->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e2->getSubscriptions());
+
+        $this->assertSubscriptions([
+            subscribe(200, 230)
+        ], $e3->getSubscriptions());
     }
 }
