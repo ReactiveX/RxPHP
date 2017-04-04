@@ -4,6 +4,9 @@ namespace Rx\Functional\Operator;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
+use Rx\Observer\CallbackObserver;
+use Rx\Subject\Subject;
+use Rx\Testing\Subscription;
 
 class TakeUntilTest extends FunctionalTestCase
 {
@@ -40,6 +43,13 @@ class TakeUntilTest extends FunctionalTestCase
             ],
             $result->getMessages()
         );
+        $this->assertSubscriptions([
+            new Subscription(200, 225)
+        ], $l->getSubscriptions());
+
+        $this->assertSubscriptions([
+            new Subscription(200, 225)
+        ], $r->getSubscriptions());
     }
 
     /**
@@ -340,5 +350,26 @@ class TakeUntilTest extends FunctionalTestCase
         );
 
         $this->assertFalse($sourceNotDisposed);
+    }
+
+    /**
+     * @test
+     */
+    public function takeUntil_should_subscribe_to_the_notifier_first_with_immediate_scheduler()
+    {
+        $emissions = 0;
+        $source = Observable::range(1, 10);
+
+        $notification = new Subject();
+
+        $source->takeUntil($notification)
+            ->subscribe(new CallbackObserver(function($value) use (&$emissions, $notification) {
+                if ($value === 5) {
+                    $notification->onNext(true);
+                }
+                $emissions++;
+            }));
+
+        $this->assertEquals(5, $emissions);
     }
 }

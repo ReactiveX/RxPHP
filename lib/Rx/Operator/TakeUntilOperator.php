@@ -28,14 +28,14 @@ class TakeUntilOperator implements OperatorInterface
     {
 
         return new CompositeDisposable([
-            $observable->subscribe($observer, $scheduler),
             $this->other->subscribe(
                 new CallbackObserver(
                     [$observer, "onCompleted"],
                     [$observer, "onError"]
                 ),
                 $scheduler
-            )
+            ),
+            $observable->subscribe($observer, $scheduler)
         ]);
     }
 }
