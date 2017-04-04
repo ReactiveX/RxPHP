@@ -566,7 +566,7 @@ class ReplaySubjectTest extends FunctionalTestCase
      * @test
      */
     public function it_replays_with_immediate_scheduler() {
-        $rs = new ReplaySubject(null, null, new ImmediateScheduler());
+        $rs = new ReplaySubject();
 
         $o = Observable::fromArray(range(1,5));
 

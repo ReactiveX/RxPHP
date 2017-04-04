@@ -8,6 +8,7 @@ use Rx\Disposable\CallbackDisposable;
 use Rx\DisposableInterface;
 use Rx\Observer\ScheduledObserver;
 use Rx\ObserverInterface;
+use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 /**
@@ -34,7 +35,7 @@ class ReplaySubject extends Subject
     /** @var SchedulerInterface */
     private $scheduler;
 
-    public function __construct(int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler)
+    public function __construct(int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler = null)
     {
         $bufferSize = $bufferSize ?? $this->maxSafeInt;
 
@@ -48,7 +49,7 @@ class ReplaySubject extends Subject
             $this->windowSize = $windowSize;
         }
 
-        $this->scheduler = $scheduler;
+        $this->scheduler = $scheduler ?: Scheduler::getDefault();
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
