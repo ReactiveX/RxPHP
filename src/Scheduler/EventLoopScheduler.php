@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Rx\Scheduler;
 
 use React\EventLoop\LoopInterface;
+use Rx\Disposable\CallbackDisposable;
+use Rx\Disposable\EmptyDisposable;
 use Rx\DisposableInterface;
 
 final class EventLoopScheduler extends VirtualTimeScheduler
@@ -15,6 +17,8 @@ final class EventLoopScheduler extends VirtualTimeScheduler
 
     private $delayCallback;
 
+    private $currentTimer;
+
     /**
      * EventLoopScheduler constructor.
      * @param callable|LoopInterface $timerCallableOrLoop
@@ -23,9 +27,14 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     {
         $this->delayCallback = $timerCallableOrLoop instanceof LoopInterface ?
             function ($ms, $callable) use ($timerCallableOrLoop) {
-                $timerCallableOrLoop->addTimer($ms / 1000, $callable);
+                $timer = $timerCallableOrLoop->addTimer($ms / 1000, $callable);
+                return new CallbackDisposable(function () use ($timer) {
+                    $timer->cancel();
+                });
             } :
             $timerCallableOrLoop;
+
+        $this->currentTimer = new EmptyDisposable();
 
         parent::__construct($this->now(), function ($a, $b) {
             return $a - $b;
@@ -36,9 +45,18 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     {
         $disp = parent::scheduleAbsoluteWithState($state, $dueTime, $action);
 
-        if (!$this->insideInvoke) {
-            call_user_func($this->delayCallback, 0, [$this, 'start']);
+        if ($this->insideInvoke) {
+            return $disp;
         }
+
+        if ($this->nextTimer <= $dueTime) {
+            return $disp;
+        }
+
+        $this->nextTimer = $this->getClock();
+
+        $this->currentTimer->dispose();
+        $this->currentTimer = call_user_func($this->delayCallback, 0, [$this, 'start']);
 
         return $disp;
     }
@@ -48,12 +66,13 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         $this->clock = $this->now();
 
         $this->insideInvoke = true;
+        $this->nextTimer    = PHP_INT_MAX;
         while ($this->queue->count() > 0) {
             $next = $this->getNext();
             if ($next !== null) {
                 if ($next->getDueTime() > $this->clock) {
                     $this->nextTimer = $next->getDueTime();
-                    call_user_func($this->delayCallback, $this->nextTimer - $this->clock, [$this, "start"]);
+                    $this->currentTimer = call_user_func($this->delayCallback, $this->nextTimer - $this->clock, [$this, "start"]);
                     break;
                 }
 
