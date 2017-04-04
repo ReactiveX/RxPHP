@@ -70,6 +70,7 @@ use Rx\Operator\ThrottleOperator;
 use Rx\Operator\TimeoutOperator;
 use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
+use Rx\Operator\WithLatestFromOperator;
 use Rx\Operator\ZipOperator;
 use Rx\React\Promise;
 use Rx\Subject\AsyncSubject;
@@ -1467,6 +1468,24 @@ abstract class Observable implements ObservableInterface
     {
         return $this->lift(function () use ($observables, $selector) {
             return new CombineLatestOperator($observables, $selector);
+        });
+    }
+
+    /**
+     * Merges the specified observable sequences into one observable sequence by using the selector function only when the (first) source observable sequence produces an element.
+     *
+     * @param array $observables
+     * @param callable|null $selector
+     * @return Observable - An observable sequence containing the result of combining elements of the sources using the specified result selector function.
+     *
+     * @demo withLatestFrom/withLatestFrom.php
+     * @operator
+     * @reactivex combinelatest
+     */
+    public function withLatestFrom(array $observables, callable $selector = null): Observable
+    {
+        return $this->lift(function () use ($observables, $selector) {
+            return new WithLatestFromOperator($observables, $selector);
         });
     }
 
