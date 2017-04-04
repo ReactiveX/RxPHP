@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Rx\Scheduler;
 
 use Rx\AsyncSchedulerInterface;
+use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\SerialDisposable;
 use Rx\DisposableInterface;
@@ -87,7 +88,10 @@ class VirtualTimeScheduler implements AsyncSchedulerInterface
 
         $this->queue->enqueue($scheduledItem);
 
-        return $scheduledItem->getDisposable();
+        return new CallbackDisposable(function () use ($scheduledItem) {
+            $scheduledItem->getDisposable()->dispose();
+            $this->queue->remove($scheduledItem);
+        });
     }
 
     public function scheduleRelativeWithState($state, $dueTime, $action): DisposableInterface
