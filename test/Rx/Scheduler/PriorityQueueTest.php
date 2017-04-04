@@ -130,4 +130,21 @@ class PriorityQueueTest extends TestCase
         $this->assertSame($scheduledItem, $queue->dequeue());
         $this->assertSame($scheduledItem3, $queue->dequeue());
     }
+
+    /**
+     * @test
+     */
+    public function should_not_remove_nonexistent_item()
+    {
+        $queue = new PriorityQueue();
+        $queue->remove(
+            new ScheduledItem(
+                $this->createMock(ScheduledItem::class),
+                null,
+                function () {
+                },
+                0
+            )
+        );
+    }
 }
