@@ -117,31 +117,6 @@ $observable = Observable::interval(1000)
 $promise = $observable->toPromise();
 ```
 
-## Working with [Amphp](https://github.com/amphp)
-
-Since RxPHP has support for promises, it can play nicely with async frameworks like Amphp:
-
-```PHP
-<?php
-
-require dirname(__DIR__) . '/vendor/autoload.php';
-
-//This only needs to be set once
-\Rx\Scheduler::setDefaultFactory(function () {
-    return new \Rx\Scheduler\EventLoopScheduler('Amp\Loop::delay');
-});
-
-Amp\Loop::run(function () {
-    echo yield \Rx\Observable::interval(1000)
-        ->take(1)
-        ->toPromise();
-});
-
-```
-
-Amp expects a promise to be yielded, so you need to pick a single value from the observable stream.  In this case we use the `take(1)` operator to take the first value.
-
-
 ## Additional Information
 - [The Official Reactive Extensions Documentation](http://reactivex.io/documentation/observable.html)
 - [A Simple Introduction to Observables](https://www.youtube.com/watch?v=uQ1zhJHclvs)(video)
