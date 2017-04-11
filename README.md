@@ -38,7 +38,7 @@ $source->subscribe(
 ## Try out the demos
 
 ```bash
-$ git clone git@github.com:reactivex/RxPHP.git -b 2.x
+$ git clone https://github.com/ReactiveX/RxPHP.git
 $ cd RxPHP
 $ composer install
 $ php demo/interval/interval.php
