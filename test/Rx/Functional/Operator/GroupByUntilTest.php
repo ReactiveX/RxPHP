@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx\Functional\Operator;
 
@@ -1197,7 +1197,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
             function () use (&$outerSubscription, &$outer, &$outerResults, &$inners, &$results) {
-                $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
+                $outerSubscription = $outer->subscribe(function (GroupedObservable $group) use (
                     &$outerResults,
                     &$inners,
                     &$results,
@@ -1235,7 +1235,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->start();
 
-        $this->assertEquals(2, count($inners));
+        $this->assertCount(2, $inners);
 
         $this->assertMessages([
             onNext(220, 'foo'),
