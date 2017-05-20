@@ -55,11 +55,10 @@ class RefCountDisposable implements DisposableInterface
     private function createInnerDisposable(): DisposableInterface
     {
         $this->count++;
-        $innerDisposable = &$this;
         $isInnerDisposed = false;
 
-        return new CallbackDisposable(function () use (&$innerDisposable, &$isInnerDisposed) {
-            if ($innerDisposable->isDisposed()) {
+        return new CallbackDisposable(function () use (&$isInnerDisposed) {
+            if ($this->isDisposed()) {
                 return;
             }
 
@@ -70,8 +69,8 @@ class RefCountDisposable implements DisposableInterface
             $isInnerDisposed = true;
             $this->count--;
 
-            if ($this->count === 0 && $innerDisposable->isPrimaryDisposed()) {
-                $innerDisposable->dispose();
+            if ($this->count === 0 && $this->isPrimaryDisposed()) {
+                $this->dispose();
             }
         });
     }
