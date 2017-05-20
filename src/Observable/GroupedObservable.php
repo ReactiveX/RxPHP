@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx\Observable;
 
+use Rx\Disposable\BinaryDisposable;
 use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\ObservableInterface;
-use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\RefCountDisposable;
 use Rx\DisposableInterface;
 
@@ -20,18 +20,9 @@ class GroupedObservable extends Observable
     {
         $this->key = $key;
 
-        if (null === $mergedDisposable) {
-            $this->underlyingObservable = $underlyingObservable;
-        } else {
-            $this->underlyingObservable = new AnonymousObservable(
-                function ($observer) use ($mergedDisposable, $underlyingObservable) {
-                    return new CompositeDisposable([
-                        $mergedDisposable->getDisposable(),
-                        $underlyingObservable->subscribe($observer),
-                    ]);
-                }
-            );
-        }
+        $this->underlyingObservable = !$mergedDisposable ?
+            $underlyingObservable :
+            $this->newUnderlyingObservable($mergedDisposable, $underlyingObservable);
     }
 
     public function getKey()
@@ -42,5 +33,14 @@ class GroupedObservable extends Observable
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->underlyingObservable->subscribe($observer);
+    }
+
+    private function newUnderlyingObservable(RefCountDisposable $mergedDisposable, ObservableInterface $underlyingObservable): Observable
+    {
+        return new AnonymousObservable(
+            function ($observer) use ($mergedDisposable, $underlyingObservable) {
+                return new BinaryDisposable($mergedDisposable->getDisposable(), $underlyingObservable->subscribe($observer));
+            }
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx\Operator;
 
@@ -11,27 +11,19 @@ use Rx\Disposable\SingleAssignmentDisposable;
 use Rx\DisposableInterface;
 use Rx\Observable\GroupedObservable;
 use Rx\ObservableInterface;
-use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
 final class GroupByUntilOperator implements OperatorInterface
 {
-    /** @var callable */
     private $keySelector;
-
-    /** @var callable */
     private $elementSelector;
-
-    /** @var callable */
     private $durationSelector;
-
-    /** @var callable */
     private $keySerializer;
+    private $map = [];
 
     public function __construct(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null)
     {
-
         if (null === $elementSelector) {
             $elementSelector = function ($elem) {
                 return $elem;
@@ -58,123 +50,90 @@ final class GroupByUntilOperator implements OperatorInterface
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $map                = [];
         $groupDisposable    = new CompositeDisposable();
         $refCountDisposable = new RefCountDisposable($groupDisposable);
+        $sourceEmits        = true;
 
-        $keySelector      = $this->keySelector;
-        $elementSelector  = $this->elementSelector;
-        $durationSelector = $this->durationSelector;
-        $keySerializer    = $this->keySerializer;
-        $sourceEmits      = true;
+        $handleError = function (\Throwable $e) use ($observer, &$sourceEmits) {
+            foreach ($this->map as $w) {
+                $w->onError($e);
+            }
+            if ($sourceEmits) {
+                $observer->onError($e);
+            }
+        };
 
-        $callbackObserver = new CallbackObserver(
-            function ($value) use (&$map, $keySelector, $elementSelector, $durationSelector, $observer, $keySerializer, $groupDisposable, $refCountDisposable, &$sourceEmits) {
+        $subscription = $observable->subscribe(
+            function ($element) use ($observer, $handleError, $refCountDisposable, $groupDisposable, &$sourceEmits) {
                 try {
-                    $key           = $keySelector($value);
-                    $serializedKey = $keySerializer($key);
+                    $key           = call_user_func($this->keySelector, $element);
+                    $serializedKey = call_user_func($this->keySerializer, $key);
                 } catch (\Throwable $e) {
-                    foreach ($map as $groupObserver) {
-                        $groupObserver->onError($e);
-                    }
-                    $observer->onError($e);
-
+                    $handleError($e);
                     return;
                 }
 
-                $fireNewMapEntry = false;
-
-                if (!isset($map[$serializedKey])) {
-                    $map[$serializedKey] = new Subject();
-                    $fireNewMapEntry     = true;
+                if (!$sourceEmits && !isset($this->map[$serializedKey])) {
+                    return;
                 }
-                $writer = $map[$serializedKey];
 
-                if ($fireNewMapEntry) {
-                    $group         = new GroupedObservable($key, $writer, $refCountDisposable);
-                    $durationGroup = new GroupedObservable($key, $writer);
+                if (!isset($this->map[$serializedKey])) {
+                    $writer                    = new Subject();
+                    $this->map[$serializedKey] = $writer;
+                    $group                     = new GroupedObservable($key, $writer, $refCountDisposable);
+                    $durationGroup             = new GroupedObservable($key, $writer);
 
                     try {
-                        $duration = $durationSelector($durationGroup);
+                        $duration = call_user_func($this->durationSelector, $durationGroup);
                     } catch (\Throwable $e) {
-                        foreach ($map as $groupObserver) {
-                            $groupObserver->onError($e);
-                        }
-                        $observer->onError($e);
-
+                        $handleError($e);
                         return;
                     }
 
-                    if ($sourceEmits) {
-                        $observer->onNext($group);
-                    }
+                    $observer->onNext($group);
+
                     $md = new SingleAssignmentDisposable();
                     $groupDisposable->add($md);
-                    $expire = function () use (&$map, &$md, $serializedKey, &$writer, &$groupDisposable) {
-                        if (isset($map[$serializedKey])) {
-                            unset($map[$serializedKey]);
+
+                    $durationSubscription = $duration->take(1)->subscribe(
+                        null,
+                        $handleError,
+                        function () use ($groupDisposable, $md, $writer, $serializedKey) {
+                            unset($this->map[$serializedKey]);
                             $writer->onCompleted();
-                        }
-                        $groupDisposable->remove($md);
-                    };
 
-                    $callbackObserver = new CallbackObserver(
-                        function () {
-                        },
-                        function (\Throwable $exception) use ($map, $observer) {
-                            foreach ($map as $writer) {
-                                $writer->onError($exception);
-                            }
+                            $groupDisposable->remove($md);
+                        });
 
-                            $observer->onError($exception);
-                        },
-                        function () use ($expire) {
-                            $expire();
-                        }
-                    );
-
-                    $subscription = $duration->take(1)->subscribe($callbackObserver);
-
-                    $md->setDisposable($subscription);
+                    $md->setDisposable($durationSubscription);
                 }
 
-                try {
-                    $element = $elementSelector($value);
-                } catch (\Throwable $exception) {
-                    foreach ($map as $writer) {
-                        $writer->onError($exception);
+                if (is_callable($this->elementSelector)) {
+                    try {
+                        $element = call_user_func($this->elementSelector, $element);
+                    } catch (\Throwable $e) {
+                        $handleError($e);
+                        return;
                     }
-
-                    $observer->onError($exception);
-                    return;
                 }
-                $writer->onNext($element);
+
+                $this->map[$serializedKey]->onNext($element);
             },
-            function (\Throwable $error) use (&$map, $observer) {
-                foreach ($map as $writer) {
-                    $writer->onError($error);
+            $handleError,
+            function () use ($observer, &$sourceEmits) {
+                foreach ($this->map as $w) {
+                    $w->onCompleted();
                 }
-
-                $observer->onError($error);
-            },
-            function () use (&$map, $observer) {
-                foreach ($map as $writer) {
-                    $writer->onCompleted();
+                if ($sourceEmits) {
+                    $observer->onCompleted();
                 }
-
-                $observer->onCompleted();
-            }
-        );
-
-        $subscription = $observable->subscribe($callbackObserver);
+            });
 
         $groupDisposable->add($subscription);
 
-        $sourceDisposable = new CallbackDisposable(function () use ($refCountDisposable, &$sourceEmits) {
+        return new CallbackDisposable(function () use (&$sourceEmits, $refCountDisposable) {
             $sourceEmits = false;
             $refCountDisposable->dispose();
         });
-
-        return $sourceDisposable;
     }
 }

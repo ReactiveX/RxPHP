@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx\Disposable;
 
@@ -42,26 +42,23 @@ class RefCountDisposable implements DisposableInterface
         }); // no op
     }
 
-    public function isDisposed()
+    public function isDisposed(): bool
     {
         return $this->isDisposed;
     }
 
-    public function isPrimaryDisposed()
+    public function isPrimaryDisposed(): bool
     {
         return $this->isPrimaryDisposed;
     }
 
-    private function createInnerDisposable()
+    private function createInnerDisposable(): DisposableInterface
     {
-        $count = &$this->count;
-        $count++;
-        $innerDisposable      = &$this;
-        $isInnerDisposed      = false;
-        $underLyingDisposable = &$this->disposable;
+        $this->count++;
+        $isInnerDisposed = false;
 
-        return new CallbackDisposable(function () use (&$count, &$innerDisposable, &$isInnerDisposed) {
-            if ($innerDisposable->isDisposed()) {
+        return new CallbackDisposable(function () use (&$isInnerDisposed) {
+            if ($this->isDisposed()) {
                 return;
             }
 
@@ -70,10 +67,10 @@ class RefCountDisposable implements DisposableInterface
             }
 
             $isInnerDisposed = true;
-            $count--;
+            $this->count--;
 
-            if ($count === 0 && $innerDisposable->isPrimaryDisposed()) {
-                $innerDisposable->dispose();
+            if ($this->count === 0 && $this->isPrimaryDisposed()) {
+                $this->dispose();
             }
         });
     }
