@@ -24,7 +24,6 @@ final class GroupByUntilOperator implements OperatorInterface
 
     public function __construct(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null)
     {
-
         if (null === $elementSelector) {
             $elementSelector = function ($elem) {
                 return $elem;
@@ -55,45 +54,39 @@ final class GroupByUntilOperator implements OperatorInterface
         $refCountDisposable = new RefCountDisposable($groupDisposable);
         $sourceEmits        = true;
 
-        $handleError = function (\Throwable $e) {
+        $handleError = function (\Throwable $e) use ($observer, &$sourceEmits) {
             foreach ($this->map as $w) {
                 $w->onError($e);
+            }
+            if ($sourceEmits) {
+                $observer->onError($e);
             }
         };
 
         $subscription = $observable->subscribe(
-            function ($x) use ($observer, $handleError, $refCountDisposable, $groupDisposable, &$sourceEmits) {
+            function ($element) use ($observer, $handleError, $refCountDisposable, $groupDisposable, &$sourceEmits) {
                 try {
-                    $key           = call_user_func($this->keySelector, $x);
+                    $key           = call_user_func($this->keySelector, $element);
                     $serializedKey = call_user_func($this->keySerializer, $key);
                 } catch (\Throwable $e) {
                     $handleError($e);
-                    $observer->onError($e);
                     return;
                 }
 
-                $fireNewMapEntry = false;
-
-                if (isset($this->map[$serializedKey])) {
-                    $writer = $this->map[$serializedKey];
-                } else {
-                    if (!$sourceEmits) {
-                        return;
-                    }
-                    $writer                    = new Subject();
-                    $this->map[$serializedKey] = $writer;
-                    $fireNewMapEntry           = true;
+                if (!$sourceEmits && !isset($this->map[$serializedKey])) {
+                    return;
                 }
 
-                if ($fireNewMapEntry) {
-                    $group         = new GroupedObservable($key, $writer, $refCountDisposable);
-                    $durationGroup = new GroupedObservable($key, $writer);
+                if (!isset($this->map[$serializedKey])) {
+                    $writer                    = new Subject();
+                    $this->map[$serializedKey] = $writer;
+                    $group                     = new GroupedObservable($key, $writer, $refCountDisposable);
+                    $durationGroup             = new GroupedObservable($key, $writer);
 
                     try {
                         $duration = call_user_func($this->durationSelector, $durationGroup);
                     } catch (\Throwable $e) {
                         $handleError($e);
-                        $observer->onError($e);
                         return;
                     }
 
@@ -104,41 +97,29 @@ final class GroupByUntilOperator implements OperatorInterface
 
                     $durationSubscription = $duration->take(1)->subscribe(
                         null,
-                        function ($e) use ($handleError, $observer) {
-                            $handleError($e);
-                            $observer->onError($e);
-                        },
+                        $handleError,
                         function () use ($groupDisposable, $md, $writer, $serializedKey) {
-                            if (isset($this->map[$serializedKey])) {
-                                unset($this->map[$serializedKey]);
-                                $writer->onCompleted();
-                            }
+                            unset($this->map[$serializedKey]);
+                            $writer->onCompleted();
+
                             $groupDisposable->remove($md);
                         });
 
                     $md->setDisposable($durationSubscription);
                 }
 
-                $element = $x;
-
                 if (is_callable($this->elementSelector)) {
                     try {
-                        $element = call_user_func($this->elementSelector, $x);
+                        $element = call_user_func($this->elementSelector, $element);
                     } catch (\Throwable $e) {
                         $handleError($e);
-                        $observer->onError($e);
                         return;
                     }
                 }
 
-                $writer->onNext($element);
+                $this->map[$serializedKey]->onNext($element);
             },
-            function ($e) use ($observer, $handleError, &$sourceEmits) {
-                $handleError($e);
-                if ($sourceEmits) {
-                    $observer->onError($e);
-                }
-            },
+            $handleError,
             function () use ($observer, &$sourceEmits) {
                 foreach ($this->map as $w) {
                     $w->onCompleted();
