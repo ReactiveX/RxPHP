@@ -2,6 +2,7 @@
 
 namespace Rx\Scheduler;
 
+use Rx\Disposable\CallbackDisposable;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Disposable\SerialDisposable;
 use Rx\SchedulerInterface;
@@ -26,7 +27,6 @@ class VirtualTimeScheduler implements SchedulerInterface
 
     public function schedule(callable $action, $delay = 0)
     {
-
         $invokeAction = function ($scheduler, $action) {
             $action();
             return new EmptyDisposable();
@@ -88,7 +88,10 @@ class VirtualTimeScheduler implements SchedulerInterface
 
         $this->queue->enqueue($scheduledItem);
 
-        return $scheduledItem->getDisposable();
+        return new CallbackDisposable(function () use ($scheduledItem) {
+            $scheduledItem->getDisposable()->dispose();
+            $this->queue->remove($scheduledItem);
+        });
     }
 
     public function scheduleRelativeWithState($state, $dueTime, $action)

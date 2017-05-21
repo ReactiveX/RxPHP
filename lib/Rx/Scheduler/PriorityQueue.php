@@ -20,6 +20,10 @@ class PriorityQueue
 
     public function remove($item)
     {
+        if ($this->count() === 0) {
+            return false;
+        }
+
         if ($this->peek() === $item) {
             $this->dequeue();
             return true;

@@ -4,6 +4,7 @@ namespace Rx\Scheduler;
 
 use React\EventLoop\Factory;
 use Rx\Observable;
+use Rx\Disposable\CallbackDisposable;
 use Rx\TestCase;
 
 class EventLoopSchedulerTest extends TestCase
@@ -128,5 +129,96 @@ class EventLoopSchedulerTest extends TestCase
         $loop->run();
 
         $this->assertEquals(0.2, $called-$start, '', 0.02);
+    }
+
+    public function testScheduledItemsFromOutsideOfSchedulerDontCreateExtraTimers()
+    {
+        $timersCreated   = 0;
+        $timersExecuted = 0;
+        $loop           = Factory::create();
+        $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
+            $timersCreated++;
+            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted) {
+                $timersExecuted++;
+                $action();
+            });
+            return new CallbackDisposable(function () use ($timer) {
+                $timer->cancel();
+            });
+        });
+
+        $scheduler->schedule(function () {}, 20);
+
+        $scheduler->schedule(function () {}, 15)->dispose();
+        $scheduler->schedule(function () {}, 14)->dispose();
+        $scheduler->schedule(function () {}, 13)->dispose();
+        $scheduler->schedule(function () {}, 12)->dispose();
+
+        $scheduler->schedule(function () {}, 10);
+
+        $loop->run();
+
+        $this->assertEquals($timersCreated, 3);
+        $this->assertEquals($timersExecuted, 3);
+    }
+
+    public function testMultipleSchedulersFromOutsideInSameTickDontCreateExtraTimers()
+    {
+        $timersCreated   = 0;
+        $timersExecuted = 0;
+        $loop           = Factory::create();
+        $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
+            $timersCreated++;
+            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted) {
+                $timersExecuted++;
+                $action();
+            });
+            return new CallbackDisposable(function () use ($timer) {
+                $timer->cancel();
+            });
+        });
+
+        $scheduler->schedule(function () {}, 20);
+        $loop->addTimer(0.01, function () use ($scheduler) {
+            $scheduler->schedule(function () {}, 30);
+
+            $scheduler->schedule(function () {}, 25)->dispose();
+            $scheduler->schedule(function () {}, 24)->dispose();
+            $scheduler->schedule(function () {}, 23)->dispose();
+            $scheduler->schedule(function () {}, 22)->dispose();
+        });
+
+        $loop->run();
+
+        $this->assertEquals($timersCreated, 3);
+        $this->assertEquals($timersExecuted, 3);
+    }
+
+    public function testThatStuffScheduledWayInTheFutureDoesntKeepTheLoopRunningIfDisposed()
+    {
+        $loop           = Factory::create();
+        $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
+            $timersCreated++;
+            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted) {
+                $timersExecuted++;
+                $action();
+            });
+            return new CallbackDisposable(function () use ($timer) {
+                $timer->cancel();
+            });
+        });
+
+        $disp = $scheduler->schedule(function () {}, 3000);
+        $loop->addTimer(0.01, function () use ($scheduler, $disp) {
+            $scheduler->schedule(function () use ($disp) {
+                $disp->dispose();
+            });
+        });
+
+        $beforeLoopStart = microtime(true);
+        $loop->run();
+        $loopTime = microtime(true) - $beforeLoopStart;
+
+        $this->assertLessThan(2, $loopTime);
     }
 }
