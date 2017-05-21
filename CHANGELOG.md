@@ -1,3 +1,17 @@
+# 2.0.2
+
+### Bug Fixes
+
+- Make scheduler optional for `ReplaySubject` ([a8d1c50](https://github.com/ReactiveX/RxPHP/commit/a8d1c50d69c80ae71a945886de06a01d1b0f4d09))
+- EventLoop will only ever scheduler 1 timer now #167 #165 ([bccbce9](https://github.com/ReactiveX/RxPHP/commit/bccbce9af3dc9bf083fb26b5812aad119ad2e97b))
+- Canceled items are now removed from `PriorityQueue` #168 ([6a4f9e7](https://github.com/ReactiveX/RxPHP/pull/168/commits/6a4f9e7fd8b3f9390b19bd451b87c5907b012562))
+- Fix memory leak and refactor `groupBy*` operators ([7e4dc3c](https://github.com/ReactiveX/RxPHP/commit/7e4dc3c9e4eb04045bcb94db3296cb452def2cda))
+
+### Features
+
+- Added `withLatestFrom` operator ([273df81](https://github.com/ReactiveX/RxPHP/commit/273df812f7871a320b6702bf8b74657423fafa9c))
+
+
 # 2.0.1
 
 ### Bug Fixes
