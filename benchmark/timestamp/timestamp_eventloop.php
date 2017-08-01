@@ -8,7 +8,7 @@ $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
 $source = Observable::range(0, 5, $scheduler)
-    ->timestamp();
+    ->timestamp($scheduler);
 
 $factory = function() use ($source) {
     return $source;

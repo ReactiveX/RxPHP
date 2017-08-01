@@ -8,7 +8,7 @@ $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
 $source = Observable::range(0, 25, $scheduler)
-    ->startWithArray([5, 5, 5]);
+    ->startWithArray([5, 5, 5], $scheduler);
 
 return function() use ($source) {
     return $source;

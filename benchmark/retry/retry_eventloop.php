@@ -15,7 +15,7 @@ $source = Observable::range(5, 1, $scheduler)
         if (++$newRetryCount < $maxRetryCount - 1) {
             return Observable::error(new \Exception('error'));
         }
-        return Observable::just($x);
+        return Observable::of($x);
     })
     ->retry($maxRetryCount);
 

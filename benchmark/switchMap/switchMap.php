@@ -1,10 +1,13 @@
 <?php
 
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
 
-$source = Observable::range(0, 25)
-    ->flatMapLatest(function($x) {
-        return Observable::range($x, 25);
+$scheduler = new ImmediateScheduler();
+
+$source = Observable::range(0, 25, $scheduler)
+    ->flatMapLatest(function($x) use ($scheduler) {
+        return Observable::range($x, 25, $scheduler);
     });
 
 return function() use ($source) {

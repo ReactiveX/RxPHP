@@ -1,10 +1,13 @@
 <?php
 
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
 
-$source = Observable::range(0, 25)
-    ->map(function() {
-        return Observable::range(0, 25);
+$scheduler = new ImmediateScheduler();
+
+$source = Observable::range(0, 25, $scheduler)
+    ->map(function() use ($scheduler) {
+        return Observable::range(0, 25, $scheduler);
     })
     ->concatAll();
 

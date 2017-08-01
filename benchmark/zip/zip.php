@@ -1,9 +1,12 @@
 <?php
 
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
 
-$source = Observable::range(0, 25)
-    ->zip([Observable::range(0, 25)], function ($a, $b) {
+$scheduler = new ImmediateScheduler();
+
+$source = Observable::range(0, 25, $scheduler)
+    ->zip([Observable::range(0, 25, $scheduler)], function ($a, $b) {
         return $a + $b;
     });
 

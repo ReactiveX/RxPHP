@@ -1,10 +1,13 @@
 <?php
 
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
 
-$source = Observable::range(0, 25)
+$scheduler = new ImmediateScheduler();
+
+$source = Observable::range(0, 25, $scheduler)
     ->scan(function($acc, $x) {
-        return $x + $x;
+        return $acc + $x;
     });
 
 return function() use ($source) {

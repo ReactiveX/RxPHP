@@ -1,14 +1,13 @@
 <?php
 
 use Rx\Observable;
-use Rx\Scheduler\EventLoopScheduler;
 use React\EventLoop\StreamSelectLoop;
+use Rx\Scheduler;
 
 $loop = new StreamSelectLoop();
-$scheduler = new EventLoopScheduler($loop);
+$scheduler = new Scheduler\EventLoopScheduler($loop);
 
-$source = Observable::of(25, $scheduler)
-    ->delay(0, $scheduler);
+$source = Observable::fromArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], $scheduler);
 
 $factory = function() use ($source) {
     return $source;

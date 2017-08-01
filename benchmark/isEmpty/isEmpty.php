@@ -1,8 +1,11 @@
 <?php
 
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
 
-$source = Observable::just(25)
+$scheduler = new ImmediateScheduler();
+
+$source = Observable::of(25, $scheduler)
     ->isEmpty();
 
 return function() use ($source) {

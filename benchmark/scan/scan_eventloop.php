@@ -9,7 +9,7 @@ $scheduler = new EventLoopScheduler($loop);
 
 $source = Observable::range(0, 25, $scheduler)
     ->scan(function($acc, $x) {
-        return $x + $x;
+        return $acc + $x;
     });
 
 $factory = function() use ($source) {

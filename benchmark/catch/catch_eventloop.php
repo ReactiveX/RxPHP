@@ -7,8 +7,10 @@ use React\EventLoop\StreamSelectLoop;
 $loop = new StreamSelectLoop();
 $scheduler = new EventLoopScheduler($loop);
 
-$source = Observable::range(0, 25, $scheduler)
-    ->startWith(5, $scheduler);
+$source = Observable::error(new \Exception('error'), $scheduler)
+    ->catch(function() use ($scheduler) {
+        return Observable::of(25, $scheduler);
+    });
 
 return function() use ($source) {
     return $source;

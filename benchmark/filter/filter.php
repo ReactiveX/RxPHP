@@ -1,8 +1,11 @@
 <?php
 
 use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
 
-$source = Observable::range(0, 50)
+$scheduler = new ImmediateScheduler();
+
+$source = Observable::range(0, 50, $scheduler)
     ->filter(function($value) {
         return $value % 2 == 0;
     })
