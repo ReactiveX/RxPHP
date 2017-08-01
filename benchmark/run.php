@@ -36,7 +36,7 @@ if ($_SERVER['argc'] === 1) {
 
 
 Observable::just($files)
-    ->doOnNext(function(array $files) {
+    ->do(function(array $files) {
         printf("Benchmarking %d file/s (min %ds each)\n", count($files), MIN_TOTAL_DURATION);
         printf("script_name - total_runs (single_run_mean ±standard_deviation) - mem_start [mem_100_iter] mem_end\n");
         printf("==============================================================\n");
@@ -44,7 +44,7 @@ Observable::just($files)
     ->concatMap(function($files) { // Flatten the array
         return Observable::fromArray($files);
     })
-    ->doOnNext(function($file) {
+    ->do(function($file) {
         printf('%s', pathinfo($file, PATHINFO_FILENAME));
     })
     ->map(function($file) { // Run benchmark
@@ -118,7 +118,7 @@ Observable::just($files)
             'memory_usage' => $memoryUsage,
         ];
     })
-    ->doOnNext(function(array $result) { // Print the number of successful runs
+    ->do(function(array $result) { // Print the number of successful runs
         printf(' - %d', count($result['durations']));
     })
     ->map(function(array $result) { // Calculate the standard deviation
