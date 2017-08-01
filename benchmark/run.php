@@ -10,6 +10,10 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use React\EventLoop\LoopInterface;
+use React\EventLoop\Factory;
+use Rx\Scheduler;
+
+$scheduler = new Scheduler\ImmediateScheduler();
 
 // Check whether XDebug is enabled
 if (in_array('Xdebug', get_loaded_extensions(true))) {
@@ -34,15 +38,14 @@ if ($_SERVER['argc'] === 1) {
     }
 }
 
-
-Observable::just($files)
+Observable::of($files, $scheduler)
     ->do(function(array $files) {
         printf("Benchmarking %d file/s (min %ds each)\n", count($files), MIN_TOTAL_DURATION);
         printf("script_name - total_runs (single_run_mean ±standard_deviation) - mem_start [mem_100_iter] mem_end\n");
         printf("==============================================================\n");
     })
-    ->concatMap(function($files) { // Flatten the array
-        return Observable::fromArray($files);
+    ->concatMap(function($files) use ($scheduler) { // Flatten the array
+        return Observable::fromArray($files, $scheduler);
     })
     ->do(function($file) {
         printf('%s', pathinfo($file, PATHINFO_FILENAME));
@@ -88,13 +91,13 @@ Observable::just($files)
             }
         };
 
-        $stopStartTime = microtime(true) + MIN_TOTAL_DURATION;
+        $stopTime = microtime(true) + MIN_TOTAL_DURATION;
 
         if ($loop) {
-            $reschedule = function() use (&$reschedule, $benchmarkLoop, $sourceFactory, $loop, $stopStartTime) {
-                $loop->futureTick(function () use (&$reschedule, $benchmarkLoop, $stopStartTime, $sourceFactory) {
+            $reschedule = function() use (&$reschedule, $benchmarkLoop, $sourceFactory, $loop, $stopTime) {
+                $loop->futureTick(function () use (&$reschedule, $benchmarkLoop, $stopTime, $sourceFactory) {
                     $benchmarkLoop($sourceFactory());
-                    if ($stopStartTime > microtime(true)) {
+                    if ($stopTime > microtime(true)) {
                         $reschedule();
                     }
                 });
@@ -103,7 +106,7 @@ Observable::just($files)
             $reschedule();
             $loop->run();
         } else {
-            while ($stopStartTime > microtime(true)) {
+            while ($stopTime > microtime(true)) {
                 $benchmarkLoop($sourceFactory());
             }
         }
@@ -136,7 +139,7 @@ Observable::just($files)
             'standard_deviation' => pow($variance / $count, 0.5),
         ];
     })
-    ->subscribe(new CallbackObserver(
+    ->subscribe(
         function(array $result) {
             printf(" (%.2fms ±%.2fms) - ", $result['mean'], $result['standard_deviation']);
             foreach ($result['memory_usage'] as $memory) {
@@ -151,4 +154,4 @@ Observable::just($files)
             printf("============================================================\n");
             printf("total duration: %.2fs\n", microtime(true) - $start);
         }
-    ));
+    );
