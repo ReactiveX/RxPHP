@@ -4,14 +4,11 @@ declare(strict_types = 1);
 
 namespace Rx;
 
-use React\Promise\Deferred;
-use React\Promise\PromiseInterface;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
-use Rx\Observable\FromPromiseObservable;
 use Rx\Observable\ForkJoinObservable;
 use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
@@ -72,7 +69,7 @@ use Rx\Operator\TimestampOperator;
 use Rx\Operator\ToArrayOperator;
 use Rx\Operator\WithLatestFromOperator;
 use Rx\Operator\ZipOperator;
-use Rx\React\Promise;
+use Rx\Promise\Promise;
 use Rx\Subject\AsyncSubject;
 use Rx\Subject\BehaviorSubject;
 use Rx\Subject\ReplaySubject;
@@ -1995,7 +1992,7 @@ abstract class Observable implements ObservableInterface
     /**
      * Converts a promise into an observable
      *
-     * @param PromiseInterface $promise
+     * @param \React\Promise\PromiseInterface|\Amp\Promise $promise
      * @return Observable
      * @throws \InvalidArgumentException
      *
@@ -2003,7 +2000,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex from
      */
-    public static function fromPromise(PromiseInterface $promise): Observable
+    public static function fromPromise($promise): Observable
     {
         return Promise::toObservable($promise);
     }
@@ -2011,13 +2008,12 @@ abstract class Observable implements ObservableInterface
     /**
      * Converts Observable into a Promise
      *
-     * @param Deferred $deferred
-     * @return PromiseInterface
+     * @return Promise
      * @throws \InvalidArgumentException
      */
-    public function toPromise(Deferred $deferred = null): PromiseInterface
+    public function toPromise(): Promise
     {
-        return Promise::fromObservable($this, $deferred);
+        return Promise::fromObservable($this);
     }
 
     /**

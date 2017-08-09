@@ -7,8 +7,10 @@ use Exception;
 use React\Promise\Deferred;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observer\CallbackObserver;
-use Rx\React\Promise;
+use Rx\Promise\Promise;
 use Rx\Testing\MockObserver;
+use function React\Promise\resolve;
+use function React\Promise\reject;
 
 class PromiseToObservableTest extends FunctionalTestCase
 {
@@ -18,7 +20,7 @@ class PromiseToObservableTest extends FunctionalTestCase
      */
     public function from_promise_success()
     {
-        $p = Promise::resolved(42);
+        $p = resolve(42);
 
         $source = Promise::toObservable($p);
 
@@ -40,7 +42,7 @@ class PromiseToObservableTest extends FunctionalTestCase
      */
     public function from_promise_failure()
     {
-        $p = Promise::rejected(new Exception('error'));
+        $p = reject(new Exception('error'));
 
         $source = Promise::toObservable($p);
 

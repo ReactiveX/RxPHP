@@ -1,6 +1,6 @@
 <?php
 
-namespace Rx\React;
+namespace Rx\Promise;
 
 class RejectedPromiseException extends \Exception
 {

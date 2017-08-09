@@ -6,7 +6,7 @@ namespace Rx\Functional\React;
 use Exception;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-use Rx\React\Promise;
+use Rx\Promise\Promise;
 use Rx\Subject\Subject;
 
 class PromiseFromObservableTest extends FunctionalTestCase
