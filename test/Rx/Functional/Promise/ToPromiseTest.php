@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace Rx\Functional\Promise;
 
+use Amp\Promise as AmpPromise;
 use Exception;
+use React\Promise\PromiseInterface as ReactPromise;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 
@@ -17,6 +19,9 @@ class ToPromiseTest extends FunctionalTestCase
     public function promise_success()
     {
         $promise = Observable::of(42)->toPromise();
+
+        $this->assertInstanceOf(AmpPromise::class, $promise);
+        $this->assertInstanceOf(ReactPromise::class, $promise);
 
         $result = null;
 
@@ -34,6 +39,9 @@ class ToPromiseTest extends FunctionalTestCase
     public function promise_failure()
     {
         $promise = Observable::error(new Exception('some error'))->toPromise();
+
+        $this->assertInstanceOf(AmpPromise::class, $promise);
+        $this->assertInstanceOf(ReactPromise::class, $promise);
 
         $error = null;
 

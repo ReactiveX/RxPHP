@@ -1,12 +1,14 @@
 <?php
 
-namespace Rx\Functional\React;
+namespace Rx\Functional\Promise;
 
 use Exception;
 use Rx\Functional\FunctionalTestCase;
-use Rx\React\Promise;
-use Rx\React\PromiseFactory;
-use Rx\React\RejectedPromiseException;
+use Rx\Promise\Promise;
+use Rx\Promise\PromiseFactory;
+use Rx\Promise\RejectedPromiseException;
+use function React\Promise\resolve;
+use function React\Promise\reject;
 
 class PromiseFactoryTest extends FunctionalTestCase
 {
@@ -16,7 +18,7 @@ class PromiseFactoryTest extends FunctionalTestCase
     public function from_promise_success()
     {
         $source = PromiseFactory::toObservable(function() {
-            return Promise::resolved(42);
+            return resolve(42);
         });
 
         $results = $this->scheduler->startWithCreate(function() use ($source) {
@@ -35,7 +37,7 @@ class PromiseFactoryTest extends FunctionalTestCase
     public function from_promise_reject_non_exception()
     {
         $source = PromiseFactory::toObservable(function () {
-            return Promise::rejected(42);
+            return reject(42);
         });
 
         $theException = null;
@@ -63,7 +65,7 @@ class PromiseFactoryTest extends FunctionalTestCase
         $error = new Exception("Test exception");
 
         $source = PromiseFactory::toObservable(function () use ($error) {
-            return Promise::rejected($error);
+            return reject($error);
         });
 
         $theException = null;

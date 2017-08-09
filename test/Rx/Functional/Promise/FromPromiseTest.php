@@ -7,7 +7,7 @@ namespace Rx\Functional\Promise;
 use Exception;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
-use Rx\React\RejectedPromiseException;
+use Rx\Promise\RejectedPromiseException;
 use Rx\Testing\MockObserver;
 
 class FromPromiseTest extends FunctionalTestCase
