@@ -6,6 +6,7 @@ namespace Rx\Scheduler;
 
 use React\EventLoop\Factory;
 use Rx\Disposable\CallbackDisposable;
+use Rx\Disposable\EmptyDisposable;
 use Rx\TestCase;
 
 class EventLoopSchedulerTest extends TestCase
@@ -15,7 +16,7 @@ class EventLoopSchedulerTest extends TestCase
      */
     public function now_returns_time_since_epoch_in_ms()
     {
-        $scheduler = new EventLoopScheduler(function () {});
+        $scheduler = new EventLoopScheduler(function () { return new EmptyDisposable(); });
 
         $this->assertTrue(abs(time() * 1000 - $scheduler->now()) < 1000, 'time difference is less than or equal to 1');
     }
@@ -88,6 +89,7 @@ class EventLoopSchedulerTest extends TestCase
         // create a scheduler - timing is not important for this test
         // so we can just use an empty callable
         $scheduler = new EventLoopScheduler(function () {
+            return new EmptyDisposable();
         });
 
         $calls = [];
@@ -223,5 +225,23 @@ class EventLoopSchedulerTest extends TestCase
         $loopTime = microtime(true) - $beforeLoopStart;
 
         $this->assertLessThan(2, $loopTime);
+    }
+
+    public function testThatDisposalOfSingleScheduledItemOutsideOfInvokeCancelsTimer()
+    {
+        $loop      = Factory::create();
+        $scheduler = new EventLoopScheduler($loop);
+
+        $startTime = microtime(true);
+
+        $disp = $scheduler->schedule(function () {}, 3000);
+        $loop->addTimer(0.01, function () use ($disp) {
+            $disp->dispose();
+        });
+
+        $loop->run();
+        $endTime = microtime(true);
+
+        $this->assertLessThan(2, $endTime - $startTime);
     }
 }

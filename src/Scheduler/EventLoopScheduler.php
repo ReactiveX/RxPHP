@@ -6,6 +6,7 @@ namespace Rx\Scheduler;
 
 use React\EventLoop\LoopInterface;
 use Rx\Disposable\CallbackDisposable;
+use Rx\Disposable\CompositeDisposable;
 use Rx\Disposable\EmptyDisposable;
 use Rx\DisposableInterface;
 
@@ -58,7 +59,15 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         $this->currentTimer->dispose();
         $this->currentTimer = call_user_func($this->delayCallback, 0, [$this, 'start']);
 
-        return $disp;
+        return new CompositeDisposable([
+            $disp,
+            new CallbackDisposable(function () {
+                if (!$this->insideInvoke) {
+                    $this->currentTimer->dispose();
+                    $this->currentTimer = call_user_func($this->delayCallback, 0, [$this, 'start']);
+                }
+            })
+        ]);
     }
 
     public function start()
