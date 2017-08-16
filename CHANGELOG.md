@@ -1,3 +1,15 @@
+# 2.0.3
+
+### Bug Fixes
+
+- Fixed order of subscriptions in `takeUntil` ([1838ede](https://github.com/ReactiveX/RxPHP/commit/1838ede703bcb14eb67ed54cd61401f2ffff08c8))
+- Fixed issue where disposed of scheduled item would not cancel timer in some instances ([bb2c5a0](https://github.com/ReactiveX/RxPHP/commit/bb2c5a09dd37d0a4f5dd16c8c5ae8607e59936cb))
+- Removed throttle.expect to get rid of non-determinate test failures ([97a980c](https://github.com/ReactiveX/RxPHP/commit/97a980c3b87dae992ac774c03d87726a268a042a))
+
+### Features
+
+- Updated PHPUnit to 5.7 ([b1b37ab](https://github.com/ReactiveX/RxPHP/commit/b1b37ab2cf4ae3649b8571b0d42d7fcfefc079ae))
+
 # 2.0.2
 
 ### Bug Fixes
