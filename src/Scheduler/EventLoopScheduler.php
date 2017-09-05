@@ -42,9 +42,27 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         });
     }
 
+    private function scheduleStartup()
+    {
+        if ($this->insideInvoke) {
+            return;
+        }
+        $this->currentTimer->dispose();
+        $this->nextTimer    = $this->getClock();
+        $this->currentTimer = call_user_func($this->delayCallback, 0, [$this, 'start']);
+    }
+
     public function scheduleAbsoluteWithState($state, int $dueTime, callable $action): DisposableInterface
     {
-        $disp = parent::scheduleAbsoluteWithState($state, $dueTime, $action);
+        $disp = new CompositeDisposable([
+            parent::scheduleAbsoluteWithState($state, $dueTime, $action),
+            new CallbackDisposable(function () use ($dueTime) {
+                if ($dueTime > $this->nextTimer) {
+                    return;
+                }
+                $this->scheduleStartup();
+            })
+        ]);
 
         if ($this->insideInvoke) {
             return $disp;
@@ -54,20 +72,9 @@ final class EventLoopScheduler extends VirtualTimeScheduler
             return $disp;
         }
 
-        $this->nextTimer = $this->getClock();
+        $this->scheduleStartup();
 
-        $this->currentTimer->dispose();
-        $this->currentTimer = call_user_func($this->delayCallback, 0, [$this, 'start']);
-
-        return new CompositeDisposable([
-            $disp,
-            new CallbackDisposable(function () {
-                if (!$this->insideInvoke) {
-                    $this->currentTimer->dispose();
-                    $this->currentTimer = call_user_func($this->delayCallback, 0, [$this, 'start']);
-                }
-            })
-        ]);
+        return $disp;
     }
 
     public function start()
