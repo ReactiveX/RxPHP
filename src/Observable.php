@@ -11,7 +11,6 @@ use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\ErrorObservable;
-use Rx\Observable\FromPromiseObservable;
 use Rx\Observable\ForkJoinObservable;
 use Rx\Observable\IntervalObservable;
 use Rx\Observable\IteratorObservable;
@@ -1310,6 +1309,43 @@ abstract class Observable implements ObservableInterface
     public function share(): RefCountObservable
     {
         return $this->publish()->refCount();
+    }
+
+    /**
+     * Returns an observable sequence that shares a single subscription to the underlying sequence. This observable sequence
+     * can be resubscribed to, even if all prior subscriptions have ended.
+     *
+     * This operator behaves like share() in RxJS 5
+     *
+     * @return \Rx\Observable An observable sequence that contains the elements of a sequence
+     * produced by multicasting the source sequence.
+     *
+     * @demo share/singleInstance.php
+     * @operator
+     * @reactivex refcount
+     */
+    public function singleInstance(): Observable
+    {
+        $hasObservable = false;
+        $observable = null;
+        $source = $this;
+
+        $getObservable = function () use (&$hasObservable, &$observable, $source): Observable {
+            if (!$hasObservable) {
+                $hasObservable = true;
+                $observable = $source
+                    ->finally(function () use (&$hasObservable) {
+                        $hasObservable = false;
+                    })
+                    ->publish()
+                    ->refCount();
+            }
+            return $observable;
+        };
+
+        return new Observable\AnonymousObservable(function (ObserverInterface $o) use ($getObservable) {
+            return $getObservable()->subscribe($o);
+        });
     }
 
     /**
