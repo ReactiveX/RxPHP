@@ -1,3 +1,13 @@
+# 2.0.4
+
+### Bug Fixes
+
+- Fixed issue where EventLoopScheduler did not cancel timers in certain circumstances ([c915843](https://github.com/ReactiveX/RxPHP/commit/c91584391da87f78649af0222368f14ba22e0837))
+
+### Features
+
+- Added `singleInstance` operator ([4f77d38](https://github.com/ReactiveX/RxPHP/pull/185/commits/4f77d386b4596eccb2f5a3e9e3f9658a9aa57015))
+
 # 2.0.3
 
 ### Bug Fixes
