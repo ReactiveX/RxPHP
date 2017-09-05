@@ -167,7 +167,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals($timersExecuted, 3);
     }
 
-    public function testMultipleSchedulersFromOutsideInSameTickDontCreateExtraTimers()
+    public function testMultipleSchedulesFromOutsideInSameTickDontCreateExtraTimers()
     {
         $timersCreated   = 0;
         $timersExecuted = 0;
@@ -190,13 +190,13 @@ class EventLoopSchedulerTest extends TestCase
             $scheduler->schedule(function () {}, 25)->dispose();
             $scheduler->schedule(function () {}, 24)->dispose();
             $scheduler->schedule(function () {}, 23)->dispose();
-            $scheduler->schedule(function () {}, 22)->dispose();
+            $scheduler->schedule(function () {}, 25)->dispose();
         });
 
         $loop->run();
 
-        $this->assertEquals($timersCreated, 3);
-        $this->assertEquals($timersExecuted, 3);
+        $this->assertEquals(3, $timersCreated);
+        $this->assertEquals(3, $timersExecuted);
     }
 
     public function testThatStuffScheduledWayInTheFutureDoesntKeepTheLoopRunningIfDisposed()
@@ -236,6 +236,25 @@ class EventLoopSchedulerTest extends TestCase
 
         $disp = $scheduler->schedule(function () {}, 3000);
         $loop->addTimer(0.01, function () use ($disp) {
+            $disp->dispose();
+        });
+
+        $loop->run();
+        $endTime = microtime(true);
+
+        $this->assertLessThan(2, $endTime - $startTime);
+    }
+
+    public function testScheduledItemPastNextScheduledItemKillsItOwnTimerIfItBecomesTheNextOneAndIsDisposed()
+    {
+        $loop      = Factory::create();
+        $scheduler = new EventLoopScheduler($loop);
+
+        $startTime = microtime(true);
+
+        $scheduler->schedule(function () {}, 30);
+        $disp  = $scheduler->schedule(function () {}, 3000);
+        $loop->addTimer(0.050, function () use ($disp) {
             $disp->dispose();
         });
 
