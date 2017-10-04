@@ -94,7 +94,14 @@ class ToPromiseTest extends FunctionalTestCase
      */
     public function promise_cancel()
     {
-        $promise = Observable::timer(1000)->mapTo(42)->toPromise();
+        $disposed = false;
+
+        $promise = Observable::timer(1000)
+            ->mapTo(42)
+            ->finally(function () use (&$disposed) {
+                $disposed = true;
+            })
+            ->toPromise();
 
         $result = null;
 
@@ -105,5 +112,6 @@ class ToPromiseTest extends FunctionalTestCase
         });
 
         $this->assertEquals(null, $result);
+        $this->assertTrue($disposed);
     }
 }
