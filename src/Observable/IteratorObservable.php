@@ -27,7 +27,7 @@ class IteratorObservable extends Observable
 
         $action = function ($reschedule) use (&$observer, &$key) {
             try {
-                if (null === $key) {
+                if (null === $key || !$this->items->valid()) {
 
                     if ($this->items instanceof \Generator && $this->items->getReturn()) {
                         $observer->onNext($this->items->getReturn());
