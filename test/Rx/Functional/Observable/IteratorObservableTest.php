@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx\Functional\Observable;
 
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observable\IteratorObservable;
+use Rx\Testing\MockObserver;
 
 class IteratorObservableTest extends FunctionalTestCase
 {
@@ -118,6 +119,76 @@ class IteratorObservableTest extends FunctionalTestCase
             onNext(204, 10),
             onCompleted(204),
         ], $results->getMessages());
+    }
+
+    /**
+     * @test
+     * RxPHP Issue 188
+     */
+    public function it_completes_if_subscribed_second_time_without_return_value()
+    {
+        $generator = $this->genOneToThree();
+
+        $results1 = new MockObserver($this->scheduler);
+
+        $this->scheduler->scheduleAbsolute(200, function () use ($generator, $results1) {
+            Observable::fromIterator($generator, $this->scheduler)->subscribe($results1);
+        });
+
+        $results2 = new MockObserver($this->scheduler);
+
+        $this->scheduler->scheduleAbsolute(400, function () use ($generator, $results2) {
+            Observable::fromIterator($generator, $this->scheduler)->subscribe($results2);
+        });
+
+        $this->scheduler->start();
+
+        $this->assertMessages([
+            onNext(201, 1),
+            onNext(202, 2),
+            onNext(203, 3),
+            onCompleted(204),
+        ], $results1->getMessages());
+
+        $this->assertMessages([
+            onCompleted(401),
+        ], $results2->getMessages());
+    }
+
+    /**
+     * @test
+     * RxPHP Issue 188
+     */
+    public function it_returns_value_if_subscribed_second_time_with_return_value()
+    {
+        $generator = $this->genOneToThreeAndReturn();
+
+        $results1 = new MockObserver($this->scheduler);
+
+        $this->scheduler->scheduleAbsolute(200, function () use ($generator, $results1) {
+            Observable::fromIterator($generator, $this->scheduler)->subscribe($results1);
+        });
+
+        $results2 = new MockObserver($this->scheduler);
+
+        $this->scheduler->scheduleAbsolute(400, function () use ($generator, $results2) {
+            Observable::fromIterator($generator, $this->scheduler)->subscribe($results2);
+        });
+
+        $this->scheduler->start();
+
+        $this->assertMessages([
+            onNext(201, 1),
+            onNext(202, 2),
+            onNext(203, 3),
+            onNext(204, 10),
+            onCompleted(204),
+        ], $results1->getMessages());
+
+        $this->assertMessages([
+            onNext(401,10),
+            onCompleted(401),
+        ], $results2->getMessages());
     }
 
     private function genOneToThree()
