@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx\Functional\Promise;
 
@@ -86,5 +86,32 @@ class ToPromiseTest extends FunctionalTestCase
             });
 
         $this->assertEquals(new Exception('some error'), $error);
+    }
+
+    /**
+     * @test
+     *
+     */
+    public function promise_cancel()
+    {
+        $disposed = false;
+
+        $promise = Observable::timer(1000)
+            ->mapTo(42)
+            ->finally(function () use (&$disposed) {
+                $disposed = true;
+            })
+            ->toPromise();
+
+        $result = null;
+
+        $promise->cancel();
+
+        $promise->then(function ($value) use (&$result) {
+            $result = $value;
+        });
+
+        $this->assertEquals(null, $result);
+        $this->assertTrue($disposed);
     }
 }

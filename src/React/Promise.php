@@ -46,10 +46,14 @@ final class Promise
      */
     public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null): ReactPromise
     {
-        $d     = $deferred ?: new Deferred();
+
+        $d = $deferred ?: new Deferred(function () use (&$subscription) {
+            $subscription->dispose();
+        });
+
         $value = null;
 
-        $observable->subscribe(
+        $subscription = $observable->subscribe(
             function ($v) use (&$value) {
                 $value = $v;
             },
