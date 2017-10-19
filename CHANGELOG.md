@@ -1,3 +1,10 @@
+# 2.0.5
+
+### Bug Fixes
+
+- Immediately complete if the iterator is no longer valid ([af6765a](https://github.com/ReactiveX/RxPHP/commit/af6765a0f996b2f8d1d4b8d93e1d0bb755587843))
+- Dispose inner observable when promise is cancelled ([4855812](https://github.com/ReactiveX/RxPHP/commit/48558124af3a47c2057ce50953bf5d7019bd6382))
+
 # 2.0.4
 
 ### Bug Fixes
