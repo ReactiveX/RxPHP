@@ -97,7 +97,19 @@ abstract class Observable implements ObservableInterface
             throw new \InvalidArgumentException('The first argument needs to be a "callable" or "Observer"');
         }
 
-        $observer = new CallbackObserver($onNextOrObserver, $onError, $onCompleted);
+        $observer = new CallbackObserver(
+            $onNextOrObserver === null
+                ? null
+                : function ($value) use ($onNextOrObserver, &$observer) {
+                try {
+                    $onNextOrObserver($value);
+                } catch (\Throwable $throwable) {
+                    $observer->onError($throwable);
+                }
+            },
+            $onError,
+            $onCompleted
+        );
 
         return $this->_subscribe($observer);
     }

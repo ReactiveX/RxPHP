@@ -8,6 +8,7 @@ use Rx\Observable\ConnectableObservable;
 use Rx\Observable\EmptyObservable;
 use Rx\Observable\RefCountObservable;
 use Rx\Observable\ReturnObservable;
+use Rx\Observer\TestException;
 use Rx\Scheduler\ImmediateScheduler;
 use Rx\Testing\TestScheduler;
 
@@ -178,5 +179,27 @@ class ObservableTest extends TestCase
 
 
         $o->switchLatest();
+    }
+
+    /**
+     * @test
+     */
+    public function it_sends_throwables_in_onnext_to_onerror()
+    {
+        $onNext = function ($x) {
+            throw new TestException();
+        };
+
+        $error = null;
+
+        Observable::of(0)
+            ->subscribe(
+                $onNext,
+                function (\Throwable $e) use (&$error) {
+                    $error = $e;
+                }
+            );
+
+        $this->assertInstanceOf(TestException::class, $error);
     }
 }
