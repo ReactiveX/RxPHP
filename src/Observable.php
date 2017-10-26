@@ -6,6 +6,7 @@ namespace Rx;
 
 use React\Promise\Deferred;
 use React\Promise\PromiseInterface;
+use Rx\Disposable\EmptyDisposable;
 use Rx\Observable\AnonymousObservable;
 use Rx\Observable\ArrayObservable;
 use Rx\Observable\ConnectableObservable;
@@ -97,9 +98,26 @@ abstract class Observable implements ObservableInterface
             throw new \InvalidArgumentException('The first argument needs to be a "callable" or "Observer"');
         }
 
-        $observer = new CallbackObserver($onNextOrObserver, $onError, $onCompleted);
+        $disposable = new EmptyDisposable();
 
-        return $this->_subscribe($observer);
+        $observer = new CallbackObserver(
+            $onNextOrObserver === null
+                ? null
+                : function ($value) use ($onNextOrObserver, &$observer, &$disposable) {
+                try {
+                    $onNextOrObserver($value);
+                } catch (\Throwable $throwable) {
+                    $disposable->dispose();
+                    $observer->onError($throwable);
+                }
+            },
+            $onError,
+            $onCompleted
+        );
+
+        $disposable = $this->_subscribe($observer);
+
+        return $disposable;
     }
 
     /**
