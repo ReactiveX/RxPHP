@@ -1,3 +1,9 @@
+# 2.0.6
+
+### Bug Fixes
+
+- Reroute exceptions in onNext to onError by default ([b7ba556](https://github.com/ReactiveX/RxPHP/commit/b7ba55623676257cf4b1bea5d8a9218333cfb563))
+
 # 2.0.5
 
 ### Bug Fixes
