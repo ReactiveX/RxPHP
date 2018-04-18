@@ -147,8 +147,8 @@ class EventLoopSchedulerTest extends TestCase
                 $timersExecuted++;
                 $action();
             });
-            return new CallbackDisposable(function () use ($timer) {
-                $timer->cancel();
+            return new CallbackDisposable(function () use ($loop, $timer) {
+                $loop->cancelTimer($timer);
             });
         });
 
@@ -176,8 +176,8 @@ class EventLoopSchedulerTest extends TestCase
                 $timersExecuted++;
                 $action();
             });
-            return new CallbackDisposable(function () use ($timer) {
-                $timer->cancel();
+            return new CallbackDisposable(function () use ($loop, $timer) {
+                $loop->cancelTimer($timer);
             });
         });
 
@@ -206,8 +206,8 @@ class EventLoopSchedulerTest extends TestCase
                 $timersExecuted++;
                 $action();
             });
-            return new CallbackDisposable(function () use ($timer) {
-                $timer->cancel();
+            return new CallbackDisposable(function () use ($loop, $timer) {
+                $loop->cancelTimer($timer);
             });
         });
 
