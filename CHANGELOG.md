@@ -1,3 +1,9 @@
+# 2.0.7
+
+### Update
+
+- Forward compatibility with react/event-loop 1.0 and 0.5 while still supporting 0.4 ([5f91a62](https://github.com/ReactiveX/RxPHP/commit/5f91a6200ecda70776d78c969f4d04294fe5ac89))
+
 # 2.0.6
 
 ### Bug Fixes
