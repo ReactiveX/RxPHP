@@ -29,8 +29,8 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         $this->delayCallback = $timerCallableOrLoop instanceof LoopInterface ?
             function ($ms, $callable) use ($timerCallableOrLoop) {
                 $timer = $timerCallableOrLoop->addTimer($ms / 1000, $callable);
-                return new CallbackDisposable(function () use ($timer) {
-                    $timer->cancel();
+                return new CallbackDisposable(function () use ($timer, $timerCallableOrLoop) {
+                    $timerCallableOrLoop->cancelTimer($timer);
                 });
             } :
             $timerCallableOrLoop;
