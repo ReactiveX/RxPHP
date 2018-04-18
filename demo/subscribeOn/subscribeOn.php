@@ -18,10 +18,10 @@ $observable = Rx\Observable::create(function (ObserverInterface $observer) use (
     // Change scheduler for here
     $timer = $loop->addTimer(0.001, $handler);
 
-    return new CallbackDisposable(function () use ($timer) {
+    return new CallbackDisposable(function () use ($loop, $timer) {
         // And change scheduler for here
         if ($timer) {
-            $timer->cancel();
+            $loop->cancelTimer($timer);
         }
     });
 });
