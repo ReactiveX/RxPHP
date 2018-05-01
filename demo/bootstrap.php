@@ -20,10 +20,22 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 }
 
 function asString($value) {
-    if (is_array($value)) {
-        return json_encode($value);
-    } elseif (is_bool($value)) {
-        return (string)(integer)$value;
+    if(!is_array($value) && !is_object($value) && !is_resource($value)) {
+        if(is_bool($value)) {
+            return $value ? '1' : '0';
+        } else {
+            return (string) $value;   
+        }
+    } elseif (is_array($value) {
+        return json_encode($value);   
+    } elseif (is_object($value) {
+        if(method_exists($value,'__toString')) {
+            return $value->__toString();
+        } else {
+            return 'object('.get_class($value).')';   
+        }
+    } elseif(is_resource($value)) {
+        return 'resource('.get_resource_type($value).')';   
     }
     return (string) $value;
 }
