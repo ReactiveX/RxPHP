@@ -49,4 +49,18 @@ class PromiseFromObservableTest extends FunctionalTestCase
               $this->assertEquals($error, new Exception("some error"));
           });
     }
+
+    /**
+     * @test
+     */
+    public function promise_no_memory_leak()
+    {
+        gc_collect_cycles();
+
+        $source = Observable::of(42);
+
+        Promise::fromObservable($source)->done();
+
+        $this->assertSame(0, gc_collect_cycles());
+    }
 }
