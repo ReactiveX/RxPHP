@@ -46,26 +46,32 @@ final class Promise
      */
     public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null): ReactPromise
     {
+        $subscription = null;
+        $promise = new ReactPromise(static function ($resolve, $reject) use (&$subscription, $observable) {
+            $value = null;
+            $subscription = $observable->subscribe(
+                static function ($v) use (&$value) {
+                    $value = $v;
+                },
+                static function ($error) use ($reject) {
+                    $reject($error);
+                },
+                static function () use ($resolve, &$value) {
+                    $resolve($value);
+                }
+            );
 
-        $d = $deferred ?: new Deferred(function () use (&$subscription) {
+        }, static function () use (&$subscription) {
             $subscription->dispose();
         });
 
-        $value = null;
+        if ($deferred === null) {
+            return $promise;
+        }
 
-        $subscription = $observable->subscribe(
-            function ($v) use (&$value) {
-                $value = $v;
-            },
-            function ($error) use ($d) {
-                $d->reject($error);
-            },
-            function () use ($d, &$value) {
-                $d->resolve($value);
-            }
-        );
+        $promise->done([$deferred, 'resolve'], [$deferred, 'reject']);
 
-        return $d->promise();
+        return $deferred->promise();
     }
 
     /**
