@@ -1001,7 +1001,7 @@ abstract class Observable implements ObservableInterface
      * The optional seed value is used as the initial accumulator value.
      *
      * @param $accumulator
-     * @param null $seed
+     * @param mixed $seed
      * @return Observable
      *
      * @demo scan/scan.php
