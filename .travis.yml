@@ -40,6 +40,18 @@ matrix:
       env:
         - dependencies=highest
         - dropPlatform=false
+    - php: 7.3
+      env:
+        - dependencies=highest
+    - php: 7.3
+      env:
+        - dependencies=lowest
+    - php: 7.4
+      env:
+        - dependencies=highest
+    - php: 7.4
+      env:
+        - dependencies=lowest
 
 before_script: composer install
 

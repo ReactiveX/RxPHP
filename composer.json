@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "php": "~7.0",
+        "php": "~7.0 || ~8.0",
         "react/promise": "~2.2"
     },
     "require-dev": {
