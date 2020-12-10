@@ -21,7 +21,7 @@ abstract class FunctionalTestCase extends TestCase
 
     const TIME_FACTOR = 10;
 
-    public function setup()
+    public function setup() : void
     {
         $this->scheduler = $this->createTestScheduler();
     }
@@ -105,14 +105,15 @@ abstract class FunctionalTestCase extends TestCase
     /**
      * @param callable $callback
      */
-    protected function assertException(callable $callback)
+    protected static function assertException(callable $callback)
     {
+        $exception = null;
         try {
             $callback();
         } catch (\Exception $e) {
-            return;
+            $exception = $e;
         }
-        $this->fail('Expected the callback to throw an exception.');
+        static::assertThat($e instanceof \Exception, static::isTrue(), 'Expected the callback to throw an exception.');
     }
 
 

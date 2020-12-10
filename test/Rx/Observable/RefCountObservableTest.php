@@ -38,6 +38,25 @@ class RefCountObservableTest extends TestCase
 
     public function testDisposesWhenRefcountReachesZero()
     {
+        $source = $this->createMock(ConnectableObservable::class);
+
+        $innerDisp = $this->createMock(DisposableInterface::class);
+
+        $source
+            ->expects($this->once())
+            ->method('subscribe')
+            ->willReturn($innerDisp);
+
+        $innerDisp
+            ->expects($this->once())
+            ->method('dispose');
+
+        $observable = new RefCountObservable($source);
+
+        $subscription = $observable->subscribe();
+
+        $subscription->dispose();
+
 
     }
 }

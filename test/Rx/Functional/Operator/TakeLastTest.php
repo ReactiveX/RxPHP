@@ -296,11 +296,10 @@ class TakeLastTest extends FunctionalTestCase
 
     /**
      * @test
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function takeLast_invalid_count()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([
             onNext(180, 1),
             onNext(210, 2),

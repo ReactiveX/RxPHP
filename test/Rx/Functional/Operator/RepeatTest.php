@@ -125,10 +125,10 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     public function repeat_Observable_throws_1()
     {
+        $this->expectException(\Exception::class);
         $scheduler1 = new TestScheduler();
 
         $xs = (new ReturnObservable(1, $scheduler1))->repeat();
@@ -144,10 +144,10 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     public function repeat_Observable_throws_2()
     {
+        $this->expectException(\Exception::class);
         $scheduler2 = new TestScheduler();
 
         $xs = (new ErrorObservable(new \Exception(), $scheduler2))->repeat();
@@ -164,6 +164,7 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
+     * @doesNotPerformAssertions
      */
     public function repeat_Observable_throws_3()
     {
@@ -187,10 +188,10 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     public function repeat_Observable_throws_4()
     {
+        $this->expectException(\Exception::class);
         $xs = (new AnonymousObservable(function () {
             throw new \Exception;
         }))->repeat();
@@ -346,11 +347,11 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage from onNext
      */
     public function repeat_Observable_repeat_count_throws_1()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('from onNext');
         $scheduler1 = new TestScheduler();
         $xs         = (new ReturnObservable(1, $scheduler1))->repeat(3);
 
@@ -365,11 +366,11 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage from onError
      */
     public function repeat_Observable_repeat_count_throws_2()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('from onError');
         $scheduler2 = new TestScheduler();
 
         $xs = (new ErrorObservable(new \Exception('from ErrorObservable'), $scheduler2))->repeat(3);
@@ -386,10 +387,10 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     public function repeat_Observable_repeat_count_throws_3()
     {
+        $this->expectException(\Exception::class);
         $scheduler3 = new TestScheduler();
 
         $xs = (new ReturnObservable(1, $scheduler3))->repeat(3);
@@ -407,11 +408,11 @@ class RepeatTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage from Anon
      */
     public function repeat_Observable_repeat_count_throws_4()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('from Anon');
         $xss = (new AnonymousObservable(function () {
             throw new \Exception('from Anon');
         }))->repeat(3);

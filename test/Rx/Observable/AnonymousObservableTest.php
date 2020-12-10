@@ -48,11 +48,10 @@ class AnonymousObservableTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function it_throws_when_args_invalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $observable = new AnonymousObservable(function () {
         });
 

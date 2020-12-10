@@ -148,11 +148,11 @@ class DeferTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage I take exception
      */
     public function defer_error_while_subscribe_with_immediate_scheduler()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('I take exception');
         Observable::defer(function () {
             return Observable::create(function (ObserverInterface $observer) {
                 $observer->onError(new \Exception('I take exception'));

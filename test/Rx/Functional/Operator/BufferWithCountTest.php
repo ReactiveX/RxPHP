@@ -228,11 +228,10 @@ class BufferWithCountTest extends FunctionalTestCase
 
     /**
      * @test
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function bufferWithCount_invalid_skip()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([
             onNext(100, 1),
             onNext(210, 2),
@@ -247,10 +246,10 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      *
-     * @expectedException \InvalidArgumentException
      */
     public function bufferWithCount_invalid_count()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([
             onNext(100, 1),
             onNext(210, 2),

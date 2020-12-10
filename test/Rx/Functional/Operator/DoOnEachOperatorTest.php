@@ -744,15 +744,17 @@ class DoOnEachOperatorTest extends FunctionalTestCase
             );
         });
 
+        $this->assertTrue($sawError);
+
     }
 
     /**
      * @test
      *
-     * @expectedException \InvalidArgumentException
      */
     public function do_throws_when_args_invalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([
             onNext(150, 1),
             onNext(210, 2),

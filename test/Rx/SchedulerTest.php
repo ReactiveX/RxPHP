@@ -21,17 +21,17 @@ class SchedulerTest extends TestCase
         }
     }
 
-    public function setup()
+    public function setup() : void
     {
         $this->resetStaticScheduler();
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Please set a default scheduler factory
      */
     public function testGetDefaultThrowsIfNotSet()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Please set a default scheduler factory');
         $scheduler = Scheduler::getDefault();
 
         $this->assertInstanceOf(EventLoopScheduler::class, $scheduler);
@@ -94,10 +94,10 @@ class SchedulerTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testSetDefaultTwiceThrowsException()
     {
+        $this->expectException(\Exception::class);
         $scheduler = new TestScheduler();
 
         Scheduler::setDefaultFactory(function () use ($scheduler) {
@@ -113,10 +113,10 @@ class SchedulerTest extends TestCase
 
 
     /**
-     * @expectedException \Exception
      */
     public function testSetAsyncTwiceThrowsException()
     {
+        $this->expectException(\Exception::class);
         $scheduler = new TestScheduler();
 
         Scheduler::setAsyncFactory(function () use ($scheduler) {
@@ -131,11 +131,12 @@ class SchedulerTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Please set a default scheduler factory
      */
     public function testGetAsyncBeforeSet()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Please set a default scheduler factory');
+
         Scheduler::getAsync();
     }
 
@@ -152,11 +153,16 @@ class SchedulerTest extends TestCase
     }
 
     /**
-     * @expectedException \Throwable
-     * @expectedExceptionMessage Return value of Rx\Scheduler::getAsync() must implement interface Rx\AsyncSchedulerInterface, instance of Rx\Scheduler\ImmediateScheduler returned
      */
     public function testAsyncSchedulerFactorReturnsNonAsyncScheduler()
     {
+        $this->expectException(\Throwable::class);
+        if (phpversion() < '8.0.0') {
+            $this->expectExceptionMessage('Return value of Rx\Scheduler::getAsync() must implement interface Rx\AsyncSchedulerInterface, instance of Rx\Scheduler\ImmediateScheduler returned');
+        } else {
+            $this->expectExceptionMessage('Rx\Scheduler::getAsync(): Return value must be of type Rx\AsyncSchedulerInterface, Rx\Scheduler\ImmediateScheduler returned');
+        }
+
         Scheduler::setAsyncFactory(function () {
             return new ImmediateScheduler();
         });
@@ -165,11 +171,15 @@ class SchedulerTest extends TestCase
     }
 
     /**
-     * @expectedException \Throwable
-     * @expectedExceptionMessage Return value of Rx\Scheduler::getDefault() must implement interface Rx\SchedulerInterface, instance of stdClass returned
      */
     public function testDefaultSchedulerFactorReturnsNonScheduler()
     {
+        $this->expectException(\Throwable::class);
+        if (phpversion() < '8.0.0') {
+            $this->expectExceptionMessage('Return value of Rx\Scheduler::getDefault() must implement interface Rx\SchedulerInterface, instance of stdClass returned');
+        } else {
+            $this->expectExceptionMessage('Rx\Scheduler::getDefault(): Return value must be of type Rx\SchedulerInterface, stdClass returned');
+        }
         Scheduler::setDefaultFactory(function () {
             return new \stdClass();
         });
@@ -178,11 +188,12 @@ class SchedulerTest extends TestCase
     }
 
     /**
-     * @expectedException \Throwable
-     * @expectedExceptionMessage Please set an async scheduler factory
      */
     public function testAsyncSchedulerFactorThrowsNonAsyncDefaultScheduler()
     {
+        $this->expectException(\Throwable::class);
+        $this->expectExceptionMessage('Please set an async scheduler factory');
+
         Scheduler::setDefaultFactory(function () {
             return new ImmediateScheduler();
         });
