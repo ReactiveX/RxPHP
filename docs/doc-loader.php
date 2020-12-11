@@ -77,7 +77,8 @@ class Demo
         $outputPath = __DIR__ . '/../demo/' . $path . '.expect';
 
         assert(file_exists($codePath), "code does not exist $codePath");
-        assert(file_exists($outputPath), "output does not exist $outputPath");
+        // allow demos without expect files - we will just get a warning later
+        // assert(file_exists($outputPath), "output does not exist $outputPath");
 
         return new Demo(
             $path,
