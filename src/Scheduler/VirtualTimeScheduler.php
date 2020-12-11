@@ -21,7 +21,7 @@ class VirtualTimeScheduler implements AsyncSchedulerInterface
      * @param integer $initialClock Initial value for the clock.
      * @param callable $comparer Comparer to determine causality of events based on absolute time.
      */
-    public function __construct(int $initialClock = 0, callable $comparer)
+    public function __construct(int $initialClock, callable $comparer)
     {
         $this->clock    = $initialClock;
         $this->comparer = $comparer;
