@@ -273,7 +273,7 @@ class ThrottleTest extends FunctionalTestCase
     public function throttle_scheduler_overrides_subscribe_scheduler()
     {
         $scheduler = $this->createMock(SchedulerInterface::class);
-        $scheduler->expects($this->any())
+        $scheduler->expects($this->exactly(2))
             ->method('schedule')
             ->willReturn(new EmptyDisposable());
         

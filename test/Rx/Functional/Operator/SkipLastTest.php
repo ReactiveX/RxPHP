@@ -11,10 +11,10 @@ use Rx\Testing\MockObserver;
 class SkipLastTest extends FunctionalTestCase
 {
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testSkipLastNegative()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable(
             [
                 onNext(180, 1),

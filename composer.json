@@ -20,13 +20,12 @@
         }
     ],
     "require": {
-        "php": "~7.0",
+        "php": ">=7.0.0",
         "react/promise": "~2.2"
     },
     "require-dev": {
         "satooshi/php-coveralls": "~1.0",
-        "phpunit/phpcov": "^3.1",
-        "phpunit/phpunit": "^5.7",
+        "phpunit/phpunit": "^8.5 || ^9",
         "react/event-loop": "^1.0 || ^0.5 || ^0.4.2"
     },
     "suggest": {

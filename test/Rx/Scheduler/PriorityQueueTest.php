@@ -133,6 +133,7 @@ class PriorityQueueTest extends TestCase
 
     /**
      * @test
+     * @doesNotPerformAssertions
      */
     public function should_not_remove_nonexistent_item()
     {

@@ -200,6 +200,7 @@ class CompositeDisposableTest extends TestCase
 
     /**
      * @test
+     * @doesNotPerformAssertions
      */
     public function it_can_be_disposed_multiple_times()
     {

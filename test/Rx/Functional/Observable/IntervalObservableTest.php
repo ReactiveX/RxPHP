@@ -97,10 +97,10 @@ class IntervalObservableTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
     public function interval_relative_time_observer_throws()
     {
+        $this->expectException(\Exception::class);
         $xs = new IntervalObservable(1, $this->scheduler);
 
         $xs->subscribe(new CallbackObserver(function () {

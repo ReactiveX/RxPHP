@@ -48,10 +48,10 @@ class SingleAssignmentDisposableTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_cannot_be_assignmed_multiple_times()
     {
+        $this->expectException(\RuntimeException::class);
         $d1         = new CallbackDisposable(function(){});
         $d2         = new CallbackDisposable(function(){});
         $disposable = new SingleAssignmentDisposable();

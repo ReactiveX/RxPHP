@@ -97,11 +97,10 @@ class CreateTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \Exception
-     *
      */
     public function create_throws_errors()
     {
+        $this->expectException(\Exception::class);
         Observable::create(function ($o) {
             throw new \Exception;
         })->subscribe(new CallbackObserver());

@@ -49,10 +49,10 @@ class TimerObservableTest extends FunctionalTestCase
 
     /**
      * @test
-     * @expectedException \TypeError
      */
     public function timer_one_shot_relative_time_zero_non_int()
     {
+        $this->expectException(\TypeError::class);
         $this->scheduler->startWithCreate(function () {
             return Observable::timer('z', $this->scheduler);
         });

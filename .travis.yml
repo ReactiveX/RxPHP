@@ -1,45 +1,10 @@
 language: php
 
-matrix:
-  include:
-    - php: 7.0
-      env:
-        - qaExtended=true
-    - php: 7.1
-    - php: 7.2
-      env:
-        - dropPlatform=false
-    - php: nightly
-      env:
-        - dropPlatform=false
-    - php: 7.0
-      env:
-        - dependencies=lowest
-    - php: 7.1
-      env:
-        - dependencies=lowest
-    - php: 7.2
-      env:
-        - dependencies=lowest
-        - dropPlatform=false
-    - php: nightly
-      env:
-        - dependencies=lowest
-        - dropPlatform=false
-    - php: 7.0
-      env:
-        - dependencies=highest
-    - php: 7.1
-      env:
-        - dependencies=highest
-    - php: 7.2
-      env:
-        - dependencies=highest
-        - dropPlatform=false
-    - php: nightly
-      env:
-        - dependencies=highest
-        - dropPlatform=false
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+  - 8.0
 
 before_script: composer install
 

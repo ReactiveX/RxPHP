@@ -345,11 +345,11 @@ class ScheduledObserverTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage onNext(0) exception
      */
     public function throw_inside_onnext_throws()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('onNext(0) exception');
         $scheduler = new TestScheduler();
 
         $scheduledObserver = new ScheduledObserver(

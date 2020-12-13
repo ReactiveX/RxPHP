@@ -47,10 +47,10 @@ class CallbackObserverTest extends TestCase
 
     /**
      * @test
-     * @expectedException Rx\Observer\TestException
      */
     public function default_on_error_callable_rethrows_exception()
     {
+        $this->expectException(\Rx\Observer\TestException::class);
         $observer = new CallbackObserver();
 
         $observer->onError(new TestException());

@@ -222,28 +222,28 @@ class MarbleTest extends FunctionalTestCase
     }
 
     /**
-     * @expectedException \Rx\MarbleDiagramException
      */
     public function testSubscriptionsInvalidMarkers()
     {
+        $this->expectException(\Rx\MarbleDiagramException::class);
         $marbles = '--^--a--!-';
         $this->convertMarblesToSubscriptions($marbles);
     }
 
     /**
-     * @expectedException \Rx\MarbleDiagramException
      */
     public function testSubscriptionsMultipleSubscribeMarkers()
     {
+        $this->expectException(\Rx\MarbleDiagramException::class);
         $marbles = '--^-^---!-';
         $this->convertMarblesToSubscriptions($marbles);
     }
 
     /**
-     * @expectedException \Rx\MarbleDiagramException
      */
     public function testSubscriptionsMultipleUnsubscribeMarkers()
     {
+        $this->expectException(\Rx\MarbleDiagramException::class);
         $marbles = '--^---!-!-';
         $this->convertMarblesToSubscriptions($marbles);
     }

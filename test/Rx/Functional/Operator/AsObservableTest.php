@@ -17,6 +17,7 @@ class AsObservableTest extends FunctionalTestCase
     public function testAsObservableHides()
     {
         $someObservable = new EmptyObservable($this->scheduler);
+        self::assertNotSame($someObservable->asObservable(), $someObservable);
         return ($someObservable->asObservable() !== $someObservable);
     }
 
