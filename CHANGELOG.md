@@ -1,3 +1,10 @@
+# 2.0.8
+
+### Update
+
+- Allow PHP 8
+- Update PHPUnit
+
 # 2.0.7
 
 ### Update
