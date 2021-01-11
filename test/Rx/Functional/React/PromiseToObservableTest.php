@@ -3,8 +3,8 @@
 
 namespace Rx\Functional\React;
 
-use Exception;
 use React\Promise\Deferred;
+use React\Promise\Promise as ReactPromise;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observer\CallbackObserver;
 use Rx\React\Promise;
@@ -40,7 +40,9 @@ class PromiseToObservableTest extends FunctionalTestCase
      */
     public function from_promise_failure()
     {
-        $p = Promise::rejected(new Exception('error'));
+        $p = new ReactPromise(function () {
+            1 / 0;
+        });
 
         $source = Promise::toObservable($p);
 
@@ -49,8 +51,8 @@ class PromiseToObservableTest extends FunctionalTestCase
               $this->assertFalse(true);
 
           },
-          function ($error) {
-              $this->assertEquals($error, new Exception('error'));
+          function (\Throwable $error) {
+              $this->assertStringContainsStringIgnoringCase('division by zero', $error->getMessage());
           },
           function () {
               $this->assertFalse(true);
