@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace Rx;
 
+use React\Promise\PromiseInterface;
+use Rx\React\Promise;
+
 final class ObservableFactoryWrapper
 {
     private $selector;
@@ -16,6 +19,10 @@ final class ObservableFactoryWrapper
     public function __invoke(): Observable
     {
         $result = call_user_func_array($this->selector, func_get_args());
+
+        if ($result instanceof PromiseInterface) {
+            $result = Promise::toObservable($result);
+        }
 
         if (!$result instanceof ObservableInterface) {
             $reflectCallable = new \ReflectionFunction($this->selector);
