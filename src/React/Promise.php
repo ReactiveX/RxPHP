@@ -85,7 +85,7 @@ final class Promise
                 $subject->onCompleted();
             },
             function ($error) use ($subject) {
-                $error = $error instanceof \Exception ? $error : new RejectedPromiseException($error);
+                $error = $error instanceof \Throwable ? $error : new RejectedPromiseException($error);
                 $subject->onError($error);
             }
         );
