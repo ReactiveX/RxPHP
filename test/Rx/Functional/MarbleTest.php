@@ -308,4 +308,24 @@ class MarbleTest extends FunctionalTestCase
         $this->expectObservable($e1->count())->toBe($expected, ['x' => 3]);
         $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
     }
+
+    public function testGroupMarble()
+    {
+        $hot      = '--1---2---3---4---5---|';
+        $expected = '--x---y---------------|';
+        $coldx    =   '1-------3-------5---|';
+        $coldy    =       '2-------4-------|';
+
+        $e1 = $this->createHot($hot);
+        $x  = $this->createCold($coldx);
+        $y  = $this->createCold($coldy);
+
+        $expectedValues = ['x' => $x, 'y' => $y];
+
+        $source = $e1->groupBy(function ($val) {
+            return (int)$val % 2;
+        });
+
+        $this->expectObservable($source)->toBe($expected, $expectedValues);
+    }
 }
