@@ -4,6 +4,7 @@
 namespace Rx\Functional\React;
 
 use Exception;
+use React\Promise\Deferred;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\React\Promise;
@@ -48,5 +49,32 @@ class PromiseFromObservableTest extends FunctionalTestCase
           function ($error) {
               $this->assertEquals($error, new Exception("some error"));
           });
+    }
+
+    /**
+     * @test
+     */
+    public function promise_no_memory_leak()
+    {
+        gc_collect_cycles();
+
+        $source = Observable::of(42);
+
+        Promise::fromObservable($source)->done();
+
+        $this->assertSame(0, gc_collect_cycles());
+    }
+    /**
+     * @test
+     */
+    public function promise_no_memory_leak_deferred()
+    {
+        gc_collect_cycles();
+
+        $source = Observable::of(42);
+
+        Promise::fromObservable($source, new Deferred())->done();
+
+        $this->assertSame(0, gc_collect_cycles());
     }
 }
