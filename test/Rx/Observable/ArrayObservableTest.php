@@ -6,8 +6,9 @@ namespace Rx\Observable;
 
 use Rx\Observer\CallbackObserver;
 use Rx\Scheduler;
+use Rx\TestCase;
 
-class ArrayObservableTest extends \PHPUnit_Framework_TestCase
+class ArrayObservableTest extends TestCase
 {
     /**
      * @test

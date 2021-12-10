@@ -1,3 +1,24 @@
+# 2.0.10
+
+### Update
+
+- Suppress warnings from php 8.1
+
+# 2.0.9
+
+### Bug Fixes
+
+- ObservableFactoryWrapper should convert promise to observable ([b24ec82](https://github.com/ReactiveX/RxPHP/commit/6115f363e686891eb0dee8acc38c19cc6b24ec82))
+- Promise should support low level Throwable ([c48c168](https://github.com/ReactiveX/RxPHP/commit/fa9136ecf96c80d964aaa5976261d4a50c48c168))
+
+
+# 2.0.8
+
+### Update
+
+- Allow PHP 8
+- Update PHPUnit
+
 # 2.0.7
 
 ### Update

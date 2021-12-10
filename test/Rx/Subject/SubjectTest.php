@@ -11,10 +11,10 @@ class SubjectTest extends TestCase
 {
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_throws_when_subscribing_to_a_disposed_subject()
     {
+        $this->expectException(\RuntimeException::class);
         $subject = new Subject();
         $subject->dispose();
 
@@ -201,10 +201,10 @@ class SubjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_throws_on_error_if_disposed()
     {
+        $this->expectException(\RuntimeException::class);
         $subject   = new Subject();
 
         $subject->dispose();
@@ -213,10 +213,10 @@ class SubjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_passes_on_complete_if_disposed()
     {
+        $this->expectException(\RuntimeException::class);
         $subject  = new Subject();
 
         $subject->dispose();
@@ -225,10 +225,10 @@ class SubjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_passes_on_next_if_disposed()
     {
+        $this->expectException(\RuntimeException::class);
         $subject  = new Subject();
         $value    = 42;
 

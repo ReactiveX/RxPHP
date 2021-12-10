@@ -11,7 +11,7 @@ class Recorded
         $this->time     = $time;
         $this->value    = $value;
         $this->comparer = $comparer ?: function ($a, $b) {
-            if (method_exists($a, 'equals')) {
+            if (is_object($a) && method_exists($a, 'equals')) {
                 return $a->equals($b);
             }
 

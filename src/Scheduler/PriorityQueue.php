@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Rx\Scheduler;
 
+use ReturnTypeWillChange;
 use SplPriorityQueue;
 
 class PriorityQueue
@@ -76,6 +77,7 @@ class InternalPriorityQueue extends SplPriorityQueue
         parent::insert($item, [$priority, $this->serial--]);
     }
 
+    #[ReturnTypeWillChange]
     public function compare($a, $b)
     {
         $value = $b[0]->compareTo($a[0]);

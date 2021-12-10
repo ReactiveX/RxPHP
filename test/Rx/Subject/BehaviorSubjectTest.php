@@ -11,10 +11,10 @@ class BehaviorSubjectTest extends TestCase
 {
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_throws_when_subscribing_to_a_disposed_subject()
     {
+        $this->expectException(\RuntimeException::class);
         $subject = new BehaviorSubject();
         $subject->dispose();
 
@@ -223,10 +223,10 @@ class BehaviorSubjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_throws_on_error_if_disposed()
     {
+        $this->expectException(\RuntimeException::class);
         $subject   = new BehaviorSubject();
 
         $subject->dispose();
@@ -235,10 +235,10 @@ class BehaviorSubjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_passes_on_complete_if_disposed()
     {
+        $this->expectException(\RuntimeException::class);
         $subject  = new BehaviorSubject();
 
         $subject->dispose();
@@ -247,10 +247,10 @@ class BehaviorSubjectTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_passes_on_next_if_disposed()
     {
+        $this->expectException(\RuntimeException::class);
         $subject  = new BehaviorSubject();
         $value    = 42;
 

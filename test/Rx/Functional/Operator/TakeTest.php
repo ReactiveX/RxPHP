@@ -14,10 +14,10 @@ class TakeTest extends FunctionalTestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function it_throws_an_exception_on_negative_amounts()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $observable = new ReturnObservable(42, $this->scheduler);
         $result     = $observable->take(-1);
 
