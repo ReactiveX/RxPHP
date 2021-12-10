@@ -5,7 +5,7 @@ Reactive extensions for PHP. The reactive extensions for PHP are a set of
 libraries to compose asynchronous and event-based programs using observable
 collections and LINQ-style query operators in PHP.
 
-[![Build Status](https://secure.travis-ci.org/ReactiveX/RxPHP.png?branch=master)](https://travis-ci.org/ReactiveX/RxPHP)
+[![CI status](https://github.com/ReactiveX/RxPHP/workflows/CI/badge.svg)](https://github.com/ReactiveX/RxPHP/actions)
 [![Coverage Status](https://coveralls.io/repos/github/ReactiveX/RxPHP/badge.svg?branch=master)](https://coveralls.io/github/ReactiveX/RxPHP?branch=master)
 
 note:  This repo is for v2.x, the latest version of RxPHP, not [v1.x](https://github.com/ReactiveX/RxPHP/tree/1.x).
