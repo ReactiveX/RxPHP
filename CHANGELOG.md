@@ -1,3 +1,9 @@
+# 2.0.10
+
+### Update
+
+- Suppress warnings from php 8.1
+
 # 2.0.9
 
 ### Bug Fixes
