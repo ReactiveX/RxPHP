@@ -13,6 +13,7 @@ class ScheduledItem
     private $action;
     private $dueTime;
     private $comparer;
+    private $disposable;
 
     public function __construct($scheduler, $state, $action, $dueTime, $comparer = null)
     {
