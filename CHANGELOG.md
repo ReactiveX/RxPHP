@@ -1,3 +1,9 @@
+# 2.0.11
+
+### Update
+
+- Small fixes for and test on PHP 8.2
+
 # 2.0.10
 
 ### Update
