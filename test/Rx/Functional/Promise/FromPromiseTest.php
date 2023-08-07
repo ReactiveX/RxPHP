@@ -40,7 +40,7 @@ class FromPromiseTest extends FunctionalTestCase
      */
     public function from_promise_failure()
     {
-        $p = \React\Promise\reject('error');
+        $p = \React\Promise\reject(new RejectedPromiseException('error'));
 
         $source = Observable::fromPromise($p);
 

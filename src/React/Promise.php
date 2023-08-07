@@ -2,7 +2,6 @@
 
 namespace Rx\React;
 
-use React\Promise\CancellablePromiseInterface;
 use React\Promise\Promise as ReactPromise;
 use React\Promise\PromiseInterface;
 use Rx\Disposable\CallbackDisposable;
@@ -11,6 +10,7 @@ use Rx\Observable;
 use Rx\Observable\AnonymousObservable;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
+use Throwable;
 
 final class Promise
 {
@@ -32,7 +32,7 @@ final class Promise
     public static function rejected($exception): ReactPromise
     {
         $d = new Deferred();
-        $d->reject($exception);
+        $d->reject($exception instanceof Throwable ? $exception : new RejectedPromiseException($exception));
         return $d->promise();
     }
 
@@ -94,7 +94,7 @@ final class Promise
             $disp = $subject->subscribe($observer);
             return new CallbackDisposable(function () use ($p, $disp) {
                 $disp->dispose();
-                if ($p instanceof CancellablePromiseInterface) {
+                if (\method_exists($p, 'cancel')) {
                     $p->cancel();
                 }
             });

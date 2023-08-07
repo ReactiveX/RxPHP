@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "react/promise": "~2.2"
+        "react/promise": "^3 || ~2.2"
     },
     "require-dev": {
         "satooshi/php-coveralls": "~1.0",
