@@ -8,13 +8,20 @@ use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Observable;
 use Rx\DisposableInterface;
+use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
-class Subject extends Observable implements ObserverInterface, DisposableInterface
+/**
+ * @template T
+ * @template-extends Observable<T>
+ * @template-implements ObservableInterface<T>
+ */
+class Subject extends Observable implements ObserverInterface, DisposableInterface, ObservableInterface
 {
     protected $exception;
     protected $isDisposed = false;
     protected $isStopped = false;
+    /** @var array<ObserverInterface> */
     protected $observers = [];
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface

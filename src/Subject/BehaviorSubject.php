@@ -5,8 +5,14 @@ declare(strict_types = 1);
 namespace Rx\Subject;
 
 use Rx\DisposableInterface;
+use Rx\Observable;
+use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ * @template-extends Subject<T>
+ */
 class BehaviorSubject extends Subject
 {
     private $value;

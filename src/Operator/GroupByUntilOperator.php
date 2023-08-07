@@ -14,12 +14,14 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
+/** @template T */
 final class GroupByUntilOperator implements OperatorInterface
 {
     private $keySelector;
     private $elementSelector;
     private $durationSelector;
     private $keySerializer;
+    /** @var array<Subject<T>> */
     private $map = [];
 
     public function __construct(callable $keySelector, ?callable $elementSelector = null, ?callable $durationSelector = null, ?callable $keySerializer = null)

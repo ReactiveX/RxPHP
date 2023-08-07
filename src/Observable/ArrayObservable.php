@@ -6,15 +6,22 @@ namespace Rx\Observable;
 
 use Rx\DisposableInterface;
 use Rx\Observable;
+use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template  T
+ * @template-extends Observable<T>
+ */
 class ArrayObservable extends Observable
 {
+    /** @var array<T> */
     private $data;
 
     private $scheduler;
 
+    /** @param array<T> $data */
     public function __construct(array $data, SchedulerInterface $scheduler)
     {
         $this->data      = $data;

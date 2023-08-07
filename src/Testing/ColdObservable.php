@@ -12,12 +12,19 @@ use Rx\Notification;
 use Rx\Observable;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class ColdObservable extends Observable
 {
     private $scheduler;
+    /** @var array<Recorded> */
     private $messages;
+    /** @var array<Subscription> */
     private $subscriptions = [];
 
+    /** @param array<Recorded> $messages */
     public function __construct(TestScheduler $scheduler, array $messages = [])
     {
         $this->scheduler = $scheduler;
@@ -59,6 +66,7 @@ class ColdObservable extends Observable
 
     }
 
+    /** @return array<Subscription> */
     public function getSubscriptions(): array
     {
         return $this->subscriptions;
