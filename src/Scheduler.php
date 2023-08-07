@@ -8,12 +8,34 @@ use Rx\Scheduler\ImmediateScheduler;
 
 final class Scheduler
 {
+    /**
+     * @var null|SchedulerInterface|AsyncSchedulerInterface
+     */
     private static $default;
+
+    /**
+     * @var ?AsyncSchedulerInterface
+     */
     private static $async;
+
+    /**
+     * @var ?ImmediateScheduler
+     */
     private static $immediate;
+
+    /**
+     * @var (callable(): SchedulerInterface)
+     */
     private static $defaultFactory;
+
+    /**
+     * @var (callable(): AsyncSchedulerInterface)
+     */
     private static $asyncFactory;
 
+    /**
+     * @return SchedulerInterface|AsyncSchedulerInterface
+     */
     public static function getDefault(): SchedulerInterface
     {
         if (static::$default) {
@@ -29,6 +51,10 @@ final class Scheduler
         return static::$default;
     }
 
+    /**
+     * @param (callable(): SchedulerInterface) $factory
+     * @return void
+     */
     public static function setDefaultFactory(callable $factory)
     {
         if (static::$default !== null) {
@@ -40,12 +66,14 @@ final class Scheduler
 
     public static function getAsync(): AsyncSchedulerInterface
     {
-        if (static::$async) {
+        if (static::$async instanceof AsyncSchedulerInterface) {
             return static::$async;
         }
 
         if (static::$asyncFactory === null && static::getDefault() instanceof AsyncSchedulerInterface) {
+            assert(static::$default instanceof AsyncSchedulerInterface);
             static::$async = static::$default;
+            assert(static::$async instanceof AsyncSchedulerInterface);
             return static::$async;
         }
 
@@ -58,6 +86,10 @@ final class Scheduler
         return static::$async;
     }
 
+    /**
+     * @param (callable(): AsyncSchedulerInterface) $factory
+     * @return void
+     */
     public static function setAsyncFactory(callable $factory)
     {
         if (static::$async !== null) {
@@ -72,6 +104,8 @@ final class Scheduler
         if (!static::$immediate) {
             static::$immediate = new ImmediateScheduler();
         }
+
+        assert(self::$immediate instanceof ImmediateScheduler);
         return self::$immediate;
     }
 }

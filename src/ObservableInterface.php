@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace Rx;
 
+/**
+ * @template-covariant T
+ */
 interface ObservableInterface
 {
     /**
-     * @param callable|ObserverInterface|null $onNextOrObserver
+     * @param (callable(T): void)|ObserverInterface|null $onNextOrObserver
      * @param callable|null $onError
      * @param callable|null $onCompleted
      * @return DisposableInterface

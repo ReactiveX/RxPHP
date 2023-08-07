@@ -11,7 +11,14 @@ use Rx\ObserverInterface;
 
 final class CountOperator implements OperatorInterface
 {
+    /**
+     * @var int
+     */
     private $count = 0;
+
+    /**
+     * @var callable|null
+     */
     private $predicate;
 
     public function __construct(callable $predicate = null)

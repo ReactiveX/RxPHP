@@ -11,8 +11,14 @@ use Rx\Disposable\SingleAssignmentDisposable;
 
 class AutoDetachObserver extends AbstractObserver
 {
+    /**
+     * @var ObserverInterface
+     */
     private $observer;
 
+    /**
+     * @var SingleAssignmentDisposable
+     */
     private $disposable;
 
     public function __construct(ObserverInterface $observer)
@@ -21,6 +27,9 @@ class AutoDetachObserver extends AbstractObserver
         $this->disposable = new SingleAssignmentDisposable();
     }
 
+    /**
+     * @return void
+     */
     public function setDisposable(DisposableInterface $disposable = null)
     {
         $disposable = $disposable ?: new EmptyDisposable();
@@ -50,6 +59,11 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
+    /**
+     * @template T
+     * @param T $value
+     * @return void
+     */
     protected function next($value)
     {
         try {
@@ -60,6 +74,9 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
+    /**
+     * @return void
+     */
     public function dispose()
     {
         $this->disposable->dispose();

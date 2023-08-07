@@ -4,10 +4,14 @@ namespace Rx\React;
 
 class RejectedPromiseException extends \Exception
 {
+    /**
+     * @var mixed
+     */
     private $rejectValue;
 
     /**
      * RejectedPromiseException constructor.
+     * @param mixed $rejectValue
      */
     public function __construct($rejectValue)
     {
@@ -17,7 +21,7 @@ class RejectedPromiseException extends \Exception
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getRejectValue()
     {

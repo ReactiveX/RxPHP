@@ -8,6 +8,9 @@ use Rx\ObserverInterface;
 
 abstract class AbstractObserver implements ObserverInterface
 {
+    /**
+     * @var bool
+     */
     private $isStopped = false;
 
     public function onCompleted()
@@ -39,9 +42,20 @@ abstract class AbstractObserver implements ObserverInterface
         $this->next($value);
     }
 
+    /**
+     * @return void
+     */
     abstract protected function completed();
 
+    /**
+     * @template T
+     * @param T $value
+     * @return void
+     */
     abstract protected function next($value);
 
+    /**
+     * @return void
+     */
     abstract protected function error(\Throwable $error);
 }

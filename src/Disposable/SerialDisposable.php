@@ -15,7 +15,7 @@ class SerialDisposable implements DisposableInterface
     /** @var bool */
     private $isDisposed = false;
 
-    /** @var DisposableInterface */
+    /** @var ?DisposableInterface */
     private $disposable = null;
 
     public function dispose()
@@ -34,7 +34,7 @@ class SerialDisposable implements DisposableInterface
     }
 
     /**
-     * @return DisposableInterface
+     * @return ?DisposableInterface
      */
     public function getDisposable()
     {
@@ -43,6 +43,7 @@ class SerialDisposable implements DisposableInterface
 
     /**
      * @param DisposableInterface $disposable
+     * @return void
      */
     public function setDisposable(DisposableInterface $disposable)
     {

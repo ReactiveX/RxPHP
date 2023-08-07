@@ -2,55 +2,64 @@
 
 namespace Rx\React;
 
-use React\Promise\Promise as ReactPromise;
 use React\Promise\PromiseInterface;
 use Rx\Disposable\CallbackDisposable;
+use Rx\DisposableInterface;
 use Rx\ObservableInterface;
 use Rx\Observable;
 use Rx\Observable\AnonymousObservable;
 use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
 use Throwable;
+use function React\Promise\reject;
+use function React\Promise\resolve;
 
+/**
+ * @template T
+ */
 final class Promise
 {
     /**
-     * @param mixed $value
-     * @return ReactPromise A promise resolved to $value
+     * @param T $value
+     * @return PromiseInterface<T> A promise resolved to $value
      */
-    public static function resolved($value): ReactPromise
+    public static function resolved($value): PromiseInterface
     {
-        $d = new Deferred();
-        $d->resolve($value);
-        return $d->promise();
+        return resolve($value);
     }
 
     /**
      * @param mixed $exception
-     * @return ReactPromise A promise rejected with $exception
+     * @return PromiseInterface<never> A promise rejected with $exception
      */
-    public static function rejected($exception): ReactPromise
+    public static function rejected($exception): PromiseInterface
     {
-        $d = new Deferred();
-        $d->reject($exception instanceof Throwable ? $exception : new RejectedPromiseException($exception));
-        return $d->promise();
+        return reject($exception instanceof Throwable ? $exception : new RejectedPromiseException($exception));
     }
 
     /**
      * Converts an existing observable sequence to React Promise
      *
-     * @param ObservableInterface $observable
-     * @param Deferred $deferred
-     * @return ReactPromise
+     * @template X
+     * @param ObservableInterface<X> $observable
+     * @param ?Deferred<X> $deferred
+     * @return PromiseInterface<X>
      * @throws \InvalidArgumentException
      */
-    public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null): ReactPromise
+    public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null): PromiseInterface
     {
-
+        /**
+         * @var ?DisposableInterface $subscription
+         */
+        $subscription = null;
         $d = $deferred ?: new Deferred(function () use (&$subscription) {
+            assert($subscription instanceof DisposableInterface);
             $subscription->dispose();
         });
 
+        /**
+         * @var X $value
+         */
         $value = null;
 
         $subscription = $observable->subscribe(
@@ -71,8 +80,9 @@ final class Promise
     /**
      * Converts a Promise to an Observable sequence
      *
-     * @param PromiseInterface $promise
-     * @return Observable
+     * @template X
+     * @param PromiseInterface<X> $promise
+     * @return Observable<X>
      * @throws \InvalidArgumentException
      */
     public static function toObservable(PromiseInterface $promise): Observable
@@ -84,8 +94,7 @@ final class Promise
                 $subject->onNext($value);
                 $subject->onCompleted();
             },
-            function ($error) use ($subject) {
-                $error = $error instanceof \Throwable ? $error : new RejectedPromiseException($error);
+            function (\Throwable $error) use ($subject) {
                 $subject->onError($error);
             }
         );

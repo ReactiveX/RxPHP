@@ -11,6 +11,9 @@ use Rx\ObserverInterface;
 
 final class FilterOperator implements OperatorInterface
 {
+    /**
+     * @var callable
+     */
     private $predicate;
 
     public function __construct(callable $predicate)

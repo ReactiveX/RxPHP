@@ -10,10 +10,19 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ */
 final class TakeUntilOperator implements OperatorInterface
 {
+    /**
+     * @var ObservableInterface<T>
+     */
     private $other;
 
+    /**
+     * @param ObservableInterface<T> $other
+     */
     public function __construct(ObservableInterface $other)
     {
         $this->other = $other;

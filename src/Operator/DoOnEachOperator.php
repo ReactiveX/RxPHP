@@ -11,6 +11,9 @@ use Rx\Observer\CallbackObserver;
 
 final class DoOnEachOperator implements OperatorInterface
 {
+    /**
+     * @var ObserverInterface
+     */
     private $onEachObserver;
 
     public function __construct(ObserverInterface $observer)
@@ -25,7 +28,8 @@ final class DoOnEachOperator implements OperatorInterface
                 try {
                     $this->onEachObserver->onNext($x);
                 } catch (\Throwable $e) {
-                    return $observer->onError($e);
+                    $observer->onError($e);
+                    return;
                 }
                 $observer->onNext($x);
 
@@ -34,7 +38,8 @@ final class DoOnEachOperator implements OperatorInterface
                 try {
                     $this->onEachObserver->onError($err);
                 } catch (\Throwable $e) {
-                    return $observer->onError($e);
+                    $observer->onError($e);
+                    return;
                 }
                 $observer->onError($err);
             },
@@ -42,7 +47,8 @@ final class DoOnEachOperator implements OperatorInterface
                 try {
                     $this->onEachObserver->onCompleted();
                 } catch (\Throwable $e) {
-                    return $observer->onError($e);
+                    $observer->onError($e);
+                    return;
                 }
                 $observer->onCompleted();
             }

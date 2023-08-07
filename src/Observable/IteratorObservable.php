@@ -9,13 +9,23 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class IteratorObservable extends Observable
 {
+    /**
+     * @var \Iterator
+     */
     private $items;
 
+    /**
+     * @var SchedulerInterface
+     */
     private $scheduler;
 
-    public function __construct(\Iterator $items, SchedulerInterface $scheduler = null)
+    public function __construct(\Iterator $items, SchedulerInterface $scheduler)
     {
         $this->items     = $items;
         $this->scheduler = $scheduler;

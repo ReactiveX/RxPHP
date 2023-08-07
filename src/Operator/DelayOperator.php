@@ -14,16 +14,19 @@ use Rx\ObserverInterface;
 use Rx\AsyncSchedulerInterface;
 use Rx\Timestamped;
 
+/**
+ * @template T
+ */
 final class DelayOperator implements OperatorInterface
 {
     /** @var int */
     private $delayTime;
 
-    /** @var \SplQueue */
+    /** @var \SplQueue<Timestamped> */
     private $queue;
 
-    /** @var DisposableInterface */
-    private $schedulerDisposable;
+    /** @var ?DisposableInterface */
+    private $schedulerDisposable = null;
 
     /** @var AsyncSchedulerInterface */
     private $scheduler;
@@ -37,7 +40,7 @@ final class DelayOperator implements OperatorInterface
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        /** @var AnonymousObservable $observable */
+        /** @var AnonymousObservable<T> $observable */
         $disp = $observable
             ->materialize()
             ->timestamp($this->scheduler)

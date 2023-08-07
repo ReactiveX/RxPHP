@@ -12,12 +12,24 @@ use Rx\DisposableInterface;
 
 final class EventLoopScheduler extends VirtualTimeScheduler
 {
+    /**
+     * @var int
+     */
     private $nextTimer = PHP_INT_MAX;
 
+    /**
+     * @var bool
+     */
     private $insideInvoke = false;
 
+    /**
+     * @var callable
+     */
     private $delayCallback;
 
+    /**
+     * @var DisposableInterface
+     */
     private $currentTimer;
 
     /**
@@ -42,6 +54,9 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         });
     }
 
+    /**
+     * @return void
+     */
     private function scheduleStartup()
     {
         if ($this->insideInvoke) {

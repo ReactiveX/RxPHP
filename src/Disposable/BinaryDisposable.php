@@ -12,10 +12,10 @@ use Rx\DisposableInterface;
  */
 class BinaryDisposable implements DisposableInterface
 {
-    /** @var \Rx\DisposableInterface */
+    /** @var ?\Rx\DisposableInterface */
     private $first;
 
-    /** @var \Rx\DisposableInterface */
+    /** @var ?\Rx\DisposableInterface */
     private $second;
 
     /** @var bool */
@@ -23,8 +23,8 @@ class BinaryDisposable implements DisposableInterface
 
     /**
      * BinaryDisposable constructor.
-     * @param $first
-     * @param $second
+     * @param DisposableInterface $first
+     * @param DisposableInterface $second
      */
     public function __construct(DisposableInterface $first, DisposableInterface $second)
     {
@@ -40,7 +40,9 @@ class BinaryDisposable implements DisposableInterface
 
         $this->isDisposed = true;
 
+        /** @phpstan-ignore-next-line */
         $this->first->dispose();
+        /** @phpstan-ignore-next-line */
         $this->second->dispose();
 
         $this->first  = null;

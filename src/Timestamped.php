@@ -17,13 +17,17 @@ class Timestamped
      * @param int $timestampMillis
      * @param mixed $value
      */
-    public function __construct($timestampMillis, $value)
+    public function __construct(int $timestampMillis, $value)
     {
         $this->timestampMillis = $timestampMillis;
         $this->value = $value;
     }
 
-    public function equals($other)
+    /**
+     * @param Timestamped|mixed $other
+     * @return bool
+     */
+    public function equals($other): bool
     {
         if ($this === $other) {
             return true;
@@ -45,10 +49,7 @@ class Timestamped
         return false;
     }
 
-    /**
-     * @return int
-     */
-    public function getTimestampMillis()
+    public function getTimestampMillis(): int
     {
         return $this->timestampMillis;
     }

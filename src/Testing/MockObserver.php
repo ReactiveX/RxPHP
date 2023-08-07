@@ -10,11 +10,19 @@ use Rx\Notification\OnNextNotification;
 use Rx\ObserverInterface;
 
 /**
+ * @template T
  * Mock observer that records all messages.
  */
 class MockObserver implements ObserverInterface
 {
+    /**
+     * @var TestScheduler
+     */
     private $scheduler;
+
+    /**
+     * @var array<Recorded>
+     */
     private $messages = [];
 
     public function __construct(TestScheduler $scheduler)
@@ -22,6 +30,10 @@ class MockObserver implements ObserverInterface
         $this->scheduler = $scheduler;
     }
 
+    /**
+     * @param T $value
+     * @return void
+     */
     public function onNext($value)
     {
         $this->messages[] = new Recorded(
@@ -30,6 +42,10 @@ class MockObserver implements ObserverInterface
         );
     }
 
+    /**
+     * @param \Throwable $error
+     * @return void
+     */
     public function onError(\Throwable $error)
     {
         $this->messages[] = new Recorded(
@@ -38,6 +54,9 @@ class MockObserver implements ObserverInterface
         );
     }
 
+    /**
+     * @return void
+     */
     public function onCompleted()
     {
         $this->messages[] = new Recorded(
@@ -46,6 +65,9 @@ class MockObserver implements ObserverInterface
         );
     }
 
+    /**
+     * @return array<Recorded>
+     */
     public function getMessages()
     {
         return $this->messages;

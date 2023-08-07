@@ -12,12 +12,30 @@ use Rx\Notification;
 use Rx\Observable;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class ColdObservable extends Observable
 {
+    /**
+     * @var TestScheduler
+     */
     private $scheduler;
+
+    /**
+     * @var array<Recorded>
+     */
     private $messages;
+
+    /**
+     * @var array<Subscription>
+     */
     private $subscriptions = [];
 
+    /**
+     * @param array<Recorded> $messages
+     */
     public function __construct(TestScheduler $scheduler, array $messages = [])
     {
         $this->scheduler = $scheduler;
@@ -29,7 +47,6 @@ class ColdObservable extends Observable
         $this->subscriptions[] = new Subscription($this->scheduler->getClock());
         $index                 = count($this->subscriptions) - 1;
 
-        $currentObservable = $this;
         $disposable        = new CompositeDisposable();
         $scheduler         = $this->scheduler;
         $isDisposed        = false;
@@ -38,8 +55,11 @@ class ColdObservable extends Observable
             $notification = $message->getValue();
             $time         = $message->getTime();
 
-            $schedule = function (Notification $innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed) {
+            assert($notification instanceof Notification);
+
+            $schedule = function (Notification $innerNotification) use (&$disposable, $observer, $scheduler, $time, &$isDisposed) {
                 $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function () use ($observer, $innerNotification, &$isDisposed) {
+                    /** @phpstan-ignore-next-line */
                     if (!$isDisposed) {
                         $innerNotification->accept($observer);
                     }
@@ -52,13 +72,16 @@ class ColdObservable extends Observable
 
         $subscriptions = &$this->subscriptions;
 
-        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
+        return new CallbackDisposable(function () use ($index, $scheduler, &$subscriptions, &$isDisposed) {
             $isDisposed            = true;
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });
 
     }
 
+    /**
+     * @return array<Subscription>
+     */
     public function getSubscriptions(): array
     {
         return $this->subscriptions;

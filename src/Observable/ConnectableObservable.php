@@ -12,18 +12,20 @@ use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
 /**
+ * @template T
+ * @template-extends Observable<T>
  * Class ConnectableObservable
  * @package Rx\Observable
  */
 class ConnectableObservable extends Observable
 {
-    /** @var \Rx\Subject\Subject */
+    /** @var \Rx\Subject\Subject<T> */
     protected $subject;
 
     /** @var  BinaryDisposable */
     protected $subscription;
 
-    /** @var  Observable */
+    /** @var  Observable<T> */
     protected $sourceObservable;
 
     /** @var bool */
@@ -31,8 +33,8 @@ class ConnectableObservable extends Observable
 
     /**
      * ConnectableObservable constructor.
-     * @param Observable $source
-     * @param \Rx\Subject\Subject $subject
+     * @param Observable<T> $source
+     * @param \Rx\Subject\Subject<T> $subject
      */
     public function __construct(Observable $source, Subject $subject = null)
     {
@@ -63,6 +65,9 @@ class ConnectableObservable extends Observable
         return $this->subscription;
     }
 
+    /**
+     * @return RefCountObservable<T>
+     */
     public function refCount(): RefCountObservable
     {
         return new RefCountObservable($this);

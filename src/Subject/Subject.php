@@ -8,13 +8,34 @@ use RuntimeException;
 use Rx\Disposable\EmptyDisposable;
 use Rx\Observable;
 use Rx\DisposableInterface;
+use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
-class Subject extends Observable implements ObserverInterface, DisposableInterface
+/**
+ * @template T
+ * @template-extends Observable<T>
+ * @template-implements ObservableInterface<T>
+ */
+class Subject extends Observable implements ObserverInterface, DisposableInterface, ObservableInterface
 {
+    /**
+     * @var ?\Throwable
+     */
     protected $exception;
+
+    /**
+     * @var bool
+     */
     protected $isDisposed = false;
+
+    /**
+     * @var bool
+     */
     protected $isStopped = false;
+
+    /**
+     * @var array<ObserverInterface>
+     */
     protected $observers = [];
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -38,16 +59,25 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         return new EmptyDisposable();
     }
 
+    /**
+     * @return bool
+     */
     public function isDisposed()
     {
         return $this->isDisposed;
     }
 
+    /**
+     * @return bool
+     */
     public function hasObservers()
     {
         return count($this->observers) > 0;
     }
 
+    /**
+     * @return void
+     */
     protected function assertNotDisposed()
     {
         if ($this->isDisposed) {
@@ -55,6 +85,9 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         }
     }
 
+    /**
+     * @return void
+     */
     public function onCompleted()
     {
         $this->assertNotDisposed();
@@ -73,6 +106,9 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         $this->observers = [];
     }
 
+    /**
+     * @return void
+     */
     public function onError(\Throwable $exception)
     {
         $this->assertNotDisposed();
@@ -92,6 +128,10 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         $this->observers = [];
     }
 
+    /**
+     * @param T $value
+     * @return void
+     */
     public function onNext($value)
     {
         $this->assertNotDisposed();
@@ -106,6 +146,9 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         }
     }
 
+    /**
+     * @return void
+     */
     public function dispose()
     {
         $this->isDisposed = true;

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Rx\Scheduler;
 
+use Rx\Disposable\EmptyDisposable;
+use Rx\SchedulerInterface;
 use Rx\TestCase;
 
 class PriorityQueueTest extends TestCase
@@ -32,7 +34,9 @@ class PriorityQueueTest extends TestCase
 
     private function createScheduledItem($dueTime)
     {
-        return new ScheduledItem(null, null, null, $dueTime, null);
+        return new ScheduledItem(new ImmediateScheduler(), null, function (SchedulerInterface $scheduler, $data) {
+            return new EmptyDisposable();
+        }, $dueTime, null);
     }
 
     /**
@@ -140,9 +144,10 @@ class PriorityQueueTest extends TestCase
         $queue = new PriorityQueue();
         $queue->remove(
             new ScheduledItem(
-                $this->createMock(ScheduledItem::class),
+                new ImmediateScheduler(),
                 null,
-                function () {
+                function (SchedulerInterface $scheduler, $data) {
+                    return new EmptyDisposable();
                 },
                 0
             )

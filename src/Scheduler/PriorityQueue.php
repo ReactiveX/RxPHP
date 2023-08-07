@@ -9,6 +9,9 @@ use SplPriorityQueue;
 
 class PriorityQueue
 {
+    /**
+     * @var InternalPriorityQueue<int, ScheduledItem>
+     */
     private $queue;
 
     public function __construct()
@@ -16,12 +19,19 @@ class PriorityQueue
         $this->queue = new InternalPriorityQueue;
     }
 
+    /**
+     * @return void
+     */
     public function enqueue(ScheduledItem $item)
     {
+        /** @phpstan-ignore-next-line */
         $this->queue->insert($item, $item);
     }
 
-    public function remove($item)
+    /**
+     * @return bool
+     */
+    public function remove(ScheduledItem $item)
     {
         if ($this->count() === 0) {
             return false;
@@ -31,15 +41,27 @@ class PriorityQueue
             $this->dequeue();
             return true;
         }
+
+        /**
+         * @var InternalPriorityQueue<int, ScheduledItem> $newQueue
+         */
         $newQueue = new InternalPriorityQueue();
         $removed  = false;
 
         foreach ($this->queue as $element) {
+            /**
+             * Look at this later
+             * @phpstan-ignore-next-line
+             */
             if ($item === $element) {
                 $removed = true;
                 continue;
             }
 
+            /**
+             * Look at this later
+             * @phpstan-ignore-next-line
+             */
             $newQueue->insert($element, $element);
         }
 
@@ -48,44 +70,31 @@ class PriorityQueue
         return $removed;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return $this->queue->count();
     }
 
+    /**
+     * @return ScheduledItem
+     */
     public function peek()
     {
-        return $this->queue->top();
+        $return = $this->queue->top();
+        assert($return instanceof ScheduledItem);
+        return $return;
     }
 
+    /**
+     * @return ScheduledItem
+     */
     public function dequeue()
     {
-        return $this->queue->extract();
-    }
-}
-
-/**
- * @internal
- */
-class InternalPriorityQueue extends SplPriorityQueue
-{
-    // use this value to "stabilize" the priority queue
-    private $serial = PHP_INT_MAX;
-
-    public function insert($item, $priority)
-    {
-        parent::insert($item, [$priority, $this->serial--]);
-    }
-
-    #[ReturnTypeWillChange]
-    public function compare($a, $b)
-    {
-        $value = $b[0]->compareTo($a[0]);
-
-        if (0 === $value) {
-            return $a[1] < $b[1] ? -1 : 1;
-        }
-
-        return $value;
+        $return = $this->queue->extract();
+        assert($return instanceof ScheduledItem);
+        return $return;
     }
 }

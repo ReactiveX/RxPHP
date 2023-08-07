@@ -8,7 +8,7 @@ interface SchedulerInterface
 {
     /**
      * @param callable $action
-     * @param $delay
+     * @param int $delay
      *
      * @return DisposableInterface
      */
@@ -24,16 +24,16 @@ interface SchedulerInterface
     /**
      * @param callable $action
      * @param int $delay
-     * @param $period
+     * @param int $period
      *
-     * @return mixed
+     * @return DisposableInterface
      */
     public function schedulePeriodic(callable $action, $delay, $period): DisposableInterface;
 
     /**
      * Gets the current representation of now for the scheduler
      *
-     * @return mixed
+     * @return int
      */
     public function now(): int;
 }

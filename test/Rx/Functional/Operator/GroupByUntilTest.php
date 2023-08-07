@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rx\Functional\Operator;
 
+use Rx\Disposable\EmptyDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Notification;
 use Rx\Observable;
@@ -565,7 +566,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
             function () use (&$outer, &$outerSubscription, &$inners, &$results, &$innerSubscriptions) {
-                $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
+                $outerSubscription = $outer->subscribe(function (GroupedObservable $group) use (
                     &$inners,
                     &$results
                 ) {
@@ -576,6 +577,8 @@ class GroupByUntilTest extends FunctionalTestCase
 
                     $this->scheduler->scheduleRelativeWithState(null, 100, function () use ($group, $result) {
                         $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
+
+                        return new EmptyDisposable();
                     });
                 });
             }
@@ -787,6 +790,8 @@ class GroupByUntilTest extends FunctionalTestCase
                             100,
                             function () use (&$innerSubscriptions, $group, $result) {
                                 $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
+
+                                return new EmptyDisposable();
                             }
                         );
                     },

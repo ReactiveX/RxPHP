@@ -9,13 +9,15 @@ use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
 /**
+ * @template T
+ * @template-extends Subject<T>
  * Class AsyncSubject
  * @package Rx\Subject
  */
 class AsyncSubject extends Subject
 {
     /**
-     * @var
+     * @var T
      */
     private $value;
 
@@ -26,7 +28,7 @@ class AsyncSubject extends Subject
     private $valueSet = false;
 
     /**
-     * @return mixed
+     * @return T
      */
     public function getValue()
     {
@@ -34,7 +36,7 @@ class AsyncSubject extends Subject
     }
 
     /**
-     * @param $value
+     * @param T $value
      */
     public function onNext($value)
     {

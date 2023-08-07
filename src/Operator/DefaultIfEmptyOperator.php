@@ -10,14 +10,20 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ */
 final class DefaultIfEmptyOperator implements OperatorInterface
 {
-    /** @var  ObservableInterface */
+    /** @var  ObservableInterface<T> */
     private $observable;
 
     /** @var bool */
     private $passThrough = false;
 
+    /**
+     * @param ObservableInterface<T> $observable
+     */
     public function __construct(ObservableInterface $observable)
     {
         $this->observable = $observable;

@@ -9,17 +9,14 @@ namespace Rx;
  */
 abstract class Notification
 {
-    private $kind;
-
     /**
-     * @param mixed $kind Kind of notification
+     * @template T
+     * @param (callable(T): void)|ObserverInterface $observerOrOnNext
+     * @param (callable(\Throwable): void) $onError
+     * @param (callable(): void) $onCompleted
+     * @return void
      */
-    public function __construct($kind)
-    {
-        $this->kind = $kind;
-    }
-
-    public function accept($observerOrOnNext, $onError = null, $onCompleted = null)
+    public function accept($observerOrOnNext, callable $onError = null, callable $onCompleted = null)
     {
         if (null === $onError && null === $onCompleted && $observerOrOnNext instanceof ObserverInterface) {
             $this->doAcceptObservable($observerOrOnNext);
@@ -27,15 +24,30 @@ abstract class Notification
             return;
         }
 
-        return $this->doAccept($observerOrOnNext, $onError, $onCompleted);
+        assert(is_callable($observerOrOnNext));
+        $this->doAccept($observerOrOnNext, $onError, $onCompleted);
     }
 
+    /**
+     * @param mixed $other
+     */
     public function equals($other): bool
     {
+        /** @phpstan-ignore-next-line */
         return (string)$this === (string)$other;
     }
 
+    /**
+     * @return void
+     */
     abstract protected function doAcceptObservable(ObserverInterface $observer);
 
-    abstract protected function doAccept($onNext, $onError, $onCompleted);
+    /**
+     * @template T
+     * @param (callable(T): void) $onNext
+     * @param (callable(\Throwable): void) $onError
+     * @param (callable(): void) $onCompleted
+     * @return void
+     */
+    abstract protected function doAccept(callable $onNext, callable $onError = null, callable $onCompleted = null);
 }

@@ -14,6 +14,9 @@ use Rx\Subject\Subject;
 
 final class RetryWhenOperator implements OperatorInterface
 {
+    /**
+     * @var callable
+     */
     private $notificationHandler;
 
     public function __construct(callable $notificationHandler)
@@ -52,6 +55,7 @@ final class RetryWhenOperator implements OperatorInterface
                     $disposable->remove($sourceDisposable);
                     $sourceDisposable->dispose();
 
+                    /** @phpstan-ignore-next-line */
                     if ($innerCompleted) {
                         $observer->onCompleted();
                         return;

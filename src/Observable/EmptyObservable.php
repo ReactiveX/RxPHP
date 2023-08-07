@@ -9,8 +9,15 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class EmptyObservable extends Observable
 {
+    /**
+     * @var SchedulerInterface
+     */
     private $scheduler;
 
     public function __construct(SchedulerInterface $scheduler)

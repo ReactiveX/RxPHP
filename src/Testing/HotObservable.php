@@ -11,22 +11,38 @@ use Rx\Notification;
 use Rx\Observable;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class HotObservable extends Observable
 {
+    /**
+     * @var TestScheduler
+     */
     private $scheduler;
-    private $messages;
+    /**
+     * @var array<Subscription>
+     */
     private $subscriptions = [];
+    /**
+     * @var array<ObserverInterface>
+     */
     private $observers = [];
 
+    /**
+     * @param array<Recorded> $messages
+     */
     public function __construct(TestScheduler $scheduler, array $messages)
     {
         $this->scheduler   = $scheduler;
-        $this->messages    = $messages;
         $currentObservable = $this;
 
         foreach ($messages as $message) {
             $time         = $message->getTime();
             $notification = $message->getValue();
+
+            assert($notification instanceof Notification);
 
             $schedule = function (Notification $innerNotification) use (&$currentObservable, $scheduler, $time) {
                 $scheduler->scheduleAbsolute($time, function () use (&$currentObservable, $innerNotification) {
@@ -77,12 +93,17 @@ class HotObservable extends Observable
 
     /**
      * @internal
+     *
+     * @return array<ObserverInterface>
      */
     public function getObservers(): array
     {
         return $this->observers;
     }
 
+    /**
+     * @return array<Subscription>
+     */
     public function getSubscriptions(): array
     {
         return $this->subscriptions;

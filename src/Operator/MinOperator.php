@@ -11,6 +11,9 @@ use Rx\ObserverInterface;
 
 final class MinOperator implements OperatorInterface
 {
+    /**
+     * @var callable
+     */
     private $comparer;
 
     public function __construct(callable $comparer = null)

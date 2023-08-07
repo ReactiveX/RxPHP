@@ -9,9 +9,20 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class ErrorObservable extends Observable
 {
+    /**
+     * @var \Throwable
+     */
     private $error;
+
+    /**
+     * @var SchedulerInterface
+     */
     private $scheduler;
 
     public function __construct(\Throwable $error, SchedulerInterface $scheduler)

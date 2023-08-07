@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Rx\Functional\Subject;
 
+use Rx\Disposable\EmptyDisposable;
 use Rx\Functional\FunctionalTestCase;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
@@ -36,35 +37,55 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(3, 100, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use (&$subscription, &$xs, &$subject) {
             $subscription = $xs->subscribe($subject);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 1000, function () use (&$subscription) {
             $subscription->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subscription1, &$subject, &$results1) {
             $subscription1 = $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subscription2, &$subject, &$results2) {
             $subscription2 = $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subscription3, &$subject, &$results3) {
             $subscription3 = $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 700, function () use (&$subscription2) {
             $subscription2->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 800, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subscription3) {
             $subscription3->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();
@@ -125,35 +146,55 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(3, 100, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use (&$subject, &$subscription, $xs) {
             $subscription = $xs->subscribe($subject);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 1000, function () use (&$subscription) {
             $subscription->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subject, &$subscription1, &$results1) {
             $subscription1 = $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subject, &$subscription2, &$results2) {
             $subscription2 = $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subject, &$subscription3, &$results3) {
             $subscription3 = $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 700, function () use (&$subscription2) {
             $subscription2->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 800, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subscription3) {
             $subscription3->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();
@@ -209,35 +250,55 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(3, 100, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use (&$subject, &$subscription, $xs) {
             $subscription = $xs->subscribe($subject);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 1000, function () use (&$subscription) {
             $subscription->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subject, &$subscription1, &$results1) {
             $subscription1 = $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subject, &$subscription2, &$results2) {
             $subscription2 = $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subject, &$subscription3, &$results3) {
             $subscription3 = $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 700, function () use (&$subscription2) {
             $subscription2->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 800, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subscription3) {
             $subscription3->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();
@@ -286,35 +347,55 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(3, 100, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use (&$subject, &$subscription, $xs) {
             $subscription = $xs->subscribe($subject);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 1000, function () use (&$subscription) {
             $subscription->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subject, &$subscription1, &$results1) {
             $subscription1 = $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subject, &$subscription2, &$results2) {
             $subscription2 = $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subject, &$subscription3, &$results3) {
             $subscription3 = $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 700, function () use (&$subscription2) {
             $subscription2->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 800, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subscription3) {
             $subscription3->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();
@@ -354,35 +435,55 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(3, 100, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use (&$subject, &$subscription, $xs) {
             $subscription = $xs->subscribe($subject);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 1000, function () use (&$subscription) {
             $subscription->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subject, &$subscription1, &$results1) {
             $subscription1 = $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subject, &$subscription2, &$results2) {
             $subscription2 = $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subject, &$subscription3, &$results3) {
             $subscription3 = $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 700, function () use (&$subscription2) {
             $subscription2->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 800, function () use (&$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subscription3) {
             $subscription3->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();
@@ -407,63 +508,97 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(null, null, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use (&$subject, &$subscription1, &$results1) {
             $subscription1 = $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subject, &$subscription2, &$results2) {
             $subscription2 = $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subject, &$subscription3, &$results3) {
             $subscription3 = $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 500, function () use (&$subject, &$subscription1) {
             $subscription1->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subject) {
             $subject->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 700, function () use (&$subscription2) {
             $subscription2->dispose();
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 800, function () use (&$subscription3) {
             $subscription3->dispose();
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 150, function () use (&$subject) {
             $subject->onNext(1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 250, function () use (&$subject) {
             $subject->onNext(2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 350, function () use (&$subject) {
             $subject->onNext(3);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 450, function () use (&$subject) {
             $subject->onNext(4);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 550, function () use (&$subject) {
             $subject->onNext(5);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 650, function () use (&$subject) {
             $this->assertException(function () use (&$subject) {
                 $subject->onNext(6);
             });
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 750, function () use (&$subject) {
             $this->assertException(function () use (&$subject) {
                 $subject->onCompleted();
             });
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 850, function () use (&$subject) {
             $this->assertException(function () use (&$subject) {
                 $subject->onError(new \Exception());
             });
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 950, function () use (&$subject) {
             $this->assertException(function () use (&$subject) {
                 $subject->subscribe(new CallbackObserver());
             });
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();
@@ -514,22 +649,34 @@ class ReplaySubjectTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsoluteWithState(null, 100, function () use (&$subject) {
             $subject = new ReplaySubject(9007199254740991, 100, $this->scheduler);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 200, function () use ($xs, &$subject) {
             $xs->subscribe($subject);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->scheduleAbsoluteWithState(null, 300, function () use (&$subject, &$results1) {
             $subject->subscribe($results1);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 400, function () use (&$subject, &$results2) {
             $subject->subscribe($results2);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 600, function () use (&$subject, &$results3) {
             $subject->subscribe($results3);
+
+            return new EmptyDisposable();
         });
         $this->scheduler->scheduleAbsoluteWithState(null, 900, function () use (&$subject, &$results4) {
             $subject->subscribe($results4);
+
+            return new EmptyDisposable();
         });
 
         $this->scheduler->start();

@@ -13,12 +13,20 @@ final class ReduceOperator implements OperatorInterface
 {
     /** @var  callable */
     protected $accumulator;
+
+    /**
+     * @var mixed
+     */
     protected $seed;
+
+    /**
+     * @var bool
+     */
     protected $hasSeed;
 
     /**
      * @param callable $accumulator
-     * @param $seed
+     * @param mixed $seed
      */
     public function __construct(callable $accumulator, $seed)
     {
@@ -51,7 +59,7 @@ final class ReduceOperator implements OperatorInterface
             function ($e) use ($observer) {
                 $observer->onError($e);
             },
-            function () use ($observer, &$hasAccumulation, &$accumulation, &$hasValue) {
+            function () use ($observer, &$accumulation, &$hasValue) {
                 if ($hasValue) {
                     $observer->onNext($accumulation);
                 } else {

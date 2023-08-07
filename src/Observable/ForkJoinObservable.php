@@ -10,19 +10,35 @@ use Rx\Observer\AutoDetachObserver;
 use Rx\ObserverInterface;
 use Rx\Disposable\CompositeDisposable;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class ForkJoinObservable extends Observable
 {
     /**
-     * @var Observable[]
+     * @var array<Observable<T>>
      */
     private $observables;
 
+    /**
+     * @var array<T>
+     */
     private $values = [];
 
+    /**
+     * @var int
+     */
     private $completed = 0;
 
+    /**
+     * @var callable|null
+     */
     private $resultSelector;
 
+    /**
+     * @param array<Observable<T>> $observables
+     */
     public function __construct(array $observables = [], callable $resultSelector = null)
     {
         $this->observables    = $observables;

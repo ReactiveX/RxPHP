@@ -24,7 +24,7 @@ class ObservableTest extends TestCase
                 return static::$ofCalled;
             }
 
-            public static function of($value, SchedulerInterface $scheduler = null): ReturnObservable
+            public static function of($value, ?SchedulerInterface $scheduler = null): Observable
             {
                 static::$ofCalled = true;
                 return new ReturnObservable(123, new ImmediateScheduler());

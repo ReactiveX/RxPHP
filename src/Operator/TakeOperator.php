@@ -11,6 +11,9 @@ use Rx\ObserverInterface;
 
 final class TakeOperator implements OperatorInterface
 {
+    /**
+     * @var int
+     */
     private $count;
 
     public function __construct(int $count)
