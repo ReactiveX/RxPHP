@@ -1,0 +1,8 @@
+parameters:
+    level: max
+
+    paths:
+        - test/types/
+
+    fileExtensions:
+        - php
