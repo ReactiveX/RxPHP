@@ -1,3 +1,9 @@
+# 2.0.12
+
+### Update
+
+- Add support for react/promise v3
+
 # 2.0.11
 
 ### Update
