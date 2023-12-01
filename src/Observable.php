@@ -294,6 +294,33 @@ abstract class Observable implements ObservableInterface
     }
 
     /**
+     * Combine an Observable together with another Observable by merging their emissions into a single Observable.
+     * This variant of merge will hold errors emitted from component observables until all observables have
+     * either completed or errored.
+     *
+     * @return Observable
+     *
+     * @operator
+     * @reactivex mergeDelayError
+     */
+    public function mergeDelayError(Observable $o) : Observable {
+        return Observable::fromArray([$this, $o])
+            ->reduce(function ($a, Observable $o) {
+                $s = new Subject();
+                return [
+                    $a[0]->merge($o->catch(function (\Throwable $e) use ($s) {
+                        $s->onError($e);
+                        return Observable::empty();
+                    })),
+                    $a[1]->merge($s)
+                ];
+            }, [Observable::empty(), Observable::empty()])
+            ->flatMap(function ($a) {
+                return $a[0]->concat($a[1]);
+            });
+    }
+
+    /**
      * Converts an array to an observable sequence
      *
      * @param array $array
