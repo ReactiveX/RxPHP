@@ -37,6 +37,7 @@ final class MergeAllOperator implements OperatorInterface
                         function () use (&$group, &$innerSubscription, &$isStopped, $observer) {
                             $group->remove($innerSubscription);
 
+                            /** @phpstan-ignore-next-line */
                             if ($isStopped && $group->count() === 1) {
                                 $observer->onCompleted();
                             }

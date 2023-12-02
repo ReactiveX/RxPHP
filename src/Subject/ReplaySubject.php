@@ -6,12 +6,17 @@ namespace Rx\Subject;
 
 use Rx\Disposable\CallbackDisposable;
 use Rx\DisposableInterface;
+use Rx\Observable;
+use Rx\ObservableInterface;
 use Rx\Observer\ScheduledObserver;
 use Rx\ObserverInterface;
 use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 /**
+ * @template T
+ * @template-extends Subject<T>
+ *
  * Represents an object that is both an observable sequence as well as an observer.
  * Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.
  */
@@ -23,7 +28,7 @@ class ReplaySubject extends Subject
     /** @var int */
     private $windowSize;
 
-    /** @var array */
+    /** @var array<array{interval: int|mixed, value: T}> */
     private $queue = [];
 
     /** @var int */
@@ -69,7 +74,7 @@ class ReplaySubject extends Subject
         }
 
         if ($this->hasError) {
-            $so->onError($this->exception);
+            $so->onError($this->exception); /** @phpstan-ignore-line */
         } else {
             if ($this->isStopped) {
                 $so->onCompleted();
@@ -81,6 +86,10 @@ class ReplaySubject extends Subject
         return $subscription;
     }
 
+    /**
+     * @param T $value
+     * @return void
+     */
     public function onNext($value)
     {
         $this->assertNotDisposed();
@@ -144,7 +153,12 @@ class ReplaySubject extends Subject
         $this->observers = [];
     }
 
-    private function createRemovableDisposable($subject, $observer): DisposableInterface
+    /**
+     * @param Subject<T> $subject
+     * @param ScheduledObserver $observer
+     * @return DisposableInterface
+     */
+    private function createRemovableDisposable(Subject $subject, ScheduledObserver $observer): DisposableInterface
     {
         return new CallbackDisposable(function () use ($observer, $subject) {
             $observer->dispose();
@@ -154,6 +168,9 @@ class ReplaySubject extends Subject
         });
     }
 
+    /**
+     * @return void
+     */
     private function trim()
     {
         if (count($this->queue) > $this->bufferSize) {

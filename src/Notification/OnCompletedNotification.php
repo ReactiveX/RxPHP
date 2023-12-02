@@ -9,18 +9,17 @@ use Rx\Notification;
 
 class OnCompletedNotification extends Notification
 {
-    public function __construct()
-    {
-        parent::__construct('C');
-    }
-
+    /**
+     * @return void
+     */
     protected function doAcceptObservable(ObserverInterface $observer)
     {
         $observer->onCompleted();
     }
 
-    protected function doAccept($onNext, $onError, $onCompleted)
+    protected function doAccept(callable $onNext, callable $onError = null, callable $onCompleted = null)
     {
+        assert(is_callable($onCompleted));
         $onCompleted();
     }
 

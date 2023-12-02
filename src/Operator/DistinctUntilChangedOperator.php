@@ -11,8 +11,14 @@ use Rx\ObserverInterface;
 
 final class DistinctUntilChangedOperator implements OperatorInterface
 {
+    /**
+     * @var callable|null
+     */
     protected $keySelector;
 
+    /**
+     * @var callable
+     */
     protected $comparer;
 
     public function __construct(callable $keySelector = null, callable $comparer = null)
@@ -35,7 +41,8 @@ final class DistinctUntilChangedOperator implements OperatorInterface
                     try {
                         $key = ($this->keySelector)($value);
                     } catch (\Throwable $e) {
-                        return $observer->onError($e);
+                        $observer->onError($e);
+                        return;
                     }
                 }
 
@@ -44,7 +51,8 @@ final class DistinctUntilChangedOperator implements OperatorInterface
                     try {
                         $comparerEquals = ($this->comparer)($currentKey, $key);
                     } catch (\Throwable $e) {
-                        return $observer->onError($e);
+                        $observer->onError($e);
+                        return;
                     }
                 }
 

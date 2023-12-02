@@ -14,7 +14,7 @@ final class BufferWithCountOperator implements OperatorInterface
     /** @var int */
     private $count;
 
-    /** @var */
+    /** @var ?int */
     private $skip;
 
     /** @var int */

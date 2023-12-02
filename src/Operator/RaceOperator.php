@@ -12,13 +12,15 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ */
 final class RaceOperator implements OperatorInterface
 {
-
     /** @var bool */
     private $hasFirst = false;
 
-    /** @var Observable[] */
+    /** @var array<Observable<T>> */
     private $observables = [];
 
     /** @var DisposableInterface[] */
@@ -55,7 +57,7 @@ final class RaceOperator implements OperatorInterface
                     $this->innerSubscription->add($subscription);
                 }
 
-                $this->observables = null;
+                $this->observables = [];
             }
         );
 
@@ -65,6 +67,12 @@ final class RaceOperator implements OperatorInterface
 
     }
 
+    /**
+     * @param ObservableInterface<T> $observable
+     * @param mixed $outerIndex
+     *
+     * @return DisposableInterface
+     */
     private function subscribeToResult(ObservableInterface $observable, ObserverInterface $observer, $outerIndex)
     {
         return $observable->subscribe(new CallbackObserver(

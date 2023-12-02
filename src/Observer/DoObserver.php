@@ -8,13 +8,16 @@ use Rx\ObserverInterface;
 
 class DoObserver implements ObserverInterface
 {
-    /** @var callable|null */
+    /**
+     * @template T
+     * @var callable(T)
+     */
     private $onNext;
 
-    /** @var callable|null */
+    /** @var callable */
     private $onError;
 
-    /** @var callable|null */
+    /** @var callable */
     private $onCompleted;
 
     public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
@@ -41,12 +44,17 @@ class DoObserver implements ObserverInterface
         ($this->onError)($error);
     }
 
+    /**
+     * @template T
+     * @param T $value
+     * @return void
+     */
     public function onNext($value)
     {
         ($this->onNext)($value);
     }
 
-    private function getOrDefault(callable $callback = null, $default = null): callable
+    private function getOrDefault(callable $callback = null, callable $default): callable
     {
         if (null === $callback) {
             return $default;

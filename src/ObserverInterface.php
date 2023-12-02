@@ -6,9 +6,20 @@ namespace Rx;
 
 interface ObserverInterface
 {
+    /**
+     * @return void
+     */
     public function onCompleted();
 
+    /**
+     * @return void
+     */
     public function onError(\Throwable $error);
 
+    /**
+     * @template T
+     * @param T $value
+     * @return void
+     */
     public function onNext($value);
 }

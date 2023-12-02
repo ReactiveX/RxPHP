@@ -13,15 +13,18 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
+/**
+ * @template T
+ */
 final class RepeatWhenOperator implements OperatorInterface
 {
     /** @var callable */
     private $notificationHandler;
 
-    /** @var Subject */
+    /** @var Subject<int> */
     private $completions;
 
-    /** @var Subject */
+    /** @var Subject<T> */
     private $notifier;
 
     /** @var CompositeDisposable */
@@ -52,12 +55,12 @@ final class RepeatWhenOperator implements OperatorInterface
         $outerDisposable = new SerialDisposable();
         $this->disposable->add($outerDisposable);
 
-        $subscribe = function () use ($outerDisposable, $observable, $observer, &$subscribe) {
+        $subscribe = function () use ($outerDisposable, $observable, $observer) {
             $this->sourceComplete = false;
             $outerSubscription    = $observable->subscribe(new CallbackObserver(
                 [$observer, 'onNext'],
                 [$observer, 'onError'],
-                function () use ($observer, &$subscribe, $outerDisposable) {
+                function () use ($observer, $outerDisposable) {
                     $this->sourceComplete = true;
                     if (!$this->repeat) {
                         $observer->onCompleted();

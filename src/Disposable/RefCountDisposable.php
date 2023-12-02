@@ -8,9 +8,24 @@ use Rx\DisposableInterface;
 
 class RefCountDisposable implements DisposableInterface
 {
+    /**
+     * @var int
+     */
     private $count = 0;
+
+    /**
+     * @var DisposableInterface
+     */
     private $disposable;
+
+    /**
+     * @var bool
+     */
     private $isDisposed = false;
+
+    /**
+     * @var bool
+     */
     private $isPrimaryDisposed = false;
 
     public function __construct(DisposableInterface $disposable)
@@ -32,6 +47,9 @@ class RefCountDisposable implements DisposableInterface
         }
     }
 
+    /**
+     * @return DisposableInterface
+     */
     public function getDisposable()
     {
         if (!$this->isDisposed) {

@@ -14,12 +14,34 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
+/**
+ * @template T
+ */
 final class GroupByUntilOperator implements OperatorInterface
 {
+    /**
+     * @var callable
+     */
     private $keySelector;
+
+    /**
+     * @var callable
+     */
     private $elementSelector;
+
+    /**
+     * @var callable
+     */
     private $durationSelector;
+
+    /**
+     * @var callable
+     */
     private $keySerializer;
+
+    /**
+     * @var array<Subject<T>>
+     */
     private $map = [];
 
     public function __construct(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null)
@@ -58,6 +80,7 @@ final class GroupByUntilOperator implements OperatorInterface
             foreach ($this->map as $w) {
                 $w->onError($e);
             }
+            /** @phpstan-ignore-next-line */
             if ($sourceEmits) {
                 $observer->onError($e);
             }
@@ -73,6 +96,7 @@ final class GroupByUntilOperator implements OperatorInterface
                     return;
                 }
 
+                /** @phpstan-ignore-next-line */
                 if (!$sourceEmits && !isset($this->map[$serializedKey])) {
                     return;
                 }
@@ -124,6 +148,7 @@ final class GroupByUntilOperator implements OperatorInterface
                 foreach ($this->map as $w) {
                     $w->onCompleted();
                 }
+                /** @phpstan-ignore-next-line */
                 if ($sourceEmits) {
                     $observer->onCompleted();
                 }

@@ -9,10 +9,20 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\AsyncSchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class TimerObservable extends Observable
 {
+    /**
+     * @var int
+     */
     private $dueTime;
 
+    /**
+     * @var AsyncSchedulerInterface
+     */
     private $scheduler;
 
     public function __construct(int $dueTime, AsyncSchedulerInterface $scheduler)

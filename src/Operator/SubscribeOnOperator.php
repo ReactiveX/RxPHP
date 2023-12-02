@@ -14,6 +14,9 @@ use Rx\SchedulerInterface;
 
 final class SubscribeOnOperator implements OperatorInterface
 {
+    /**
+     * @var SchedulerInterface
+     */
     private $scheduler;
 
     public function __construct(SchedulerInterface $scheduler)

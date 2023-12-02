@@ -8,6 +8,9 @@ use Rx\Disposable\BinaryDisposable;
 use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ */
 final class FinallyOperator implements OperatorInterface
 {
     /** @var callable */
@@ -22,7 +25,7 @@ final class FinallyOperator implements OperatorInterface
     }
 
     /**
-     * @param \Rx\ObservableInterface $observable
+     * @param \Rx\ObservableInterface<T> $observable
      * @param \Rx\ObserverInterface $observer
      * @return \Rx\DisposableInterface
      */

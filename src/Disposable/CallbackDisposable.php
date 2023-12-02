@@ -8,7 +8,14 @@ use Rx\DisposableInterface;
 
 class CallbackDisposable implements DisposableInterface
 {
+    /**
+     * @var callable
+     */
     private $action;
+
+    /**
+     * @var bool
+     */
     private $disposed = false;
 
     public function __construct(callable $action)

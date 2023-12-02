@@ -2,6 +2,7 @@ parameters:
     level: max
 
     paths:
+        - src/
         - test/types/
 
     fileExtensions:

@@ -6,6 +6,26 @@ namespace Rx\Testing;
 
 class Recorded
 {
+    /**
+     * @var int
+     */
+    private $time;
+
+    /**
+     * @var mixed
+     */
+    private $value;
+
+    /**
+     * @var callable
+     */
+    private $comparer;
+
+    /**
+     * @param int $time
+     * @param mixed $value
+     * @param callable|null $comparer
+     */
     public function __construct(int $time, $value, callable $comparer = null)
     {
         $this->time     = $time;
@@ -19,7 +39,7 @@ class Recorded
         };
     }
 
-    public function equals(Recorded $other)
+    public function equals(Recorded $other): bool
     {
         $comparer = $this->comparer;
 
@@ -32,11 +52,14 @@ class Recorded
         return $this->value . '@' . $this->time;
     }
 
-    public function getTime()
+    public function getTime(): int
     {
         return $this->time;
     }
 
+    /**
+     * @return mixed
+     */
     public function getValue()
     {
         return $this->value;

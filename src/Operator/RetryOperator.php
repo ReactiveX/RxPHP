@@ -13,6 +13,9 @@ use Rx\ObserverInterface;
 
 final class RetryOperator implements OperatorInterface
 {
+    /**
+     * @var int
+     */
     private $retryCount;
 
     public function __construct(int $retryCount = -1)

@@ -10,6 +10,8 @@ use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
 /**
+ * @template T
+ * @template-extends Subject<T>
  * Class TestSubject
  * @package Rx\Testing
  */
@@ -18,11 +20,11 @@ class TestSubject extends Subject
     /** @var int */
     private $subscribeCount;
 
-    /** @var  ObserverInterface */
+    /** @var ObserverInterface */
     private $observer;
 
-    /* @var DisposableInterface[] */
-    private $disposeOnMap;
+    /** @var array<DisposableInterface> */
+    private $disposeOnMap = [];
 
     public function __construct()
     {
@@ -42,8 +44,9 @@ class TestSubject extends Subject
     }
 
     /**
-     * @param $value
-     * @param $disposable
+     * @param mixed $value
+     * @param DisposableInterface $disposable
+     * @return void
      */
     public function disposeOn($value, DisposableInterface $disposable)
     {
@@ -51,7 +54,7 @@ class TestSubject extends Subject
     }
 
     /**
-     * @param $value
+     * @param T $value
      */
     public function onNext($value)
     {

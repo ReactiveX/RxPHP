@@ -11,6 +11,9 @@ use Rx\ObserverInterface;
 
 final class MaxOperator implements OperatorInterface
 {
+    /**
+     * @var callable
+     */
     private $comparer;
 
     public function __construct(callable $comparer = null)

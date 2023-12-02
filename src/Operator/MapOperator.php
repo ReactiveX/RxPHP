@@ -13,6 +13,9 @@ use Rx\ObserverInterface;
 
 final class MapOperator implements OperatorInterface
 {
+    /**
+     * @var callable
+     */
     private $selector;
 
     public function __construct(callable $selector)
@@ -34,6 +37,7 @@ final class MapOperator implements OperatorInterface
                 } catch (\Throwable $e) {
                     $observer->onError($e);
                 }
+                /** @phpstan-ignore-next-line */
                 if (!$disposed) {
                     $observer->onNext($value);
                 }

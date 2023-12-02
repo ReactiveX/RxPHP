@@ -9,12 +9,25 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class RangeObservable extends Observable
 {
+    /**
+     * @var int
+     */
     private $start;
 
+    /**
+     * @var int
+     */
     private $count;
 
+    /**
+     * @var SchedulerInterface
+     */
     private $scheduler;
 
     public function __construct(int $start, int $count, SchedulerInterface $scheduler)

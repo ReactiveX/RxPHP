@@ -11,11 +11,17 @@ use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 use Rx\Timestamped;
 
+/**
+ * @template T
+ */
 final class TimestampOperator implements OperatorInterface
 {
+    /**
+     * @var SchedulerInterface
+     */
     private $scheduler;
 
-    public function __construct(SchedulerInterface $scheduler = null)
+    public function __construct(SchedulerInterface $scheduler)
     {
         $this->scheduler = $scheduler;
     }

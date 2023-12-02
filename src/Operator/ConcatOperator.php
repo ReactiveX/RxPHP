@@ -10,14 +10,17 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ */
 final class ConcatOperator implements OperatorInterface
 {
-    /** @var \Rx\ObservableInterface */
+    /** @var \Rx\ObservableInterface<T> */
     private $subsequentObservable;
 
     /**
      * Concat constructor.
-     * @param ObservableInterface $subsequentObservable
+     * @param ObservableInterface<T> $subsequentObservable
      */
     public function __construct(ObservableInterface $subsequentObservable)
     {

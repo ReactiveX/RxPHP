@@ -9,22 +9,27 @@ use Rx\Notification;
 
 class OnErrorNotification extends Notification
 {
+    /**
+     * @var \Throwable
+     */
     private $exception;
 
     public function __construct(\Throwable $exception)
     {
-        parent::__construct('E');
-
         $this->exception = $exception;
     }
 
+    /**
+     * @return void
+     */
     protected function doAcceptObservable(ObserverInterface $observer)
     {
         $observer->onError($this->exception);
     }
 
-    protected function doAccept($onNext, $onError, $onCompleted)
+    protected function doAccept(callable $onNext, callable $onError = null, callable $onCompleted = null)
     {
+        assert(is_callable($onError));
         $onError($this->exception);
     }
 

@@ -10,15 +10,21 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ * @template TValue
+ */
 final class ZipOperator implements OperatorInterface
 {
-    /** @var ObservableInterface[] */
+    /**
+     * @var array<ObservableInterface<T>>
+     */
     private $sources;
 
     /** @var callable */
     private $resultSelector;
 
-    /** @var \SplQueue[] */
+    /** @var array<\SplQueue<TValue>> */
     private $queues = [];
 
     /** @var int */
@@ -30,6 +36,9 @@ final class ZipOperator implements OperatorInterface
     /** @var bool[] */
     private $completed = [];
 
+    /**
+     * @param array<ObservableInterface<T>> $sources
+     */
     public function __construct(array $sources, callable $resultSelector = null)
     {
         $this->sources = $sources;

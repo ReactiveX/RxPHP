@@ -6,7 +6,14 @@ namespace Rx\Testing;
 
 class Subscription
 {
+    /**
+     * @var int
+     */
     private $subscribed;
+
+    /**
+     * @var int
+     */
     private $unsubscribed;
 
     public function __construct(int $start, int $end = PHP_INT_MAX)
@@ -15,18 +22,28 @@ class Subscription
         $this->unsubscribed = $end;
     }
 
-    public function equals(Subscription $other)
+    /**
+     * @param Subscription $other
+     * @return bool
+     */
+    public function equals(Subscription $other): bool
     {
         return $this->subscribed === $other->subscribed
             && $this->unsubscribed === $other->unsubscribed;
     }
 
-    public function getSubscribed()
+    /**
+     * @return int
+     */
+    public function getSubscribed(): int
     {
         return $this->subscribed;
     }
 
-    public function getUnsubscribed()
+    /**
+     * @return int
+     */
+    public function getUnsubscribed(): int
     {
         return $this->unsubscribed;
     }

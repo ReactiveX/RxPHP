@@ -9,11 +9,17 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ */
 final class SkipLastOperator implements OperatorInterface
 {
+    /**
+     * @var int
+     */
     private $count;
 
-    /** @var array */
+    /** @var array<T> */
     private $q;
 
     public function __construct(int $count)

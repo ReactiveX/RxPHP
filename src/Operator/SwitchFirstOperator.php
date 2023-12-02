@@ -14,7 +14,14 @@ use Rx\ObserverInterface;
 
 final class SwitchFirstOperator implements OperatorInterface
 {
+    /**
+     * @var bool
+     */
     private $isStopped = false;
+
+    /**
+     * @var bool
+     */
     private $hasCurrent = false;
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
