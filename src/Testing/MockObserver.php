@@ -16,16 +16,18 @@ class MockObserver implements ObserverInterface
 {
     private $scheduler;
     private $messages = [];
+    private $startTime = 0;
 
-    public function __construct(TestScheduler $scheduler)
+    public function __construct(TestScheduler $scheduler, int $startTime = 0)
     {
         $this->scheduler = $scheduler;
+        $this->startTime = $startTime;
     }
 
     public function onNext($value)
     {
         $this->messages[] = new Recorded(
-            $this->scheduler->getClock(),
+            $this->scheduler->getClock() - $this->startTime,
             new OnNextNotification($value)
         );
     }
@@ -33,7 +35,7 @@ class MockObserver implements ObserverInterface
     public function onError(\Throwable $error)
     {
         $this->messages[] = new Recorded(
-            $this->scheduler->getClock(),
+            $this->scheduler->getClock() - $this->startTime,
             new OnErrorNotification($error)
         );
     }
@@ -41,7 +43,7 @@ class MockObserver implements ObserverInterface
     public function onCompleted()
     {
         $this->messages[] = new Recorded(
-            $this->scheduler->getClock(),
+            $this->scheduler->getClock() - $this->startTime,
             new OnCompletedNotification()
         );
     }

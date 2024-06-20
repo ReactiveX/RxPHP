@@ -26,13 +26,12 @@ class ColdObservable extends Observable
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
+        $currentObservable     = $this;
+        $disposable            = new CompositeDisposable();
+        $scheduler             = $this->scheduler;
+        $isDisposed            = false;
         $this->subscriptions[] = new Subscription($this->scheduler->getClock());
         $index                 = count($this->subscriptions) - 1;
-
-        $currentObservable = $this;
-        $disposable        = new CompositeDisposable();
-        $scheduler         = $this->scheduler;
-        $isDisposed        = false;
 
         foreach ($this->messages as $message) {
             $notification = $message->getValue();
@@ -53,7 +52,8 @@ class ColdObservable extends Observable
         $subscriptions = &$this->subscriptions;
 
         return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
-            $isDisposed            = true;
+            $isDisposed = true;
+
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });
 
