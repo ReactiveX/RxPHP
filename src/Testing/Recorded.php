@@ -6,6 +6,10 @@ namespace Rx\Testing;
 
 class Recorded
 {
+    private $time;
+    private $value;
+    private $comparer;
+
     public function __construct(int $time, $value, callable $comparer = null)
     {
         $this->time     = $time;

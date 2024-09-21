@@ -16,7 +16,7 @@ class SchedulerTest extends TestCase
         foreach (['default', 'async', 'immediate', 'defaultFactory', 'asyncFactory'] as $propertyName) {
             $prop = $ref->getProperty($propertyName);
             $prop->setAccessible(true);
-            $prop->setValue(null);
+            $ref->setStaticPropertyValue($propertyName, null);
             $prop->setAccessible(false);
         }
     }

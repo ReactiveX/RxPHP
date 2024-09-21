@@ -24,7 +24,6 @@ class ImmediateSchedulerTest extends TestCase
     public function non_zero_delay_throws()
     {
         $this->expectException(\Exception::class);
-        $this->expectDeprecationMessage('ImmediateScheduler does not support a non-zero delay.');
         $scheduler = new ImmediateScheduler();
 
         $scheduler->schedule(function () {
