@@ -254,4 +254,66 @@ class PluckTest extends FunctionalTestCase
             subscribe(200, 400)
         ], $xs->getSubscriptions());
     }
+
+    /**
+     * @test
+     */
+    public function pluck_object_property_null()
+    {
+        $xs = $this->createHotObservable([
+                                             onNext(180, (object)['prop' => 1]),
+                                             onNext(210, (object)['prop' => 2]),
+                                             onNext(240, (object)['prop' => 3]),
+                                             onNext(290, (object)['prop' => null]),
+                                             onNext(350, (object)['prop' => 5]),
+                                             onError(400, new \Exception())
+                                         ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->pluck('prop');
+        });
+
+        $this->assertMessages([
+                                  onNext(210, 2),
+                                  onNext(240, 3),
+                                  onNext(290, null),
+                                  onNext(350, 5),
+                                  onError(400, new \Exception())
+                              ], $results->getMessages());
+
+        $this->assertSubscriptions([
+                                       subscribe(200, 400)
+                                   ], $xs->getSubscriptions());
+    }
+
+    /**
+     * @test
+     */
+    public function pluck_array_assoc_null()
+    {
+        $xs = $this->createHotObservable([
+                                             onNext(180, ['prop' => 1]),
+                                             onNext(210, ['prop' => 2]),
+                                             onNext(240, ['prop' => 3]),
+                                             onNext(290, ['prop' => null]),
+                                             onNext(350, ['prop' => 5]),
+                                             onError(400, new \Exception())
+                                         ]);
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs) {
+            return $xs->pluck('prop');
+        });
+
+        $this->assertMessages([
+                                  onNext(210, 2),
+                                  onNext(240, 3),
+                                  onNext(290, null),
+                                  onNext(350, 5),
+                                  onError(400, new \Exception())
+                              ], $results->getMessages());
+
+        $this->assertSubscriptions([
+                                       subscribe(200, 400)
+                                   ], $xs->getSubscriptions());
+    }
 }
