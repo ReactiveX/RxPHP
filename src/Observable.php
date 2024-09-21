@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rx;
 
@@ -104,13 +104,13 @@ abstract class Observable implements ObservableInterface
             $onNextOrObserver === null
                 ? null
                 : function ($value) use ($onNextOrObserver, &$observer, &$disposable) {
-                try {
-                    $onNextOrObserver($value);
-                } catch (\Throwable $throwable) {
-                    $disposable->dispose();
-                    $observer->onError($throwable);
-                }
-            },
+                    try {
+                        $onNextOrObserver($value);
+                    } catch (\Throwable $throwable) {
+                        $disposable->dispose();
+                        $observer->onError($throwable);
+                    }
+                },
             $onError,
             $onCompleted
         );
@@ -1684,7 +1684,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex catch
      */
-    public function catch (callable $selector): Observable
+    public function catch(callable $selector): Observable
     {
         return $this->lift(function () use ($selector) {
             return new CatchErrorOperator(new ObservableFactoryWrapper($selector));
@@ -1831,7 +1831,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex switch
      */
-    public function switch (): Observable
+    public function switch(): Observable
     {
         return $this->lift(function () {
             return new SwitchLatestOperator();
@@ -1978,10 +1978,10 @@ abstract class Observable implements ObservableInterface
         }
 
         return $this->map(function ($x) use ($property) {
-            if (is_array($x) && isset($x[$property])) {
+            if (is_array($x) && array_key_exists($property, $x)) {
                 return $x[$property];
             }
-            if (is_object($x) && isset($x->$property)) {
+            if (is_object($x) && property_exists($x, $property)) {
                 return $x->$property;
             }
 
