@@ -1,3 +1,8 @@
+# 2.0.13
+
+- Fix `pluck` to correctly handle null values when an index or property exists but is null. #216
+- Updated testing to work with PHP 8.3
+
 # 2.0.12
 
 ### Update
