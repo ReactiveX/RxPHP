@@ -12,10 +12,12 @@ use Rx\ObserverInterface;
 final class TakeWhileOperator implements OperatorInterface
 {
     private $predicate;
+    private $inclusive;
 
-    public function __construct(callable $predicate)
+    public function __construct(callable $predicate, bool $inclusive = false)
     {
         $this->predicate = $predicate;
+        $this->inclusive = $inclusive;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -25,6 +27,9 @@ final class TakeWhileOperator implements OperatorInterface
                 if (($this->predicate)($value)) {
                     $observer->onNext($value);
                 } else {
+                    if ($this->inclusive) {
+                        $observer->onNext($value);
+                    }
                     $observer->onCompleted();
                 }
             } catch (\Throwable $e) {

@@ -440,4 +440,49 @@ class TakeWhileTest extends FunctionalTestCase
 
         return true;
     }
+
+    /**
+     * @test
+     */
+    public function takeWhile_inclusive()
+    {
+        $error = new \Exception();
+
+        $xs = $this->createHotObservable([
+                                             onNext(90, -1),
+                                             onNext(110, -1),
+                                             onNext(210, 2),
+                                             onNext(260, 5),
+                                             onError(270, $error),
+                                             onCompleted(280),
+                                             onNext(290, 13),
+                                             onNext(320, 3),
+                                             onNext(350, 7),
+                                             onNext(390, 4),
+                                             onNext(410, 17),
+                                             onNext(450, 8),
+                                             onNext(500, 23)
+                                         ]);
+
+        $invoked = 0;
+
+        $results = $this->scheduler->startWithCreate(function () use ($xs, &$invoked) {
+            return $xs->takeWhile(function ($x) use (&$invoked) {
+                $invoked++;
+                return $x != 5;
+            }, true);
+        });
+
+        $this->assertMessages([
+                                  onNext(210, 2),
+                                  onNext(260, 5),
+                                  onCompleted(260)
+                              ], $results->getMessages());
+
+        $this->assertSubscriptions([
+                                       subscribe(200, 260)
+                                   ], $xs->getSubscriptions());
+
+        $this->assertEquals(2, $invoked);
+    }
 }
