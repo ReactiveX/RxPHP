@@ -675,10 +675,10 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex takeWhile
      */
-    public function takeWhile(callable $predicate): Observable
+    public function takeWhile(callable $predicate, bool $inclusive = false): Observable
     {
-        return $this->lift(function () use ($predicate) {
-            return new TakeWhileOperator($predicate);
+        return $this->lift(function () use ($predicate, $inclusive) {
+            return new TakeWhileOperator($predicate, $inclusive);
         });
     }
 
