@@ -9,13 +9,11 @@ final class PromiseFactory
     /**
      * Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
      *
-     * @param callable $factory
-     * @return Observable
      * @throws \InvalidArgumentException
      */
     public static function toObservable(callable $factory): Observable
     {
-        $observableFactory = function () use ($factory) {
+        $observableFactory = function () use ($factory): \Rx\Observable {
             return Promise::toObservable($factory());
         };
 

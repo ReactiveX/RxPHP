@@ -11,14 +11,10 @@ use Rx\ObserverInterface;
 
 final class ScanOperator implements OperatorInterface
 {
-    private $accumulator;
-
-    private $seed;
-
-    public function __construct(callable $accumulator, $seed = null)
-    {
-        $this->accumulator = $accumulator;
-        $this->seed        = $seed;
+    public function __construct(
+        private readonly null|\Closure $accumulator,
+        private $seed = null
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -28,7 +24,7 @@ final class ScanOperator implements OperatorInterface
         $accumulation    = $this->seed;
         $hasSeed         = $this->seed !== null;
         $cbObserver      = new CallbackObserver(
-            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue) {
+            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue): void {
                 $hasValue = true;
                 if ($hasAccumulation) {
                     $accumulation = ($this->tryCatch($this->accumulator))($accumulation, $x);
@@ -42,8 +38,8 @@ final class ScanOperator implements OperatorInterface
                 }
                 $observer->onNext($accumulation);
             },
-            [$observer, 'onError'],
-            function () use ($observer, &$hasValue, &$hasSeed) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer, &$hasValue, &$hasSeed): void {
                 if (!$hasValue && $hasSeed) {
                     $observer->onNext($this->seed);
                 }

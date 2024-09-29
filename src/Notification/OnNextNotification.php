@@ -9,9 +9,7 @@ use Rx\Notification;
 
 class OnNextNotification extends Notification
 {
-    private $value;
-
-    public function __construct($value)
+    public function __construct(private $value)
     {
         parent::__construct('N');
 
@@ -35,10 +33,8 @@ class OnNextNotification extends Notification
 
     public function equals($other): bool
     {
-        if (($other instanceof $this) && is_object($this->value) && is_object($other->value)) {
-            if ($this->value instanceof $other->value && method_exists($this->value, "equals")) {
-                return $this->value->equals($other->value);
-            }
+        if (($other instanceof $this) && is_object($this->value) && is_object($other->value) && ($this->value instanceof $other->value && method_exists($this->value, "equals"))) {
+            return $this->value->equals($other->value);
         }
 
         return (string)$this === (string)$other;

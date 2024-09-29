@@ -10,9 +10,9 @@ final class Scheduler
 {
     private static $default;
     private static $async;
-    private static $immediate;
-    private static $defaultFactory;
-    private static $asyncFactory;
+    private static null|ImmediateScheduler $immediate = null;
+    private static null|\Closure $defaultFactory = null;
+    private static null|\Closure $asyncFactory = null;
 
     public static function getDefault(): SchedulerInterface
     {
@@ -29,7 +29,7 @@ final class Scheduler
         return static::$default;
     }
 
-    public static function setDefaultFactory(callable $factory)
+    public static function setDefaultFactory(callable $factory): void
     {
         if (static::$default !== null) {
             throw new \Exception("The default factory can not be set after the scheduler has been created");
@@ -44,7 +44,7 @@ final class Scheduler
             return static::$async;
         }
 
-        if (static::$asyncFactory === null && static::getDefault() instanceof AsyncSchedulerInterface) {
+        if (static::$asyncFactory === null && self::getDefault() instanceof AsyncSchedulerInterface) {
             static::$async = static::$default;
             return static::$async;
         }
@@ -58,7 +58,7 @@ final class Scheduler
         return static::$async;
     }
 
-    public static function setAsyncFactory(callable $factory)
+    public static function setAsyncFactory(callable $factory): void
     {
         if (static::$async !== null) {
             throw new \Exception("The async factory can not be set after the scheduler has been created");

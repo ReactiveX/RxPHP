@@ -43,7 +43,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         return $this->isDisposed;
     }
 
-    public function hasObservers()
+    public function hasObservers(): bool
     {
         return count($this->observers) > 0;
     }
@@ -55,7 +55,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         }
     }
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         $this->assertNotDisposed();
 
@@ -73,7 +73,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         $this->observers = [];
     }
 
-    public function onError(\Throwable $exception)
+    public function onError(\Throwable $exception): void
     {
         $this->assertNotDisposed();
 
@@ -92,7 +92,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         $this->observers = [];
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         $this->assertNotDisposed();
 
@@ -106,7 +106,7 @@ class Subject extends Observable implements ObserverInterface, DisposableInterfa
         }
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         $this->isDisposed = true;
         $this->observers  = [];

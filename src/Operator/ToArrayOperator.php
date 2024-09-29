@@ -11,17 +11,16 @@ use Rx\ObserverInterface;
 
 final class ToArrayOperator implements OperatorInterface
 {
-    /** @var array */
-    private $arr = [];
+    private array $arr = [];
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $cbObserver = new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 $this->arr[] = $x;
             },
-            [$observer, 'onError'],
-            function () use ($observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer): void {
                 $observer->onNext($this->arr);
                 $observer->onCompleted();
             }

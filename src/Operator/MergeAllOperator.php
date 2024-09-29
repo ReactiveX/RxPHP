@@ -22,19 +22,19 @@ final class MergeAllOperator implements OperatorInterface
         $group->add($sourceSubscription);
 
         $callbackObserver = new CallbackObserver(
-            function (ObservableInterface $innerSource) use (&$group, &$isStopped, $observer) {
+            function (ObservableInterface $innerSource) use (&$group, &$isStopped, $observer): void {
                 $innerSubscription = new SingleAssignmentDisposable();
                 $group->add($innerSubscription);
 
                 $innerSubscription->setDisposable(
                     $innerSource->subscribe(new CallbackObserver(
-                        function ($nextValue) use ($observer) {
+                        function ($nextValue) use ($observer): void {
                             $observer->onNext($nextValue);
                         },
-                        function ($error) use ($observer) {
+                        function ($error) use ($observer): void {
                             $observer->onError($error);
                         },
-                        function () use (&$group, &$innerSubscription, &$isStopped, $observer) {
+                        function () use (&$group, &$innerSubscription, &$isStopped, $observer): void {
                             $group->remove($innerSubscription);
 
                             if ($isStopped && $group->count() === 1) {
@@ -44,8 +44,8 @@ final class MergeAllOperator implements OperatorInterface
                     ))
                 );
             },
-            [$observer, 'onError'],
-            function () use (&$group, &$isStopped, $observer) {
+            fn ($err) => $observer->onError($err),
+            function () use (&$group, &$isStopped, $observer): void {
                 $isStopped = true;
                 if ($group->count() === 1) {
                     $observer->onCompleted();

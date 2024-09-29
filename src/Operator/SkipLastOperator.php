@@ -11,14 +11,10 @@ use Rx\ObserverInterface;
 
 final class SkipLastOperator implements OperatorInterface
 {
-    private $count;
+    private array $q = [];
 
-    /** @var array */
-    private $q;
-
-    public function __construct(int $count)
+    public function __construct(private readonly int $count)
     {
-        $this->count = $count;
         if ($this->count < 0) {
             throw new \InvalidArgumentException('Argument Out of Range');
         }
@@ -28,14 +24,14 @@ final class SkipLastOperator implements OperatorInterface
     {
         $this->q    = [];
         $cbObserver = new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 $this->q[] = $x;
                 if (count($this->q) > $this->count) {
                     $observer->onNext(array_shift($this->q));
                 }
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($cbObserver);

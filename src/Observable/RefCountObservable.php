@@ -10,25 +10,14 @@ use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
 
-/**
- * Class RefCountObservable
- * @package Rx\Observable
- */
 class RefCountObservable extends Observable
 {
-    /** @var \Rx\Observable\ConnectableObservable */
-    protected $source;
 
-    /** @var int */
-    protected $count;
-
-    /** @var  BinaryDisposable */
-    protected $connectableSubscription;
-
-    public function __construct(ConnectableObservable $source)
-    {
-        $this->source = $source;
-        $this->count  = 0;
+    public function __construct(
+        private readonly ConnectableObservable $source,
+        protected int                          $count = 0,
+        protected                              $connectableSubscription = null
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -41,7 +30,7 @@ class RefCountObservable extends Observable
             $this->connectableSubscription = $this->source->connect();
         }
 
-        return new CallbackDisposable(function () use ($subscription) {
+        return new CallbackDisposable(function () use ($subscription): void {
             $subscription->dispose();
 
             $this->count--;

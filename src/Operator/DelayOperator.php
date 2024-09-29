@@ -16,23 +16,16 @@ use Rx\Timestamped;
 
 final class DelayOperator implements OperatorInterface
 {
-    /** @var int */
-    private $delayTime;
-
-    /** @var \SplQueue */
-    private $queue;
+    private \SplQueue $queue;
 
     /** @var DisposableInterface */
     private $schedulerDisposable;
 
-    /** @var AsyncSchedulerInterface */
-    private $scheduler;
-
-    public function __construct(int $delayTime, AsyncSchedulerInterface $scheduler)
-    {
-        $this->delayTime = $delayTime;
+    public function __construct(
+        private readonly int                     $delayTime,
+        private readonly AsyncSchedulerInterface $scheduler
+    ) {
         $this->queue     = new \SplQueue();
-        $this->scheduler = $scheduler;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -41,18 +34,18 @@ final class DelayOperator implements OperatorInterface
         $disp = $observable
             ->materialize()
             ->timestamp($this->scheduler)
-            ->map(function (Timestamped $x) {
+            ->map(function (Timestamped $x): \Rx\Timestamped {
                 return new Timestamped($x->getTimestampMillis() + $this->delayTime, $x->getValue());
             })
             ->subscribe(new CallbackObserver(
-                function (Timestamped $x) use ($observer) {
+                function (Timestamped $x) use ($observer): void {
                     if ($x->getValue() instanceof Notification\OnErrorNotification) {
                         $x->getValue()->accept($observer);
                         return;
                     }
                     $this->queue->enqueue($x);
                     if ($this->schedulerDisposable === null) {
-                        $doScheduledStuff = function () use ($observer, &$doScheduledStuff) {
+                        $doScheduledStuff = function () use ($observer, &$doScheduledStuff): void {
                             while ((!$this->queue->isEmpty()) && $this->scheduler->now() >= $this->queue->bottom()->getTimestampMillis()) {
                                 /** @var Timestamped $item */
                                 $item = $this->queue->dequeue();
@@ -77,7 +70,7 @@ final class DelayOperator implements OperatorInterface
                 [$observer, 'onError']
             ));
 
-        return new CallbackDisposable(function () use ($disp) {
+        return new CallbackDisposable(function () use ($disp): void {
             if ($this->schedulerDisposable) {
                 $this->schedulerDisposable->dispose();
             }

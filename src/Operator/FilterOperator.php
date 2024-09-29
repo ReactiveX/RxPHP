@@ -11,17 +11,14 @@ use Rx\ObserverInterface;
 
 final class FilterOperator implements OperatorInterface
 {
-    private $predicate;
-
-    public function __construct(callable $predicate)
+    public function __construct(private readonly null|\Closure $predicate)
     {
-        $this->predicate = $predicate;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $selectObserver = new CallbackObserver(
-            function ($nextValue) use ($observer) {
+            function ($nextValue) use ($observer): void {
                 $shouldFire = false;
                 try {
                     $shouldFire = ($this->predicate)($nextValue);
@@ -33,8 +30,8 @@ final class FilterOperator implements OperatorInterface
                     $observer->onNext($nextValue);
                 }
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($selectObserver);

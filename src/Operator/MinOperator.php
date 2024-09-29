@@ -11,12 +11,10 @@ use Rx\ObserverInterface;
 
 final class MinOperator implements OperatorInterface
 {
-    private $comparer;
-
-    public function __construct(callable $comparer = null)
+    public function __construct(private null|\Closure $comparer = null)
     {
         if ($comparer === null) {
-            $comparer = function ($x, $y) {
+            $comparer = function ($x, $y): int {
                 return $x > $y ? 1 : ($x < $y ? -1 : 0);
             };
         }
@@ -30,7 +28,7 @@ final class MinOperator implements OperatorInterface
         $comparing   = false;
 
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use (&$comparing, &$previousMin, $observer) {
+            function ($x) use (&$comparing, &$previousMin, $observer): void {
                 if (!$comparing) {
                     $comparing   = true;
                     $previousMin = $x;
@@ -47,8 +45,8 @@ final class MinOperator implements OperatorInterface
                     $observer->onError($e);
                 }
             },
-            [$observer, 'onError'],
-            function () use (&$comparing, &$previousMin, $observer) {
+            fn ($err) => $observer->onError($err),
+            function () use (&$comparing, &$previousMin, $observer): void {
                 if ($comparing) {
                     $observer->onNext($previousMin);
                     $observer->onCompleted();

@@ -11,24 +11,21 @@ use Rx\Disposable\SingleAssignmentDisposable;
 
 class AutoDetachObserver extends AbstractObserver
 {
-    private $observer;
+    private SingleAssignmentDisposable $disposable;
 
-    private $disposable;
-
-    public function __construct(ObserverInterface $observer)
+    public function __construct(private readonly ObserverInterface $observer)
     {
-        $this->observer   = $observer;
         $this->disposable = new SingleAssignmentDisposable();
     }
 
-    public function setDisposable(DisposableInterface $disposable = null)
+    public function setDisposable(DisposableInterface $disposable = null): void
     {
         $disposable = $disposable ?: new EmptyDisposable();
 
         $this->disposable->setDisposable($disposable);
     }
 
-    protected function completed()
+    protected function completed(): void
     {
         try {
             $this->observer->onCompleted();
@@ -39,7 +36,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    protected function error(\Throwable $exception)
+    protected function error(\Throwable $exception): void
     {
         try {
             $this->observer->onError($exception);
@@ -50,7 +47,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    protected function next($value)
+    protected function next($value): void
     {
         try {
             $this->observer->onNext($value);
@@ -60,7 +57,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         $this->disposable->dispose();
     }

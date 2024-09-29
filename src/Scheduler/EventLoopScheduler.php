@@ -12,24 +12,20 @@ use Rx\DisposableInterface;
 
 final class EventLoopScheduler extends VirtualTimeScheduler
 {
-    private $nextTimer = PHP_INT_MAX;
+    private int $nextTimer = PHP_INT_MAX;
 
-    private $insideInvoke = false;
+    private bool $insideInvoke = false;
 
     private $delayCallback;
 
     private $currentTimer;
 
-    /**
-     * EventLoopScheduler constructor.
-     * @param callable|LoopInterface $timerCallableOrLoop
-     */
-    public function __construct($timerCallableOrLoop)
+    public function __construct(\Closure|LoopInterface $timerCallableOrLoop)
     {
         $this->delayCallback = $timerCallableOrLoop instanceof LoopInterface ?
-            function ($ms, $callable) use ($timerCallableOrLoop) {
+            function ($ms, $callable) use ($timerCallableOrLoop): CallbackDisposable {
                 $timer = $timerCallableOrLoop->addTimer($ms / 1000, $callable);
-                return new CallbackDisposable(function () use ($timer, $timerCallableOrLoop) {
+                return new CallbackDisposable(function () use ($timer, $timerCallableOrLoop): void {
                     $timerCallableOrLoop->cancelTimer($timer);
                 });
             } :
@@ -37,12 +33,12 @@ final class EventLoopScheduler extends VirtualTimeScheduler
 
         $this->currentTimer = new EmptyDisposable();
 
-        parent::__construct($this->now(), function ($a, $b) {
+        parent::__construct($this->now(), function ($a, $b): int|float {
             return $a - $b;
         });
     }
 
-    private function scheduleStartup()
+    private function scheduleStartup(): void
     {
         if ($this->insideInvoke) {
             return;
@@ -56,7 +52,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     {
         $disp = new CompositeDisposable([
             parent::scheduleAbsoluteWithState($state, $dueTime, $action),
-            new CallbackDisposable(function () use ($dueTime) {
+            new CallbackDisposable(function () use ($dueTime): void {
                 if ($dueTime > $this->nextTimer) {
                     return;
                 }
@@ -77,7 +73,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         return $disp;
     }
 
-    public function start()
+    public function start(): void
     {
         $this->clock = $this->now();
 

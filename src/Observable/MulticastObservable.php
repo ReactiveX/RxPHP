@@ -9,32 +9,13 @@ use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
 
-/**
- * Class MulticastObservable
- * @package Rx\Observable
- */
 class MulticastObservable extends Observable
 {
-    /** @var \Rx\Observable */
-    private $source;
-
-    /** @var  callable */
-    private $fn1;
-
-    /** @var  callable */
-    private $fn2;
-
-    /**
-     * MulticastObservable constructor.
-     * @param $source
-     * @param $fn1
-     * @param $fn2
-     */
-    public function __construct(Observable $source, callable $fn1, callable $fn2)
-    {
-        $this->source = $source;
-        $this->fn1    = $fn1;
-        $this->fn2    = $fn2;
+    public function __construct(
+        private readonly Observable $source,
+        private readonly \Closure   $fn1,
+        private readonly \Closure $fn2
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface

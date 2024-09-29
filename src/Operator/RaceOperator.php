@@ -15,17 +15,15 @@ use Rx\ObserverInterface;
 final class RaceOperator implements OperatorInterface
 {
 
-    /** @var bool */
-    private $hasFirst = false;
+    private bool $hasFirst = false;
 
     /** @var Observable[] */
-    private $observables = [];
+    private ?array $observables = [];
 
     /** @var DisposableInterface[] */
-    private $subscriptions = [];
+    private array $subscriptions = [];
 
-    /** @var CompositeDisposable */
-    private $innerSubscription;
+    private CompositeDisposable $innerSubscription;
 
 
     public function __construct()
@@ -37,11 +35,11 @@ final class RaceOperator implements OperatorInterface
     {
 
         $callbackObserver = new CallbackObserver(
-            function (Observable $innerObservable) {
+            function (Observable $innerObservable): void {
                 $this->observables[] = $innerObservable;
             },
-            [$observer, 'onError'],
-            function () use ($observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer): void {
 
                 if (count($this->observables) === 0) {
                     $observer->onCompleted();
@@ -65,10 +63,10 @@ final class RaceOperator implements OperatorInterface
 
     }
 
-    private function subscribeToResult(ObservableInterface $observable, ObserverInterface $observer, $outerIndex)
+    private function subscribeToResult(ObservableInterface $observable, ObserverInterface $observer, $outerIndex): \Rx\DisposableInterface
     {
         return $observable->subscribe(new CallbackObserver(
-            function ($value) use ($observer, $outerIndex) {
+            function ($value) use ($observer, $outerIndex): void {
 
                 if (!$this->hasFirst) {
                     $this->hasFirst = true;
@@ -85,8 +83,8 @@ final class RaceOperator implements OperatorInterface
                 $observer->onNext($value);
 
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
 
         ));
     }

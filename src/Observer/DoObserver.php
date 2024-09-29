@@ -8,40 +8,34 @@ use Rx\ObserverInterface;
 
 class DoObserver implements ObserverInterface
 {
-    /** @var callable|null */
-    private $onNext;
-
-    /** @var callable|null */
-    private $onError;
-
-    /** @var callable|null */
-    private $onCompleted;
-
-    public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
-    {
-        $default = function () {
+    public function __construct(
+        private null|\Closure $onNext = null,
+        private null|\Closure $onError = null,
+        private null|\Closure $onCompleted = null
+    ) {
+        $default = function (): void {
         };
 
         $this->onNext = $this->getOrDefault($onNext, $default);
 
-        $this->onError = $this->getOrDefault($onError, function ($e) {
+        $this->onError = $this->getOrDefault($onError, function ($e): void {
             throw $e;
         });
 
         $this->onCompleted = $this->getOrDefault($onCompleted, $default);
     }
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         ($this->onCompleted)();
     }
 
-    public function onError(\Throwable $error)
+    public function onError(\Throwable $error): void
     {
         ($this->onError)($error);
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         ($this->onNext)($value);
     }

@@ -11,17 +11,13 @@ use Rx\ObserverInterface;
 
 final class DistinctUntilChangedOperator implements OperatorInterface
 {
-    protected $keySelector;
-
-    protected $comparer;
-
-    public function __construct(callable $keySelector = null, callable $comparer = null)
-    {
-        $this->comparer = $comparer ?: function ($x, $y) {
+    public function __construct(
+        private readonly null|\Closure $keySelector = null,
+        protected null|\Closure        $comparer = null
+    ) {
+        $this->comparer = $comparer ?: function ($x, $y): bool {
             return $x == $y;
         };
-
-        $this->keySelector = $keySelector;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -55,8 +51,8 @@ final class DistinctUntilChangedOperator implements OperatorInterface
                 }
 
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($cbObserver);

@@ -10,18 +10,10 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
-final class ConcatOperator implements OperatorInterface
+final readonly class ConcatOperator implements OperatorInterface
 {
-    /** @var \Rx\ObservableInterface */
-    private $subsequentObservable;
-
-    /**
-     * Concat constructor.
-     * @param ObservableInterface $subsequentObservable
-     */
-    public function __construct(ObservableInterface $subsequentObservable)
+    public function __construct(private ObservableInterface $subsequentObservable)
     {
-        $this->subsequentObservable = $subsequentObservable;
     }
 
     /**
@@ -32,9 +24,9 @@ final class ConcatOperator implements OperatorInterface
         $disp = new SerialDisposable();
 
         $cbObserver = new CallbackObserver(
-            [$observer, 'onNext'],
-            [$observer, 'onError'],
-            function () use ($observer, $disp) {
+            fn ($x) => $observer->onNext($x),
+            fn ($err) => $observer->onError($err),
+            function () use ($observer, $disp): void {
                 $disp->setDisposable($this->subsequentObservable->subscribe($observer));
             }
         );

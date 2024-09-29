@@ -11,18 +11,15 @@ use Rx\ObserverInterface;
 
 final class TakeWhileOperator implements OperatorInterface
 {
-    private $predicate;
-    private $inclusive;
-
-    public function __construct(callable $predicate, bool $inclusive = false)
-    {
-        $this->predicate = $predicate;
-        $this->inclusive = $inclusive;
+    public function __construct(
+        private readonly null|\Closure $predicate,
+        private readonly bool $inclusive = false
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $onNext = function ($value) use ($observer) {
+        $onNext = function ($value) use ($observer): void {
             try {
                 if (($this->predicate)($value)) {
                     $observer->onNext($value);
@@ -39,8 +36,8 @@ final class TakeWhileOperator implements OperatorInterface
 
         $callbackObserver = new CallbackObserver(
             $onNext,
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($callbackObserver);

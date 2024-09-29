@@ -11,34 +11,22 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
-/**
- * Class ConnectableObservable
- * @package Rx\Observable
- */
 class ConnectableObservable extends Observable
 {
-    /** @var \Rx\Subject\Subject */
-    protected $subject;
+    protected Subject $subject;
 
-    /** @var  BinaryDisposable */
-    protected $subscription;
+    protected BinaryDisposable $subscription;
 
-    /** @var  Observable */
-    protected $sourceObservable;
+    protected Observable $sourceObservable;
 
-    /** @var bool */
-    protected $hasSubscription;
+    protected bool $hasSubscription = false;
 
-    /**
-     * ConnectableObservable constructor.
-     * @param Observable $source
-     * @param \Rx\Subject\Subject $subject
-     */
-    public function __construct(Observable $source, Subject $subject = null)
-    {
+    public function __construct(
+        Observable $source,
+        Subject $subject = null
+    ) {
         $this->sourceObservable = $source->asObservable();
         $this->subject          = $subject ?: new Subject();
-        $this->hasSubscription  = false;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -54,7 +42,7 @@ class ConnectableObservable extends Observable
 
         $this->hasSubscription = true;
 
-        $connectableDisposable = new CallbackDisposable(function () {
+        $connectableDisposable = new CallbackDisposable(function (): void {
             $this->hasSubscription = false;
         });
 

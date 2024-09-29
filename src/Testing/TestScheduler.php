@@ -18,7 +18,7 @@ class TestScheduler extends VirtualTimeScheduler
 
     public function __construct()
     {
-        parent::__construct(0, function ($a, $b) {
+        parent::__construct(0, function ($a, $b): int|float {
             return $a - $b;
         });
     }
@@ -42,25 +42,25 @@ class TestScheduler extends VirtualTimeScheduler
         return $this->startWithTiming($create, self::CREATED, self::SUBSCRIBED, $disposed);
     }
 
-    public function startWithTiming($create, $created = self::CREATED, $subscribed = self::SUBSCRIBED, $disposed = self::DISPOSED): ObserverInterface
+    public function startWithTiming($create, int $created = self::CREATED, int $subscribed = self::SUBSCRIBED, int $disposed = self::DISPOSED): ObserverInterface
     {
         $observer     = new MockObserver($this);
         $source       = null;
         $subscription = null;
 
-        $this->scheduleAbsoluteWithState(null, $created, function () use ($create, &$source) {
+        $this->scheduleAbsoluteWithState(null, $created, function () use ($create, &$source): \Rx\Disposable\EmptyDisposable {
             $source = $create();
 
             return new EmptyDisposable();
         });
 
-        $this->scheduleAbsoluteWithState(null, $subscribed, function () use (&$observer, &$source, &$subscription) {
+        $this->scheduleAbsoluteWithState(null, $subscribed, function () use (&$observer, &$source, &$subscription): \Rx\Disposable\EmptyDisposable {
             $subscription = $source->subscribe($observer);
 
             return new EmptyDisposable();
         });
 
-        $this->scheduleAbsoluteWithState(null, $disposed, function () use (&$subscription) {
+        $this->scheduleAbsoluteWithState(null, $disposed, function () use (&$subscription): \Rx\Disposable\EmptyDisposable {
             $subscription->dispose();
 
             return new EmptyDisposable();

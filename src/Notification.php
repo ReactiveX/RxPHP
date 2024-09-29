@@ -9,14 +9,12 @@ namespace Rx;
  */
 abstract class Notification
 {
-    private $kind;
 
     /**
      * @param mixed $kind Kind of notification
      */
-    public function __construct($kind)
+    public function __construct(private $kind)
     {
-        $this->kind = $kind;
     }
 
     public function accept($observerOrOnNext, $onError = null, $onCompleted = null)
@@ -24,7 +22,7 @@ abstract class Notification
         if (null === $onError && null === $onCompleted && $observerOrOnNext instanceof ObserverInterface) {
             $this->doAcceptObservable($observerOrOnNext);
 
-            return;
+            return null;
         }
 
         return $this->doAccept($observerOrOnNext, $onError, $onCompleted);
@@ -32,7 +30,7 @@ abstract class Notification
 
     public function equals($other): bool
     {
-        return (string)$this === (string)$other;
+        return (string) $this === (string)$other;
     }
 
     abstract protected function doAcceptObservable(ObserverInterface $observer);

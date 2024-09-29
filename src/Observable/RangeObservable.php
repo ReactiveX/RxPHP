@@ -11,24 +11,19 @@ use Rx\SchedulerInterface;
 
 class RangeObservable extends Observable
 {
-    private $start;
 
-    private $count;
-
-    private $scheduler;
-
-    public function __construct(int $start, int $count, SchedulerInterface $scheduler)
-    {
-        $this->start     = $start;
-        $this->count     = $count;
-        $this->scheduler = $scheduler;
+    public function __construct(
+        private readonly int       $start,
+        private readonly int       $count,
+        private readonly SchedulerInterface $scheduler
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $i = 0;
 
-        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i) {
+        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i): void {
             if ($i < $this->count) {
                 $observer->onNext($this->start + $i);
                 $i++;

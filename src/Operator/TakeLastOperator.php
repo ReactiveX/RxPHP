@@ -11,33 +11,27 @@ use Rx\ObserverInterface;
 
 final class TakeLastOperator implements OperatorInterface
 {
-    /** @var integer */
-    private $count;
+    private array $items = [];
 
-    /** @var array */
-    private $items = [];
-
-    public function __construct(int $count)
+    public function __construct(private readonly int $count)
     {
         if ($count < 0) {
             throw new \InvalidArgumentException('Count must be >= 0');
         }
-
-        $this->count = $count;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $callbackObserver = new CallbackObserver(
-            function ($nextValue) use ($observer) {
+            function ($nextValue) use ($observer): void {
                 $this->items[] = $nextValue;
 
                 if (count($this->items) > $this->count) {
                     array_shift($this->items);
                 }
             },
-            [$observer, 'onError'],
-            function () use ($observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer): void {
 
                 while (count($this->items) > 0) {
                     $observer->onNext(array_shift($this->items));

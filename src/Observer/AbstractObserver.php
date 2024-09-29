@@ -8,9 +8,9 @@ use Rx\ObserverInterface;
 
 abstract class AbstractObserver implements ObserverInterface
 {
-    private $isStopped = false;
+    private bool $isStopped = false;
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         if ($this->isStopped) {
             return;
@@ -20,7 +20,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->completed();
     }
 
-    public function onError(\Throwable $error)
+    public function onError(\Throwable $error): void
     {
         if ($this->isStopped) {
             return;
@@ -30,7 +30,7 @@ abstract class AbstractObserver implements ObserverInterface
         $this->error($error);
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         if ($this->isStopped) {
             return;

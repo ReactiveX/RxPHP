@@ -11,9 +11,7 @@ use Rx\ObserverInterface;
 
 final class SkipOperator implements OperatorInterface
 {
-    private $count;
-
-    public function __construct(int $count)
+    public function __construct(private int $count)
     {
         if ($count < 0) {
             throw new \InvalidArgumentException('Count must be >= 0');
@@ -27,15 +25,15 @@ final class SkipOperator implements OperatorInterface
         $remaining = $this->count;
 
         $cbObserver = new CallbackObserver(
-            function ($nextValue) use ($observer, &$remaining) {
+            function ($nextValue) use ($observer, &$remaining): void {
                 if ($remaining <= 0) {
                     $observer->onNext($nextValue);
                 } else {
                     $remaining--;
                 }
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($cbObserver);

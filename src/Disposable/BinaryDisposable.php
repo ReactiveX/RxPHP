@@ -6,33 +6,16 @@ namespace Rx\Disposable;
 
 use Rx\DisposableInterface;
 
-/**
- * Class BinaryDisposable
- * @package Rx\Disposable
- */
 class BinaryDisposable implements DisposableInterface
 {
-    /** @var \Rx\DisposableInterface */
-    private $first;
-
-    /** @var \Rx\DisposableInterface */
-    private $second;
-
-    /** @var bool */
-    protected $isDisposed = false;
-
-    /**
-     * BinaryDisposable constructor.
-     * @param $first
-     * @param $second
-     */
-    public function __construct(DisposableInterface $first, DisposableInterface $second)
-    {
-        $this->first  = $first;
-        $this->second = $second;
+    public function __construct(
+        private null|DisposableInterface $first,
+        private null|DisposableInterface $second,
+        protected bool $isDisposed = false
+    ) {
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         if ($this->isDisposed) {
             return;

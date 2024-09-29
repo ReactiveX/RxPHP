@@ -12,12 +12,8 @@ use Rx\ObserverInterface;
 final class DeferOperator implements OperatorInterface
 {
 
-    /* @var Callable */
-    private $factory;
-
-    public function __construct(callable $factory)
+    public function __construct(private $factory)
     {
-        $this->factory = $factory;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface

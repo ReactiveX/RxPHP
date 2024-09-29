@@ -14,15 +14,13 @@ use Rx\ObserverInterface;
  */
 class MockObserver implements ObserverInterface
 {
-    private $scheduler;
-    private $messages = [];
+    private array $messages = [];
 
-    public function __construct(TestScheduler $scheduler)
+    public function __construct(private readonly TestScheduler $scheduler)
     {
-        $this->scheduler = $scheduler;
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         $this->messages[] = new Recorded(
             $this->scheduler->getClock(),
@@ -30,7 +28,7 @@ class MockObserver implements ObserverInterface
         );
     }
 
-    public function onError(\Throwable $error)
+    public function onError(\Throwable $error): void
     {
         $this->messages[] = new Recorded(
             $this->scheduler->getClock(),
@@ -38,7 +36,7 @@ class MockObserver implements ObserverInterface
         );
     }
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         $this->messages[] = new Recorded(
             $this->scheduler->getClock(),
@@ -46,7 +44,7 @@ class MockObserver implements ObserverInterface
         );
     }
 
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }

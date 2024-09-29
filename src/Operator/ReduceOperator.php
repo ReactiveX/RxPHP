@@ -11,19 +11,10 @@ use Rx\ObserverInterface;
 
 final class ReduceOperator implements OperatorInterface
 {
-    /** @var  callable */
-    protected $accumulator;
-    protected $seed;
-    protected $hasSeed;
+    protected bool $hasSeed;
 
-    /**
-     * @param callable $accumulator
-     * @param $seed
-     */
-    public function __construct(callable $accumulator, $seed)
+    public function __construct(private readonly null|\Closure $accumulator, protected $seed)
     {
-        $this->accumulator = $accumulator;
-        $this->seed        = $seed;
         $this->hasSeed     = null !== $seed;
     }
 
@@ -33,7 +24,7 @@ final class ReduceOperator implements OperatorInterface
         $accumulation    = null;
         $hasValue        = false;
         $cbObserver      = new CallbackObserver(
-            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasValue) {
+            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasValue): void {
 
                 $hasValue = true;
 
@@ -48,10 +39,10 @@ final class ReduceOperator implements OperatorInterface
                     $observer->onError($e);
                 }
             },
-            function ($e) use ($observer) {
+            function ($e) use ($observer): void {
                 $observer->onError($e);
             },
-            function () use ($observer, &$hasAccumulation, &$accumulation, &$hasValue) {
+            function () use ($observer, &$hasAccumulation, &$accumulation, &$hasValue): void {
                 if ($hasValue) {
                     $observer->onNext($accumulation);
                 } else {

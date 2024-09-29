@@ -12,24 +12,21 @@ use Rx\SchedulerInterface;
 
 class ReturnObservable extends Observable
 {
-    private $value;
-    private $scheduler;
-
-    public function __construct($value, SchedulerInterface $scheduler)
-    {
-        $this->value     = $value;
-        $this->scheduler = $scheduler;
+    public function __construct(
+        private $value,
+        private SchedulerInterface $scheduler
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $disposable = new CompositeDisposable();
 
-        $disposable->add($this->scheduler->schedule(function () use ($observer) {
+        $disposable->add($this->scheduler->schedule(function () use ($observer): void {
             $observer->onNext($this->value);
         }));
 
-        $disposable->add($this->scheduler->schedule(function () use ($observer) {
+        $disposable->add($this->scheduler->schedule(function () use ($observer): void {
             $observer->onCompleted();
         }));
 

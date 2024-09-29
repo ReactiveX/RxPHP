@@ -6,41 +6,36 @@ namespace Rx\Observer;
 
 class CallbackObserver extends AbstractObserver
 {
-    /** @var callable|null */
-    private $onNext;
 
-    /** @var callable|null */
-    private $onError;
-
-    /** @var callable|null */
-    private $onCompleted;
-
-    public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
-    {
-        $default = function () {
+    public function __construct(
+        private $onNext = null,
+        private $onError = null,
+        private $onCompleted = null
+    ) {
+        $default = function (): void {
         };
 
         $this->onNext = $this->getOrDefault($onNext, $default);
 
-        $this->onError = $this->getOrDefault($onError, function ($e) {
+        $this->onError = $this->getOrDefault($onError, function ($e): void {
             throw $e;
         });
 
         $this->onCompleted = $this->getOrDefault($onCompleted, $default);
     }
 
-    protected function completed()
+    protected function completed(): void
     {
         // Cannot use $foo() here, see: https://bugs.php.net/bug.php?id=47160
         ($this->onCompleted)();
     }
 
-    protected function error(\Throwable $error)
+    protected function error(\Throwable $error): void
     {
         ($this->onError)($error);
     }
 
-    protected function next($value)
+    protected function next($value): void
     {
         ($this->onNext)($value);
     }

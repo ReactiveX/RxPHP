@@ -11,18 +11,16 @@ use Rx\SchedulerInterface;
 
 class ErrorObservable extends Observable
 {
-    private $error;
-    private $scheduler;
 
-    public function __construct(\Throwable $error, SchedulerInterface $scheduler)
-    {
-        $this->error     = $error;
-        $this->scheduler = $scheduler;
+    public function __construct(
+        private readonly \Throwable $error,
+        private readonly SchedulerInterface $scheduler
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-        return $this->scheduler->schedule(function () use ($observer) {
+        return $this->scheduler->schedule(function () use ($observer): void {
             $observer->onError($this->error);
         });
     }

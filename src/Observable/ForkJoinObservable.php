@@ -12,21 +12,12 @@ use Rx\Disposable\CompositeDisposable;
 
 class ForkJoinObservable extends Observable
 {
-    /**
-     * @var Observable[]
-     */
-    private $observables;
-
-    private $values = [];
-
-    private $completed = 0;
-
-    private $resultSelector;
-
-    public function __construct(array $observables = [], callable $resultSelector = null)
-    {
-        $this->observables    = $observables;
-        $this->resultSelector = $resultSelector;
+    public function __construct(
+        private readonly array         $observables = [],
+        private readonly null|\Closure $resultSelector = null,
+        private array                  $values = [],
+        private int                    $completed = 0
+    ) {
     }
 
     public function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -43,11 +34,11 @@ class ForkJoinObservable extends Observable
 
         foreach ($this->observables as $i => $observable) {
             $innerDisp = $observable->subscribe(
-                function ($v) use ($i) {
+                function ($v) use ($i): void {
                     $this->values[$i] = $v;
                 },
-                [$autoObs, 'onError'],
-                function () use ($len, $i, $autoObs) {
+                fn ($e) => $autoObs->onError($e),
+                function () use ($len, $i, $autoObs): void {
                     $this->completed++;
 
                     if (!array_key_exists($i, $this->values)) {

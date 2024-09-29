@@ -14,11 +14,8 @@ use Rx\SchedulerInterface;
 
 final class SubscribeOnOperator implements OperatorInterface
 {
-    private $scheduler;
-
-    public function __construct(SchedulerInterface $scheduler)
+    public function __construct(private readonly SchedulerInterface $scheduler)
     {
-        $this->scheduler = $scheduler;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -28,7 +25,7 @@ final class SubscribeOnOperator implements OperatorInterface
         $disposable->setDisposable($singleDisposable);
 
         $singleDisposable->setDisposable(
-            $this->scheduler->schedule(function () use ($disposable, $observer, $observable) {
+            $this->scheduler->schedule(function () use ($disposable, $observer, $observable): void {
                 $subscription = $observable->subscribe($observer);
                 $disposable->setDisposable(new ScheduledDisposable($this->scheduler, $subscription));
             })

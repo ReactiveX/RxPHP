@@ -10,22 +10,10 @@ use Rx\ObserverInterface;
 
 final class FinallyOperator implements OperatorInterface
 {
-    /** @var callable */
-    private $callback;
-
-    /**
-     * @param callable $callback
-     */
-    public function __construct(callable $callback)
+    public function __construct(private readonly null|\Closure $callback)
     {
-        $this->callback = $callback;
     }
 
-    /**
-     * @param \Rx\ObservableInterface $observable
-     * @param \Rx\ObserverInterface $observer
-     * @return \Rx\DisposableInterface
-     */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return new BinaryDisposable(

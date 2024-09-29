@@ -12,27 +12,22 @@ use Rx\ObserverInterface;
 
 final class DefaultIfEmptyOperator implements OperatorInterface
 {
-    /** @var  ObservableInterface */
-    private $observable;
-
-    /** @var bool */
-    private $passThrough = false;
-
-    public function __construct(ObservableInterface $observable)
-    {
-        $this->observable = $observable;
+    public function __construct(
+        private ObservableInterface $observable,
+        private bool $passThrough = false
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $disposable = new SerialDisposable();
         $cbObserver = new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 $this->passThrough = true;
                 $observer->onNext($x);
             },
-            [$observer, 'onError'],
-            function () use ($observer, $disposable) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer, $disposable): void {
                 if (!$this->passThrough) {
                     $disposable->setDisposable($this->observable->subscribe($observer));
                     return;

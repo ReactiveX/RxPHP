@@ -6,19 +6,13 @@ namespace Rx\Disposable;
 
 use Rx\DisposableInterface;
 
-/**
- * Class SerialDisposable
- * @package Rx\Disposable
- */
 class SerialDisposable implements DisposableInterface
 {
-    /** @var bool */
-    private $isDisposed = false;
+    private bool $isDisposed = false;
 
-    /** @var DisposableInterface */
-    private $disposable = null;
+    private ?DisposableInterface $disposable = null;
 
-    public function dispose()
+    public function dispose(): void
     {
         if ($this->isDisposed) {
             return;
@@ -33,18 +27,12 @@ class SerialDisposable implements DisposableInterface
         }
     }
 
-    /**
-     * @return DisposableInterface
-     */
-    public function getDisposable()
+    public function getDisposable(): null|DisposableInterface
     {
         return $this->disposable;
     }
 
-    /**
-     * @param DisposableInterface $disposable
-     */
-    public function setDisposable(DisposableInterface $disposable)
+    public function setDisposable(DisposableInterface $disposable): void
     {
         $shouldDispose = $this->isDisposed;
 

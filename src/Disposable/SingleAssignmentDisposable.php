@@ -9,10 +9,10 @@ use Rx\DisposableInterface;
 
 class SingleAssignmentDisposable implements DisposableInterface
 {
-    private $current;
-    private $isDisposed = false;
+    private null|DisposableInterface $current = null;
+    private bool $isDisposed = false;
 
-    public function dispose()
+    public function dispose(): void
     {
         $old = null;
 
@@ -27,7 +27,7 @@ class SingleAssignmentDisposable implements DisposableInterface
         }
     }
 
-    public function setDisposable(DisposableInterface $disposable = null)
+    public function setDisposable(DisposableInterface $disposable = null): void
     {
         if ($this->current) {
             throw new RuntimeException('Disposable has already been assigned.');
@@ -42,12 +42,12 @@ class SingleAssignmentDisposable implements DisposableInterface
         }
     }
 
-    public function getDisposable()
+    public function getDisposable(): null|DisposableInterface
     {
         return $this->current;
     }
 
-    public function isDisposed()
+    public function isDisposed(): bool
     {
         return $this->isDisposed;
     }

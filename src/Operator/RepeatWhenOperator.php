@@ -15,36 +15,18 @@ use Rx\Subject\Subject;
 
 final class RepeatWhenOperator implements OperatorInterface
 {
-    /** @var callable */
-    private $notificationHandler;
+    private Subject $completions;
+    private Subject $notifier;
+    private CompositeDisposable $disposable;
+    private bool $repeat = true;
+    private int $count = 0;
+    private bool $sourceComplete = false;
 
-    /** @var Subject */
-    private $completions;
-
-    /** @var Subject */
-    private $notifier;
-
-    /** @var CompositeDisposable */
-    private $disposable;
-
-    /** @var bool */
-    private $repeat;
-
-    /** @var int */
-    private $count;
-
-    /** @var bool */
-    private $sourceComplete;
-
-    public function __construct(callable $notificationHandler)
+    public function __construct(private $notificationHandler)
     {
-        $this->notificationHandler = $notificationHandler;
         $this->completions         = new Subject();
         $this->disposable          = new CompositeDisposable();
         $this->notifier            = new Subject();
-        $this->repeat              = true;
-        $this->count               = 0;
-        $this->sourceComplete      = false;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -52,12 +34,12 @@ final class RepeatWhenOperator implements OperatorInterface
         $outerDisposable = new SerialDisposable();
         $this->disposable->add($outerDisposable);
 
-        $subscribe = function () use ($outerDisposable, $observable, $observer, &$subscribe) {
+        $subscribe = function () use ($outerDisposable, $observable, $observer, &$subscribe): void {
             $this->sourceComplete = false;
             $outerSubscription    = $observable->subscribe(new CallbackObserver(
-                [$observer, 'onNext'],
-                [$observer, 'onError'],
-                function () use ($observer, &$subscribe, $outerDisposable) {
+                fn ($x) => $observer->onNext($x),
+                fn ($err) => $observer->onError($err),
+                function () use ($observer, &$subscribe, $outerDisposable): void {
                     $this->sourceComplete = true;
                     if (!$this->repeat) {
                         $observer->onCompleted();
@@ -72,14 +54,14 @@ final class RepeatWhenOperator implements OperatorInterface
         };
 
         $notifierDisposable = $this->notifier->subscribe(new CallbackObserver(
-            function () use (&$subscribe) {
+            function () use (&$subscribe): void {
                 $subscribe();
             },
-            function ($ex) use ($observer) {
+            function ($ex) use ($observer): void {
                 $this->repeat = false;
                 $observer->onError($ex);
             },
-            function () use ($observer) {
+            function () use ($observer): void {
                 $this->repeat = false;
                 if ($this->sourceComplete) {
                     $observer->onCompleted();

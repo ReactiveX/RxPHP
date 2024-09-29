@@ -38,11 +38,7 @@ class Timestamped
         if (is_scalar($this->value) && $this->value == $other->value) {
             return true;
         }
-        if ($this->value === $other->value) {
-            return true;
-        }
-        
-        return false;
+        return $this->value === $other->value;
     }
 
     /**

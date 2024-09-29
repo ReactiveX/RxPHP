@@ -13,23 +13,20 @@ use Rx\ObserverInterface;
 
 class HotObservable extends Observable
 {
-    private $scheduler;
-    private $messages;
-    private $subscriptions = [];
-    private $observers = [];
+    private array $subscriptions = [];
+    private array $observers = [];
 
-    public function __construct(TestScheduler $scheduler, array $messages)
+    public function __construct(private TestScheduler $scheduler, array $messages)
     {
         $this->scheduler   = $scheduler;
-        $this->messages    = $messages;
         $currentObservable = $this;
 
         foreach ($messages as $message) {
             $time         = $message->getTime();
             $notification = $message->getValue();
 
-            $schedule = function (Notification $innerNotification) use (&$currentObservable, $scheduler, $time) {
-                $scheduler->scheduleAbsolute($time, function () use (&$currentObservable, $innerNotification) {
+            $schedule = function (Notification $innerNotification) use (&$currentObservable, $scheduler, $time): void {
+                $scheduler->scheduleAbsolute($time, function () use (&$currentObservable, $innerNotification): \Rx\Disposable\EmptyDisposable {
                     $observers = $currentObservable->getObservers();
 
                     foreach ($observers as $observer) {
@@ -56,7 +53,7 @@ class HotObservable extends Observable
         $index     = count($this->subscriptions) - 1;
         $scheduler = $this->scheduler;
 
-        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
+        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions): void {
             $currentObservable->removeObserver($observer);
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });

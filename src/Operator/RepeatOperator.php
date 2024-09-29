@@ -13,9 +13,7 @@ use Rx\ObserverInterface;
 
 final class RepeatOperator implements OperatorInterface
 {
-    private $repeatCount;
-
-    public function __construct(int $repeatCount = -1)
+    public function __construct(private int $repeatCount = -1)
     {
         if ($repeatCount < 0) {
             $repeatCount = -1;
@@ -30,11 +28,11 @@ final class RepeatOperator implements OperatorInterface
 
         $disposable = new SerialDisposable();
 
-        $subscribe = function () use (&$disposable, $observable, $observer, &$completeCount, &$subscribe) {
+        $subscribe = function () use (&$disposable, $observable, $observer, &$completeCount, &$subscribe): void {
             $disposable->setDisposable($observable->subscribe(new CallbackObserver(
-                [$observer, 'onNext'],
-                [$observer, 'onError'],
-                function () use (&$completeCount, $observable, $observer, &$disposable, &$subscribe) {
+                fn ($x) => $observer->onNext($x),
+                fn ($err) => $observer->onError($err),
+                function () use (&$completeCount, $observable, $observer, &$disposable, &$subscribe): void {
                     $completeCount++;
                     if ($this->repeatCount === -1 || $completeCount < $this->repeatCount) {
                         $subscribe();
@@ -49,7 +47,7 @@ final class RepeatOperator implements OperatorInterface
 
         $subscribe();
 
-        return new CallbackDisposable(function () use (&$disposable) {
+        return new CallbackDisposable(function () use (&$disposable): void {
             $disposable->dispose();
         });
     }

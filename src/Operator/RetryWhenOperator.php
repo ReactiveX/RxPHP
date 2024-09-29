@@ -14,11 +14,8 @@ use Rx\Subject\Subject;
 
 final class RetryWhenOperator implements OperatorInterface
 {
-    private $notificationHandler;
-
-    public function __construct(callable $notificationHandler)
+    public function __construct(private $notificationHandler)
     {
-        $this->notificationHandler = $notificationHandler;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -36,10 +33,10 @@ final class RetryWhenOperator implements OperatorInterface
             return new EmptyDisposable();
         }
 
-        $subscribeToSource = function () use ($observer, $disposable, $observable, &$sourceError, $errors, &$sourceDisposable, &$innerCompleted) {
+        $subscribeToSource = function () use ($observer, $disposable, $observable, &$sourceError, $errors, &$sourceDisposable, &$innerCompleted): void {
             $sourceError      = false;
             $sourceDisposable = $observable->subscribe(new CallbackObserver(
-                [$observer, 'onNext'],
+                fn ($x) => $observer->onNext($x),
                 function ($err) use (
                     &$sourceError,
                     $errors,
@@ -47,7 +44,7 @@ final class RetryWhenOperator implements OperatorInterface
                     &$sourceDisposable,
                     &$innerCompleted,
                     $observer
-                ) {
+                ): void {
                     $sourceError = true;
                     $disposable->remove($sourceDisposable);
                     $sourceDisposable->dispose();
@@ -58,21 +55,21 @@ final class RetryWhenOperator implements OperatorInterface
                     }
                     $errors->onNext($err);
                 },
-                [$observer, 'onCompleted']
+                fn () => $observer->onCompleted()
             ));
 
             $disposable->add($sourceDisposable);
         };
 
         $whenDisposable = $when->subscribe(new CallbackObserver(
-            function ($x) use ($subscribeToSource, &$sourceError) {
+            function ($x) use ($subscribeToSource, &$sourceError): void {
                 if ($sourceError) {
                     $sourceError = false;
                     $subscribeToSource();
                 }
             },
-            [$observer, 'onError'],
-            function () use (&$innerCompleted, &$sourceError, $observer) {
+            fn ($err) => $observer->onError($err),
+            function () use (&$innerCompleted, &$sourceError, $observer): void {
                 $innerCompleted = true;
                 if ($sourceError) {
                     $observer->onCompleted();
