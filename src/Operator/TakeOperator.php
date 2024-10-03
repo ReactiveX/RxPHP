@@ -27,12 +27,15 @@ final class TakeOperator implements OperatorInterface
         $remaining = $this->count;
 
         $callbackObserver = new CallbackObserver(
-            function ($nextValue) use ($observer, &$remaining) {
+            function ($nextValue) use ($observer, &$remaining, &$disposable) {
                 if ($remaining > 0) {
                     $remaining--;
                     $observer->onNext($nextValue);
                     if ($remaining === 0) {
                         $observer->onCompleted();
+                        if ($disposable instanceof DisposableInterface) {
+                            $disposable->dispose();
+                        }
                     }
                 }
             },
@@ -40,6 +43,7 @@ final class TakeOperator implements OperatorInterface
             [$observer, 'onCompleted']
         );
 
-        return $observable->subscribe($callbackObserver);
+        $disposable = $observable->subscribe($callbackObserver);
+        return $disposable;
     }
 }
