@@ -11,14 +11,10 @@ use Rx\SchedulerInterface;
 
 class ArrayObservable extends Observable
 {
-    private $data;
-
-    private $scheduler;
-
-    public function __construct(array $data, SchedulerInterface $scheduler)
-    {
-        $this->data      = $data;
-        $this->scheduler = $scheduler;
+    public function __construct(
+        private array $data,
+        private SchedulerInterface $scheduler
+    ){
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -28,14 +24,12 @@ class ArrayObservable extends Observable
         $keys   = array_keys($values);
         $count  = 0;
 
-        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys) {
+        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys): void {
             if ($count < $max) {
                 $observer->onNext($values[$keys[$count]]);
                 $count++;
-                if ($count >= 1) {
-                    $reschedule();
-                    return;
-                }
+                $reschedule();
+                return;
             }
             $observer->onCompleted();
         });

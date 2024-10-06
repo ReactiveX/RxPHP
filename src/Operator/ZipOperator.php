@@ -12,30 +12,21 @@ use Rx\ObserverInterface;
 
 final class ZipOperator implements OperatorInterface
 {
-    /** @var ObservableInterface[] */
-    private $sources;
-
-    /** @var callable */
-    private $resultSelector;
-
     /** @var \SplQueue[] */
-    private $queues = [];
-
-    /** @var int */
-    private $completesRemaining = 0;
-
-    /** @var int */
-    private $numberOfSources;
-
+    private array $queues = [];
+    private int $completesRemaining = 0;
+    private ?int $numberOfSources = null;
     /** @var bool[] */
-    private $completed = [];
+    private array $completed = [];
 
-    public function __construct(array $sources, callable $resultSelector = null)
-    {
-        $this->sources = $sources;
+    public function __construct(
+        /** @var ObservableInterface[] */
+        private array $sources,
+        private null|\Closure $resultSelector = null
+    ) {
 
         if ($resultSelector === null) {
-            $resultSelector = function () {
+            $resultSelector = function (): array {
                 return func_get_args();
             };
         }
@@ -61,7 +52,7 @@ final class ZipOperator implements OperatorInterface
             $source = $this->sources[$i];
 
             $cbObserver = new CallbackObserver(
-                function ($x) use ($i, $observer) {
+                function ($x) use ($i, $observer): void {
                     // if there is another item in the sequence after one of the other source
                     // observables completes, we need to complete at this time to match the
                     // behavior of RxJS
@@ -94,10 +85,10 @@ final class ZipOperator implements OperatorInterface
                         $observer->onError($e);
                     }
                 },
-                function ($e) use ($observer) {
+                function ($e) use ($observer): void {
                     $observer->onError($e);
                 },
-                function () use ($i, $observer) {
+                function () use ($i, $observer): void {
                     $this->completesRemaining--;
                     $this->completed[$i] = true;
                     if ($this->completesRemaining === 0) {

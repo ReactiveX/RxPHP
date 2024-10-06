@@ -20,6 +20,6 @@ $subscription = $source
         function ($array) use ($observer) {
             $observer->onNext(json_encode($array));
         },
-        [$observer, 'onError'],
-        [$observer, 'onCompleted']
+        fn ($e) => $observer->onError($e),
+        fn () => $observer->onCompleted()
     ));

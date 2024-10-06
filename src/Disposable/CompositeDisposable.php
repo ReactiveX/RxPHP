@@ -8,15 +8,14 @@ use Rx\DisposableInterface;
 
 class CompositeDisposable implements DisposableInterface
 {
-    private $disposables;
-    private $isDisposed = false;
 
-    public function __construct(array $disposables = [])
-    {
-        $this->disposables = $disposables;
+    public function __construct(
+        private array $disposables = [],
+        private bool $isDisposed = false
+    ) {
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         if ($this->isDisposed) {
             return;
@@ -32,7 +31,7 @@ class CompositeDisposable implements DisposableInterface
         }
     }
 
-    public function add(DisposableInterface $disposable)
+    public function add(DisposableInterface $disposable): void
     {
         if ($this->isDisposed) {
             $disposable->dispose();
@@ -65,12 +64,12 @@ class CompositeDisposable implements DisposableInterface
         return in_array($disposable, $this->disposables, true);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->disposables);
     }
 
-    public function clear()
+    public function clear(): void
     {
         $disposables       = $this->disposables;
         $this->disposables = [];

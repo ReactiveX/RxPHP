@@ -9,7 +9,7 @@ use Rx\Notification;
 
 class OnErrorNotification extends Notification
 {
-    private $exception;
+    private \Throwable $exception;
 
     public function __construct(\Throwable $exception)
     {

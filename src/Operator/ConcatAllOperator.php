@@ -14,38 +14,23 @@ use Rx\ObserverInterface;
 
 final class ConcatAllOperator implements OperatorInterface
 {
-    /** @var  array */
-    private $buffer;
-
-    /** @var CompositeDisposable */
-    private $disposable;
-
-    /** @var SerialDisposable */
-    private $innerDisposable;
-
-    /** @var bool */
-    private $startBuffering;
-
-    /** @var bool */
-    private $sourceCompleted;
-
-    /** @var bool */
-    private $innerCompleted;
+    private array $buffer = [];
+    private CompositeDisposable $disposable;
+    private DisposableInterface $innerDisposable;
+    private bool $startBuffering = false;
+    private bool $sourceCompleted = false;
+    private bool $innerCompleted = true;
 
     public function __construct()
     {
-        $this->buffer          = [];
         $this->disposable      = new CompositeDisposable();
         $this->innerDisposable = new EmptyDisposable();
-        $this->startBuffering  = false;
-        $this->sourceCompleted = false;
-        $this->innerCompleted  = true;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $subscription = $observable->subscribe(new CallbackObserver(
-            function (ObservableInterface $innerObservable) use ($observable, $observer) {
+            function (ObservableInterface $innerObservable) use ($observable, $observer): void {
                 try {
 
                     if ($this->startBuffering === true) {
@@ -53,7 +38,7 @@ final class ConcatAllOperator implements OperatorInterface
                         return;
                     }
 
-                    $onCompleted = function () use (&$subscribeToInner, $observer) {
+                    $onCompleted = function () use (&$subscribeToInner, $observer): void {
 
                         $this->disposable->remove($this->innerDisposable);
                         $this->innerDisposable->dispose();
@@ -62,7 +47,7 @@ final class ConcatAllOperator implements OperatorInterface
 
                         $obs = array_shift($this->buffer);
 
-                        if (empty($this->buffer)) {
+                        if ($this->buffer === []) {
                             $this->startBuffering = false;
                         }
 
@@ -73,10 +58,10 @@ final class ConcatAllOperator implements OperatorInterface
                         }
                     };
 
-                    $subscribeToInner = function ($observable) use ($observer, &$onCompleted) {
+                    $subscribeToInner = function ($observable) use ($observer, &$onCompleted): void {
                         $callbackObserver = new CallbackObserver(
-                            [$observer, 'onNext'],
-                            [$observer, 'onError'],
+                            fn ($x) => $observer->onNext($x),
+                            fn ($err) => $observer->onError($err),
                             $onCompleted
                         );
 
@@ -93,8 +78,8 @@ final class ConcatAllOperator implements OperatorInterface
                     $observer->onError($e);
                 }
             },
-            [$observer, 'onError'],
-            function () use ($observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer): void {
                 $this->sourceCompleted = true;
                 if ($this->innerCompleted === true) {
                     $observer->onCompleted();

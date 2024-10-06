@@ -17,23 +17,17 @@ use Rx\SchedulerInterface;
  */
 class ReplaySubject extends Subject
 {
-    /** @var int */
-    private $bufferSize;
+    private ?int $bufferSize;
 
-    /** @var int */
-    private $windowSize;
+    private ?int $windowSize;
 
-    /** @var array */
-    private $queue = [];
+    private array $queue = [];
 
-    /** @var int */
-    private $maxSafeInt = PHP_INT_MAX;
+    private int $maxSafeInt = PHP_INT_MAX;
 
-    /** @var bool */
-    private $hasError = false;
+    private bool $hasError = false;
 
-    /** @var SchedulerInterface */
-    private $scheduler;
+    private \Rx\SchedulerInterface $scheduler;
 
     public function __construct(int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler = null)
     {
@@ -70,10 +64,8 @@ class ReplaySubject extends Subject
 
         if ($this->hasError) {
             $so->onError($this->exception);
-        } else {
-            if ($this->isStopped) {
-                $so->onCompleted();
-            }
+        } elseif ($this->isStopped) {
+            $so->onCompleted();
         }
 
         $so->ensureActive();
@@ -81,7 +73,7 @@ class ReplaySubject extends Subject
         return $subscription;
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         $this->assertNotDisposed();
 
@@ -102,7 +94,7 @@ class ReplaySubject extends Subject
 
     }
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         $this->assertNotDisposed();
 
@@ -121,7 +113,7 @@ class ReplaySubject extends Subject
         $this->observers = [];
     }
 
-    public function onError(\Throwable $exception)
+    public function onError(\Throwable $exception): void
     {
         $this->assertNotDisposed();
 
@@ -144,9 +136,9 @@ class ReplaySubject extends Subject
         $this->observers = [];
     }
 
-    private function createRemovableDisposable($subject, $observer): DisposableInterface
+    private function createRemovableDisposable(self $subject, \Rx\Observer\ScheduledObserver $observer): DisposableInterface
     {
-        return new CallbackDisposable(function () use ($observer, $subject) {
+        return new CallbackDisposable(function () use ($observer, $subject): void {
             $observer->dispose();
             if (!$subject->isDisposed()) {
                 array_splice($subject->observers, (int)array_search($observer, $subject->observers, true), 1);
@@ -154,7 +146,7 @@ class ReplaySubject extends Subject
         });
     }
 
-    private function trim()
+    private function trim(): void
     {
         if (count($this->queue) > $this->bufferSize) {
             array_shift($this->queue);

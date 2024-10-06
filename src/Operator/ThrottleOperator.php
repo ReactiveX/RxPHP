@@ -16,18 +16,14 @@ use Rx\SchedulerInterface;
 
 final class ThrottleOperator implements OperatorInterface
 {
-    private $nextSend = 0;
+    private float|int $nextSend = 0;
 
-    private $throttleTime = 0;
+    private bool $completed = false;
 
-    private $completed = false;
-
-    private $scheduler;
-
-    public function __construct(int $debounceTime, SchedulerInterface $scheduler)
-    {
-        $this->throttleTime = $debounceTime;
-        $this->scheduler    = $scheduler;
+    public function __construct(
+        private readonly int $throttleTime,
+        private readonly SchedulerInterface $scheduler
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -35,7 +31,7 @@ final class ThrottleOperator implements OperatorInterface
         $innerDisp = new SerialDisposable();
 
         $disp = $observable->subscribe(new CallbackObserver(
-            function ($x) use ($innerDisp, $observer) {
+            function ($x) use ($innerDisp, $observer): void {
                 $now = $this->scheduler->now();
                 if ($this->nextSend <= $now) {
                     $innerDisp->setDisposable(new EmptyDisposable());
@@ -47,7 +43,7 @@ final class ThrottleOperator implements OperatorInterface
                 $newDisp = Observable::of($x, $this->scheduler)
                     ->delay($this->nextSend - $now, $this->scheduler)
                     ->subscribe(new CallbackObserver(
-                        function ($x) use ($observer) {
+                        function ($x) use ($observer): void {
                             $observer->onNext($x);
                             $this->nextSend = $this->scheduler->now() + $this->throttleTime - 1;
                             if ($this->completed) {
@@ -59,11 +55,11 @@ final class ThrottleOperator implements OperatorInterface
 
                 $innerDisp->setDisposable($newDisp);
             },
-            function (\Throwable $e) use ($observer, $innerDisp) {
+            function (\Throwable $e) use ($observer, $innerDisp): void {
                 $innerDisp->dispose();
                 $observer->onError($e);
             },
-            function () use ($observer) {
+            function () use ($observer): void {
                 $this->completed = true;
                 if ($this->nextSend === 0) {
                     $observer->onCompleted();

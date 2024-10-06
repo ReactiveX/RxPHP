@@ -11,21 +11,17 @@ use Rx\SchedulerInterface;
 
 class IteratorObservable extends Observable
 {
-    private $items;
-
-    private $scheduler;
-
-    public function __construct(\Iterator $items, SchedulerInterface $scheduler = null)
-    {
-        $this->items     = $items;
-        $this->scheduler = $scheduler;
+    public function __construct(
+        private readonly \Iterator $items,
+        private readonly null|SchedulerInterface $scheduler = null
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         $key = 0;
 
-        $action = function ($reschedule) use (&$observer, &$key) {
+        $action = function ($reschedule) use (&$observer, &$key): void {
             try {
                 if (null === $key || !$this->items->valid()) {
 

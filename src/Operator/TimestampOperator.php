@@ -13,21 +13,18 @@ use Rx\Timestamped;
 
 final class TimestampOperator implements OperatorInterface
 {
-    private $scheduler;
-
-    public function __construct(SchedulerInterface $scheduler = null)
+    public function __construct(private readonly null|SchedulerInterface $scheduler = null)
     {
-        $this->scheduler = $scheduler;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 $observer->onNext(new Timestamped($this->scheduler->now(), $x));
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         ));
     }
 }

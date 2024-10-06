@@ -12,11 +12,8 @@ use Rx\ObserverInterface;
 
 final class TakeUntilOperator implements OperatorInterface
 {
-    private $other;
-
-    public function __construct(ObservableInterface $other)
+    public function __construct(private ObservableInterface $other)
     {
-        $this->other = $other;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -25,7 +22,7 @@ final class TakeUntilOperator implements OperatorInterface
         return new CompositeDisposable([
             $this->other->subscribe(
                 new CallbackObserver(
-                    [$observer, 'onCompleted'],
+                    fn () => $observer->onCompleted(),
                     [$observer, 'onError']
                 )
             ),

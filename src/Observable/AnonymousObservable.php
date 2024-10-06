@@ -12,11 +12,8 @@ use Rx\Observer\AutoDetachObserver;
 
 class AnonymousObservable extends Observable
 {
-    private $subscribeAction;
-
-    public function __construct(callable $subscribeAction)
+    public function __construct(private $subscribeAction)
     {
-        $this->subscribeAction = $subscribeAction;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -27,7 +24,7 @@ class AnonymousObservable extends Observable
 
         $autoDetachObserver->setDisposable($subscribeAction($autoDetachObserver));
 
-        return new CallbackDisposable(function () use ($autoDetachObserver) {
+        return new CallbackDisposable(function () use ($autoDetachObserver): void {
             $autoDetachObserver->dispose();
         });
     }

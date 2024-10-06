@@ -8,15 +8,13 @@ use Rx\DisposableInterface;
 
 class CallbackDisposable implements DisposableInterface
 {
-    private $action;
-    private $disposed = false;
-
-    public function __construct(callable $action)
-    {
-        $this->action = $action;
+    public function __construct(
+        private \Closure $action,
+        private bool $disposed = false
+    ) {
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         if ($this->disposed) {
             return;

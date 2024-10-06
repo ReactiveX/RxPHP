@@ -12,16 +12,13 @@ use Rx\ObserverInterface;
 
 final class WithLatestFromOperator implements OperatorInterface
 {
-    /** @var ObservableInterface[] */
-    private $observables;
-
-    /** @var callable */
-    private $resultSelector;
-
-    public function __construct(array $observables, callable $resultSelector = null)
-    {
+    public function __construct(
+        /** @var ObservableInterface[] */
+        private array $observables,
+        private null|\Closure $resultSelector = null
+    ) {
         if (null === $resultSelector) {
-            $resultSelector = function () {
+            $resultSelector = function (): array {
                 return func_get_args();
             };
         }
@@ -49,12 +46,12 @@ final class WithLatestFromOperator implements OperatorInterface
             $sad = new SingleAssignmentDisposable();
 
             $subscription = $o->subscribe(
-                function ($value) use ($key, &$values, $count, &$hasAllValues) {
+                function ($value) use ($key, &$values, $count, &$hasAllValues): void {
                     $values[$key] = $value;
                     $hasAllValues = $count === count($values);
                 },
-                [$observer, 'onError'],
-                function () {
+                fn ($err) => $observer->onError($err),
+                function (): void {
                     //noop
                 });
 
@@ -64,7 +61,7 @@ final class WithLatestFromOperator implements OperatorInterface
 
         $outerSad = new SingleAssignmentDisposable();
         $outerSad->setDisposable($source->subscribe(
-            function ($value) use ($observer, &$values, &$hasAllValues) {
+            function ($value) use ($observer, &$values, &$hasAllValues): void {
                 ksort($values);
                 $allValues = array_merge([$value], $values);
 
@@ -79,8 +76,8 @@ final class WithLatestFromOperator implements OperatorInterface
                     $observer->onError($ex);
                 }
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']));
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()));
         $subscriptions[] = $outerSad;
 
         return new CompositeDisposable($subscriptions);

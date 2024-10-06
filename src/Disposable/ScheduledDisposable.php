@@ -9,22 +9,14 @@ use Rx\SchedulerInterface;
 
 class ScheduledDisposable implements DisposableInterface
 {
-    /** @var DisposableInterface */
-    private $disposable;
-
-    /** @var SchedulerInterface */
-    private $scheduler;
-
-    /** @var bool */
-    protected $isDisposed = false;
-
-    public function __construct(SchedulerInterface $scheduler, DisposableInterface $disposable)
-    {
-        $this->scheduler  = $scheduler;
-        $this->disposable = $disposable;
+    public function __construct(
+        private SchedulerInterface   $scheduler,
+        private  DisposableInterface $disposable,
+        protected bool               $isDisposed = false
+    ) {
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         if ($this->isDisposed) {
             return;
@@ -32,7 +24,7 @@ class ScheduledDisposable implements DisposableInterface
 
         $this->isDisposed = true;
 
-        $this->scheduler->schedule(function () {
+        $this->scheduler->schedule(function (): void {
             $this->disposable->dispose();
         });
     }

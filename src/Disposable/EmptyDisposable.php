@@ -8,7 +8,7 @@ use Rx\DisposableInterface;
 
 class EmptyDisposable implements DisposableInterface
 {
-    public function dispose()
+    public function dispose(): void
     {
         // do nothing \o/
     }

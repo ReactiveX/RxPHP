@@ -10,59 +10,45 @@ use Rx\SchedulerInterface;
 
 final class ScheduledObserver extends AbstractObserver
 {
-    /** @var SchedulerInterface */
-    private $scheduler;
-
-    /** @var ObserverInterface */
-    private $observer;
-
-    /** @var bool */
-    private $isAcquired = false;
-
-    /** @var bool */
-    private $hasFaulted = false;
-
-    /** @var \Closure[] */
-    private $queue = [];
-
-    /** @var SerialDisposable */
-    private $disposable;
+    private SerialDisposable $disposable;
 
     /**
      * ScheduledObserver constructor.
-     * @param SchedulerInterface $scheduler
-     * @param ObserverInterface $observer
      */
-    public function __construct(SchedulerInterface $scheduler, ObserverInterface $observer)
-    {
-        $this->scheduler  = $scheduler;
-        $this->observer   = $observer;
+    public function __construct(
+        private SchedulerInterface $scheduler,
+        private ObserverInterface $observer,
+        private bool $isAcquired = false,
+        private bool $hasFaulted = false,
+        /** @var \Closure[] */
+        private array $queue = []
+    ) {
         $this->disposable = new SerialDisposable();
     }
 
 
-    protected function completed()
+    protected function completed(): void
     {
-        $this->queue[] = function () {
+        $this->queue[] = function (): void {
             $this->observer->onCompleted();
         };
     }
 
-    protected function next($value)
+    protected function next($value): void
     {
-        $this->queue[] = function () use ($value) {
+        $this->queue[] = function () use ($value): void {
             $this->observer->onNext($value);
         };
     }
 
-    protected function error(\Throwable $error)
+    protected function error(\Throwable $error): void
     {
-        $this->queue[] = function () use ($error) {
+        $this->queue[] = function () use ($error): void {
             $this->observer->onError($error);
         };
     }
 
-    public function ensureActive()
+    public function ensureActive(): void
     {
         $isOwner = false;
         if (!$this->hasFaulted && count($this->queue) > 0) {
@@ -76,7 +62,7 @@ final class ScheduledObserver extends AbstractObserver
 
         $this->disposable->setDisposable(
             $this->scheduler->scheduleRecursive(
-                function ($recurse) {
+                function ($recurse): void {
                     $parent = $this;
                     if (count($parent->queue) > 0) {
                         $work = array_shift($parent->queue);
@@ -99,7 +85,7 @@ final class ScheduledObserver extends AbstractObserver
         );
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         $this->disposable->dispose();
     }

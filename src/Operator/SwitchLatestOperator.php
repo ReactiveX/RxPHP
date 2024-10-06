@@ -14,29 +14,22 @@ use Rx\ObserverInterface;
 
 final class SwitchLatestOperator implements OperatorInterface
 {
-    /** @var bool */
-    private $hasLatest;
+    private bool $hasLatest = false;
 
-    /** @var bool */
-    private $isStopped;
+    private bool $isStopped = false;
 
-    /** @var int */
-    private $latest;
+    private int $latest = 0;
 
-    /** @var SerialDisposable */
-    private $innerSubscription;
+    private SerialDisposable $innerSubscription;
 
     public function __construct()
     {
-        $this->hasLatest         = false;
-        $this->isStopped         = false;
-        $this->latest            = 0;
         $this->innerSubscription = new SerialDisposable();
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $onNext = function ($innerSource) use ($observer) {
+        $onNext = function ($innerSource) use ($observer): void {
             $innerDisposable = new SingleAssignmentDisposable();
 
             $id = ++$this->latest;
@@ -45,17 +38,17 @@ final class SwitchLatestOperator implements OperatorInterface
             $this->innerSubscription->setDisposable($innerDisposable);
 
             $innerCallbackObserver = new CallbackObserver(
-                function ($x) use ($id, $observer) {
+                function ($x) use ($id, $observer): void {
                     if ($this->latest === $id) {
                         $observer->onNext($x);
                     }
                 },
-                function ($e) use ($id, $observer) {
+                function ($e) use ($id, $observer): void {
                     if ($this->latest === $id) {
                         $observer->onError($e);
                     }
                 },
-                function () use ($id, $observer) {
+                function () use ($id, $observer): void {
                     if ($this->latest === $id) {
                         $this->hasLatest = false;
                         if ($this->isStopped) {
@@ -71,8 +64,8 @@ final class SwitchLatestOperator implements OperatorInterface
 
         $callbackObserver = new CallbackObserver(
             $onNext,
-            [$observer, 'onError'],
-            function () use ($observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer): void {
                 $this->isStopped = true;
                 if (!$this->hasLatest) {
                     $observer->onCompleted();

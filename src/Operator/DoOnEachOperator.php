@@ -11,11 +11,8 @@ use Rx\Observer\CallbackObserver;
 
 final class DoOnEachOperator implements OperatorInterface
 {
-    private $onEachObserver;
-
-    public function __construct(ObserverInterface $observer)
+    public function __construct(private ObserverInterface $onEachObserver)
     {
-        $this->onEachObserver = $observer;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface

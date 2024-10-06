@@ -8,26 +8,22 @@ use Rx\Disposable\SingleAssignmentDisposable;
 
 class ScheduledItem
 {
-    private $scheduler;
-    private $state;
-    private $action;
-    private $dueTime;
-    private $comparer;
-    private $disposable;
+    private SingleAssignmentDisposable $disposable;
 
-    public function __construct($scheduler, $state, $action, $dueTime, $comparer = null)
-    {
-        $this->scheduler  = $scheduler;
-        $this->state      = $state;
-        $this->action     = $action;
-        $this->dueTime    = $dueTime;
-        $this->comparer   = $comparer ?: function ($a, $b) {
+    public function __construct(
+        private $scheduler,
+        private $state,
+        private $action,
+        private $dueTime,
+        private null|\Closure $comparer = null
+    ) {
+        $this->comparer   = $comparer ?: function ($a, $b): int|float {
             return $a - $b;
         };
         $this->disposable = new SingleAssignmentDisposable();
     }
 
-    public function invoke()
+    public function invoke(): void
     {
         $this->disposable->setDisposable($this->invokeCore());
     }

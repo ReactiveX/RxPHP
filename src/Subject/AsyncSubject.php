@@ -8,37 +8,19 @@ use Rx\Disposable\EmptyDisposable;
 use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
-/**
- * Class AsyncSubject
- * @package Rx\Subject
- */
 class AsyncSubject extends Subject
 {
-    /**
-     * @var
-     */
     private $value;
 
+    private bool $valueSet = false;
 
-    /**
-     * @var bool
-     */
-    private $valueSet = false;
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
 
-    /**
-     * @param $value
-     */
-    public function onNext($value)
+    public function onNext($value): void
     {
-
         $this->assertNotDisposed();
 
         if ($this->isStopped) {
@@ -49,7 +31,7 @@ class AsyncSubject extends Subject
         $this->valueSet = true;
     }
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         if ($this->valueSet) {
             parent::onNext($this->value);
@@ -84,7 +66,7 @@ class AsyncSubject extends Subject
 
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         parent::dispose();
 

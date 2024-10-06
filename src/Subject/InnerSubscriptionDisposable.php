@@ -9,16 +9,13 @@ use Rx\ObserverInterface;
 
 class InnerSubscriptionDisposable implements DisposableInterface
 {
-    private $observer;
-    private $subject;
-
-    public function __construct(Subject $subject, ObserverInterface $observer)
-    {
-        $this->subject  = $subject;
-        $this->observer = $observer;
+    public function __construct(
+        private readonly Subject $subject,
+        private null|ObserverInterface $observer
+    ) {
     }
 
-    public function dispose()
+    public function dispose(): void
     {
         if ($this->subject->isDisposed()) {
             return;

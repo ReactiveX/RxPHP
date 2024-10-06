@@ -13,16 +13,18 @@ use Rx\DisposableInterface;
 
 class GroupedObservable extends Observable
 {
-    private $key;
-    private $underlyingObservable;
+    private ObservableInterface $underlyingObservable;
 
-    public function __construct($key, ObservableInterface $underlyingObservable, RefCountDisposable $mergedDisposable = null)
-    {
+    public function __construct(
+        private $key,
+        ObservableInterface $underlyingObservable,
+        RefCountDisposable $mergedDisposable = null
+    ) {
         $this->key = $key;
 
-        $this->underlyingObservable = !$mergedDisposable ?
-            $underlyingObservable :
-            $this->newUnderlyingObservable($mergedDisposable, $underlyingObservable);
+        $this->underlyingObservable = $mergedDisposable instanceof RefCountDisposable ?
+            $this->newUnderlyingObservable($mergedDisposable, $underlyingObservable) :
+            $underlyingObservable;
     }
 
     public function getKey()
@@ -38,7 +40,7 @@ class GroupedObservable extends Observable
     private function newUnderlyingObservable(RefCountDisposable $mergedDisposable, ObservableInterface $underlyingObservable): Observable
     {
         return new AnonymousObservable(
-            function ($observer) use ($mergedDisposable, $underlyingObservable) {
+            function ($observer) use ($mergedDisposable, $underlyingObservable): \Rx\Disposable\BinaryDisposable {
                 return new BinaryDisposable($mergedDisposable->getDisposable(), $underlyingObservable->subscribe($observer));
             }
         );

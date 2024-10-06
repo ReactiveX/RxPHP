@@ -13,17 +13,10 @@ use Rx\SchedulerInterface;
 
 final class DistinctOperator implements OperatorInterface
 {
-
-    /** @var callable */
-    protected $keySelector;
-
-    /** @var callable */
-    protected $comparer;
-
-    public function __construct(callable $keySelector = null, callable $comparer = null)
-    {
-        $this->comparer = $comparer;
-        $this->keySelector = $keySelector;
+    public function __construct(
+        private readonly null|\Closure $keySelector = null,
+        private readonly null|\Closure $comparer = null
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
@@ -58,8 +51,8 @@ final class DistinctOperator implements OperatorInterface
                     return $observer->onError($e);
                 }
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($callbackObserver);

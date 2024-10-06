@@ -9,24 +9,17 @@ use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
-/**
- * Class TestSubject
- * @package Rx\Testing
- */
 class TestSubject extends Subject
 {
-    /** @var int */
-    private $subscribeCount;
+    private int $subscribeCount = 0;
 
-    /** @var  ObserverInterface */
-    private $observer;
+    private ?\Rx\ObserverInterface $observer = null;
 
     /* @var DisposableInterface[] */
-    private $disposeOnMap;
+    private ?array $disposeOnMap = null;
 
     public function __construct()
     {
-        $this->subscribeCount = 0;
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -35,25 +28,18 @@ class TestSubject extends Subject
         $this->subscribeCount++;
         $this->observer = $observer;
 
-        return new CallbackDisposable(function () {
+        return new CallbackDisposable(function (): void {
             $this->dispose();
         });
 
     }
 
-    /**
-     * @param $value
-     * @param $disposable
-     */
-    public function disposeOn($value, DisposableInterface $disposable)
+    public function disposeOn($value, DisposableInterface $disposable): void
     {
         $this->disposeOnMap[$value] = $disposable;
     }
 
-    /**
-     * @param $value
-     */
-    public function onNext($value)
+    public function onNext($value): void
     {
         $this->observer->onNext($value);
         if (isset($this->disposeOnMap[$value])) {
@@ -61,22 +47,16 @@ class TestSubject extends Subject
         }
     }
 
-    /**
-     * @param \Throwable $exception
-     */
-    public function onError(\Throwable $exception)
+    public function onError(\Throwable $exception): void
     {
         $this->observer->onError($exception);
     }
 
-    public function onCompleted()
+    public function onCompleted(): void
     {
         $this->observer->onCompleted();
     }
 
-    /**
-     * @return int
-     */
     public function getSubscribeCount(): int
     {
         return $this->subscribeCount;

@@ -39,28 +39,25 @@ final class Promise
     /**
      * Converts an existing observable sequence to React Promise
      *
-     * @param ObservableInterface $observable
-     * @param Deferred $deferred
-     * @return ReactPromise
      * @throws \InvalidArgumentException
      */
     public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null): ReactPromise
     {
 
-        $d = $deferred ?: new Deferred(function () use (&$subscription) {
+        $d = $deferred ?: new Deferred(function () use (&$subscription): void {
             $subscription->dispose();
         });
 
         $value = null;
 
         $subscription = $observable->subscribe(
-            function ($v) use (&$value) {
+            function ($v) use (&$value): void {
                 $value = $v;
             },
-            function ($error) use ($d) {
+            function ($error) use ($d): void {
                 $d->reject($error);
             },
-            function () use ($d, &$value) {
+            function () use ($d, &$value): void {
                 $d->resolve($value);
             }
         );
@@ -71,8 +68,6 @@ final class Promise
     /**
      * Converts a Promise to an Observable sequence
      *
-     * @param PromiseInterface $promise
-     * @return Observable
      * @throws \InvalidArgumentException
      */
     public static function toObservable(PromiseInterface $promise): Observable
@@ -80,19 +75,19 @@ final class Promise
         $subject = new AsyncSubject();
 
         $p = $promise->then(
-            function ($value) use ($subject) {
+            function ($value) use ($subject): void {
                 $subject->onNext($value);
                 $subject->onCompleted();
             },
-            function ($error) use ($subject) {
+            function ($error) use ($subject): void {
                 $error = $error instanceof \Throwable ? $error : new RejectedPromiseException($error);
                 $subject->onError($error);
             }
         );
 
-        return new AnonymousObservable(function ($observer) use ($subject, $p) {
+        return new AnonymousObservable(function ($observer) use ($subject, $p): \Rx\Disposable\CallbackDisposable {
             $disp = $subject->subscribe($observer);
-            return new CallbackDisposable(function () use ($p, $disp) {
+            return new CallbackDisposable(function () use ($p, $disp): void {
                 $disp->dispose();
                 if (\method_exists($p, 'cancel')) {
                     $p->cancel();

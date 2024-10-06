@@ -13,7 +13,7 @@ use Rx\ObserverInterface;
 final class CombineLatestOperator implements OperatorInterface
 {
     /** @var ObservableInterface[] */
-    private $observables;
+    private array $observables;
 
     /** @var callable */
     private $resultSelector;
@@ -21,7 +21,7 @@ final class CombineLatestOperator implements OperatorInterface
     public function __construct(array $observables, callable $resultSelector = null)
     {
         if (null === $resultSelector) {
-            $resultSelector = function () {
+            $resultSelector = function (): array {
                 return func_get_args();
             };
         }
@@ -53,7 +53,7 @@ final class CombineLatestOperator implements OperatorInterface
             $hasValue[$key] = false;
 
             $cbObserver = new CallbackObserver(
-                function ($value) use ($count, &$hasValue, $key, &$values, $observer, &$waitingForValues, &$waitingToComplete) {
+                function ($value) use ($count, &$hasValue, $key, &$values, $observer, &$waitingForValues, &$waitingToComplete): void {
 
                     // If an observable has completed before it has emitted, we need to complete right away
                     if ($waitingForValues > $waitingToComplete) {
@@ -76,8 +76,8 @@ final class CombineLatestOperator implements OperatorInterface
                         }
                     }
                 },
-                [$observer, 'onError'],
-                function () use (&$waitingToComplete, $observer) {
+                fn ($err) => $observer->onError($err),
+                function () use (&$waitingToComplete, $observer): void {
                     $waitingToComplete--;
                     if ($waitingToComplete === 0) {
                         $observer->onCompleted();

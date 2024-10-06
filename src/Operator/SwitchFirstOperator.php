@@ -14,8 +14,8 @@ use Rx\ObserverInterface;
 
 final class SwitchFirstOperator implements OperatorInterface
 {
-    private $isStopped = false;
-    private $hasCurrent = false;
+    private bool $isStopped = false;
+    private bool $hasCurrent = false;
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
@@ -25,7 +25,7 @@ final class SwitchFirstOperator implements OperatorInterface
         $disposable->add($singleDisposable);
 
         $callbackObserver = new CallbackObserver(
-            function (Observable $x) use ($disposable, $observer) {
+            function (Observable $x) use ($disposable, $observer): void {
                 if ($this->hasCurrent) {
                     return;
                 }
@@ -35,9 +35,9 @@ final class SwitchFirstOperator implements OperatorInterface
                 $disposable->add($inner);
 
                 $innerSub = $x->subscribe(new CallbackObserver(
-                    [$observer, 'onNext'],
-                    [$observer, 'onError'],
-                    function () use ($disposable, $inner, $observer) {
+                    fn ($x) => $observer->onNext($x),
+                    fn ($err) => $observer->onError($err),
+                    function () use ($disposable, $inner, $observer): void {
                         $disposable->remove($inner);
                         $this->hasCurrent = false;
 
@@ -49,8 +49,8 @@ final class SwitchFirstOperator implements OperatorInterface
 
                 $inner->setDisposable($innerSub);
             },
-            [$observer, 'onError'],
-            function () use ($disposable, $observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($disposable, $observer): void {
                 $this->isStopped = true;
                 if (!$this->hasCurrent && $disposable->count() === 1) {
                     $observer->onCompleted();

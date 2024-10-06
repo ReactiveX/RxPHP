@@ -11,22 +11,16 @@ use Rx\ObserverInterface;
 
 final class SkipWhileOperator implements OperatorInterface
 {
-    /** @var callable */
-    private $predicate;
+    private bool $isSkipping = true;
 
-    /** @var bool */
-    private $isSkipping;
-
-    public function __construct(callable $predicate)
+    public function __construct(private readonly null|\Closure $predicate)
     {
-        $this->predicate  = $predicate;
-        $this->isSkipping = true;
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $callbackObserver = new CallbackObserver(
-            function ($value) use ($observer, $observable) {
+            function ($value) use ($observer, $observable): void {
                 try {
 
                     if ($this->isSkipping) {
@@ -41,8 +35,8 @@ final class SkipWhileOperator implements OperatorInterface
                     $observer->onError($e);
                 }
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         );
 
         return $observable->subscribe($callbackObserver);

@@ -15,11 +15,11 @@ final class DematerializeOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return $observable->subscribe(new CallbackObserver(
-            function (Notification $x) use ($observer) {
+            function (Notification $x) use ($observer): void {
                 $x->accept($observer);
             },
-            [$observer, 'onError'],
-            [$observer, 'onCompleted']
+            fn ($err) => $observer->onError($err),
+            fn () => $observer->onCompleted()
         ));
     }
 }

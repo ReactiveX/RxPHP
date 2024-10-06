@@ -10,16 +10,10 @@ use Rx\ObserverInterface;
 
 final class ConcatMapOperator implements OperatorInterface
 {
-    /** @var callable */
-    private $selector;
-
-    /** @var callable */
-    private $resultSelector;
-
-    public function __construct(callable $selector, callable $resultSelector = null)
-    {
-        $this->selector       = $selector;
-        $this->resultSelector = $resultSelector;
+    public function __construct(
+        private $selector,
+        private $resultSelector = null
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface

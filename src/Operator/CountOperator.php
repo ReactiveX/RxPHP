@@ -11,18 +11,16 @@ use Rx\ObserverInterface;
 
 final class CountOperator implements OperatorInterface
 {
-    private $count = 0;
-    private $predicate;
-
-    public function __construct(callable $predicate = null)
-    {
-        $this->predicate = $predicate;
+    public function __construct(
+        private readonly null|\Closure $predicate = null,
+        private int                    $count = 0
+    ) {
     }
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $callbackObserver = new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 if ($this->predicate === null) {
                     $this->count++;
 
@@ -37,8 +35,8 @@ final class CountOperator implements OperatorInterface
                     $observer->onError($e);
                 }
             },
-            [$observer, 'onError'],
-            function () use ($observer) {
+            fn ($err) => $observer->onError($err),
+            function () use ($observer): void {
                 $observer->onNext($this->count);
                 $observer->onCompleted();
             }

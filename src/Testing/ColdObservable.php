@@ -14,14 +14,11 @@ use Rx\ObserverInterface;
 
 class ColdObservable extends Observable
 {
-    private $scheduler;
-    private $messages;
-    private $subscriptions = [];
-
-    public function __construct(TestScheduler $scheduler, array $messages = [])
-    {
-        $this->scheduler = $scheduler;
-        $this->messages  = $messages;
+    public function __construct(
+        private readonly TestScheduler $scheduler,
+        private readonly array         $messages = [],
+        private array                  $subscriptions = []
+    ) {
     }
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
@@ -38,11 +35,9 @@ class ColdObservable extends Observable
             $notification = $message->getValue();
             $time         = $message->getTime();
 
-            $schedule = function (Notification $innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed) {
-                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function () use ($observer, $innerNotification, &$isDisposed) {
-                    if (!$isDisposed) {
-                        $innerNotification->accept($observer);
-                    }
+            $schedule = function (Notification $innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed): void {
+                $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function () use ($observer, $innerNotification, &$isDisposed): \Rx\Disposable\EmptyDisposable {
+                    $innerNotification->accept($observer);
                     return new EmptyDisposable();
                 }));
             };
@@ -52,7 +47,7 @@ class ColdObservable extends Observable
 
         $subscriptions = &$this->subscriptions;
 
-        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
+        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed): void {
             $isDisposed            = true;
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });

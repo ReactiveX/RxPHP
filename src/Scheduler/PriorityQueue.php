@@ -9,14 +9,14 @@ use SplPriorityQueue;
 
 class PriorityQueue
 {
-    private $queue;
+    private InternalPriorityQueue $queue;
 
     public function __construct()
     {
         $this->queue = new InternalPriorityQueue;
     }
 
-    public function enqueue(ScheduledItem $item)
+    public function enqueue(ScheduledItem $item): void
     {
         $this->queue->insert($item, $item);
     }
@@ -48,7 +48,7 @@ class PriorityQueue
         return $removed;
     }
 
-    public function count()
+    public function count(): int
     {
         return $this->queue->count();
     }
@@ -70,9 +70,9 @@ class PriorityQueue
 class InternalPriorityQueue extends SplPriorityQueue
 {
     // use this value to "stabilize" the priority queue
-    private $serial = PHP_INT_MAX;
+    private int $serial = PHP_INT_MAX;
 
-    public function insert($item, $priority)
+    public function insert($item, $priority): void
     {
         parent::insert($item, [$priority, $this->serial--]);
     }

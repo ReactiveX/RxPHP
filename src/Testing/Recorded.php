@@ -6,14 +6,11 @@ namespace Rx\Testing;
 
 class Recorded
 {
-    private $time;
-    private $value;
-    private $comparer;
-
-    public function __construct(int $time, $value, callable $comparer = null)
-    {
-        $this->time     = $time;
-        $this->value    = $value;
+    public function __construct(
+        private int $time,
+        private $value,
+        private null|\Closure $comparer = null
+    ) {
         $this->comparer = $comparer ?: function ($a, $b) {
             if (is_object($a) && method_exists($a, 'equals')) {
                 return $a->equals($b);
@@ -23,7 +20,7 @@ class Recorded
         };
     }
 
-    public function equals(Recorded $other)
+    public function equals(Recorded $other): bool
     {
         $comparer = $this->comparer;
 
@@ -31,7 +28,7 @@ class Recorded
             && $comparer($this->value, $other->value);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value . '@' . $this->time;
     }
