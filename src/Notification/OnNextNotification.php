@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Rx\Notification;
 
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Notification;
 
@@ -30,6 +31,11 @@ class OnNextNotification extends Notification
 
     public function __toString(): string
     {
+        if ($this->value instanceof Observable) {
+            $messages = materializeObservable($this->value);
+            return '[' . implode(', ', $messages) . ']';
+        }
+
         return 'OnNext(' . json_encode($this->value) . ')';
     }
 

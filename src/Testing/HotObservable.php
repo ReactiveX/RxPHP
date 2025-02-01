@@ -46,15 +46,12 @@ class HotObservable extends Observable
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-        $currentObservable = $this;
-
+        $currentObservable     = $this;
         $this->observers[]     = $observer;
+        $subscriptions         = &$this->subscriptions;
         $this->subscriptions[] = new Subscription($this->scheduler->getClock());
-
-        $subscriptions = &$this->subscriptions;
-
-        $index     = count($this->subscriptions) - 1;
-        $scheduler = $this->scheduler;
+        $index                 = count($this->subscriptions) - 1;
+        $scheduler             = $this->scheduler;
 
         return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
             $currentObservable->removeObserver($observer);

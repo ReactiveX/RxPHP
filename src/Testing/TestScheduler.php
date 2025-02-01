@@ -7,7 +7,6 @@ namespace Rx\Testing;
 use Rx\Disposable\EmptyDisposable;
 use Rx\DisposableInterface;
 use Rx\ObserverInterface;
-use Rx\Scheduler;
 use Rx\Scheduler\VirtualTimeScheduler;
 
 class TestScheduler extends VirtualTimeScheduler
