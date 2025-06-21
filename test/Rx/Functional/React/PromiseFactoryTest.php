@@ -23,10 +23,10 @@ class PromiseFactoryTest extends FunctionalTestCase
             return $source;
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(200, 42),
             onCompleted(200),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
@@ -42,7 +42,7 @@ class PromiseFactoryTest extends FunctionalTestCase
 
         $source->subscribe(
             [$this, 'fail'],
-            function ($err) use (&$theException) {
+            function ($err) use (&$theException): void {
                 $theException = $err;
             },
             [$this, 'fail'],
@@ -70,7 +70,7 @@ class PromiseFactoryTest extends FunctionalTestCase
 
         $source->subscribe(
             [$this, 'fail'],
-            function ($err) use (&$theException) {
+            function ($err) use (&$theException): void {
                 $theException = $err;
             },
             [$this, 'fail'],

@@ -92,7 +92,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -118,12 +118,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i) {
+                function ($x) use (&$i): void {
                     $i++;
 
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -163,7 +163,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
 
-                function ($e) use (&$sawError, $ex) {
+                function ($e) use (&$sawError, $ex): void {
                     $sawError = $e === $ex;
                 }
             ));
@@ -204,7 +204,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
 
-                function ($e) use (&$sawError, $ex) {
+                function ($e) use (&$sawError, $ex): void {
                     $sawError = $e === $ex;
                 }
             ));
@@ -238,14 +238,14 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i, &$sum) {
+                function ($x) use (&$i, &$sum): void {
                     $i++;
                     $sum -= $x;
                 },
-                function () use (&$sawError) {
+                function () use (&$sawError): void {
                     $sawError = true;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -281,14 +281,14 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i, &$sum) {
+                function ($x) use (&$i, &$sum): void {
                     $i++;
                     $sum -= $x;
                 },
-                function () use (&$sawError) {
+                function () use (&$sawError): void {
                     $sawError = true;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -318,13 +318,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed, &$sawError) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i, &$sum) {
+                function ($x) use (&$i, &$sum): void {
                     $i++;
                 },
-                function () use (&$sawError) {
+                function () use (&$sawError): void {
                     $sawError = true;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -350,7 +350,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->do(new CallbackObserver(function () use ($ex) {
+            return $xs->do(new CallbackObserver(function () use ($ex): void {
                 throw $ex;
             }));
         });
@@ -374,11 +374,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
                 null,
-                function () {
+                function (): void {
                 }));
         });
 
@@ -401,10 +401,10 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
                 null,
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 }));
         });
@@ -428,10 +428,10 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -455,9 +455,9 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
-                function () use ($ex2) {
+                function () use ($ex2): void {
                     throw $ex2;
                 }
             ));
@@ -483,12 +483,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
-                function () {
+                function (): void {
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -512,12 +512,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
-                function () use ($ex2) {
+                function () use ($ex2): void {
                     throw $ex2;
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -542,11 +542,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
 
-                function () {
+                function (): void {
                 },
-                function () {
+                function (): void {
                 },
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 }
             ));
@@ -572,12 +572,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
 
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
-                function () {
+                function (): void {
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -601,12 +601,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
-                function () use ($ex2) {
+                function () use ($ex2): void {
                     throw $ex2;
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -630,11 +630,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () { //noop
+                function (): void { //noop
                 },
-                function () { //noop
+                function (): void { //noop
                 },
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 }
             ));
@@ -697,7 +697,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -738,7 +738,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
 
-                function ($e) use (&$sawError, $ex) {
+                function ($e) use (&$sawError, $ex): void {
                     $sawError = $e === $ex;
                 }
             );

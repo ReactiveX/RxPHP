@@ -131,13 +131,13 @@ class IteratorObservableTest extends FunctionalTestCase
 
         $results1 = new MockObserver($this->scheduler);
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($generator, $results1) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($generator, $results1): void {
             Observable::fromIterator($generator, $this->scheduler)->subscribe($results1);
         });
 
         $results2 = new MockObserver($this->scheduler);
 
-        $this->scheduler->scheduleAbsolute(400, function () use ($generator, $results2) {
+        $this->scheduler->scheduleAbsolute(400, function () use ($generator, $results2): void {
             Observable::fromIterator($generator, $this->scheduler)->subscribe($results2);
         });
 
@@ -165,13 +165,13 @@ class IteratorObservableTest extends FunctionalTestCase
 
         $results1 = new MockObserver($this->scheduler);
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($generator, $results1) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($generator, $results1): void {
             Observable::fromIterator($generator, $this->scheduler)->subscribe($results1);
         });
 
         $results2 = new MockObserver($this->scheduler);
 
-        $this->scheduler->scheduleAbsolute(400, function () use ($generator, $results2) {
+        $this->scheduler->scheduleAbsolute(400, function () use ($generator, $results2): void {
             Observable::fromIterator($generator, $this->scheduler)->subscribe($results2);
         });
 

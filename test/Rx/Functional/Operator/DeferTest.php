@@ -108,7 +108,7 @@ class DeferTest extends FunctionalTestCase
         $invoked = 0;
 
         $results = $this->scheduler->startWithCreate(function () use (&$invoked) {
-            return Observable::defer(function () use (&$invoked) {
+            return Observable::defer(function () use (&$invoked): void {
                 $invoked++;
                 throw new \Exception('error');
             });
@@ -154,7 +154,7 @@ class DeferTest extends FunctionalTestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('I take exception');
         Observable::defer(function () {
-            return Observable::create(function (ObserverInterface $observer) {
+            return Observable::create(function (ObserverInterface $observer): void {
                 $observer->onError(new \Exception('I take exception'));
             });
         }, new ImmediateScheduler())->subscribe();
@@ -168,10 +168,10 @@ class DeferTest extends FunctionalTestCase
         $onErrorCalled = false;
 
         Observable::defer(function () {
-            return Observable::create(function (ObserverInterface $observer) {
+            return Observable::create(function (ObserverInterface $observer): void {
                 $observer->onError(new \Exception('I take exception'));
             });
-        }, new ImmediateScheduler())->subscribe(null, function (\Exception $e) use (&$onErrorCalled) {
+        }, new ImmediateScheduler())->subscribe(null, function (\Exception $e) use (&$onErrorCalled): void {
             $onErrorCalled = true;
             $this->assertEquals('I take exception', $e->getMessage());
         });

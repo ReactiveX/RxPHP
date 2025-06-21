@@ -23,13 +23,13 @@ class ConcatMapTest extends FunctionalTestCase
 
         $xs->concatMapTo($ys)
             ->subscribe(
-                function ($x) use (&$results) {
+                function ($x) use (&$results): void {
                     $results[] = $x;
                 },
-                function ($e) {
+                function ($e): void {
                     $this->fail();
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -52,14 +52,14 @@ class ConcatMapTest extends FunctionalTestCase
 
         $xs->concatMapTo($ys)
             ->subscribe(
-                function ($x) use (&$results) {
+                function ($x) use (&$results): void {
                     $results[] = $x;
                 },
-                function (\Exception $e) use (&$results, &$error) {
+                function (\Exception $e) use (&$results, &$error): void {
                     $error = true;
                     $this->assertSame('test', $e->getMessage());
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -87,13 +87,13 @@ class ConcatMapTest extends FunctionalTestCase
                 return $x + $y + $oi;
             })
             ->subscribe(
-                function ($x) use (&$results) {
+                function ($x) use (&$results): void {
                     $results[] = $x;
                 },
-                function ($e) {
+                function ($e): void {
                     $this->fail();
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -118,17 +118,17 @@ class ConcatMapTest extends FunctionalTestCase
             function ($x, $i) {
                 return Observable::of($x + $i);
             },
-            function ($x, $y, $i) use ($error) {
+            function ($x, $y, $i) use ($error): void {
                 throw $error;
             })
             ->subscribe(
-                function ($x) use (&$results) {
+                function ($x) use (&$results): void {
                     $results[] = $x;
                 },
-                function ($e) use (&$returnError) {
+                function ($e) use (&$returnError): void {
                     $returnError = $e;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -152,13 +152,13 @@ class ConcatMapTest extends FunctionalTestCase
             return Observable::of($x + $i);
         })
             ->subscribe(
-                function ($x) use (&$results) {
+                function ($x) use (&$results): void {
                     $results[] = $x;
                 },
-                function ($e) {
+                function ($e): void {
                     $this->fail('Should not get an error');
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -182,14 +182,14 @@ class ConcatMapTest extends FunctionalTestCase
             return Observable::error(new Exception((string)($x + $i)));
         })
             ->subscribe(
-                function ($x) use (&$results) {
+                function ($x) use (&$results): void {
                     $results[] = $x;
                 },
-                function (\Exception $e) use (&$results, &$error) {
+                function (\Exception $e) use (&$results, &$error): void {
                     $error = true;
                     $this->assertEquals(4, $e->getMessage());
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );

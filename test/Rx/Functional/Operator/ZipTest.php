@@ -429,7 +429,7 @@ class ZipTest extends FunctionalTestCase
         $result = null;
 
         $source->toArray()->subscribe(new CallbackObserver(
-            function ($x) use (&$result) {
+            function ($x) use (&$result): void {
                 $result = $x;
             }
         ));
@@ -446,7 +446,7 @@ class ZipTest extends FunctionalTestCase
         $result = null;
 
         $source->count()->subscribe(new CallbackObserver(
-            function ($x) use (&$result) {
+            function ($x) use (&$result): void {
                 $result = $x;
             }
         ));

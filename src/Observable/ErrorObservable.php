@@ -22,7 +22,7 @@ class ErrorObservable extends Observable
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-        return $this->scheduler->schedule(function () use ($observer) {
+        return $this->scheduler->schedule(function () use ($observer): void {
             $observer->onError($this->error);
         });
     }

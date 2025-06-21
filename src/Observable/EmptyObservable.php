@@ -20,7 +20,7 @@ class EmptyObservable extends Observable
 
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
-        return $this->scheduler->schedule(function () use ($observer) {
+        return $this->scheduler->schedule(function () use ($observer): void {
             $observer->onCompleted();
         });
     }

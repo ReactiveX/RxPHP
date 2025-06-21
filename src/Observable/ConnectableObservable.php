@@ -54,7 +54,7 @@ class ConnectableObservable extends Observable
 
         $this->hasSubscription = true;
 
-        $connectableDisposable = new CallbackDisposable(function () {
+        $connectableDisposable = new CallbackDisposable(function (): void {
             $this->hasSubscription = false;
         });
 

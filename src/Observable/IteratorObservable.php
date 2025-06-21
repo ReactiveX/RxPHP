@@ -25,7 +25,7 @@ class IteratorObservable extends Observable
     {
         $key = 0;
 
-        $action = function ($reschedule) use (&$observer, &$key) {
+        $action = function ($reschedule) use (&$observer, &$key): void {
             try {
                 if (null === $key || !$this->items->valid()) {
 

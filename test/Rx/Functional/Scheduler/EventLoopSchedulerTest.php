@@ -22,13 +22,13 @@ class EventLoopSchedulerTest extends FunctionalTestCase
         Observable::interval(50, new EventLoopScheduler($loop))
             ->take(1)
             ->subscribe(new CallbackObserver(
-                function ($x) use (&$nextCount) {
+                function ($x) use (&$nextCount): void {
                     $nextCount++;
                 },
-                function ($err) {
+                function ($err): void {
                     throw $err;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));

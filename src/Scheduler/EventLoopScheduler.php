@@ -29,7 +29,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
         $this->delayCallback = $timerCallableOrLoop instanceof LoopInterface ?
             function ($ms, $callable) use ($timerCallableOrLoop) {
                 $timer = $timerCallableOrLoop->addTimer($ms / 1000, $callable);
-                return new CallbackDisposable(function () use ($timer, $timerCallableOrLoop) {
+                return new CallbackDisposable(function () use ($timer, $timerCallableOrLoop): void {
                     $timerCallableOrLoop->cancelTimer($timer);
                 });
             } :
@@ -56,7 +56,7 @@ final class EventLoopScheduler extends VirtualTimeScheduler
     {
         $disp = new CompositeDisposable([
             parent::scheduleAbsoluteWithState($state, $dueTime, $action),
-            new CallbackDisposable(function () use ($dueTime) {
+            new CallbackDisposable(function () use ($dueTime): void {
                 if ($dueTime > $this->nextTimer) {
                     return;
                 }

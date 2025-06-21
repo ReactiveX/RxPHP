@@ -40,7 +40,7 @@ class ConcatAllTest extends FunctionalTestCase
      */
     public function concatAll_errors_when_exception_during_inner_subscribe()
     {
-        $o1 = Observable::create(function () {
+        $o1 = Observable::create(function (): void {
             throw new \Exception("Exception in inner subscribe");
         });
 

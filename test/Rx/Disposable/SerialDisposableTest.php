@@ -15,7 +15,7 @@ class SerialDisposableTest extends TestCase
     public function it_disposes_the_assigned_disposable()
     {
         $disposed1  = false;
-        $d1         = new CallbackDisposable(function () use (&$disposed1) {
+        $d1         = new CallbackDisposable(function () use (&$disposed1): void {
             $disposed1 = true;
         });
         $disposable = new SerialDisposable();
@@ -35,7 +35,7 @@ class SerialDisposableTest extends TestCase
     public function it_disposes_the_assigned_disposable_on_reassignment()
     {
         $disposed1  = false;
-        $d1         = new CallbackDisposable(function () use (&$disposed1) { $disposed1 = true; });
+        $d1         = new CallbackDisposable(function () use (&$disposed1): void { $disposed1 = true; });
         $d2         = new EmptyDisposable();
         $disposable = new SerialDisposable();
 
@@ -56,7 +56,7 @@ class SerialDisposableTest extends TestCase
     public function it_unsets_the_disposable_on_dispose()
     {
         $disposed1  = false;
-        $d1         = new CallbackDisposable(function () use (&$disposed1) {
+        $d1         = new CallbackDisposable(function () use (&$disposed1): void {
             $disposed1 = true;
         });
         $disposable = new SerialDisposable();
@@ -79,8 +79,8 @@ class SerialDisposableTest extends TestCase
     {
         $disposed1  = false;
         $disposed2  = false;
-        $d1         = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
-        $d2         = new CallbackDisposable(function() use (&$disposed2){ $disposed2 = true; });
+        $d1         = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
+        $d2         = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2 = true; });
         $disposable = new SerialDisposable();
 
         $disposable->setDisposable($d1);

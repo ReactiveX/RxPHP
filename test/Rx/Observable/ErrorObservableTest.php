@@ -18,12 +18,12 @@ class ErrorObservableTest extends TestCase
 
         $recordedException = null;
         $observable->subscribe(
-            function () {
+            function (): void {
             },
-            function ($ex) use (&$recordedException) {
+            function ($ex) use (&$recordedException): void {
                 $recordedException = $ex;
             },
-            function () {
+            function (): void {
             }
         );
 

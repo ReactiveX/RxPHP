@@ -235,7 +235,7 @@ class ReduceTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->reduce(function () {
+            return $xs->reduce(function (): void {
                 throw new \Exception();
             });
         });
@@ -257,7 +257,7 @@ class ReduceTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->reduce(function () {
+            return $xs->reduce(function (): void {
                 throw new \Exception();
             }, 42);
         });

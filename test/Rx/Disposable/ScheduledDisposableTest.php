@@ -17,7 +17,7 @@ class ScheduledDisposableTest extends TestCase
     {
         $disposed1 = false;
 
-        $d1 = new CallbackDisposable(function () use (&$disposed1) {
+        $d1 = new CallbackDisposable(function () use (&$disposed1): void {
             $disposed1 = true;
         });
 
@@ -43,7 +43,7 @@ class ScheduledDisposableTest extends TestCase
     {
         $disposed1 = 0;
 
-        $d1 = new CallbackDisposable(function () use (&$disposed1) {
+        $d1 = new CallbackDisposable(function () use (&$disposed1): void {
             $disposed1++;
         });
 

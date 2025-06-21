@@ -880,7 +880,7 @@ class CombineLatestTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->combineLatest([$e2], function () {
+            return $e1->combineLatest([$e2], function (): void {
                 throw new \Exception();
             });
         });

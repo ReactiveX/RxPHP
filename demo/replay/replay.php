@@ -6,7 +6,7 @@ $interval = \Rx\Observable::interval(1000);
 
 $source = $interval
     ->take(2)
-    ->doOnNext(function ($x) {
+    ->doOnNext(function ($x): void {
         echo $x, ' something', PHP_EOL;
         echo 'Side effect', PHP_EOL;
     });

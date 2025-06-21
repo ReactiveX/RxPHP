@@ -28,7 +28,7 @@ final class ScanOperator implements OperatorInterface
         $accumulation    = $this->seed;
         $hasSeed         = $this->seed !== null;
         $cbObserver      = new CallbackObserver(
-            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue) {
+            function ($x) use ($observer, &$hasAccumulation, &$accumulation, &$hasSeed, &$hasValue): void {
                 $hasValue = true;
                 if ($hasAccumulation) {
                     $accumulation = ($this->tryCatch($this->accumulator))($accumulation, $x);
@@ -43,7 +43,7 @@ final class ScanOperator implements OperatorInterface
                 $observer->onNext($accumulation);
             },
             [$observer, 'onError'],
-            function () use ($observer, &$hasValue, &$hasSeed) {
+            function () use ($observer, &$hasValue, &$hasSeed): void {
                 if (!$hasValue && $hasSeed) {
                     $observer->onNext($this->seed);
                 }

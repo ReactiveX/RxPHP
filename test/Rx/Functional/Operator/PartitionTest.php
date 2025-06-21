@@ -33,16 +33,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });
@@ -79,16 +79,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });
@@ -138,16 +138,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });
@@ -200,16 +200,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });
@@ -263,16 +263,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });
@@ -327,16 +327,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });
@@ -389,16 +389,16 @@ class PartitionTest extends FunctionalTestCase
         $r1 = $this->scheduler->createObserver();
         $r2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$observables, $xs): void {
             $observables = $xs->partition([$this, 'isEven']);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::SUBSCRIBED, function () use (&$observables, &$s1, &$s2, $r1, $r2): void {
             $s1 = $observables[0]->subscribe($r1);
             $s2 = $observables[1]->subscribe($r2);
         });
 
-        $this->scheduler->scheduleAbsolute(280, function () use (&$s1, &$s2) {
+        $this->scheduler->scheduleAbsolute(280, function () use (&$s1, &$s2): void {
             $s1->dispose();
             $s2->dispose();
         });

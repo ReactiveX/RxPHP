@@ -23,13 +23,13 @@ class FromPromiseTest extends FunctionalTestCase
         $source = Observable::fromPromise($p);
 
         $source->subscribe(
-            function ($x) {
+            function ($x): void {
                 $this->assertEquals(42, $x);
             },
-            function ($error) {
+            function ($error): void {
                 $this->assertFalse(true);
             },
-            function () {
+            function (): void {
                 $this->assertTrue(true);
             });
     }
@@ -45,13 +45,13 @@ class FromPromiseTest extends FunctionalTestCase
         $source = Observable::fromPromise($p);
 
         $source->subscribe(
-            function ($x) {
+            function ($x): void {
                 $this->assertFalse(true);
             },
-            function (Exception $error) {
+            function (Exception $error): void {
                 $this->assertInstanceOf(RejectedPromiseException::class, $error);
             },
-            function () {
+            function (): void {
                 $this->assertFalse(true);
             });
     }

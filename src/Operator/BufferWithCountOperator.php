@@ -49,7 +49,7 @@ final class BufferWithCountOperator implements OperatorInterface
         $currentGroups = [];
 
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use (&$currentGroups, $observer) {
+            function ($x) use (&$currentGroups, $observer): void {
                 if ($this->index % $this->skip === 0) {
                     $currentGroups[] = [];
                 }
@@ -63,10 +63,10 @@ final class BufferWithCountOperator implements OperatorInterface
                     }
                 }
             },
-            function ($err) use ($observer) {
+            function ($err) use ($observer): void {
                 $observer->onError($err);
             },
-            function () use (&$currentGroups, $observer) {
+            function () use (&$currentGroups, $observer): void {
                 foreach ($currentGroups as &$group) {
                     $observer->onNext($group);
                 }

@@ -105,7 +105,7 @@ class RaceTest extends FunctionalTestCase
             onNext(150, 1),
             onNext(220, 2),
             onError(230, $error)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -148,7 +148,7 @@ class RaceTest extends FunctionalTestCase
             onNext(150, 1),
             onNext(220, 3),
             onCompleted(250)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 

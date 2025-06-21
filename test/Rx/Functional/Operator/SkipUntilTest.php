@@ -250,7 +250,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
 
         $r = new AnonymousObservable(function () use (&$disposed) {
-            return new CallbackDisposable(function () use (&$disposed) {
+            return new CallbackDisposable(function () use (&$disposed): void {
                 $disposed = true;
             });
         });
@@ -276,14 +276,14 @@ class SkipUntilTest extends FunctionalTestCase
         Observable::of(1)
             ->skipUntil(Observable::of(1))
             ->subscribe(
-                function ($x) use (&$emitted) {
+                function ($x) use (&$emitted): void {
                     if ($emitted !== null) {
                         $this->fail('emitted should be null');
                     }
                     $emitted = $x;
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );

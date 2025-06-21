@@ -50,7 +50,7 @@ class DoOnNextTest extends FunctionalTestCase
         $messages = [];
         
         $xs
-            ->doOnNext(function ($x) use (&$messages) {
+            ->doOnNext(function ($x) use (&$messages): void {
                 $messages[] = onNext($this->scheduler->getClock(), $x);
             })
             ->repeat(2)

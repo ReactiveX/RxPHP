@@ -1059,7 +1059,7 @@ class WithLatestFromTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->withLatestFrom([$e2], function () {
+            return $e1->withLatestFrom([$e2], function (): void {
                 throw new \Exception();
             });
         });

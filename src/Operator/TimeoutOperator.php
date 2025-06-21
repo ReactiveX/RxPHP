@@ -42,7 +42,7 @@ final class TimeoutOperator implements OperatorInterface
 
         $sourceDisposable = new EmptyDisposable();
 
-        $doTimeout = function () use ($observer, $disposable, &$sourceDisposable) {
+        $doTimeout = function () use ($observer, $disposable, &$sourceDisposable): void {
             $disposable->remove($sourceDisposable);
             $sourceDisposable->dispose();
             $disposable->add($this->timeoutObservable->subscribe($observer));
@@ -51,7 +51,7 @@ final class TimeoutOperator implements OperatorInterface
         $doTimeoutDisposable = $this->scheduler->schedule($doTimeout, $this->timeout);
         $disposable->add($doTimeoutDisposable);
 
-        $rescheduleTimeout = function () use ($disposable, &$doTimeoutDisposable, $doTimeout) {
+        $rescheduleTimeout = function () use ($disposable, &$doTimeoutDisposable, $doTimeout): void {
             $disposable->remove($doTimeoutDisposable);
             $doTimeoutDisposable->dispose();
 
@@ -60,15 +60,15 @@ final class TimeoutOperator implements OperatorInterface
         };
 
         $sourceDisposable = $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer, $rescheduleTimeout) {
+            function ($x) use ($observer, $rescheduleTimeout): void {
                 $rescheduleTimeout();
                 $observer->onNext($x);
             },
-            function ($err) use ($observer, $rescheduleTimeout) {
+            function ($err) use ($observer, $rescheduleTimeout): void {
                 $rescheduleTimeout();
                 $observer->onError($err);
             },
-            function () use ($observer, $rescheduleTimeout) {
+            function () use ($observer, $rescheduleTimeout): void {
                 $rescheduleTimeout();
                 $observer->onCompleted();
             }

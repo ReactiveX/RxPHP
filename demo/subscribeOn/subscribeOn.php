@@ -10,7 +10,7 @@ use Rx\Scheduler\EventLoopScheduler;
 $loop = Factory::create();
 
 $observable = Rx\Observable::create(function (ObserverInterface $observer) use ($loop) {
-    $handler = function () use ($observer) {
+    $handler = function () use ($observer): void {
         $observer->onNext(42);
         $observer->onCompleted();
     };
@@ -18,7 +18,7 @@ $observable = Rx\Observable::create(function (ObserverInterface $observer) use (
     // Change scheduler for here
     $timer = $loop->addTimer(0.001, $handler);
 
-    return new CallbackDisposable(function () use ($loop, $timer) {
+    return new CallbackDisposable(function () use ($loop, $timer): void {
         // And change scheduler for here
         if ($timer) {
             $loop->cancelTimer($timer);

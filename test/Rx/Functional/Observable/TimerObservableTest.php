@@ -109,22 +109,22 @@ class TimerObservableTest extends FunctionalTestCase
         $scheduler1 = new TestScheduler();
 
         $xs = Observable::timer(1, $scheduler1);
-        $xs->subscribe(function () {
+        $xs->subscribe(function (): void {
             throw new \Exception();
         });
 
-        $this->assertException(function () use ($scheduler1) {
+        $this->assertException(function () use ($scheduler1): void {
             $scheduler1->start();
         });
 
         $scheduler2 = new TestScheduler();
 
         $ys = Observable::timer(1, $scheduler2);
-        $ys->subscribe(null, null, function () {
+        $ys->subscribe(null, null, function (): void {
             throw new \Exception();
         });
 
-        $this->assertException(function () use ($scheduler2) {
+        $this->assertException(function () use ($scheduler2): void {
             $scheduler2->start();
         });
     }

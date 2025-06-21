@@ -15,7 +15,7 @@ class CallbackObserverTest extends TestCase
     public function it_calls_the_given_callable_on_next()
     {
         $called = false;
-        $observer = new CallbackObserver(function() use (&$called) { $called = true; });
+        $observer = new CallbackObserver(function() use (&$called): void { $called = true; });
 
         $observer->onNext(42);
         $this->assertTrue($called);
@@ -27,7 +27,7 @@ class CallbackObserverTest extends TestCase
     public function it_calls_the_given_callable_on_error()
     {
         $called = false;
-        $observer = new CallbackObserver(function(){}, function() use (&$called) { $called = true; });
+        $observer = new CallbackObserver(function(): void{}, function() use (&$called): void { $called = true; });
 
         $observer->onError(new Exception());
         $this->assertTrue($called);
@@ -39,7 +39,7 @@ class CallbackObserverTest extends TestCase
     public function it_calls_the_given_callable_on_complete()
     {
         $called = false;
-        $observer = new CallbackObserver(function(){}, function(){}, function() use (&$called) { $called = true; });
+        $observer = new CallbackObserver(function(): void{}, function(): void{}, function() use (&$called): void { $called = true; });
 
         $observer->onCompleted();
         $this->assertTrue($called);
@@ -62,7 +62,7 @@ class CallbackObserverTest extends TestCase
     public function it_calls_on_next_with_the_given_value()
     {
         $called = null;
-        $observer = new CallbackObserver(function($value) use (&$called) { $called = $value; });
+        $observer = new CallbackObserver(function($value) use (&$called): void { $called = $value; });
 
         $observer->onNext(42);
 
@@ -75,9 +75,9 @@ class CallbackObserverTest extends TestCase
     public function it_does_not_call_on_next_after_an_error()
     {
         $called = false;
-        $record = function() use (&$called) { $called = true; };
+        $record = function() use (&$called): void { $called = true; };
 
-        $observer = new CallbackObserver($record, function(){});
+        $observer = new CallbackObserver($record, function(): void{});
         $observer->onError(new Exception());
 
         $called = false;
@@ -92,9 +92,9 @@ class CallbackObserverTest extends TestCase
     public function it_does_not_call_on_completed_after_an_error()
     {
         $called = false;
-        $record = function() use (&$called) { $called = true; };
+        $record = function() use (&$called): void { $called = true; };
 
-        $observer = new CallbackObserver(function(){}, function(){}, $record);
+        $observer = new CallbackObserver(function(): void{}, function(): void{}, $record);
         $observer->onError(new Exception());
 
         $called = false;
@@ -109,9 +109,9 @@ class CallbackObserverTest extends TestCase
     public function it_does_not_call_on_error_after_an_error()
     {
         $called = false;
-        $record = function() use (&$called) { $called = true; };
+        $record = function() use (&$called): void { $called = true; };
 
-        $observer = new CallbackObserver(function(){}, $record);
+        $observer = new CallbackObserver(function(): void{}, $record);
         $observer->onError(new Exception());
 
         $called = false;
@@ -126,9 +126,9 @@ class CallbackObserverTest extends TestCase
     public function it_does_not_call_on_next_after_completion()
     {
         $called = false;
-        $record = function() use (&$called) { $called = true; };
+        $record = function() use (&$called): void { $called = true; };
 
-        $observer = new CallbackObserver($record, function(){});
+        $observer = new CallbackObserver($record, function(): void{});
         $observer->onCompleted();
 
         $called = false;
@@ -143,9 +143,9 @@ class CallbackObserverTest extends TestCase
     public function it_does_not_call_on_completed_after_completion()
     {
         $called = false;
-        $record = function() use (&$called) { $called = true; };
+        $record = function() use (&$called): void { $called = true; };
 
-        $observer = new CallbackObserver(function(){}, function(){}, $record);
+        $observer = new CallbackObserver(function(): void{}, function(): void{}, $record);
         $observer->onCompleted();
 
         $called = false;
@@ -160,9 +160,9 @@ class CallbackObserverTest extends TestCase
     public function it_does_not_call_on_error_after_completion()
     {
         $called = false;
-        $record = function() use (&$called) { $called = true; };
+        $record = function() use (&$called): void { $called = true; };
 
-        $observer = new CallbackObserver(function(){}, $record);
+        $observer = new CallbackObserver(function(): void{}, $record);
         $observer->onCompleted();
 
         $called = false;

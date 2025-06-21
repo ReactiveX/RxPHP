@@ -43,11 +43,11 @@ class ForkJoinObservable extends Observable
 
         foreach ($this->observables as $i => $observable) {
             $innerDisp = $observable->subscribe(
-                function ($v) use ($i) {
+                function ($v) use ($i): void {
                     $this->values[$i] = $v;
                 },
                 [$autoObs, 'onError'],
-                function () use ($len, $i, $autoObs) {
+                function () use ($len, $i, $autoObs): void {
                     $this->completed++;
 
                     if (!array_key_exists($i, $this->values)) {

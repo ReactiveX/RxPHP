@@ -27,18 +27,18 @@ class SingleInstanceTest extends FunctionalTestCase
         $results2 = $this->scheduler->createObserver();
         $disposable = null;
 
-        $this->scheduler->scheduleAbsolute($this->scheduler::CREATED, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute($this->scheduler::CREATED, function () use (&$ys, $xs): void {
             $ys = $xs->singleInstance();
         });
 
-        $this->scheduler->scheduleAbsolute($this->scheduler::SUBSCRIBED, function () use (&$ys, &$disposable, $results1, $results2) {
+        $this->scheduler->scheduleAbsolute($this->scheduler::SUBSCRIBED, function () use (&$ys, &$disposable, $results1, $results2): void {
             $disposable = new CompositeDisposable([
                 $ys->subscribe($results1),
                 $ys->subscribe($results2)
             ]);
         });
 
-        $this->scheduler->scheduleAbsolute($this->scheduler::DISPOSED, function () use (&$disposable) {
+        $this->scheduler->scheduleAbsolute($this->scheduler::DISPOSED, function () use (&$disposable): void {
             $disposable->dispose();
         });
 
@@ -80,19 +80,19 @@ class SingleInstanceTest extends FunctionalTestCase
         $results2 = $this->scheduler->createObserver();
         $disposable = new SerialDisposable();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->singleInstance();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $disposable, $results1) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $disposable, $results1): void {
             $disposable->setDisposable($ys->subscribe($results1));
         });
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$ys, $disposable, $results2) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$ys, $disposable, $results2): void {
             $disposable->setDisposable($ys->subscribe($results2));
         });
 
-        $this->scheduler->scheduleAbsolute(900, function () use (&$disposable) {
+        $this->scheduler->scheduleAbsolute(900, function () use (&$disposable): void {
             $disposable->dispose();
         });
 

@@ -226,7 +226,7 @@ class FlatMapLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ys) {
-            return $xs->flatMapLatest(function () use ($ys) {
+            return $xs->flatMapLatest(function () use ($ys): void {
                 throw new \Exception('error');
             });
         });

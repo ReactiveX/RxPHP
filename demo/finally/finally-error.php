@@ -9,7 +9,7 @@ Rx\Observable::range(1, 3)
         }
         return $value;
     })
-    ->finally(function() {
+    ->finally(function(): void {
         echo "Finally\n";
     })
     ->subscribe($stdoutObserver);

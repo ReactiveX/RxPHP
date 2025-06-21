@@ -26,7 +26,7 @@ class ImmediateSchedulerTest extends TestCase
         $this->expectException(\Exception::class);
         $scheduler = new ImmediateScheduler();
 
-        $scheduler->schedule(function () {
+        $scheduler->schedule(function (): void {
             $this->fail("This should never get called");
         }, 1);
     }
@@ -40,7 +40,7 @@ class ImmediateSchedulerTest extends TestCase
         $this->expectExceptionMessage('ImmediateScheduler does not support a non-zero delay.');
         $scheduler = new ImmediateScheduler();
 
-        $scheduler->schedulePeriodic(function () {
+        $scheduler->schedulePeriodic(function (): void {
             $this->fail("This should never get called");
         }, 1, 1);
     }

@@ -22,9 +22,9 @@ class ObservableTest extends FunctionalTestCase
 
         $disposable = null;
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($xs, $results, &$disposable) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($xs, $results, &$disposable): void {
             $disposable = $xs->subscribe(
-                function ($value) use ($results) {
+                function ($value) use ($results): void {
                     if ($value === 3) {
                         throw new TestException();
                     }
@@ -35,7 +35,7 @@ class ObservableTest extends FunctionalTestCase
             );
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$disposable) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$disposable): void {
             $disposable->dispose();
         });
 

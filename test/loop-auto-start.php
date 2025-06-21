@@ -11,6 +11,6 @@ Scheduler::setAsyncFactory(function () use ($scheduler) {
     return $scheduler;
 });
 
-register_shutdown_function(function () use ($loop) {
+register_shutdown_function(function () use ($loop): void {
     $loop->run();
 });

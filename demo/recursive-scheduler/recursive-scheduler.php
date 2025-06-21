@@ -18,7 +18,7 @@ class RecursiveReturnObservable extends Observable
 
     public function _subscribe(\Rx\ObserverInterface $observer): \Rx\DisposableInterface
     {
-        return \Rx\Scheduler::getDefault()->scheduleRecursive(function ($reschedule) use ($observer) {
+        return \Rx\Scheduler::getDefault()->scheduleRecursive(function ($reschedule) use ($observer): void {
             $observer->onNext($this->value);
             $reschedule();
         });
@@ -31,14 +31,14 @@ $observable->subscribe($stdoutObserver);
 $observable = new RecursiveReturnObservable(21);
 $disposable = $observable->subscribe($stdoutObserver);
 
-Loop::repeat(100, function () {
+Loop::repeat(100, function (): void {
     $memory    = memory_get_usage() / 1024;
     $formatted = number_format($memory, 3) . 'K';
     echo "Current memory usage: {$formatted}\n";
 });
 
 // after a second we'll dispose the 21 observable
-Loop::delay(1000, function () use ($disposable) {
+Loop::delay(1000, function () use ($disposable): void {
     echo "Disposing 21 observable.\n";
     $disposable->dispose();
 });

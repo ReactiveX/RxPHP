@@ -17,7 +17,7 @@ class ScheduledObserverTest extends TestCase
     {
         $called    = false;
         $scheduler = new TestScheduler();
-        $observer  = new CallbackObserver(function () use (&$called) {
+        $observer  = new CallbackObserver(function () use (&$called): void {
             $called = true;
         });
 
@@ -44,9 +44,9 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             });
 
@@ -73,11 +73,11 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             });
 
@@ -105,10 +105,10 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -143,11 +143,11 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             }
         );
@@ -183,12 +183,12 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -225,12 +225,12 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -267,11 +267,11 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             }
         );
@@ -309,12 +309,12 @@ class ScheduledObserverTest extends TestCase
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -355,7 +355,7 @@ class ScheduledObserverTest extends TestCase
         $scheduledObserver = new ScheduledObserver(
             $scheduler,
             new CallbackObserver(
-                function ($x) {
+                function ($x): void {
                     throw new Exception("onNext($x) exception");
                 }
             )

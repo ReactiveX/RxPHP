@@ -9,7 +9,7 @@ $source = Rx\Observable::of(42)
                 return $acc + $x;
             }, 0)
             ->delay(1000)
-            ->doOnNext(function () {
+            ->doOnNext(function (): void {
                 echo "1 second delay", PHP_EOL;
             })
             ->takeWhile(function ($count) {

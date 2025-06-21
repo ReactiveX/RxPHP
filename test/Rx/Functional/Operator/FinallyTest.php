@@ -18,7 +18,7 @@ class FinallyCallTest extends FunctionalTestCase
         $completed = false;
 
         Observable::fromArray([1, 2, 3])
-            ->finally(function() use (&$completed) {
+            ->finally(function() use (&$completed): void {
                 $completed = true;
             })
             ->subscribe(new CallbackObserver());
@@ -40,10 +40,10 @@ class FinallyCallTest extends FunctionalTestCase
                 }
                 return $value;
             })
-            ->finally(function() use (&$thrown) {
+            ->finally(function() use (&$thrown): void {
                 $thrown = true;
             })
-            ->subscribe(new CallbackObserver(null, function() {})); // Ignore the default error handler
+            ->subscribe(new CallbackObserver(null, function(): void {})); // Ignore the default error handler
 
         $this->assertTrue($thrown);
     }
@@ -55,10 +55,10 @@ class FinallyCallTest extends FunctionalTestCase
     {
         $disposed = false;
 
-        Observable::create(function(ObserverInterface $obs) {
+        Observable::create(function(ObserverInterface $obs): void {
                 $obs->onNext(1);
             })
-            ->finally(function() use (&$disposed) {
+            ->finally(function() use (&$disposed): void {
                 $disposed = true;
             })
             ->subscribe(new CallbackObserver())
@@ -74,10 +74,10 @@ class FinallyCallTest extends FunctionalTestCase
     {
         $disposed = false;
 
-        Observable::create(function(ObserverInterface $obs) {
+        Observable::create(function(ObserverInterface $obs): void {
                 $obs->onNext(1);
             })
-            ->finally(function() use (&$disposed) {
+            ->finally(function() use (&$disposed): void {
                 $disposed = true;
             })
             ->share()
@@ -95,10 +95,10 @@ class FinallyCallTest extends FunctionalTestCase
         $invoked = 0;
 
         Observable::fromArray([1, 2, 3])
-            ->finally(function() use (&$invoked) {
+            ->finally(function() use (&$invoked): void {
                 $invoked++;
             })
-            ->finally(function() use (&$invoked) {
+            ->finally(function() use (&$invoked): void {
                 $invoked++;
             })
             ->share()
@@ -119,7 +119,7 @@ class FinallyCallTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         });
@@ -145,7 +145,7 @@ class FinallyCallTest extends FunctionalTestCase
         $xs = $this->createHotObservable([ ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         });
@@ -173,7 +173,7 @@ class FinallyCallTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         });
@@ -204,7 +204,7 @@ class FinallyCallTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         });
@@ -238,7 +238,7 @@ class FinallyCallTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         });
@@ -274,7 +274,7 @@ class FinallyCallTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         });
@@ -307,7 +307,7 @@ class FinallyCallTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function() use ($xs, &$executed) {
-            return $xs->finally(function() use (&$executed) {
+            return $xs->finally(function() use (&$executed): void {
                 $executed = true;
             });
         }, 450);

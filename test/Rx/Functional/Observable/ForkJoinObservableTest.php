@@ -480,7 +480,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(230),
         ]);
 
-        $xs = Observable::forkJoin([$e0], function () use ($error) {
+        $xs = Observable::forkJoin([$e0], function () use ($error): void {
             throw $error;
         });
 

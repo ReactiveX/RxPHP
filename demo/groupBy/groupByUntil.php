@@ -34,17 +34,17 @@ $source = Rx\Observable
         });
 
 $subscription = $source->subscribe(new CallbackObserver(
-    function (\Rx\Observable $obs) {
+    function (\Rx\Observable $obs): void {
         // Print the count
         $obs->count()->subscribe(new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 echo 'Count: ', $x, PHP_EOL;
             }));
     },
-    function (Throwable $err) {
+    function (Throwable $err): void {
         echo 'Error', $err->getMessage(), PHP_EOL;
     },
-    function () {
+    function (): void {
         echo 'Completed', PHP_EOL;
     }));
 

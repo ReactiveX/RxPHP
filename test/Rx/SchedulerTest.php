@@ -142,7 +142,7 @@ class SchedulerTest extends TestCase
 
     public function testGetAsyncAfterSettingDefaultToAsync()
     {
-        $asyncScheduler = new EventLoopScheduler(function () {
+        $asyncScheduler = new EventLoopScheduler(function (): void {
         });
 
         Scheduler::setDefaultFactory(function () use ($asyncScheduler) {

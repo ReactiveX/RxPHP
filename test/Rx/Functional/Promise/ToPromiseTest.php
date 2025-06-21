@@ -20,7 +20,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $result = null;
 
-        $promise->then(function ($value) use (&$result) {
+        $promise->then(function ($value) use (&$result): void {
             $result = $value;
         });
 
@@ -38,9 +38,9 @@ class ToPromiseTest extends FunctionalTestCase
         $error = null;
 
         $promise->then(
-            function () {
+            function (): void {
             },
-            function ($ex) use (&$error) {
+            function ($ex) use (&$error): void {
                 $error = $ex;
             });
 
@@ -59,7 +59,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $result = null;
 
-        $promise2->then(function ($value) use (&$result) {
+        $promise2->then(function ($value) use (&$result): void {
             $result = $value;
         });
 
@@ -79,9 +79,9 @@ class ToPromiseTest extends FunctionalTestCase
         $error = null;
 
         $promise2->then(
-            function () {
+            function (): void {
             },
-            function (Exception $ex) use (&$error) {
+            function (Exception $ex) use (&$error): void {
                 $error = $ex;
             });
 
@@ -98,7 +98,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $promise = Observable::timer(1000)
             ->mapTo(42)
-            ->finally(function () use (&$disposed) {
+            ->finally(function () use (&$disposed): void {
                 $disposed = true;
             })
             ->toPromise();
@@ -107,7 +107,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $promise->cancel();
 
-        $promise->then(function ($value) use (&$result) {
+        $promise->then(function ($value) use (&$result): void {
             $result = $value;
         });
 

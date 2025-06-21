@@ -21,7 +21,7 @@ class SelectTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->select(function () {
+            return $xs->select(function (): void {
                 throw new Exception();
             });
         });
@@ -118,7 +118,7 @@ class SelectTest extends FunctionalTestCase
             })->subscribe($results)
         );
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use ($d) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use ($d): void {
             $d->dispose();
         });
 

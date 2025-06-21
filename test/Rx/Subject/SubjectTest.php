@@ -18,7 +18,7 @@ class SubjectTest extends TestCase
         $subject = new Subject();
         $subject->dispose();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $subject->subscribe($observer);
     }
 
@@ -31,7 +31,7 @@ class SubjectTest extends TestCase
 
         $this->assertFalse($subject->hasObservers());
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $subject->subscribe($observer);
         $this->assertTrue($subject->hasObservers());
     }
@@ -56,7 +56,7 @@ class SubjectTest extends TestCase
     {
         $subject = new Subject();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $subject->subscribe($observer);
         $this->assertTrue($subject->hasObservers());
 
@@ -71,7 +71,7 @@ class SubjectTest extends TestCase
     {
         $subject = new Subject();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $subject->subscribe($observer);
         $this->assertTrue($subject->hasObservers());
 
@@ -86,7 +86,7 @@ class SubjectTest extends TestCase
     {
         $subject = new Subject();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
 
         $this->assertFalse($subject->removeObserver($observer));
         $this->assertFalse($subject->hasObservers());
@@ -101,7 +101,7 @@ class SubjectTest extends TestCase
         $subject   = new Subject();
         $subject->onError($exception);
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $observer->expects($this->once())
             ->method('onError')
             ->with($this->equalTo($exception));
@@ -117,7 +117,7 @@ class SubjectTest extends TestCase
         $subject   = new Subject();
         $subject->onCompleted();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $observer->expects($this->once())
             ->method('onCompleted');
 
@@ -132,7 +132,7 @@ class SubjectTest extends TestCase
         $exception = new Exception('fail');
         $subject   = new Subject();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $observer->expects($this->once())
             ->method('onError')
             ->with($this->equalTo($exception));
@@ -149,7 +149,7 @@ class SubjectTest extends TestCase
     {
         $subject  = new Subject();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $observer->expects($this->once())
             ->method('onCompleted');
 
@@ -165,7 +165,7 @@ class SubjectTest extends TestCase
         $subject  = new Subject();
         $value    = 42;
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $observer->expects($this->once())
             ->method('onNext')
             ->with($this->equalTo($value));
@@ -181,7 +181,7 @@ class SubjectTest extends TestCase
     {
         $subject  = new Subject();
 
-        $observer = $this->createMock('Rx\ObserverInterface');
+        $observer = $this->createMock(\Rx\ObserverInterface::class);
         $observer->expects($this->once())
             ->method('onCompleted');
 

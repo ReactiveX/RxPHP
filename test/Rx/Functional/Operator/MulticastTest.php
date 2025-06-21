@@ -46,19 +46,19 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d1) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d1): void {
             $d1->dispose();
         });
 
@@ -105,20 +105,20 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d1) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d1): void {
             $d1->dispose();
         });
 
@@ -165,23 +165,23 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d2) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d2): void {
             $d2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
@@ -230,23 +230,23 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d2) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d2): void {
             $d2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
@@ -297,15 +297,15 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
@@ -349,15 +349,15 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 

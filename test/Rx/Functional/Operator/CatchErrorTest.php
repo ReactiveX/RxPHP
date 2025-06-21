@@ -346,7 +346,7 @@ class CatchErrorTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($o1, $error2) {
-            return $o1->catch(function () use ($error2) {
+            return $o1->catch(function () use ($error2): void {
                 throw $error2;
 
             });
@@ -523,7 +523,7 @@ class CatchErrorTest extends FunctionalTestCase
         $tracer = Observable::create(function () use (&$subscribes, &$unsubscribes) {
             ++$subscribes;
 
-            return new CallbackDisposable(function () use (&$unsubscribes) {
+            return new CallbackDisposable(function () use (&$unsubscribes): void {
                 ++$unsubscribes;
             });
         });

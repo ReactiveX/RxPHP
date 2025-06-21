@@ -300,7 +300,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->distinctUntilKeyChanged(function ($x) {
+            return $xs->distinctUntilKeyChanged(function ($x): void {
                 throw new \Exception('ex');
             });
         });
@@ -321,7 +321,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->distinctUntilChanged(function ($x, $y) {
+            return $xs->distinctUntilChanged(function ($x, $y): void {
                 throw new \Exception('ex');
             });
         });

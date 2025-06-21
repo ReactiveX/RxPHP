@@ -152,7 +152,7 @@ class ObservableTest extends TestCase
             ->setMethods(['catch'])
             ->getMockForAbstractClass();
 
-        $callable = function () {
+        $callable = function (): void {
 
         };
 
@@ -186,7 +186,7 @@ class ObservableTest extends TestCase
      */
     public function it_sends_throwables_in_onnext_to_onerror()
     {
-        $onNext = function ($x) {
+        $onNext = function ($x): void {
             throw new TestException();
         };
 
@@ -195,7 +195,7 @@ class ObservableTest extends TestCase
         Observable::of(0)
             ->subscribe(
                 $onNext,
-                function (\Throwable $e) use (&$error) {
+                function (\Throwable $e) use (&$error): void {
                     $error = $e;
                 }
             );

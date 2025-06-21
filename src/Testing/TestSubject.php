@@ -35,7 +35,7 @@ class TestSubject extends Subject
         $this->subscribeCount++;
         $this->observer = $observer;
 
-        return new CallbackDisposable(function () {
+        return new CallbackDisposable(function (): void {
             $this->dispose();
         });
 

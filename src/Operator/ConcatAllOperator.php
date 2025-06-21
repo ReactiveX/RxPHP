@@ -45,7 +45,7 @@ final class ConcatAllOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $subscription = $observable->subscribe(new CallbackObserver(
-            function (ObservableInterface $innerObservable) use ($observable, $observer) {
+            function (ObservableInterface $innerObservable) use ($observable, $observer): void {
                 try {
 
                     if ($this->startBuffering === true) {
@@ -53,7 +53,7 @@ final class ConcatAllOperator implements OperatorInterface
                         return;
                     }
 
-                    $onCompleted = function () use (&$subscribeToInner, $observer) {
+                    $onCompleted = function () use (&$subscribeToInner, $observer): void {
 
                         $this->disposable->remove($this->innerDisposable);
                         $this->innerDisposable->dispose();
@@ -73,7 +73,7 @@ final class ConcatAllOperator implements OperatorInterface
                         }
                     };
 
-                    $subscribeToInner = function ($observable) use ($observer, &$onCompleted) {
+                    $subscribeToInner = function ($observable) use ($observer, &$onCompleted): void {
                         $callbackObserver = new CallbackObserver(
                             [$observer, 'onNext'],
                             [$observer, 'onError'],
@@ -94,7 +94,7 @@ final class ConcatAllOperator implements OperatorInterface
                 }
             },
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer): void {
                 $this->sourceCompleted = true;
                 if ($this->innerCompleted === true) {
                     $observer->onCompleted();

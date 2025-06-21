@@ -26,7 +26,7 @@ class DoOnErrorTest extends FunctionalTestCase
         $error = null;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$called, &$error) {
-            return $xs->doOnError(function ($err) use (&$called, &$error) {
+            return $xs->doOnError(function ($err) use (&$called, &$error): void {
                 $called++;
                 $error = $err;
             });
@@ -49,11 +49,11 @@ class DoOnErrorTest extends FunctionalTestCase
         $messages = [];
 
         $xs
-            ->doOnError(function ($x) use (&$messages) {
+            ->doOnError(function ($x) use (&$messages): void {
                 $messages[] = onError($this->scheduler->getClock(), $x);
             })
             ->retry(2)
-            ->subscribe(null, function () {}, null, $this->scheduler);
+            ->subscribe(null, function (): void {}, null, $this->scheduler);
 
         $this->scheduler->start();
 

@@ -67,7 +67,7 @@ function get_replace_position($lines) {
             break;
         }
     }
-    return array($start, $end - $start + 1);
+    return [$start, $end - $start + 1];
 }
 
 function build_documentation($docs) {

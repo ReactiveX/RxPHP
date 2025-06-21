@@ -552,7 +552,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outer              = null;
         $outerSubscription  = null;
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use ($xs, &$outer) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use ($xs, &$outer): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -564,17 +564,17 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outer, &$outerSubscription, &$inners, &$results, &$innerSubscriptions) {
+            function () use (&$outer, &$outerSubscription, &$inners, &$results, &$innerSubscriptions): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     &$inners,
                     &$results
-                ) {
+                ): void {
                     $result = $this->scheduler->createObserver();
 
                     $inners[$group->getKey()]  = $group;
                     $results[$group->getKey()] = $result;
 
-                    $this->scheduler->scheduleRelativeWithState(null, 100, function () use ($group, $result) {
+                    $this->scheduler->scheduleRelativeWithState(null, 100, function () use ($group, $result): void {
                         $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
                     });
                 });
@@ -583,7 +583,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -651,7 +651,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $innerSubscriptions = [];
         $results            = [];
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use ($xs, &$outer) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use ($xs, &$outer): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -663,12 +663,12 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$results, &$innerSubscriptions, &$inners) {
+            function () use (&$outerSubscription, &$outer, &$results, &$innerSubscriptions, &$inners): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     &$inners,
                     &$results,
                     &$innerSubscriptions
-                ) {
+                ): void {
                     $result = $this->scheduler->createObserver();
 
                     $inners[$group->getKey()]  = $group;
@@ -681,7 +681,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -758,7 +758,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $innerSubscriptions = [];
         $results            = [];
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -770,13 +770,13 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$inners, &$results, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$outer, &$inners, &$results, &$innerSubscriptions): void {
                 $outerSubscription = $outer->subscribeCallback(
                     function (GroupedObservable $group) use (
                         &$inners,
                         &$results,
                         &$innerSubscriptions
-                    ) {
+                    ): void {
                         $result = $this->scheduler->createObserver();
 
                         $inners[$group->getKey()]  = $group;
@@ -785,12 +785,12 @@ class GroupByUntilTest extends FunctionalTestCase
                         $this->scheduler->scheduleRelativeWithState(
                             null,
                             100,
-                            function () use (&$innerSubscriptions, $group, $result) {
+                            function () use (&$innerSubscriptions, $group, $result): void {
                                 $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
                             }
                         );
                     },
-                    function () {
+                    function (): void {
                     }
                 );
             }
@@ -798,7 +798,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -866,7 +866,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outer              = null;
         $outerSubscription  = null;
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, &$xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, &$xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -878,12 +878,12 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$innerSubscriptions, &$results, &$inners) {
+            function () use (&$outerSubscription, &$outer, &$innerSubscriptions, &$results, &$inners): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     &$inners,
                     &$results,
                     &$innerSubscriptions
-                ) {
+                ): void {
                     $result = $this->scheduler->createObserver();
 
                     $inners[$group->getKey()]  = $group;
@@ -894,7 +894,7 @@ class GroupByUntilTest extends FunctionalTestCase
             }
         );
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$outerSubscription, &$innerSubscriptions) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$outerSubscription, &$innerSubscriptions): void {
             $outerSubscription->dispose();
             foreach ($innerSubscriptions as $innerSubscription) {
                 $innerSubscription->dispose();
@@ -968,7 +968,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::CREATED,
-            function () use (&$outer, $xs, &$keyInvoked, $error) {
+            function () use (&$outer, $xs, &$keyInvoked, $error): void {
                 $outer = $xs->groupByUntil(function ($x) use (&$keyInvoked, $error) {
                     $keyInvoked++;
                     if ($keyInvoked === 6) {
@@ -985,26 +985,26 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$inners, &$results, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$outer, &$inners, &$results, &$innerSubscriptions): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     &$inners,
                     &$results,
                     &$innerSubscriptions
-                ) {
+                ): void {
                     $result = $this->scheduler->createObserver();
 
                     $inners[$group->getKey()]  = $group;
                     $results[$group->getKey()] = $result;
 
                     $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
-                }, function () {
+                }, function (): void {
                 });
             }
         );
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -1076,7 +1076,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::CREATED,
-            function () use (&$outer, $xs, &$eleInvoked, $error) {
+            function () use (&$outer, $xs, &$eleInvoked, $error): void {
                 $outer = $xs->groupByUntil(function ($x) {
                     return trim(strtolower($x));
                 }, function ($x) use (&$eleInvoked, $error) {
@@ -1093,26 +1093,26 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$inners, &$results) {
+            function () use (&$outerSubscription, &$outer, &$inners, &$results): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     &$inners,
                     &$results,
                     &$innerSubscriptions
-                ) {
+                ): void {
                     $result = $this->scheduler->createObserver();
 
                     $inners[$group->getKey()]  = $group;
                     $results[$group->getKey()] = $result;
 
                     $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
-                }, function () {
+                }, function (): void {
                 });
             }
         );
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -1184,7 +1184,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outerSubscription  = null;
         $outerResults       = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -1196,13 +1196,13 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$outerResults, &$inners, &$results) {
+            function () use (&$outerSubscription, &$outer, &$outerResults, &$inners, &$results): void {
                 $outerSubscription = $outer->subscribe(function (GroupedObservable $group) use (
                     &$outerResults,
                     &$inners,
                     &$results,
                     &$innerSubscriptions
-                ) {
+                ): void {
                     $outerResults->onNext($group->getKey());
 
                     $result = $this->scheduler->createObserver();
@@ -1211,9 +1211,9 @@ class GroupByUntilTest extends FunctionalTestCase
                     $results[$group->getKey()] = $result;
 
                     $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
-                }, function ($e) use (&$outerResults) {
+                }, function ($e) use (&$outerResults): void {
                     $outerResults->onError($e);
-                }, function () use (&$outerResults) {
+                }, function () use (&$outerResults): void {
                     $outerResults->onCompleted();
                 });
             }
@@ -1221,7 +1221,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -1229,7 +1229,7 @@ class GroupByUntilTest extends FunctionalTestCase
             }
         );
 
-        $this->scheduler->scheduleAbsolute(320, function () use (&$outerSubscription) {
+        $this->scheduler->scheduleAbsolute(320, function () use (&$outerSubscription): void {
             $outerSubscription->dispose();
         });
 
@@ -1295,7 +1295,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outerSubscription  = null;
         $outerResults       = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -1307,13 +1307,13 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$outerResults, &$inners, &$results, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$outer, &$outerResults, &$inners, &$results, &$innerSubscriptions): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     &$outerResults,
                     &$innerSubscriptions,
                     &$results,
                     &$inners
-                ) {
+                ): void {
                     $outerResults->onNext($group->getKey());
 
                     $result = $this->scheduler->createObserver();
@@ -1322,9 +1322,9 @@ class GroupByUntilTest extends FunctionalTestCase
                     $results[$group->getKey()] = $result;
 
                     $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
-                }, function ($e) use (&$outerResults) {
+                }, function ($e) use (&$outerResults): void {
                     $outerResults->onError($e);
-                }, function () use (&$outerResults) {
+                }, function () use (&$outerResults): void {
                     $outerResults->onCompleted();
                 });
             }
@@ -1332,7 +1332,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -1340,7 +1340,7 @@ class GroupByUntilTest extends FunctionalTestCase
             }
         );
 
-        $this->scheduler->scheduleAbsolute(320, function () use (&$innerSubscriptions) {
+        $this->scheduler->scheduleAbsolute(320, function () use (&$innerSubscriptions): void {
             $innerSubscriptions['foo']->dispose();
         });
 
@@ -1412,7 +1412,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outerSubscription  = null;
         $outerResults       = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -1424,13 +1424,13 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use ($outerResults, &$outerSubscription, &$inners, &$results, &$innerSubscriptions, &$outer) {
+            function () use ($outerResults, &$outerSubscription, &$inners, &$results, &$innerSubscriptions, &$outer): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (
                     $outerResults,
                     &$inners,
                     &$results,
                     &$innerSubscriptions
-                ) {
+                ): void {
                     $outerResults->onNext($group->getKey());
 
                     $result = $this->scheduler->createObserver();
@@ -1439,9 +1439,9 @@ class GroupByUntilTest extends FunctionalTestCase
                     $results[$group->getKey()] = $result;
 
                     $innerSubscriptions[$group->getKey()] = $group->subscribe($result);
-                }, function ($e) use ($outerResults) {
+                }, function ($e) use ($outerResults): void {
                     $outerResults->onError($e);
-                }, function () use ($outerResults) {
+                }, function () use ($outerResults): void {
                     $outerResults->onCompleted();
                 });
             }
@@ -1449,7 +1449,7 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscriptions) {
+            function () use (&$outerSubscription, &$innerSubscriptions): void {
                 $outerSubscription->dispose();
                 foreach ($innerSubscriptions as $innerSubscription) {
                     $innerSubscription->dispose();
@@ -1457,19 +1457,19 @@ class GroupByUntilTest extends FunctionalTestCase
             }
         );
 
-        $this->scheduler->scheduleAbsolute(320, function () use (&$innerSubscriptions) {
+        $this->scheduler->scheduleAbsolute(320, function () use (&$innerSubscriptions): void {
             $innerSubscriptions['foo']->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(280, function () use (&$innerSubscriptions) {
+        $this->scheduler->scheduleAbsolute(280, function () use (&$innerSubscriptions): void {
             $innerSubscriptions['bar']->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(355, function () use (&$innerSubscriptions) {
+        $this->scheduler->scheduleAbsolute(355, function () use (&$innerSubscriptions): void {
             $innerSubscriptions['baz']->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$innerSubscriptions) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$innerSubscriptions): void {
             $innerSubscriptions['qux']->dispose();
         });
 
@@ -1520,7 +1520,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outer             = null;
         $outerSubscription = null;
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -1532,20 +1532,20 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$inner) {
+            function () use (&$outerSubscription, &$outer, &$inner): void {
                 $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (&$inner) {
                     return $inner = $group;
                 });
             }
         );
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$innerSubscription, &$inner, $results) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$innerSubscription, &$inner, $results): void {
             $innerSubscription = $inner->subscribe($results);
         });
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$outerSubscription, &$innerSubscription) {
+            function () use (&$outerSubscription, &$innerSubscription): void {
                 $outerSubscription->dispose();
                 $innerSubscription->dispose();
             }
@@ -1584,7 +1584,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outer             = null;
         $outerSubscription = null;
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -1596,21 +1596,21 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$inner) {
-                $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (&$inner) {
+            function () use (&$outerSubscription, &$outer, &$inner): void {
+                $outerSubscription = $outer->subscribeCallback(function (GroupedObservable $group) use (&$inner): void {
                     $inner = $group;
-                }, function () {
+                }, function (): void {
                 });
             }
         );
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$innerSubscription, &$inner, $results) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$innerSubscription, &$inner, $results): void {
             $innerSubscription = $inner->subscribe($results);
         });
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::DISPOSED,
-            function () use (&$innerSubscription, &$outerSubscription) {
+            function () use (&$innerSubscription, &$outerSubscription): void {
                 $outerSubscription->dispose();
                 $innerSubscription->dispose();
             }
@@ -1647,7 +1647,7 @@ class GroupByUntilTest extends FunctionalTestCase
         $outer             = null;
         $outerSubscription = null;
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::CREATED, function () use (&$outer, $xs): void {
             $outer = $xs->groupByUntil(function ($x) {
                 return trim(strtolower($x));
             }, function ($x) {
@@ -1659,22 +1659,22 @@ class GroupByUntilTest extends FunctionalTestCase
 
         $this->scheduler->scheduleAbsolute(
             TestScheduler::SUBSCRIBED,
-            function () use (&$outerSubscription, &$outer, &$inner) {
-                $outerSubscription = $outer->subscribeCallback(function ($group) use (&$inner) {
+            function () use (&$outerSubscription, &$outer, &$inner): void {
+                $outerSubscription = $outer->subscribeCallback(function ($group) use (&$inner): void {
                     $inner = $group;
                 });
             }
         );
 
-        $this->scheduler->scheduleAbsolute(290, function () use (&$outerSubscription) {
+        $this->scheduler->scheduleAbsolute(290, function () use (&$outerSubscription): void {
             $outerSubscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$innerSubscription, &$inner, $results) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$innerSubscription, &$inner, $results): void {
             $innerSubscription = $inner->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$outerSubscription) {
+        $this->scheduler->scheduleAbsolute(TestScheduler::DISPOSED, function () use (&$outerSubscription): void {
             $outerSubscription->dispose();
         });
 
@@ -1761,7 +1761,7 @@ class GroupByUntilTest extends FunctionalTestCase
                 return $x;
             }, function ($x) {
                 return $x;
-            }, function () use ($error) {
+            }, function () use ($error): void {
                 throw $error;
             });
         });

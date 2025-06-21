@@ -18,14 +18,14 @@ class ReturnObservableTest extends FunctionalTestCase
         $goodCount = 0;
 
         $o->subscribe(new CallbackObserver(
-            function ($x) use (&$goodCount) {
+            function ($x) use (&$goodCount): void {
                 $this->assertEquals('The Value', $x);
                 $goodCount++;
             }
         ));
 
         $o->subscribe(new CallbackObserver(
-            function ($x) use (&$goodCount) {
+            function ($x) use (&$goodCount): void {
                 $this->assertEquals('The Value', $x);
                 $goodCount++;
             }

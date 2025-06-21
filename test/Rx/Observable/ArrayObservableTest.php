@@ -22,14 +22,14 @@ class ArrayObservableTest extends TestCase
         $goodCount = 0;
 
         $o->toArray()->subscribe(new CallbackObserver(
-            function ($x) use ($a, &$goodCount) {
+            function ($x) use ($a, &$goodCount): void {
                 $goodCount++;
                 $this->assertEquals($a, $x);
             }
         ));
 
         $o->toArray()->subscribe(new CallbackObserver(
-            function ($x) use ($a, &$goodCount) {
+            function ($x) use ($a, &$goodCount): void {
                 $goodCount++;
                 $this->assertEquals($a, $x);
             }
@@ -43,8 +43,8 @@ class ArrayObservableTest extends TestCase
         //todo: refactor
         $observable = new ArrayObservable(range(1, 10), Scheduler::getDefault());
 
-        $record = array();
-        $observable->subscribe(function($v) use (&$record) {$record[] = $v; });
+        $record = [];
+        $observable->subscribe(function($v) use (&$record): void {$record[] = $v; });
 
         $this->assertEquals(range(1, 10), $record);
     }
@@ -52,10 +52,10 @@ class ArrayObservableTest extends TestCase
     public function testOnCompleteIsCalled()
     {
         //todo: refactor
-        $observable = new ArrayObservable(array(), Scheduler::getDefault());
+        $observable = new ArrayObservable([], Scheduler::getDefault());
 
         $isCalled = false;
-        $observable->subscribe(null, null, function() use (&$isCalled) { $isCalled = true; });
+        $observable->subscribe(null, null, function() use (&$isCalled): void { $isCalled = true; });
 
         $this->assertTrue($isCalled, 'onComplete should be called.');
     }

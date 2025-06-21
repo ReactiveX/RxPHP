@@ -19,12 +19,12 @@ class DoObserver implements ObserverInterface
 
     public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
     {
-        $default = function () {
+        $default = function (): void {
         };
 
         $this->onNext = $this->getOrDefault($onNext, $default);
 
-        $this->onError = $this->getOrDefault($onError, function ($e) {
+        $this->onError = $this->getOrDefault($onError, function ($e): void {
             throw $e;
         });
 

@@ -134,7 +134,7 @@ class RepeatTest extends FunctionalTestCase
         $xs = (new ReturnObservable(1, $scheduler1))->repeat();
 
         $xs->subscribe(new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 throw new \Exception();
             }
         ));
@@ -154,7 +154,7 @@ class RepeatTest extends FunctionalTestCase
 
         $xs->subscribe(new CallbackObserver(
             null,
-            function ($x) {
+            function ($x): void {
                 throw new \Exception();
             }
         ));
@@ -174,12 +174,12 @@ class RepeatTest extends FunctionalTestCase
         $disp = $xs->subscribe(new CallbackObserver(
             null,
             null,
-            function () {
+            function (): void {
                 throw new \Exception;
             }
         ));
 
-        $scheduler3->scheduleAbsolute(210, function () use ($disp) {
+        $scheduler3->scheduleAbsolute(210, function () use ($disp): void {
             $disp->dispose();
         });
 
@@ -192,7 +192,7 @@ class RepeatTest extends FunctionalTestCase
     public function repeat_Observable_throws_4()
     {
         $this->expectException(\Exception::class);
-        $xs = (new AnonymousObservable(function () {
+        $xs = (new AnonymousObservable(function (): void {
             throw new \Exception;
         }))->repeat();
 
@@ -356,7 +356,7 @@ class RepeatTest extends FunctionalTestCase
         $xs         = (new ReturnObservable(1, $scheduler1))->repeat(3);
 
         $xs->subscribe(new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 throw new \Exception('from onNext');
             }
         ));
@@ -377,7 +377,7 @@ class RepeatTest extends FunctionalTestCase
 
         $xs->subscribe(new CallbackObserver(
             null,
-            function ($x) {
+            function ($x): void {
                 throw new \Exception('from onError');
             }
         ));
@@ -398,7 +398,7 @@ class RepeatTest extends FunctionalTestCase
         $xs->subscribe(new CallbackObserver(
             null,
             null,
-            function () {
+            function (): void {
                 throw new \Exception('from onCompleted');
             }
         ));
@@ -413,7 +413,7 @@ class RepeatTest extends FunctionalTestCase
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('from Anon');
-        $xss = (new AnonymousObservable(function () {
+        $xss = (new AnonymousObservable(function (): void {
             throw new \Exception('from Anon');
         }))->repeat(3);
 

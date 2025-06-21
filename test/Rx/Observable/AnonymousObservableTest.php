@@ -19,7 +19,7 @@ class AnonymousObservableTest extends TestCase
         $called = 0;
         $observable = new AnonymousObservable(function() use (&$called) { $called++; return new EmptyDisposable(); });
 
-        $observerMock = $this->createMock('Rx\ObserverInterface');
+        $observerMock = $this->createMock(\Rx\ObserverInterface::class);
         $observable->subscribe($observerMock);
 
         $this->assertEquals(1, $called);
@@ -33,12 +33,12 @@ class AnonymousObservableTest extends TestCase
         $disposed = false;
 
         $observable = new AnonymousObservable(function() use (&$disposed) {
-            return new CallbackDisposable(function() use (&$disposed) {
+            return new CallbackDisposable(function() use (&$disposed): void {
                 $disposed = true;
             });
         });
 
-        $observerMock = $this->createMock('Rx\ObserverInterface');
+        $observerMock = $this->createMock(\Rx\ObserverInterface::class);
         $disposable = $observable->subscribe($observerMock);
 
         $disposable->dispose();
@@ -52,7 +52,7 @@ class AnonymousObservableTest extends TestCase
     public function it_throws_when_args_invalid()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $observable = new AnonymousObservable(function () {
+        $observable = new AnonymousObservable(function (): void {
         });
 
         $observable->subscribe('invalid arg');

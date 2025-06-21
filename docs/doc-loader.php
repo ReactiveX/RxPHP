@@ -132,7 +132,7 @@ function has_documentation_tag(\ReflectionMethod $method) {
 }
 
 function load_all_docs() {
-    $observable = new \ReflectionClass('Rx\Observable');
+    $observable = new \ReflectionClass(\Rx\Observable::class);
 
     $possibleMethods = $observable
         ->getMethods(ReflectionMethod::IS_STATIC|ReflectionMethod::IS_PUBLIC);

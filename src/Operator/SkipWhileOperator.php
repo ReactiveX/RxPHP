@@ -26,7 +26,7 @@ final class SkipWhileOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $callbackObserver = new CallbackObserver(
-            function ($value) use ($observer, $observable) {
+            function ($value) use ($observer, $observable): void {
                 try {
 
                     if ($this->isSkipping) {

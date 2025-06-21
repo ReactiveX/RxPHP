@@ -42,43 +42,43 @@ class AsyncSubjectTest extends FunctionalTestCase
         $subscription2 = null;
         $subscription3 = null;
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$subject): void {
             $subject = new AsyncSubject();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($xs, &$subscription, &$subject) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($xs, &$subscription, &$subject): void {
             $subscription = $xs->subscribe($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$results1, &$subscription1, &$subject) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$results1, &$subscription1, &$subject): void {
             $subscription1 = $subject->subscribe($results1);
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$results2, &$subscription2, &$subject) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$results2, &$subscription2, &$subject): void {
             $subscription2 = $subject->subscribe($results2);
         });
 
-        $this->scheduler->scheduleAbsolute(900, function () use (&$results3, &$subscription3, &$subject) {
+        $this->scheduler->scheduleAbsolute(900, function () use (&$results3, &$subscription3, &$subject): void {
             $subscription3 = $subject->subscribe($results3);
         });
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2) {
+        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2): void {
             $subscription2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(950, function () use (&$subscription3) {
+        $this->scheduler->scheduleAbsolute(950, function () use (&$subscription3): void {
             $subscription3->dispose();
         });
 
@@ -118,43 +118,43 @@ class AsyncSubjectTest extends FunctionalTestCase
         $subscription2 = null;
         $subscription3 = null;
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$subject): void {
             $subject = new AsyncSubject();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($xs, &$subscription, &$subject) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($xs, &$subscription, &$subject): void {
             $subscription = $xs->subscribe($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$results1, &$subscription1, &$subject) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$results1, &$subscription1, &$subject): void {
             $subscription1 = $subject->subscribe($results1);
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$results2, &$subscription2, &$subject) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$results2, &$subscription2, &$subject): void {
             $subscription2 = $subject->subscribe($results2);
         });
 
-        $this->scheduler->scheduleAbsolute(900, function () use (&$results3, &$subscription3, &$subject) {
+        $this->scheduler->scheduleAbsolute(900, function () use (&$results3, &$subscription3, &$subject): void {
             $subscription3 = $subject->subscribe($results3);
         });
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2) {
+        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2): void {
             $subscription2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(950, function () use (&$subscription3) {
+        $this->scheduler->scheduleAbsolute(950, function () use (&$subscription3): void {
             $subscription3->dispose();
         });
 
@@ -195,43 +195,43 @@ class AsyncSubjectTest extends FunctionalTestCase
         $subscription2 = null;
         $subscription3 = null;
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$subject): void {
             $subject = new AsyncSubject();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($xs, &$subscription, &$subject) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($xs, &$subscription, &$subject): void {
             $subscription = $xs->subscribe($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$results1, &$subscription1, &$subject) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$results1, &$subscription1, &$subject): void {
             $subscription1 = $subject->subscribe($results1);
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$results2, &$subscription2, &$subject) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$results2, &$subscription2, &$subject): void {
             $subscription2 = $subject->subscribe($results2);
         });
 
-        $this->scheduler->scheduleAbsolute(900, function () use (&$results3, &$subscription3, &$subject) {
+        $this->scheduler->scheduleAbsolute(900, function () use (&$results3, &$subscription3, &$subject): void {
             $subscription3 = $subject->subscribe($results3);
         });
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2) {
+        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2): void {
             $subscription2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(950, function () use (&$subscription3) {
+        $this->scheduler->scheduleAbsolute(950, function () use (&$subscription3): void {
             $subscription3->dispose();
         });
 
@@ -260,88 +260,88 @@ class AsyncSubjectTest extends FunctionalTestCase
         $subscription2 = null;
         $subscription3 = null;
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$subject): void {
             $subject = new AsyncSubject();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$subscription1, &$subject, $results1) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$subscription1, &$subject, $results1): void {
             $subscription1 = $subject->subscribe($results1);
         });
 
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$subscription2, &$subject, $results2) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$subscription2, &$subject, $results2): void {
             $subscription2 = $subject->subscribe($results2);
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$subscription3, &$subject, $results3) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$subscription3, &$subject, $results3): void {
             $subscription3 = $subject->subscribe($results3);
         });
 
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$subscription1) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$subscription1): void {
             $subscription1->dispose();
         });
 
 
-        $this->scheduler->scheduleAbsolute(600, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(600, function () use (&$subject): void {
             $subject->dispose();
         });
 
 
-        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2) {
+        $this->scheduler->scheduleAbsolute(700, function () use (&$subscription2): void {
             $subscription2->dispose();
         });
 
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription3) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$subscription3): void {
             $subscription3->dispose();
         });
 
 
-        $this->scheduler->scheduleAbsolute(150, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(150, function () use (&$subject): void {
             $subject->onNext(1);
         });
 
-        $this->scheduler->scheduleAbsolute(250, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(250, function () use (&$subject): void {
             $subject->onNext(2);
         });
 
-        $this->scheduler->scheduleAbsolute(350, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(350, function () use (&$subject): void {
             $subject->onNext(3);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$subject): void {
             $subject->onNext(4);
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$subject): void {
             $subject->onNext(5);
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$subject): void {
 
-            $this->assertException(function () use (&$subject) {
+            $this->assertException(function () use (&$subject): void {
                 $subject->onNext(6);
             });
 
         });
 
-        $this->scheduler->scheduleAbsolute(750, function () use (&$subject) {
-            $this->assertException(function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(750, function () use (&$subject): void {
+            $this->assertException(function () use (&$subject): void {
                 $subject->onCompleted();
             });
         });
 
-        $this->scheduler->scheduleAbsolute(850, function () use (&$subject) {
-            $this->assertException(function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(850, function () use (&$subject): void {
+            $this->assertException(function () use (&$subject): void {
                 $subject->onError(new \Exception());
             });
 
         });
 
-        $this->scheduler->scheduleAbsolute(950, function () use (&$subject) {
+        $this->scheduler->scheduleAbsolute(950, function () use (&$subject): void {
 
-            $this->assertException(function () use (&$subject) {
+            $this->assertException(function () use (&$subject): void {
                 $subject->subscribe(new CallbackObserver());
             });
         });

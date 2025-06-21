@@ -9,7 +9,7 @@ $source = new \Rx\Observable\AnonymousObservable(function (\Rx\ObserverInterface
     $observer->onNext(42);
     $observer->onCompleted();
 
-    return new CallbackDisposable(function () {
+    return new CallbackDisposable(function (): void {
         echo "Disposed\n";
     });
 });

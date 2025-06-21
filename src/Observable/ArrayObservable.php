@@ -28,7 +28,7 @@ class ArrayObservable extends Observable
         $keys   = array_keys($values);
         $count  = 0;
 
-        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys) {
+        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$values, $max, &$count, $keys): void {
             if ($count < $max) {
                 $observer->onNext($values[$keys[$count]]);
                 $count++;

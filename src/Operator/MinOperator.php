@@ -30,7 +30,7 @@ final class MinOperator implements OperatorInterface
         $comparing   = false;
 
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use (&$comparing, &$previousMin, $observer) {
+            function ($x) use (&$comparing, &$previousMin, $observer): void {
                 if (!$comparing) {
                     $comparing   = true;
                     $previousMin = $x;
@@ -48,7 +48,7 @@ final class MinOperator implements OperatorInterface
                 }
             },
             [$observer, 'onError'],
-            function () use (&$comparing, &$previousMin, $observer) {
+            function () use (&$comparing, &$previousMin, $observer): void {
                 if ($comparing) {
                     $observer->onNext($previousMin);
                     $observer->onCompleted();

@@ -313,13 +313,13 @@ class ConcatTest extends FunctionalTestCase
         $completed = false;
 
         $sources->concatAll()->subscribe(
-            function ($x) use (&$res) {
+            function ($x) use (&$res): void {
                 $res[] = $x;
             },
-            function ($e) {
+            function ($e): void {
                 $this->fail();
             },
-            function () use (&$completed) {
+            function () use (&$completed): void {
                 $completed = true;
             }
         );
@@ -344,14 +344,14 @@ class ConcatTest extends FunctionalTestCase
         $completed = false;
 
         $sources->concatAll()->subscribe(
-            function ($x) use (&$res) {
+            function ($x) use (&$res): void {
                 $res[] = $x;
             },
-            function ($e) use (&$res, &$error) {
+            function ($e) use (&$res, &$error): void {
                 $this->assertEquals([0], $res);
                 $error = true;
             },
-            function () use (&$completed) {
+            function () use (&$completed): void {
                 $completed = true;
             }
         );

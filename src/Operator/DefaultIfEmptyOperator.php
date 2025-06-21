@@ -27,12 +27,12 @@ final class DefaultIfEmptyOperator implements OperatorInterface
     {
         $disposable = new SerialDisposable();
         $cbObserver = new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 $this->passThrough = true;
                 $observer->onNext($x);
             },
             [$observer, 'onError'],
-            function () use ($observer, $disposable) {
+            function () use ($observer, $disposable): void {
                 if (!$this->passThrough) {
                     $disposable->setDisposable($this->observable->subscribe($observer));
                     return;

@@ -120,7 +120,7 @@ class MaxTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->max(function ($a, $b) {
-                return $a > $b ? -1 : ($a < $b ? 1 : 0);
+                return $b <=> $a;
             });
         });
 
@@ -142,7 +142,7 @@ class MaxTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->max(function ($a, $b) {
-                return $a > $b ? -1 : ($a < $b ? 1 : 0);
+                return $b <=> $a;
             });
         });
 
@@ -167,7 +167,7 @@ class MaxTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->max(function ($a, $b) {
-                return $a > $b ? -1 : ($a < $b ? 1 : 0);
+                return $b <=> $a;
             });
         });
 
@@ -191,7 +191,7 @@ class MaxTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->max(function ($a, $b) {
-                return $a > $b ? -1 : ($a < $b ? 1 : 0);
+                return $b <=> $a;
             });
         });
 
@@ -211,7 +211,7 @@ class MaxTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
             return $xs->max(function ($a, $b) {
-                return $a > $b ? -1 : ($a < $b ? 1 : 0);
+                return $b <=> $a;
             });
         });
 
@@ -234,7 +234,7 @@ class MaxTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $error) {
-            return $xs->max(function () use ($error) {
+            return $xs->max(function () use ($error): void {
                 throw $error;
             });
         });

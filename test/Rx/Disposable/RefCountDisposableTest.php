@@ -95,7 +95,7 @@ class RefCountDisposableTest extends TestCase
     public function it_does_not_dispose_the_primary_if_already_disposed_via_refcount()
     {
         $called = 0;
-        $d = new CallbackDisposable(function() use (&$called) { $called++; });
+        $d = new CallbackDisposable(function() use (&$called): void { $called++; });
         $r = new RefCountDisposable($d);
 
         $r->dispose();
@@ -110,7 +110,7 @@ class RefCountDisposableTest extends TestCase
     public function it_does_not_dispose_the_primary_if_already_disposed()
     {
         $called = 0;
-        $d = new CallbackDisposable(function() use (&$called) { $called++; });
+        $d = new CallbackDisposable(function() use (&$called): void { $called++; });
         $r = new RefCountDisposable($d);
 
         $d1 = $r->getDisposable();
@@ -129,7 +129,7 @@ class RefCountDisposableTest extends TestCase
     public function it_returns_a_noop_disposable_if_primary_is_already_disposed()
     {
         $called = 0;
-        $d = new CallbackDisposable(function() use (&$called) { $called++; });
+        $d = new CallbackDisposable(function() use (&$called): void { $called++; });
         $r = new RefCountDisposable($d);
 
         $r->dispose();

@@ -290,7 +290,7 @@ class TakeUntilTest extends FunctionalTestCase
             onNext(150, 1),
             onError(215, new \Exception()),
             onCompleted(240)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -334,7 +334,7 @@ class TakeUntilTest extends FunctionalTestCase
             onNext(150, 1),
             onNext(250, 2),
             onCompleted(260)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -363,7 +363,7 @@ class TakeUntilTest extends FunctionalTestCase
         $source = Observable::range(1, 10);
         $notification = new Subject();
         $source->takeUntil($notification)
-            ->subscribe(new CallbackObserver(function($value) use (&$emissions, $notification) {
+            ->subscribe(new CallbackObserver(function($value) use (&$emissions, $notification): void {
                 if ($value === 5) {
                     $notification->onNext(true);
                 }

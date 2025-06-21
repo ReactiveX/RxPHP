@@ -146,7 +146,7 @@ class ReplaySubject extends Subject
 
     private function createRemovableDisposable($subject, $observer): DisposableInterface
     {
-        return new CallbackDisposable(function () use ($observer, $subject) {
+        return new CallbackDisposable(function () use ($observer, $subject): void {
             $observer->dispose();
             if (!$subject->isDisposed()) {
                 array_splice($subject->observers, (int)array_search($observer, $subject->observers, true), 1);

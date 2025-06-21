@@ -27,7 +27,7 @@ final class RetryOperator implements OperatorInterface
         $getNewObserver = function () use ($observable, $observer, $disposable, &$getNewObserver) {
             return new CallbackObserver(
                 [$observer, 'onNext'],
-                function ($error) use ($observable, $observer, $disposable, &$getNewObserver) {
+                function ($error) use ($observable, $observer, $disposable, &$getNewObserver): void {
                     $this->retryCount--;
                     if ($this->retryCount === 0) {
                         $observer->onError($error);
@@ -37,7 +37,7 @@ final class RetryOperator implements OperatorInterface
                     $subscription = $observable->subscribe($getNewObserver());
                     $disposable->setDisposable($subscription);
                 },
-                function () use ($observer) {
+                function () use ($observer): void {
                     $observer->onCompleted();
                     $this->retryCount = 0;
                 }
@@ -47,7 +47,7 @@ final class RetryOperator implements OperatorInterface
         $subscription = $observable->subscribe($getNewObserver());
         $disposable->setDisposable($subscription);
 
-        return new CallbackDisposable(function () use (&$disposable) {
+        return new CallbackDisposable(function () use (&$disposable): void {
             $disposable->dispose();
         });
     }

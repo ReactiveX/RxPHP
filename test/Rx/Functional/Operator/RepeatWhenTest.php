@@ -339,7 +339,7 @@ class RepeatWhenTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->repeatWhen(function (Observable $attempts) {
+            return $xs->repeatWhen(function (Observable $attempts): void {
                 throw new Exception('error');
             });
         });

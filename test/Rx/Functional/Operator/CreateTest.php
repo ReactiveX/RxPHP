@@ -39,7 +39,7 @@ class CreateTest extends FunctionalTestCase
     {
 
         $results = $this->scheduler->startWithCreate(function () {
-            return Observable::create(function (ObserverInterface $o) {
+            return Observable::create(function (ObserverInterface $o): void {
                 $o->onNext(1);
                 $o->onNext(2);
             });
@@ -101,7 +101,7 @@ class CreateTest extends FunctionalTestCase
     public function create_throws_errors()
     {
         $this->expectException(\Exception::class);
-        Observable::create(function ($o) {
+        Observable::create(function ($o): void {
             throw new \Exception;
         })->subscribe(new CallbackObserver());
     }
@@ -120,31 +120,31 @@ class CreateTest extends FunctionalTestCase
                 $o->onNext(1);
                 $o->onNext(2);
 
-                $this->scheduler->scheduleAbsolute(600, function () use ($o, &$isStopped) {
+                $this->scheduler->scheduleAbsolute(600, function () use ($o, &$isStopped): void {
                     if (!$isStopped) {
                         $o->onNext(3);
                     }
                 });
 
-                $this->scheduler->scheduleAbsolute(700, function () use ($o, &$isStopped) {
+                $this->scheduler->scheduleAbsolute(700, function () use ($o, &$isStopped): void {
                     if (!$isStopped) {
                         $o->onNext(4);
                     }
                 });
 
-                $this->scheduler->scheduleAbsolute(900, function () use ($o, &$isStopped) {
+                $this->scheduler->scheduleAbsolute(900, function () use ($o, &$isStopped): void {
                     if (!$isStopped) {
                         $o->onNext(5);
                     }
                 });
 
-                $this->scheduler->scheduleAbsolute(1100, function () use ($o, &$isStopped) {
+                $this->scheduler->scheduleAbsolute(1100, function () use ($o, &$isStopped): void {
                     if (!$isStopped) {
                         $o->onNext(6);
                     }
                 });
 
-                return new CallbackDisposable(function () use (&$isStopped) {
+                return new CallbackDisposable(function () use (&$isStopped): void {
                     $isStopped = true;
                 });
             });
@@ -165,31 +165,31 @@ class CreateTest extends FunctionalTestCase
      */
     public function create_observer_does_not_catch()
     {
-        $this->assertException(function () {
+        $this->assertException(function (): void {
             Observable::create(function (ObserverInterface $o) {
                 $o->onNext(1);
                 return new EmptyDisposable();
-            })->subscribe(new CallbackObserver(function () {
+            })->subscribe(new CallbackObserver(function (): void {
                 throw new \Exception;
             }));
         });
 
 
-        $this->assertException(function () {
+        $this->assertException(function (): void {
             Observable::create(function (ObserverInterface $o) {
                 $o->onError(new \Exception());
                 return new EmptyDisposable();
             })->subscribe(
                 new CallbackObserver(
                     null,
-                    function () {
+                    function (): void {
                         throw new \Exception;
                     }
                 )
             );
         });
 
-        $this->assertException(function () {
+        $this->assertException(function (): void {
             Observable::create(function (ObserverInterface $o) {
                 $o->onCompleted();
                 return new EmptyDisposable();
@@ -197,7 +197,7 @@ class CreateTest extends FunctionalTestCase
                 new CallbackObserver(
                     null,
                     null,
-                    function () {
+                    function (): void {
                         throw new \Exception;
                     }
                 )

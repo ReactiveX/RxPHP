@@ -111,7 +111,7 @@ class PublishTest extends FunctionalTestCase
             $count++;
 
             return new AnonymousObservable(function () use (&$disconnected) {
-                return new CallbackDisposable(function () use (&$disconnected) {
+                return new CallbackDisposable(function () use (&$disconnected): void {
                     $disconnected = true;
                 });
             });
@@ -183,39 +183,39 @@ class PublishTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publish();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -275,31 +275,31 @@ class PublishTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publish();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -357,31 +357,31 @@ class PublishTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publish();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -440,39 +440,39 @@ class PublishTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publish();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(350, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(350, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 

@@ -269,7 +269,7 @@ class ScanTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->scan(function () {
+            return $xs->scan(function (): void {
                 throw new \Exception();
             });
         });
@@ -291,7 +291,7 @@ class ScanTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->scan(function () {
+            return $xs->scan(function (): void {
                 throw new \Exception();
             }, 42);
         });

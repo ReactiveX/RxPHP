@@ -15,27 +15,27 @@ class SelectManyTest extends FunctionalTestCase
      */
     public function it_passes_the_last_on_complete()
     {
-        $xs = $this->createColdObservable(array(
+        $xs = $this->createColdObservable([
             onNext(100, 4),
             onNext(200, 2),
             onNext(300, 3),
             onNext(400, 1),
             onCompleted(500)
-        ));
+        ]);
 
-        $ys = $this->createColdObservable(array(
+        $ys = $this->createColdObservable([
             onNext(50, 'foo'),
             onNext(100, 'bar'),
             onNext(150, 'baz'),
             onNext(200, 'qux'),
             onCompleted(250)
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, $ys) {
             return $xs->selectMany(function() use ($ys) { return $ys; });
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(350, "foo"), // 1
             onNext(400, "bar"), // 1
             onNext(450, "baz"), // 1
@@ -53,10 +53,10 @@ class SelectManyTest extends FunctionalTestCase
             onNext(750, "baz"), // 4
             onNext(800, "qux"), // 4
             onCompleted(850)
-        ), $results->getMessages());
+        ], $results->getMessages());
 
-        $this->assertSubscriptions(array(subscribe(200, 700)), $xs->getSubscriptions());
-        $this->assertSubscriptions(array(subscribe(300, 550), subscribe(400, 650), subscribe(500, 750), subscribe(600, 850)), $ys->getSubscriptions());
+        $this->assertSubscriptions([subscribe(200, 700)], $xs->getSubscriptions());
+        $this->assertSubscriptions([subscribe(300, 550), subscribe(400, 650), subscribe(500, 750), subscribe(600, 850)], $ys->getSubscriptions());
     }
 
     /**
@@ -64,37 +64,37 @@ class SelectManyTest extends FunctionalTestCase
      */
     public function it_passes_on_error()
     {
-        $xs = $this->createColdObservable(array(
+        $xs = $this->createColdObservable([
             onNext(100, 4),
             onNext(200, 2),
             onNext(300, 3),
             onNext(400, 1),
             onCompleted(510)
-        ));
+        ]);
 
-        $ys = $this->createColdObservable(array(
+        $ys = $this->createColdObservable([
             onNext(50, 'foo'),
             onNext(100, 'bar'),
             onNext(150, 'baz'),
             onError(210, new Exception()),
             onCompleted(250),
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, $ys) {
             return $xs->selectMany(function() use ($ys) { return $ys; });
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(350, "foo"), // 1
             onNext(400, "bar"), // 1
             onNext(450, "baz"), // 1
             onNext(450, "foo"), // 2
             onNext(500, "bar"), // 2
             onError(510, new Exception()), // 1
-        ), $results->getMessages());
+        ], $results->getMessages());
 
-        $this->assertSubscriptions(array(subscribe(200, 510)), $xs->getSubscriptions());
-        $this->assertSubscriptions(array(subscribe(300, 510), subscribe(400, 510), subscribe(500, 510)), $ys->getSubscriptions());
+        $this->assertSubscriptions([subscribe(200, 510)], $xs->getSubscriptions());
+        $this->assertSubscriptions([subscribe(300, 510), subscribe(400, 510), subscribe(500, 510)], $ys->getSubscriptions());
     }
 
     /**
@@ -102,27 +102,27 @@ class SelectManyTest extends FunctionalTestCase
      */
     public function flatMapTo_it_passes_the_last_on_complete()
     {
-        $xs = $this->createColdObservable(array(
+        $xs = $this->createColdObservable([
             onNext(100, 4),
             onNext(200, 2),
             onNext(300, 3),
             onNext(400, 1),
             onCompleted(500)
-        ));
+        ]);
 
-        $ys = $this->createColdObservable(array(
+        $ys = $this->createColdObservable([
             onNext(50, 'foo'),
             onNext(100, 'bar'),
             onNext(150, 'baz'),
             onNext(200, 'qux'),
             onCompleted(250)
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, $ys) {
             return $xs->flatMapTo($ys);
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(350, "foo"), // 1
             onNext(400, "bar"), // 1
             onNext(450, "baz"), // 1
@@ -140,10 +140,10 @@ class SelectManyTest extends FunctionalTestCase
             onNext(750, "baz"), // 4
             onNext(800, "qux"), // 4
             onCompleted(850)
-        ), $results->getMessages());
+        ], $results->getMessages());
 
-        $this->assertSubscriptions(array(subscribe(200, 700)), $xs->getSubscriptions());
-        $this->assertSubscriptions(array(subscribe(300, 550), subscribe(400, 650), subscribe(500, 750), subscribe(600, 850)), $ys->getSubscriptions());
+        $this->assertSubscriptions([subscribe(200, 700)], $xs->getSubscriptions());
+        $this->assertSubscriptions([subscribe(300, 550), subscribe(400, 650), subscribe(500, 750), subscribe(600, 850)], $ys->getSubscriptions());
     }
 
     /**
@@ -151,37 +151,37 @@ class SelectManyTest extends FunctionalTestCase
      */
     public function flatMapTo_it_passes_on_error()
     {
-        $xs = $this->createColdObservable(array(
+        $xs = $this->createColdObservable([
             onNext(100, 4),
             onNext(200, 2),
             onNext(300, 3),
             onNext(400, 1),
             onCompleted(510)
-        ));
+        ]);
 
-        $ys = $this->createColdObservable(array(
+        $ys = $this->createColdObservable([
             onNext(50, 'foo'),
             onNext(100, 'bar'),
             onNext(150, 'baz'),
             onError(210, new Exception()),
             onCompleted(250),
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs, $ys) {
             return $xs->flatMapTo($ys);
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(350, "foo"), // 1
             onNext(400, "bar"), // 1
             onNext(450, "baz"), // 1
             onNext(450, "foo"), // 2
             onNext(500, "bar"), // 2
             onError(510, new Exception()), // 1
-        ), $results->getMessages());
+        ], $results->getMessages());
 
-        $this->assertSubscriptions(array(subscribe(200, 510)), $xs->getSubscriptions());
-        $this->assertSubscriptions(array(subscribe(300, 510), subscribe(400, 510), subscribe(500, 510)), $ys->getSubscriptions());
+        $this->assertSubscriptions([subscribe(200, 510)], $xs->getSubscriptions());
+        $this->assertSubscriptions([subscribe(300, 510), subscribe(400, 510), subscribe(500, 510)], $ys->getSubscriptions());
     }
 
     /**

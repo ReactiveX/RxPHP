@@ -183,7 +183,7 @@ abstract class FunctionalTestCase extends TestCase
                     continue 2;
                 default:
                     $eventKey = $marbles[$i];
-                    $events[] = onNext($now, isset($eventMap[$eventKey]) ? $eventMap[$eventKey] : $marbles[$i]);
+                    $events[] = onNext($now, $eventMap[$eventKey] ?? $marbles[$i]);
                     continue 2;
             }
         }
@@ -206,13 +206,13 @@ abstract class FunctionalTestCase extends TestCase
             $lastTime = $time;
 
             $value->accept(
-                function ($x) use (&$output) {
+                function ($x) use (&$output): void {
                     $output .= $x;
                 },
-                function (\Exception $e) use (&$output) {
+                function (\Exception $e) use (&$output): void {
                     $output .= '#';
                 },
-                function () use (&$output) {
+                function () use (&$output): void {
                     $output .= '|';
                 }
             );

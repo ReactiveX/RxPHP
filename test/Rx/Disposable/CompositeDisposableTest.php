@@ -13,9 +13,9 @@ class CompositeDisposableTest extends TestCase
      */
     public function it_exposes_the_amount_of_disposables_composed()
     {
-        $d1 = new CallbackDisposable(function(){});
-        $d2 = new CallbackDisposable(function(){});
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function(): void{});
+        $d2 = new CallbackDisposable(function(): void{});
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $this->assertEquals(2, $disposable->count());
     }
@@ -25,10 +25,10 @@ class CompositeDisposableTest extends TestCase
      */
     public function it_can_be_checked_if_it_contains_a_disposable()
     {
-        $d1 = new CallbackDisposable(function(){});
-        $d2 = new CallbackDisposable(function(){});
-        $d3 = new CallbackDisposable(function(){});
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function(): void{});
+        $d2 = new CallbackDisposable(function(): void{});
+        $d3 = new CallbackDisposable(function(): void{});
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $this->assertTrue($disposable->contains($d1));
         $this->assertTrue($disposable->contains($d2));
@@ -40,9 +40,9 @@ class CompositeDisposableTest extends TestCase
      */
     public function a_disposable_can_be_added_after_creation()
     {
-        $d1 = new CallbackDisposable(function(){});
-        $d2 = new CallbackDisposable(function(){});
-        $disposable = new CompositeDisposable(array($d1));
+        $d1 = new CallbackDisposable(function(): void{});
+        $d2 = new CallbackDisposable(function(): void{});
+        $disposable = new CompositeDisposable([$d1]);
 
         $this->assertEquals(1, $disposable->count());
         $this->assertFalse($disposable->contains($d2));
@@ -59,9 +59,9 @@ class CompositeDisposableTest extends TestCase
     {
         $disposed1 = false;
         $disposed2 = false;
-        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
-        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2 = true; });
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
+        $d2 = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2 = true; });
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $disposable->dispose();
 
@@ -76,9 +76,9 @@ class CompositeDisposableTest extends TestCase
     {
         $disposed1 = 0;
         $disposed2 = 0;
-        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1++; });
-        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2++; });
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1++; });
+        $d2 = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2++; });
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $this->assertEquals(0, $disposed1);
         $this->assertEquals(0, $disposed2);
@@ -101,9 +101,9 @@ class CompositeDisposableTest extends TestCase
     {
         $disposed1 = false;
         $disposed2 = false;
-        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
-        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2 = true; });
-        $disposable = new CompositeDisposable(array($d1));
+        $d1 = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
+        $d2 = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2 = true; });
+        $disposable = new CompositeDisposable([$d1]);
 
         $disposable->dispose();
         $disposable->add($d2);
@@ -117,9 +117,9 @@ class CompositeDisposableTest extends TestCase
     public function a_disposable_can_be_removed()
     {
         $disposed2 = false;
-        $d1 = new CallbackDisposable(function(){});
-        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2 = true; });
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function(): void{});
+        $d2 = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2 = true; });
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $disposable->remove($d2);
 
@@ -132,9 +132,9 @@ class CompositeDisposableTest extends TestCase
     public function a_removed_disposable_is_disposed()
     {
         $disposed2 = false;
-        $d1 = new CallbackDisposable(function(){});
-        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2 = true; });
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function(): void{});
+        $d2 = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2 = true; });
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $this->assertTrue($disposable->remove($d2));
         $this->assertTrue($disposed2);
@@ -145,11 +145,11 @@ class CompositeDisposableTest extends TestCase
      */
     public function removing_when_disposed_has_no_effect()
     {
-        $disposable = new CompositeDisposable(array());
+        $disposable = new CompositeDisposable([]);
         $disposable->dispose();
 
         $disposed1 = false;
-        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
+        $d1 = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
 
         $removed = $disposable->remove($d1);
 
@@ -163,10 +163,10 @@ class CompositeDisposableTest extends TestCase
      */
     public function removing_a_disposable_that_is_not_contained_has_no_effect()
     {
-        $disposable = new CompositeDisposable(array());
+        $disposable = new CompositeDisposable([]);
 
         $disposed1 = false;
-        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
+        $d1 = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
 
         $removed = $disposable->remove($d1);
 
@@ -182,9 +182,9 @@ class CompositeDisposableTest extends TestCase
     {
         $disposed1 = false;
         $disposed2 = false;
-        $d1 = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
-        $d2 = new CallbackDisposable(function() use (&$disposed2){ $disposed2 = true; });
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
+        $d2 = new CallbackDisposable(function() use (&$disposed2): void{ $disposed2 = true; });
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $disposable->clear();
 
@@ -192,7 +192,7 @@ class CompositeDisposableTest extends TestCase
         $this->assertTrue($disposed2);
 
         $disposed3 = false;
-        $d3 = new CallbackDisposable(function() use (&$disposed3){ $disposed3 = true; });
+        $d3 = new CallbackDisposable(function() use (&$disposed3): void{ $disposed3 = true; });
 
         $disposable->add($d3);
         $this->assertFalse($disposed3);
@@ -204,9 +204,9 @@ class CompositeDisposableTest extends TestCase
      */
     public function it_can_be_disposed_multiple_times()
     {
-        $d1 = new CallbackDisposable(function(){});
-        $d2 = new CallbackDisposable(function(){});
-        $disposable = new CompositeDisposable(array($d1, $d2));
+        $d1 = new CallbackDisposable(function(): void{});
+        $d2 = new CallbackDisposable(function(): void{});
+        $disposable = new CompositeDisposable([$d1, $d2]);
 
         $disposable->dispose();
         $disposable->dispose();
@@ -234,7 +234,7 @@ class CompositeDisposableTest extends TestCase
         // all future sets of disp should immediately dispose
         $compositeDisposable->remove($disposables[0]);
         $wasDisposed = false;
-        $disposables[0]->setDisposable(new CallbackDisposable(function () use (&$wasDisposed) {
+        $disposables[0]->setDisposable(new CallbackDisposable(function () use (&$wasDisposed): void {
             $wasDisposed = true;
         }));
         $this->assertTrue($wasDisposed);
@@ -247,7 +247,7 @@ class CompositeDisposableTest extends TestCase
         // all future sets of disp should immediately dispose
         $compositeDisposable->remove($disposables[1]);
         $wasDisposed = false;
-        $disposables[1]->setDisposable(new CallbackDisposable(function () use (&$wasDisposed) {
+        $disposables[1]->setDisposable(new CallbackDisposable(function () use (&$wasDisposed): void {
             $wasDisposed = true;
         }));
         $this->assertTrue($wasDisposed);

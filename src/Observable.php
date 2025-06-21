@@ -103,7 +103,7 @@ abstract class Observable implements ObservableInterface
         $observer = new CallbackObserver(
             $onNextOrObserver === null
                 ? null
-                : function ($value) use ($onNextOrObserver, &$observer, &$disposable) {
+                : function ($value) use ($onNextOrObserver, &$observer, &$disposable): void {
                     try {
                         $onNextOrObserver($value);
                     } catch (\Throwable $throwable) {
@@ -270,7 +270,7 @@ abstract class Observable implements ObservableInterface
      */
     public function merge(ObservableInterface $otherObservable): Observable
     {
-        return (new AnonymousObservable(function (ObserverInterface $observer) use ($otherObservable) {
+        return (new AnonymousObservable(function (ObserverInterface $observer) use ($otherObservable): void {
             $observer->onNext($this);
             $observer->onNext($otherObservable);
             $observer->onCompleted();
@@ -380,7 +380,7 @@ abstract class Observable implements ObservableInterface
         $scheduler = $scheduler ?? Scheduler::getDefault();
         $subject   = new AsyncSubject();
 
-        $scheduler->schedule(function () use ($subject, $action) {
+        $scheduler->schedule(function () use ($subject, $action): void {
             $result = null;
             try {
                 $result = $action();
@@ -1352,7 +1352,7 @@ abstract class Observable implements ObservableInterface
             if (!$hasObservable) {
                 $hasObservable = true;
                 $observable = $source
-                    ->finally(function () use (&$hasObservable) {
+                    ->finally(function () use (&$hasObservable): void {
                         $hasObservable = false;
                     })
                     ->publish()

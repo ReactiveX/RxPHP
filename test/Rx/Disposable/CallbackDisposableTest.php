@@ -14,7 +14,7 @@ class CallbackDisposableTest extends TestCase
     public function it_calls_the_callback_on_dispose()
     {
         $disposed   = false;
-        $disposable = new CallbackDisposable(function() use (&$disposed) { $disposed = true; });
+        $disposable = new CallbackDisposable(function() use (&$disposed): void { $disposed = true; });
 
         $this->assertFalse($disposed);
 
@@ -30,7 +30,7 @@ class CallbackDisposableTest extends TestCase
     {
         $disposed    = false;
         $invocations = 0;
-        $disposable  = new CallbackDisposable(function () use (&$disposed, &$invocations) {
+        $disposable  = new CallbackDisposable(function () use (&$disposed, &$invocations): void {
             $invocations++;
             $disposed = true;
         });

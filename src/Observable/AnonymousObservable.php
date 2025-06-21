@@ -27,7 +27,7 @@ class AnonymousObservable extends Observable
 
         $autoDetachObserver->setDisposable($subscribeAction($autoDetachObserver));
 
-        return new CallbackDisposable(function () use ($autoDetachObserver) {
+        return new CallbackDisposable(function () use ($autoDetachObserver): void {
             $autoDetachObserver->dispose();
         });
     }

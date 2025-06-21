@@ -432,7 +432,7 @@ class TakeWhileTest extends FunctionalTestCase
          * The sqrt can be an aproximation, hence just for the sake of
          * security, one rounds it to the next highest integer value.
          */
-        for ($i = 3; $i <= ceil(sqrt($num)); $i = $i + 2) {
+        for ($i = 3; $i <= ceil(sqrt($num)); $i += 2) {
             if ($num % $i === 0) {
                 return false;
             }

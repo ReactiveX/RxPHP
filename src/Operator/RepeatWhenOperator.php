@@ -52,12 +52,12 @@ final class RepeatWhenOperator implements OperatorInterface
         $outerDisposable = new SerialDisposable();
         $this->disposable->add($outerDisposable);
 
-        $subscribe = function () use ($outerDisposable, $observable, $observer, &$subscribe) {
+        $subscribe = function () use ($outerDisposable, $observable, $observer, &$subscribe): void {
             $this->sourceComplete = false;
             $outerSubscription    = $observable->subscribe(new CallbackObserver(
                 [$observer, 'onNext'],
                 [$observer, 'onError'],
-                function () use ($observer, &$subscribe, $outerDisposable) {
+                function () use ($observer, &$subscribe, $outerDisposable): void {
                     $this->sourceComplete = true;
                     if (!$this->repeat) {
                         $observer->onCompleted();
@@ -72,14 +72,14 @@ final class RepeatWhenOperator implements OperatorInterface
         };
 
         $notifierDisposable = $this->notifier->subscribe(new CallbackObserver(
-            function () use (&$subscribe) {
+            function () use (&$subscribe): void {
                 $subscribe();
             },
-            function ($ex) use ($observer) {
+            function ($ex) use ($observer): void {
                 $this->repeat = false;
                 $observer->onError($ex);
             },
-            function () use ($observer) {
+            function () use ($observer): void {
                 $this->repeat = false;
                 if ($this->sourceComplete) {
                     $observer->onCompleted();

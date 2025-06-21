@@ -28,7 +28,7 @@ class HotObservable extends Observable
             $time         = $message->getTime();
             $notification = $message->getValue();
 
-            $schedule = function (Notification $innerNotification) use (&$currentObservable, $scheduler, $time) {
+            $schedule = function (Notification $innerNotification) use (&$currentObservable, $scheduler, $time): void {
                 $scheduler->scheduleAbsolute($time, function () use (&$currentObservable, $innerNotification) {
                     $observers = $currentObservable->getObservers();
 
@@ -56,7 +56,7 @@ class HotObservable extends Observable
         $index     = count($this->subscriptions) - 1;
         $scheduler = $this->scheduler;
 
-        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions) {
+        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions): void {
             $currentObservable->removeObserver($observer);
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });

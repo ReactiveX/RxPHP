@@ -22,7 +22,7 @@ final class CountOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $callbackObserver = new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 if ($this->predicate === null) {
                     $this->count++;
 
@@ -38,7 +38,7 @@ final class CountOperator implements OperatorInterface
                 }
             },
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer): void {
                 $observer->onNext($this->count);
                 $observer->onCompleted();
             }

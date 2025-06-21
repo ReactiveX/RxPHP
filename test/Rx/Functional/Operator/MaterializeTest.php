@@ -20,7 +20,7 @@ class MaterializeTest extends FunctionalTestCase
         }
 
         $value = null;
-        $valueGrabber = function ($v) use (&$value) {
+        $valueGrabber = function ($v) use (&$value): void {
             $value = $v;
         };
 

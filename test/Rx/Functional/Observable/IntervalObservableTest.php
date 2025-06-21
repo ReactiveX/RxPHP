@@ -103,7 +103,7 @@ class IntervalObservableTest extends FunctionalTestCase
         $this->expectException(\Exception::class);
         $xs = new IntervalObservable(1, $this->scheduler);
 
-        $xs->subscribe(new CallbackObserver(function () {
+        $xs->subscribe(new CallbackObserver(function (): void {
             throw new \Exception();
         }));
 

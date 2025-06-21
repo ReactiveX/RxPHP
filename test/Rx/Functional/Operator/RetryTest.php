@@ -126,7 +126,7 @@ class RetryTest extends FunctionalTestCase
 
         $xs->subscribe(
             new CallbackObserver(
-                function () {
+                function (): void {
                     throw new \Exception();
                 }
             ));
@@ -151,7 +151,7 @@ class RetryTest extends FunctionalTestCase
         $d = $ys->subscribe(
             new CallbackObserver(
                 null,
-                function ($err) {
+                function ($err): void {
                     throw $err;
                 }
             ));
@@ -170,7 +170,7 @@ class RetryTest extends FunctionalTestCase
             new CallbackObserver(
                 null,
                 null,
-                function () {
+                function (): void {
                     throw new \Exception();
                 }
             ));
@@ -335,7 +335,7 @@ class RetryTest extends FunctionalTestCase
 
         $xs = (new ReturnObservable(1, $scheduler1))->retry(3);
 
-        $xs->subscribe(function () {
+        $xs->subscribe(function (): void {
             throw new \Exception();
         });
 
@@ -351,7 +351,7 @@ class RetryTest extends FunctionalTestCase
 
         $ys = (new ErrorObservable(new \Exception(), $scheduler2))->retry(100);
 
-        $d = $ys->subscribe(null, function ($err) {
+        $d = $ys->subscribe(null, function ($err): void {
             throw $err;
         });
 
@@ -365,7 +365,7 @@ class RetryTest extends FunctionalTestCase
 
         $zs = (new ReturnObservable(1, $scheduler3))->retry(100);
 
-        $zs->subscribe(null, null, function () {
+        $zs->subscribe(null, null, function (): void {
             throw new \Exception();
         });
 
@@ -377,7 +377,7 @@ class RetryTest extends FunctionalTestCase
         }
         $this->assertNotNull($exception);
 
-        $xss = (new AnonymousObservable(function () {
+        $xss = (new AnonymousObservable(function (): void {
             throw new \Exception();
         }))->retry(100);
 
@@ -405,11 +405,11 @@ class RetryTest extends FunctionalTestCase
             ->retry(3)
             ->take(1)
             ->subscribe(new CallbackObserver(
-                function ($x) use (&$emitted) {
+                function ($x) use (&$emitted): void {
                     $emitted = $x;
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));

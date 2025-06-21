@@ -221,7 +221,7 @@ class DistinctTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $error) {
-            return $xs->distinct(function ($x) use ($error) {
+            return $xs->distinct(function ($x) use ($error): void {
                 if ($x === 12) {
                     throw $error;
                 }

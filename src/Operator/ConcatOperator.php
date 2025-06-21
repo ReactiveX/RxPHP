@@ -34,7 +34,7 @@ final class ConcatOperator implements OperatorInterface
         $cbObserver = new CallbackObserver(
             [$observer, 'onNext'],
             [$observer, 'onError'],
-            function () use ($observer, $disp) {
+            function () use ($observer, $disp): void {
                 $disp->setDisposable($this->subsequentObservable->subscribe($observer));
             }
         );

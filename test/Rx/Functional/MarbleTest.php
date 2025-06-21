@@ -272,7 +272,7 @@ class MarbleTest extends FunctionalTestCase
 
         $e1 = $this->createCold($cold, ['x' => 42]);
 
-        $r = $e1->map(function ($x) {
+        $r = $e1->map(function ($x): void {
             throw new \Exception('too bad');
         });
 

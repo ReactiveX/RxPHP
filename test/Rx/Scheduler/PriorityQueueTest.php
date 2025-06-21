@@ -142,7 +142,7 @@ class PriorityQueueTest extends TestCase
             new ScheduledItem(
                 $this->createMock(ScheduledItem::class),
                 null,
-                function () {
+                function (): void {
                 },
                 0
             )

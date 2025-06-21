@@ -15,7 +15,7 @@ class ObservableFactoryWrapperTest extends TestCase
             return resolve(true);
         });
         $true = null;
-        $afw()->subscribe(function ($v) use (&$true) {
+        $afw()->subscribe(function ($v) use (&$true): void {
             $true = $v;
         });
 
@@ -28,7 +28,7 @@ class ObservableFactoryWrapperTest extends TestCase
             return Observable::fromArray([true], Scheduler::getImmediate());
         });
         $true = null;
-        $afw()->subscribe(function ($v) use (&$true) {
+        $afw()->subscribe(function ($v) use (&$true): void {
             $true = $v;
         });
 

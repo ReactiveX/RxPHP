@@ -15,7 +15,7 @@ class Rot13Operator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return $observable->subscribe(
-            function ($json) use ($observer) {
+            function ($json) use ($observer): void {
                 $observer->onNext(str_rot13($json));
             },
             [$observer, 'onError'],

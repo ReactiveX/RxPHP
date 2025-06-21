@@ -379,7 +379,7 @@ class RetryWhenTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithDispose(function () use ($xs, $error) {
-            return $xs->retryWhen(function () use ($error) {
+            return $xs->retryWhen(function () use ($error): void {
                 throw $error;
             });
         }, 285);

@@ -54,7 +54,7 @@ final class GroupByUntilOperator implements OperatorInterface
         $refCountDisposable = new RefCountDisposable($groupDisposable);
         $sourceEmits        = true;
 
-        $handleError = function (\Throwable $e) use ($observer, &$sourceEmits) {
+        $handleError = function (\Throwable $e) use ($observer, &$sourceEmits): void {
             foreach ($this->map as $w) {
                 $w->onError($e);
             }
@@ -64,7 +64,7 @@ final class GroupByUntilOperator implements OperatorInterface
         };
 
         $subscription = $observable->subscribe(
-            function ($element) use ($observer, $handleError, $refCountDisposable, $groupDisposable, &$sourceEmits) {
+            function ($element) use ($observer, $handleError, $refCountDisposable, $groupDisposable, &$sourceEmits): void {
                 try {
                     $key           = call_user_func($this->keySelector, $element);
                     $serializedKey = call_user_func($this->keySerializer, $key);
@@ -98,7 +98,7 @@ final class GroupByUntilOperator implements OperatorInterface
                     $durationSubscription = $duration->take(1)->subscribe(
                         null,
                         $handleError,
-                        function () use ($groupDisposable, $md, $writer, $serializedKey) {
+                        function () use ($groupDisposable, $md, $writer, $serializedKey): void {
                             unset($this->map[$serializedKey]);
                             $writer->onCompleted();
 
@@ -120,7 +120,7 @@ final class GroupByUntilOperator implements OperatorInterface
                 $this->map[$serializedKey]->onNext($element);
             },
             $handleError,
-            function () use ($observer, &$sourceEmits) {
+            function () use ($observer, &$sourceEmits): void {
                 foreach ($this->map as $w) {
                     $w->onCompleted();
                 }
@@ -131,7 +131,7 @@ final class GroupByUntilOperator implements OperatorInterface
 
         $groupDisposable->add($subscription);
 
-        return new CallbackDisposable(function () use (&$sourceEmits, $refCountDisposable) {
+        return new CallbackDisposable(function () use (&$sourceEmits, $refCountDisposable): void {
             $sourceEmits = false;
             $refCountDisposable->dispose();
         });

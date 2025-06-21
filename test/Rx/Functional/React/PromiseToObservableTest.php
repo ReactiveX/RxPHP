@@ -23,13 +23,13 @@ class PromiseToObservableTest extends FunctionalTestCase
         $source = Promise::toObservable($p);
 
         $source->subscribe(new CallbackObserver(
-          function ($x) {
+          function ($x): void {
               $this->assertEquals(42, $x);
           },
-          function ($error) {
+          function ($error): void {
               $this->assertFalse(true);
           },
-          function () {
+          function (): void {
               $this->assertTrue(true);
           }));
     }
@@ -40,21 +40,21 @@ class PromiseToObservableTest extends FunctionalTestCase
      */
     public function from_promise_failure()
     {
-        $p = new ReactPromise(function () {
+        $p = new ReactPromise(function (): void {
             1 / 0;
         });
 
         $source = Promise::toObservable($p);
 
         $source->subscribe(new CallbackObserver(
-          function ($x) {
+          function ($x): void {
               $this->assertFalse(true);
 
           },
-          function (\Throwable $error) {
+          function (\Throwable $error): void {
               $this->assertStringContainsStringIgnoringCase('division by zero', $error->getMessage());
           },
-          function () {
+          function (): void {
               $this->assertFalse(true);
           }));
 
@@ -67,13 +67,13 @@ class PromiseToObservableTest extends FunctionalTestCase
     {
         $canceled = false;
 
-        $deferred = new Deferred(function () use (&$canceled) {
+        $deferred = new Deferred(function () use (&$canceled): void {
             $canceled = true;
         });
 
         $o = Promise::toObservable($deferred->promise());
 
-        $this->scheduler->schedule(function () use ($deferred) {
+        $this->scheduler->schedule(function () use ($deferred): void {
             $deferred->resolve(1);
         }, 300);
         
@@ -97,7 +97,7 @@ class PromiseToObservableTest extends FunctionalTestCase
     {
         $canceled = false;
         
-        $deferred = new Deferred(function () use (&$canceled) {
+        $deferred = new Deferred(function () use (&$canceled): void {
             $canceled = true;
         });
         
@@ -135,14 +135,14 @@ class PromiseToObservableTest extends FunctionalTestCase
     {
         $canceled = false;
 
-        $deferred = new Deferred(function () use (&$canceled) {
+        $deferred = new Deferred(function () use (&$canceled): void {
             $canceled = true;
         });
 
         $o1 = Promise::toObservable($deferred->promise());
         $o2 = Promise::toObservable($deferred->promise())->delay(100, $this->scheduler);
 
-        $this->scheduler->schedule(function () use ($deferred) {
+        $this->scheduler->schedule(function () use ($deferred): void {
             $deferred->resolve(1);
         }, 100);
         
@@ -151,7 +151,7 @@ class PromiseToObservableTest extends FunctionalTestCase
 
         $s1 = $o1->subscribe($results1);
         
-        $this->scheduler->schedule(function () use ($s1) {
+        $this->scheduler->schedule(function () use ($s1): void {
             $s1->dispose();
         }, 50);
 
@@ -178,13 +178,13 @@ class PromiseToObservableTest extends FunctionalTestCase
     {
         $canceled = false;
 
-        $deferred = new Deferred(function () use (&$canceled) {
+        $deferred = new Deferred(function () use (&$canceled): void {
             $canceled = true;
         });
 
         $o = Promise::toObservable($deferred->promise());
         
-        $this->scheduler->schedule(function () use ($deferred) {
+        $this->scheduler->schedule(function () use ($deferred): void {
             $deferred->resolve(1);
         }, 200);
         
@@ -192,7 +192,7 @@ class PromiseToObservableTest extends FunctionalTestCase
 
         $s = $o->subscribe($results);
 
-        $this->scheduler->schedule(function () use ($s) {
+        $this->scheduler->schedule(function () use ($s): void {
             $s->dispose();
         }, 250);
         

@@ -43,21 +43,21 @@ final class ScheduledObserver extends AbstractObserver
 
     protected function completed()
     {
-        $this->queue[] = function () {
+        $this->queue[] = function (): void {
             $this->observer->onCompleted();
         };
     }
 
     protected function next($value)
     {
-        $this->queue[] = function () use ($value) {
+        $this->queue[] = function () use ($value): void {
             $this->observer->onNext($value);
         };
     }
 
     protected function error(\Throwable $error)
     {
-        $this->queue[] = function () use ($error) {
+        $this->queue[] = function () use ($error): void {
             $this->observer->onError($error);
         };
     }
@@ -76,7 +76,7 @@ final class ScheduledObserver extends AbstractObserver
 
         $this->disposable->setDisposable(
             $this->scheduler->scheduleRecursive(
-                function ($recurse) {
+                function ($recurse): void {
                     $parent = $this;
                     if (count($parent->queue) > 0) {
                         $work = array_shift($parent->queue);
