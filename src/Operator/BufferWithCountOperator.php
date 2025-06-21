@@ -26,7 +26,7 @@ final class BufferWithCountOperator implements OperatorInterface
      * @param int $skip
      * @throws \InvalidArgumentException
      */
-    public function __construct(int $count, int $skip = null)
+    public function __construct(int $count, ?int $skip = null)
     {
         if ($count < 1) {
             throw new \InvalidArgumentException('count must be greater than or equal to 1');

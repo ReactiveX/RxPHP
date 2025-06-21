@@ -30,7 +30,7 @@ final class ZipOperator implements OperatorInterface
     /** @var bool[] */
     private $completed = [];
 
-    public function __construct(array $sources, callable $resultSelector = null)
+    public function __construct(array $sources, ?callable $resultSelector = null)
     {
         $this->sources = $sources;
 

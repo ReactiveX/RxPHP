@@ -23,7 +23,7 @@ class ForkJoinObservable extends Observable
 
     private $resultSelector;
 
-    public function __construct(array $observables = [], callable $resultSelector = null)
+    public function __construct(array $observables = [], ?callable $resultSelector = null)
     {
         $this->observables    = $observables;
         $this->resultSelector = $resultSelector;

@@ -18,7 +18,7 @@ final class CombineLatestOperator implements OperatorInterface
     /** @var callable */
     private $resultSelector;
 
-    public function __construct(array $observables, callable $resultSelector = null)
+    public function __construct(array $observables, ?callable $resultSelector = null)
     {
         if (null === $resultSelector) {
             $resultSelector = function () {

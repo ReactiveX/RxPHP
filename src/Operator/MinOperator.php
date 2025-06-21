@@ -13,7 +13,7 @@ final class MinOperator implements OperatorInterface
 {
     private $comparer;
 
-    public function __construct(callable $comparer = null)
+    public function __construct(?callable $comparer = null)
     {
         if ($comparer === null) {
             $comparer = function ($x, $y) {

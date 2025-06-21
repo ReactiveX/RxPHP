@@ -44,7 +44,7 @@ final class Promise
      * @return ReactPromise
      * @throws \InvalidArgumentException
      */
-    public static function fromObservable(ObservableInterface $observable, Deferred $deferred = null): ReactPromise
+    public static function fromObservable(ObservableInterface $observable, ?Deferred $deferred = null): ReactPromise
     {
 
         $d = $deferred ?: new Deferred(function () use (&$subscription): void {

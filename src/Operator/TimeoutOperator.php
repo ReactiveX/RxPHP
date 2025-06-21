@@ -22,7 +22,7 @@ final class TimeoutOperator implements OperatorInterface
 
     private $timeoutObservable;
 
-    public function __construct(int $timeout, ObservableInterface $timeoutObservable = null, AsyncSchedulerInterface $scheduler)
+    public function __construct(int $timeout, ?ObservableInterface $timeoutObservable = null, AsyncSchedulerInterface $scheduler)
     {
         $this->timeout           = $timeout;
         $this->scheduler         = $scheduler;

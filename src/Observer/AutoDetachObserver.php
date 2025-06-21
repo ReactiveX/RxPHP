@@ -21,7 +21,7 @@ class AutoDetachObserver extends AbstractObserver
         $this->disposable = new SingleAssignmentDisposable();
     }
 
-    public function setDisposable(DisposableInterface $disposable = null)
+    public function setDisposable(?DisposableInterface $disposable = null)
     {
         $disposable = $disposable ?: new EmptyDisposable();
 

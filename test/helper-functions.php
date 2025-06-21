@@ -8,15 +8,15 @@ use Rx\Notification\OnCompletedNotification;
 use Rx\Notification\OnErrorNotification;
 use Rx\Notification\OnNextNotification;
 
-function onError(int $dueTime, $error, callable $comparer = null) {
+function onError(int $dueTime, $error, ?callable $comparer = null) {
     return new Recorded($dueTime, new OnErrorNotification($error), $comparer);
 }
 
-function onNext(int $dueTime, $value, callable $comparer = null) {
+function onNext(int $dueTime, $value, ?callable $comparer = null) {
     return new Recorded($dueTime, new OnNextNotification($value), $comparer);
 }
 
-function onCompleted(int $dueTime, callable $comparer = null) {
+function onCompleted(int $dueTime, ?callable $comparer = null) {
     return new Recorded($dueTime, new OnCompletedNotification(), $comparer);
 }
 

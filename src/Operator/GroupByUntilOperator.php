@@ -22,7 +22,7 @@ final class GroupByUntilOperator implements OperatorInterface
     private $keySerializer;
     private $map = [];
 
-    public function __construct(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null)
+    public function __construct(callable $keySelector, ?callable $elementSelector = null, ?callable $durationSelector = null, ?callable $keySerializer = null)
     {
         if (null === $elementSelector) {
             $elementSelector = function ($elem) {

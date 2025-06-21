@@ -15,7 +15,7 @@ class CallbackObserver extends AbstractObserver
     /** @var callable|null */
     private $onCompleted;
 
-    public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
+    public function __construct(?callable $onNext = null, ?callable $onError = null, ?callable $onCompleted = null)
     {
         $default = function (): void {
         };
@@ -45,7 +45,7 @@ class CallbackObserver extends AbstractObserver
         ($this->onNext)($value);
     }
 
-    private function getOrDefault(callable $callback = null, $default = null): callable
+    private function getOrDefault(?callable $callback = null, $default = null): callable
     {
         if (null === $callback) {
             return $default;

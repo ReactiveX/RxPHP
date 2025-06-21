@@ -34,7 +34,7 @@ class ConnectableObservable extends Observable
      * @param Observable $source
      * @param \Rx\Subject\Subject $subject
      */
-    public function __construct(Observable $source, Subject $subject = null)
+    public function __construct(Observable $source, ?Subject $subject = null)
     {
         $this->sourceObservable = $source->asObservable();
         $this->subject          = $subject ?: new Subject();

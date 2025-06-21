@@ -15,7 +15,7 @@ final class DistinctUntilChangedOperator implements OperatorInterface
 
     protected $comparer;
 
-    public function __construct(callable $keySelector = null, callable $comparer = null)
+    public function __construct(?callable $keySelector = null, ?callable $comparer = null)
     {
         $this->comparer = $comparer ?: function ($x, $y) {
             return $x == $y;

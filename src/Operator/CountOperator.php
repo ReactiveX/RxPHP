@@ -14,7 +14,7 @@ final class CountOperator implements OperatorInterface
     private $count = 0;
     private $predicate;
 
-    public function __construct(callable $predicate = null)
+    public function __construct(?callable $predicate = null)
     {
         $this->predicate = $predicate;
     }

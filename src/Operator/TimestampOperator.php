@@ -15,7 +15,7 @@ final class TimestampOperator implements OperatorInterface
 {
     private $scheduler;
 
-    public function __construct(SchedulerInterface $scheduler = null)
+    public function __construct(?SchedulerInterface $scheduler = null)
     {
         $this->scheduler = $scheduler;
     }

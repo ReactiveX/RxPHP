@@ -20,7 +20,7 @@ final class DistinctOperator implements OperatorInterface
     /** @var callable */
     protected $comparer;
 
-    public function __construct(callable $keySelector = null, callable $comparer = null)
+    public function __construct(?callable $keySelector = null, ?callable $comparer = null)
     {
         $this->comparer = $comparer;
         $this->keySelector = $keySelector;

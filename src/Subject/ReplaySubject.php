@@ -35,7 +35,7 @@ class ReplaySubject extends Subject
     /** @var SchedulerInterface */
     private $scheduler;
 
-    public function __construct(int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler = null)
+    public function __construct(?int $bufferSize = null, ?int $windowSize = null, ?SchedulerInterface $scheduler = null)
     {
         $bufferSize = $bufferSize ?? $this->maxSafeInt;
 
