@@ -14,7 +14,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_NoErrors()
+    public function catchError_NoErrors(): void
     {
         $o1 = $this->createHotObservable(
             [
@@ -51,7 +51,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Never()
+    public function catchError_Never(): void
     {
         $o1 = Observable::never();
 
@@ -77,7 +77,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Empty()
+    public function catchError_Empty(): void
     {
         $o1 = $this->createHotObservable(
             [
@@ -110,7 +110,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Return()
+    public function catchError_Return(): void
     {
         $o1 = $this->createHotObservable(
             [
@@ -145,7 +145,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Error()
+    public function catchError_Error(): void
     {
         $error = new \Exception();
 
@@ -185,7 +185,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Error_Never()
+    public function catchError_Error_Never(): void
     {
         $error = new \Exception();
 
@@ -219,7 +219,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Error_Never_Dispose()
+    public function catchError_Error_Never_Dispose(): void
     {
         $error = new \Exception();
 
@@ -251,7 +251,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Error_Error()
+    public function catchError_Error_Error(): void
     {
         $error = new \Exception();
 
@@ -291,7 +291,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Error_Error_Dispose()
+    public function catchError_Error_Error_Dispose(): void
     {
         $error = new \Exception();
 
@@ -330,7 +330,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_HandlerThrows()
+    public function catchError_HandlerThrows(): void
     {
         $error = new \Exception();
 
@@ -365,7 +365,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_handler_returns_invalid_string()
+    public function catchError_handler_returns_invalid_string(): void
     {
         $o1 = $this->createHotObservable(
             [
@@ -395,7 +395,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_Nested_OuterCatches()
+    public function catchError_Nested_OuterCatches(): void
     {
         $error               = new \Exception();
         $firstHandlerCalled  = false;
@@ -451,7 +451,7 @@ class CatchErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function catchError_ThrowFromNestedCatch()
+    public function catchError_ThrowFromNestedCatch(): void
     {
         $error  = new \Exception();
         $error2 = new \InvalidArgumentException();
@@ -515,7 +515,7 @@ class CatchErrorTest extends FunctionalTestCase
      * does not lose subscription to underlying observable
      * @test
      */
-    public function catchError_does_not_lose_subscription()
+    public function catchError_does_not_lose_subscription(): void
     {
         $subscribes   = 0;
         $unsubscribes = 0;

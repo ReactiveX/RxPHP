@@ -6,7 +6,7 @@ use Rx\Functional\FunctionalTestCase;
 
 class ComposeTest extends FunctionalTestCase
 {
-    public function testSimpleCompose()
+    public function testSimpleCompose(): void
     {
         $xs = $this->createHotObservable(
             [

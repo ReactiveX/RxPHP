@@ -7,7 +7,7 @@ use Rx\Testing\MockObserver;
 
 class ObservableTest extends FunctionalTestCase
 {
-    public function testExceptionInOnNextByDefaultGoesToErrorAndDisposes()
+    public function testExceptionInOnNextByDefaultGoesToErrorAndDisposes(): void
     {
         $xs = $this->createHotObservable(
             [

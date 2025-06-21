@@ -11,7 +11,7 @@ class PriorityQueueTest extends TestCase
     /**
      * @test
      */
-    public function it_should_remove_a_scheduled_item()
+    public function it_should_remove_a_scheduled_item(): void
     {
         $queue          = new PriorityQueue();
         $scheduledItem  = $this->createScheduledItem(1);
@@ -38,7 +38,7 @@ class PriorityQueueTest extends TestCase
     /**
      * @test
      */
-    public function it_orders_the_items()
+    public function it_orders_the_items(): void
     {
         $queue          = new PriorityQueue();
         $scheduledItem  = $this->createScheduledItem(3);
@@ -57,7 +57,7 @@ class PriorityQueueTest extends TestCase
     /**
      * @test
      */
-    public function peek_returns_the_top_item()
+    public function peek_returns_the_top_item(): void
     {
         $queue          = new PriorityQueue();
         $scheduledItem  = $this->createScheduledItem(3);
@@ -74,7 +74,7 @@ class PriorityQueueTest extends TestCase
     /**
      * @test
      */
-    public function dequeue_removes_the_top_item_from_the_queue()
+    public function dequeue_removes_the_top_item_from_the_queue(): void
     {
         $queue          = new PriorityQueue();
         $scheduledItem  = $this->createScheduledItem(1);
@@ -96,7 +96,7 @@ class PriorityQueueTest extends TestCase
     /**
      * @test
      */
-    public function first_scheduled_item_with_same_priority_comes_first()
+    public function first_scheduled_item_with_same_priority_comes_first(): void
     {
         $queue          = new PriorityQueue();
         $scheduledItem  = $this->createScheduledItem(1);
@@ -115,7 +115,7 @@ class PriorityQueueTest extends TestCase
     /**
      * @test
      */
-    public function can_remove_scheduled_items_out_of_order()
+    public function can_remove_scheduled_items_out_of_order(): void
     {
         $queue          = new PriorityQueue();
         $scheduledItem  = $this->createScheduledItem(1);
@@ -135,7 +135,7 @@ class PriorityQueueTest extends TestCase
      * @test
      * @doesNotPerformAssertions
      */
-    public function should_not_remove_nonexistent_item()
+    public function should_not_remove_nonexistent_item(): void
     {
         $queue = new PriorityQueue();
         $queue->remove(

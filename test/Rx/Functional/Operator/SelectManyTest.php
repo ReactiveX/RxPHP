@@ -13,7 +13,7 @@ class SelectManyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_the_last_on_complete()
+    public function it_passes_the_last_on_complete(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -62,7 +62,7 @@ class SelectManyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_error()
+    public function it_passes_on_error(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -100,7 +100,7 @@ class SelectManyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapTo_it_passes_the_last_on_complete()
+    public function flatMapTo_it_passes_the_last_on_complete(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -149,7 +149,7 @@ class SelectManyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapTo_it_passes_on_error()
+    public function flatMapTo_it_passes_on_error(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -187,7 +187,7 @@ class SelectManyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMap_it_errors_with_bad_return()
+    public function flatMap_it_errors_with_bad_return(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),

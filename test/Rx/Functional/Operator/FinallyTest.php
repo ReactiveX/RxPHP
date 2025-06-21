@@ -13,7 +13,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_call_finally_after_complete()
+    public function should_call_finally_after_complete(): void
     {
         $completed = false;
 
@@ -29,7 +29,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_call_finally_after_error()
+    public function should_call_finally_after_error(): void
     {
         $thrown = false;
 
@@ -51,7 +51,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_call_finally_upon_disposal()
+    public function should_call_finally_upon_disposal(): void
     {
         $disposed = false;
 
@@ -70,7 +70,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_call_finally_when_synchronously_subscribing_to_and_unsubscribing_from_a_shared_observable()
+    public function should_call_finally_when_synchronously_subscribing_to_and_unsubscribing_from_a_shared_observable(): void
     {
         $disposed = false;
 
@@ -90,7 +90,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_call_two_finally_instances_in_succession_on_a_shared_observable()
+    public function should_call_two_finally_instances_in_succession_on_a_shared_observable(): void
     {
         $invoked = 0;
 
@@ -110,7 +110,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_empty()
+    public function should_handle_empty(): void
     {
         $executed = false;
 
@@ -138,7 +138,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_never()
+    public function should_handle_never(): void
     {
         $executed = false;
 
@@ -162,7 +162,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_throw()
+    public function should_handle_throw(): void
     {
         $executed = false;
 
@@ -192,7 +192,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_basic_hot_observable()
+    public function should_handle_basic_hot_observable(): void
     {
         $executed = false;
 
@@ -226,7 +226,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_basic_cold_observable()
+    public function should_handle_basic_cold_observable(): void
     {
         $executed = false;
 
@@ -260,7 +260,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_basic_error()
+    public function should_handle_basic_error(): void
     {
         $executed = false;
 
@@ -296,7 +296,7 @@ class FinallyCallTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_handle_unsubscription()
+    public function should_handle_unsubscription(): void
     {
         $executed = false;
 

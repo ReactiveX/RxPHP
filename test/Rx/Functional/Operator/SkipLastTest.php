@@ -12,7 +12,7 @@ class SkipLastTest extends FunctionalTestCase
 {
     /**
      */
-    public function testSkipLastNegative()
+    public function testSkipLastNegative(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable(
@@ -36,7 +36,7 @@ class SkipLastTest extends FunctionalTestCase
 
     }
 
-    public function testSkipLastZeroCompleted()
+    public function testSkipLastZeroCompleted(): void
     {
 
         $xs = $this->createHotObservable(
@@ -81,7 +81,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastZeroError()
+    public function testSkipLastZeroError(): void
     {
 
         $ex = new \Exception('ex');
@@ -126,7 +126,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastZeroDisposed()
+    public function testSkipLastZeroDisposed(): void
     {
 
         $xs = $this->createHotObservable(
@@ -169,7 +169,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastOneCompleted()
+    public function testSkipLastOneCompleted(): void
     {
 
         $xs = $this->createHotObservable(
@@ -214,7 +214,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastOneError()
+    public function testSkipLastOneError(): void
     {
 
         $ex = new \Exception('ex');
@@ -260,7 +260,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastOneDisposed()
+    public function testSkipLastOneDisposed(): void
     {
 
         $xs = $this->createHotObservable(
@@ -302,7 +302,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastThreeCompleted()
+    public function testSkipLastThreeCompleted(): void
     {
 
         $xs = $this->createHotObservable(
@@ -344,7 +344,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastThreeError()
+    public function testSkipLastThreeError(): void
     {
 
         $ex = new \Exception('ex');
@@ -387,7 +387,7 @@ class SkipLastTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipLastThreeDisposed()
+    public function testSkipLastThreeDisposed(): void
     {
 
         $xs = $this->createHotObservable(

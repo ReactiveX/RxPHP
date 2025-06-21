@@ -16,7 +16,7 @@ class FromPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function from_promise_success()
+    public function from_promise_success(): void
     {
         $p = \React\Promise\resolve(42);
 
@@ -38,7 +38,7 @@ class FromPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function from_promise_failure()
+    public function from_promise_failure(): void
     {
         $p = \React\Promise\reject(new RejectedPromiseException('error'));
 
@@ -59,7 +59,7 @@ class FromPromiseTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function two_observables_one_delayed()
+    public function two_observables_one_delayed(): void
     {
         $p = \React\Promise\resolve(1);
 

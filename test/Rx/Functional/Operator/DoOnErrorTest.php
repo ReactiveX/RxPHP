@@ -12,7 +12,7 @@ class DoOnErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnError_should_see_errors()
+    public function doOnError_should_see_errors(): void
     {
         $ex = new RuntimeException('boom!');
         $xs = $this->createHotObservable([
@@ -39,7 +39,7 @@ class DoOnErrorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnError_should_call_after_resubscription()
+    public function doOnError_should_call_after_resubscription(): void
     {
         $xs = $this->createColdObservable([
             onError(10, new \Exception("Hello")),

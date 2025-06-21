@@ -21,7 +21,7 @@ class AsObservableTest extends FunctionalTestCase
         return ($someObservable->asObservable() !== $someObservable);
     }
 
-    public function testAsObservableNever()
+    public function testAsObservableNever(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -34,7 +34,7 @@ class AsObservableTest extends FunctionalTestCase
         );
     }
 
-    public function testAsObservableEmpty()
+    public function testAsObservableEmpty(): void
     {
 
         $xs = $this->createHotObservable(
@@ -56,7 +56,7 @@ class AsObservableTest extends FunctionalTestCase
         );
     }
 
-    public function testAsObservableThrow()
+    public function testAsObservableThrow(): void
     {
         $error = new Exception();
 
@@ -79,7 +79,7 @@ class AsObservableTest extends FunctionalTestCase
         );
     }
 
-    public function testAsObservableJust()
+    public function testAsObservableJust(): void
     {
 
         $xs = $this->createHotObservable(
@@ -103,7 +103,7 @@ class AsObservableTest extends FunctionalTestCase
         );
     }
 
-    public function testAsObservableIsNotEager()
+    public function testAsObservableIsNotEager(): void
     {
 
         $subscribed = false;

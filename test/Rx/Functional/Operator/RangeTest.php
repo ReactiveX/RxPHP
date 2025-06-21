@@ -14,7 +14,7 @@ class RangeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function range_zero()
+    public function range_zero(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -32,7 +32,7 @@ class RangeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function range_one()
+    public function range_one(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -51,7 +51,7 @@ class RangeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function range_five()
+    public function range_five(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -74,7 +74,7 @@ class RangeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function range_dispose()
+    public function range_dispose(): void
     {
 
         $results = $this->scheduler->startWithDispose(function () {

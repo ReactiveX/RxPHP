@@ -13,7 +13,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_default_comparer_all_distinct()
+    public function distinct_default_comparer_all_distinct(): void
     {
         $xs = $this->createHotObservable([
             onNext(280, 4),
@@ -47,7 +47,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_default_comparer_some_duplicates()
+    public function distinct_default_comparer_some_duplicates(): void
     {
         $xs = $this->createHotObservable([
             onNext(280, 4),
@@ -79,7 +79,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_default_comparer_some_error()
+    public function distinct_default_comparer_some_error(): void
     {
         $error = new \Exception();
 
@@ -111,7 +111,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_default_comparer_dispose()
+    public function distinct_default_comparer_dispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(280, 4),
@@ -141,7 +141,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_CustomComparer_all_distinct()
+    public function distinct_CustomComparer_all_distinct(): void
     {
         $xs = $this->createHotObservable([
             onNext(280, 4),
@@ -175,7 +175,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_CustomComparer_some_duplicates()
+    public function distinct_CustomComparer_some_duplicates(): void
     {
         $xs = $this->createHotObservable([
             onNext(280, 4),
@@ -207,7 +207,7 @@ class DistinctTest extends FunctionalTestCase
      *
      * @test
      */
-    public function distinct_CustomComparer_some_throw()
+    public function distinct_CustomComparer_some_throw(): void
     {
         $error = new \Exception();
 
@@ -244,7 +244,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_CustomKey_all_distinct()
+    public function distinct_CustomKey_all_distinct(): void
     {
         $xs = $this->createHotObservable([
             onNext(280, ['id' => 4]),
@@ -282,7 +282,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_CustomKey_some_duplicates()
+    public function distinct_CustomKey_some_duplicates(): void
     {
 
         $xs = $this->createHotObservable([
@@ -319,7 +319,7 @@ class DistinctTest extends FunctionalTestCase
      *
      * @test
      */
-    public function distinct_CustomKey_some_throw()
+    public function distinct_CustomKey_some_throw(): void
     {
         $error = new \Exception();
 
@@ -358,7 +358,7 @@ class DistinctTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_CustomKey_and_CustomComparer_some_duplicates()
+    public function distinct_CustomKey_and_CustomComparer_some_duplicates(): void
     {
 
         $xs = $this->createHotObservable([

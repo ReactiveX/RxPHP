@@ -16,7 +16,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function connectable_observable_creation()
+    public function connectable_observable_creation(): void
     {
         $y   = 0;
         $s2  = new Subject();
@@ -37,7 +37,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function connectable_observable_connected()
+    public function connectable_observable_connected(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -73,7 +73,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function connectable_observable_disconnected()
+    public function connectable_observable_disconnected(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -101,7 +101,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function connectable_observable_disconnect_future()
+    public function connectable_observable_disconnect_future(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -134,7 +134,7 @@ class ConnectableObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function connectable_observable_multiple_non_overlapped_connections()
+    public function connectable_observable_multiple_non_overlapped_connections(): void
     {
         $xs = $this->createHotObservable(
           [

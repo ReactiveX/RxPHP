@@ -14,7 +14,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_success()
+    public function promise_success(): void
     {
         $promise = Observable::of(42)->toPromise();
 
@@ -31,7 +31,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_failure()
+    public function promise_failure(): void
     {
         $promise = Observable::error(new Exception('some error'))->toPromise();
 
@@ -51,7 +51,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_within_promise_success()
+    public function promise_within_promise_success(): void
     {
         $promise1 = \React\Promise\resolve(42);
 
@@ -70,7 +70,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_within_promise_failure()
+    public function promise_within_promise_failure(): void
     {
         $promise1 = \React\Promise\reject(new Exception('some error'));
 
@@ -92,7 +92,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_cancel()
+    public function promise_cancel(): void
     {
         $disposed = false;
 

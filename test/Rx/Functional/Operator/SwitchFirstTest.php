@@ -11,7 +11,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_Data()
+    public function switchFirst_Data(): void
     {
 
         $xs = $this->createHotObservable([
@@ -62,7 +62,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_inner_throws()
+    public function switchFirst_inner_throws(): void
     {
 
         $error = new \Exception();
@@ -116,7 +116,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_first_inner_throws()
+    public function switchFirst_first_inner_throws(): void
     {
 
         $error = new \Exception();
@@ -165,7 +165,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_outer_throws()
+    public function switchFirst_outer_throws(): void
     {
 
         $error = new \Exception();
@@ -209,7 +209,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_no_inner()
+    public function switchFirst_no_inner(): void
     {
 
         $xs = $this->createHotObservable([
@@ -231,7 +231,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_inner_completes()
+    public function switchFirst_inner_completes(): void
     {
 
         $xs = $this->createHotObservable([
@@ -269,7 +269,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_Dispose()
+    public function switchFirst_Dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -317,7 +317,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_Inner_Completes_Last()
+    public function switchFirst_Inner_Completes_Last(): void
     {
 
         $xs = $this->createHotObservable([
@@ -368,7 +368,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_Subsequent()
+    public function switchFirst_Subsequent(): void
     {
 
         $xs = $this->createHotObservable([
@@ -415,7 +415,7 @@ class SwitchFirstTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchFirst_SkipsOneObservable()
+    public function switchFirst_SkipsOneObservable(): void
     {
 
         $xs = $this->createHotObservable([

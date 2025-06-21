@@ -12,7 +12,7 @@ class BinaryDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_the_binary_disposable()
+    public function it_disposes_the_binary_disposable(): void
     {
         $disposed1 = false;
 
@@ -42,7 +42,7 @@ class BinaryDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_does_nothing_if_disposed_twice()
+    public function it_does_nothing_if_disposed_twice(): void
     {
         $disposed1 = 0;
 

@@ -11,7 +11,7 @@ use Rx\TestCase;
 
 class RefCountObservableTest extends TestCase
 {
-    public function testRefCountDisposableOnlyDisposesOnce()
+    public function testRefCountDisposableOnlyDisposesOnce(): void
     {
         $source = $this->createMock(ConnectableObservable::class);
 
@@ -36,7 +36,7 @@ class RefCountObservableTest extends TestCase
 
     }
 
-    public function testDisposesWhenRefcountReachesZero()
+    public function testDisposesWhenRefcountReachesZero(): void
     {
         $source = $this->createMock(ConnectableObservable::class);
 

@@ -12,7 +12,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_never()
+    public function retryWhen_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -37,7 +37,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_Observable_never()
+    public function retryWhen_Observable_never(): void
     {
         $error = new \Exception();
 
@@ -71,7 +71,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_never_completed()
+    public function retryWhen_never_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -104,7 +104,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_Observable_Empty()
+    public function retryWhen_Observable_Empty(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -134,7 +134,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_Observable_Next_Error()
+    public function retryWhen_Observable_Next_Error(): void
     {
         $error = new \Exception();
 
@@ -173,7 +173,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_Observable_complete()
+    public function retryWhen_Observable_complete(): void
     {
         $error = new \Exception();
 
@@ -204,7 +204,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_Observable_next_complete()
+    public function retryWhen_Observable_next_complete(): void
     {
         $error = new \Exception();
 
@@ -242,7 +242,7 @@ class RetryWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function retryWhen_Observable_infinite()
+    public function retryWhen_Observable_infinite(): void
     {
         $error = new \Exception();
 
@@ -269,7 +269,7 @@ class RetryWhenTest extends FunctionalTestCase
         ], $xs->getSubscriptions());
     }
 
-    public function testRetryWhenDispose()
+    public function testRetryWhenDispose(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -306,7 +306,7 @@ class RetryWhenTest extends FunctionalTestCase
         ], $xs->getSubscriptions());
     }
 
-    public function testRetryWhenDisposeBetweenSourceSubscriptions()
+    public function testRetryWhenDisposeBetweenSourceSubscriptions(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -337,7 +337,7 @@ class RetryWhenTest extends FunctionalTestCase
         ], $xs->getSubscriptions());
     }
 
-    public function testRetryWhenInnerEmitsBeforeOuterError()
+    public function testRetryWhenInnerEmitsBeforeOuterError(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -366,7 +366,7 @@ class RetryWhenTest extends FunctionalTestCase
         ], $xs->getSubscriptions());
     }
 
-    public function testRetryWhenSelectorThrows()
+    public function testRetryWhenSelectorThrows(): void
     {
         $error = new \Exception();
 
@@ -391,7 +391,7 @@ class RetryWhenTest extends FunctionalTestCase
         $this->assertSubscriptions([], $xs->getSubscriptions());
     }
 
-    public function testRetryWhenSelectorReturnsInvalidString()
+    public function testRetryWhenSelectorReturnsInvalidString(): void
     {
         $error = new \Exception();
 

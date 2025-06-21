@@ -15,7 +15,7 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function create_next()
+    public function create_next(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -35,7 +35,7 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function create_null_disposable()
+    public function create_null_disposable(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -54,7 +54,7 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function create_completed()
+    public function create_completed(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -75,7 +75,7 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function create_error()
+    public function create_error(): void
     {
 
         $error = new \Exception();
@@ -98,7 +98,7 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function create_throws_errors()
+    public function create_throws_errors(): void
     {
         $this->expectException(\Exception::class);
         Observable::create(function ($o): void {
@@ -109,7 +109,7 @@ class CreateTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function create_dispose()
+    public function create_dispose(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -163,7 +163,7 @@ class CreateTest extends FunctionalTestCase
      * @test
      *
      */
-    public function create_observer_does_not_catch()
+    public function create_observer_does_not_catch(): void
     {
         $this->assertException(function (): void {
             Observable::create(function (ObserverInterface $o) {

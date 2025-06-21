@@ -13,7 +13,7 @@ class PromiseFactoryTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function from_promise_success()
+    public function from_promise_success(): void
     {
         $source = PromiseFactory::toObservable(function() {
             return Promise::resolved(42);
@@ -32,7 +32,7 @@ class PromiseFactoryTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function from_promise_reject_non_exception()
+    public function from_promise_reject_non_exception(): void
     {
         $source = PromiseFactory::toObservable(function () {
             return Promise::rejected(42);
@@ -58,7 +58,7 @@ class PromiseFactoryTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function from_promise_reject()
+    public function from_promise_reject(): void
     {
         $error = new Exception("Test exception");
 

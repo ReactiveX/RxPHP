@@ -13,7 +13,7 @@ class MergeAllTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_error_from_sources()
+    public function it_passes_on_error_from_sources(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -45,7 +45,7 @@ class MergeAllTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_completed_from_sources()
+    public function it_passes_on_completed_from_sources(): void
     {
         $ys = $this->createHotObservable([
             onCompleted(250),

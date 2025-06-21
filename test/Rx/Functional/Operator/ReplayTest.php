@@ -13,7 +13,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_basic()
+    public function replay_count_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -102,7 +102,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_error()
+    public function replay_count_error(): void
     {
 
         $error = new \Exception();
@@ -185,7 +185,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_complete()
+    public function replay_count_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -267,7 +267,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_dispose()
+    public function replay_count_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -353,7 +353,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_multiple_connections()
+    public function replay_count_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->replay(null, 3);
@@ -375,7 +375,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_complete()
+    public function replay_count_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -443,7 +443,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_error()
+    public function replay_count_zip_error(): void
     {
 
         $error = new \Exception();
@@ -508,7 +508,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_dispose()
+    public function replay_count_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -563,7 +563,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_basic()
+    public function replay_time_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -652,7 +652,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_error()
+    public function replay_time_error(): void
     {
 
         $error = new \Exception();
@@ -733,7 +733,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_complete()
+    public function replay_time_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -812,7 +812,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_dispose()
+    public function replay_time_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -898,7 +898,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_multiple_connections()
+    public function replay_time_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->replay(null, null, 100);
@@ -920,7 +920,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_zip_complete()
+    public function replay_time_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -985,7 +985,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_zip_errorr()
+    public function replay_time_zip_errorr(): void
     {
 
         $error = new \Exception();
@@ -1049,7 +1049,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_zip_dispose()
+    public function replay_time_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([

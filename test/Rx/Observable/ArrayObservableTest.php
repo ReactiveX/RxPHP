@@ -13,7 +13,7 @@ class ArrayObservableTest extends TestCase
     /**
      * @test
      */
-    public function it_starts_again_if_you_subscribe_again()
+    public function it_starts_again_if_you_subscribe_again(): void
     {
         $a = [1,2,3];
 
@@ -38,7 +38,7 @@ class ArrayObservableTest extends TestCase
         $this->assertEquals(2, $goodCount);
     }
 
-    public function testRange()
+    public function testRange(): void
     {
         //todo: refactor
         $observable = new ArrayObservable(range(1, 10), Scheduler::getDefault());
@@ -49,7 +49,7 @@ class ArrayObservableTest extends TestCase
         $this->assertEquals(range(1, 10), $record);
     }
 
-    public function testOnCompleteIsCalled()
+    public function testOnCompleteIsCalled(): void
     {
         //todo: refactor
         $observable = new ArrayObservable([], Scheduler::getDefault());

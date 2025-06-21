@@ -11,7 +11,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_number_empty()
+    public function min_number_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -30,7 +30,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_number_Return()
+    public function min_number_Return(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -51,7 +51,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_number_Some()
+    public function min_number_Some(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -74,7 +74,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_number_throw()
+    public function min_number_throw(): void
     {
         $error = new \Exception();
 
@@ -95,7 +95,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_number_Never()
+    public function min_number_Never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)
@@ -111,7 +111,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_comparer_empty()
+    public function min_comparer_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -132,7 +132,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_comparer_return()
+    public function min_comparer_return(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 'z'),
@@ -155,7 +155,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_comparer_some()
+    public function min_comparer_some(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 'z'),
@@ -180,7 +180,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_comparer_throw()
+    public function min_comparer_throw(): void
     {
         $error = new \Exception();
 
@@ -203,7 +203,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_comparer_never()
+    public function min_comparer_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 'z')
@@ -221,7 +221,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_comparer_throws()
+    public function min_comparer_throws(): void
     {
         $error = new \Exception();
 
@@ -247,7 +247,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_never_dispose()
+    public function min_never_dispose(): void
     {
         $error = new \Exception();
 
@@ -269,7 +269,7 @@ class MinTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function min_some_dispose()
+    public function min_some_dispose(): void
     {
         $error = new \Exception();
 

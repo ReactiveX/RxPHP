@@ -12,7 +12,7 @@ use Rx\Subject\ReplaySubject;
 
 class ReplaySubjectTest extends FunctionalTestCase
 {
-    public function testInfinite()
+    public function testInfinite(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -99,7 +99,7 @@ class ReplaySubjectTest extends FunctionalTestCase
         );
     }
 
-    public function testInfinite2()
+    public function testInfinite2(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -186,7 +186,7 @@ class ReplaySubjectTest extends FunctionalTestCase
 
     }
 
-    public function testFinite()
+    public function testFinite(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -262,7 +262,7 @@ class ReplaySubjectTest extends FunctionalTestCase
 
     }
 
-    public function testError()
+    public function testError(): void
     {
         $error = new \Exception();
 
@@ -339,7 +339,7 @@ class ReplaySubjectTest extends FunctionalTestCase
         ], $results3->getMessages());
     }
 
-    public function testCanceled()
+    public function testCanceled(): void
     {
         $xs = $this->createHotObservable([
           onCompleted(630),
@@ -399,7 +399,7 @@ class ReplaySubjectTest extends FunctionalTestCase
 
     }
 
-    public function testDisposed()
+    public function testDisposed(): void
     {
         $results1 = $this->scheduler->createObserver();
         $results2 = $this->scheduler->createObserver();
@@ -493,7 +493,7 @@ class ReplaySubjectTest extends FunctionalTestCase
 
     }
 
-    public function testDiesOut()
+    public function testDiesOut(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -565,7 +565,7 @@ class ReplaySubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_replays_with_immediate_scheduler() {
+    public function it_replays_with_immediate_scheduler(): void {
         $rs = new ReplaySubject();
 
         $o = Observable::fromArray(range(1,5));

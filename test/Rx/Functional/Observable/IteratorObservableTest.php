@@ -14,7 +14,7 @@ class IteratorObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_schedules_all_elements_from_the_generator()
+    public function it_schedules_all_elements_from_the_generator(): void
     {
         $generator = $this->genOneToThree();
 
@@ -35,7 +35,7 @@ class IteratorObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function generator_yields_null()
+    public function generator_yields_null(): void
     {
         $generator = $this->genNull();
 
@@ -54,7 +54,7 @@ class IteratorObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function generator_yields_one()
+    public function generator_yields_one(): void
     {
         $generator = $this->genOne();
 
@@ -71,7 +71,7 @@ class IteratorObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function generator_throws_error()
+    public function generator_throws_error(): void
     {
         $error     = new \Exception();
         $generator = $this->genError($error);
@@ -88,7 +88,7 @@ class IteratorObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function generator_dispose()
+    public function generator_dispose(): void
     {
         $generator = $this->genOneToThree();
 
@@ -104,7 +104,7 @@ class IteratorObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_schedules_all_elements_from_the_generator_with_return()
+    public function it_schedules_all_elements_from_the_generator_with_return(): void
     {
         $generator = $this->genOneToThreeAndReturn();
 
@@ -125,7 +125,7 @@ class IteratorObservableTest extends FunctionalTestCase
      * @test
      * RxPHP Issue 188
      */
-    public function it_completes_if_subscribed_second_time_without_return_value()
+    public function it_completes_if_subscribed_second_time_without_return_value(): void
     {
         $generator = $this->genOneToThree();
 
@@ -159,7 +159,7 @@ class IteratorObservableTest extends FunctionalTestCase
      * @test
      * RxPHP Issue 188
      */
-    public function it_returns_value_if_subscribed_second_time_with_return_value()
+    public function it_returns_value_if_subscribed_second_time_with_return_value(): void
     {
         $generator = $this->genOneToThreeAndReturn();
 

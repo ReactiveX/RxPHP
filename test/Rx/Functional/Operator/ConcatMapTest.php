@@ -13,7 +13,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Complete_Task()
+    public function concatMapTo_Then_Complete_Task(): void
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
         $ys = Observable::of(42);
@@ -41,7 +41,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Error_Task()
+    public function concatMapTo_Then_Error_Task(): void
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
         $ys = Observable::error(new \Exception('test'));
@@ -71,7 +71,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_result_Complete_Task()
+    public function concatMap_result_Complete_Task(): void
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
 
@@ -105,7 +105,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_result_Error_Task()
+    public function concatMap_result_Error_Task(): void
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
 
@@ -141,7 +141,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Then_Complete_Task()
+    public function concatMap_Then_Complete_Task(): void
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
 
@@ -170,7 +170,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Then_Error_Task()
+    public function concatMap_Then_Error_Task(): void
     {
         $xs = Observable::fromArray([4, 3, 2, 1]);
 
@@ -201,7 +201,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Complete_Complete()
+    public function concatMapTo_Then_Complete_Complete(): void
     {
 
         $xs = $this->createColdObservable(
@@ -266,7 +266,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Complete_Complete_2()
+    public function concatMapTo_Then_Complete_Complete_2(): void
     {
 
         $xs = $this->createColdObservable(
@@ -331,7 +331,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Never_Complete()
+    public function concatMapTo_Then_Never_Complete(): void
     {
 
         $xs = $this->createColdObservable(
@@ -406,7 +406,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Complete_Never()
+    public function concatMapTo_Then_Complete_Never(): void
     {
 
         $xs = $this->createColdObservable(
@@ -454,7 +454,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Complete_Error()
+    public function concatMapTo_Then_Complete_Error(): void
     {
 
         $ex = new Exception();
@@ -506,7 +506,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Error_Complete()
+    public function concatMapTo_Then_Error_Complete(): void
     {
 
         $ex = new Exception();
@@ -561,7 +561,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMapTo_Then_Error_Error()
+    public function concatMapTo_Then_Error_Error(): void
     {
 
         $ex = new Exception();
@@ -613,7 +613,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Complete()
+    public function concatMap_Complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -683,7 +683,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Complete_OuterNotComplete()
+    public function concatMap_Complete_OuterNotComplete(): void
     {
 
 
@@ -753,7 +753,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Error_Outer()
+    public function concatMap_Error_Outer(): void
     {
         $ex = new Exception();
 
@@ -822,7 +822,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Error_Inner()
+    public function concatMap_Error_Inner(): void
     {
         $ex = new Exception();
 
@@ -891,7 +891,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Dispose()
+    public function concatMap_Dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -957,7 +957,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_Throw()
+    public function concatMap_Throw(): void
     {
         $invoked = 0;
         $ex      = new Exception('ex');
@@ -1030,7 +1030,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_UseFunction()
+    public function concatMap_UseFunction(): void
     {
         $xs = $this->createHotObservable([
             onNext(210, 4),
@@ -1077,7 +1077,7 @@ class ConcatMapTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatMap_return_invalid_string()
+    public function concatMap_return_invalid_string(): void
     {
         $xs = $this->createHotObservable([
             onNext(5, $this->createColdObservable([

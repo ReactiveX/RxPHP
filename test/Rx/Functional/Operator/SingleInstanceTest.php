@@ -13,7 +13,7 @@ class SingleInstanceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function singleInstance_basic()
+    public function singleInstance_basic(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -66,7 +66,7 @@ class SingleInstanceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function singleInstance_subscribe_after_stopped()
+    public function singleInstance_subscribe_after_stopped(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),

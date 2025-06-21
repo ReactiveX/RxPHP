@@ -19,7 +19,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionEmpty()
+    public function partitionEmpty(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -64,7 +64,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionSingle()
+    public function partitionSingle(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -122,7 +122,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionEach()
+    public function partitionEach(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -182,7 +182,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionCompleted()
+    public function partitionCompleted(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -246,7 +246,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionNotCompleted()
+    public function partitionNotCompleted(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -307,7 +307,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionError()
+    public function partitionError(): void
     {
         $error = new \Exception('error1');
 
@@ -371,7 +371,7 @@ class PartitionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function partitionDisposed()
+    public function partitionDisposed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),

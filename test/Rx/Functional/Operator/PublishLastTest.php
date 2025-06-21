@@ -19,7 +19,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_basic()
+    public function publishLast_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -101,7 +101,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_error()
+    public function publishLast_error(): void
     {
 
         $error = new \Exception();
@@ -179,7 +179,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_complete()
+    public function publishLast_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -257,7 +257,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_dispose()
+    public function publishLast_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -338,7 +338,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_multiple_connections()
+    public function publishLast_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->publishLast();
@@ -360,7 +360,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_zip_complete()
+    public function publishLast_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -403,7 +403,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_zip_errorr()
+    public function publishLast_zip_errorr(): void
     {
 
         $error = new \Exception();
@@ -447,7 +447,7 @@ class PublishLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_zip_dispose()
+    public function publishLast_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([

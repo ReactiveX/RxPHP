@@ -12,7 +12,7 @@ class MergeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_the_last_on_complete()
+    public function it_passes_the_last_on_complete(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),

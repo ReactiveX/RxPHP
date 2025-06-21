@@ -11,7 +11,7 @@ use Rx\Scheduler;
 
 class ReturnObservableTest extends FunctionalTestCase
 {
-    public function testReturnObservableSubscribeTwice()
+    public function testReturnObservableSubscribeTwice(): void
     {
         $o = new ReturnObservable('The Value', Scheduler::getImmediate());
 

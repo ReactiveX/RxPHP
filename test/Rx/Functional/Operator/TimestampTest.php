@@ -13,7 +13,7 @@ class TimestampTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timestamp_regular()
+    public function timestamp_regular(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -42,7 +42,7 @@ class TimestampTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timestamp_empty()
+    public function timestamp_empty(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::empty($this->scheduler)->timestamp($this->scheduler);
@@ -56,7 +56,7 @@ class TimestampTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timestamp_error()
+    public function timestamp_error(): void
     {
         $error = new \Exception();
 
@@ -72,7 +72,7 @@ class TimestampTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timestamp_never()
+    public function timestamp_never(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::never()->timestamp($this->scheduler);
@@ -84,7 +84,7 @@ class TimestampTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timestamp_dispose()
+    public function timestamp_dispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),

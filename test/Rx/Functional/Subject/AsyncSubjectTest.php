@@ -15,7 +15,7 @@ class AsyncSubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function infinite()
+    public function infinite(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -92,7 +92,7 @@ class AsyncSubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function finite()
+    public function finite(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -169,7 +169,7 @@ class AsyncSubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function error()
+    public function error(): void
     {
         $xs = $this->createHotObservable([
           onNext(70, 1),
@@ -247,7 +247,7 @@ class AsyncSubjectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function dispose()
+    public function dispose(): void
     {
 
 

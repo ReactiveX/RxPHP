@@ -13,7 +13,7 @@ class SumTest extends FunctionalTestCase
      *
      * @test
      */
-    public function sum_number_empty()
+    public function sum_number_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -35,7 +35,7 @@ class SumTest extends FunctionalTestCase
      *
      * @test
      */
-    public function sum_number_return()
+    public function sum_number_return(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -58,7 +58,7 @@ class SumTest extends FunctionalTestCase
      *
      * @test
      */
-    public function sum_number_some()
+    public function sum_number_some(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -83,7 +83,7 @@ class SumTest extends FunctionalTestCase
      *
      * @test
      */
-    public function sum_number_throw()
+    public function sum_number_throw(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -104,7 +104,7 @@ class SumTest extends FunctionalTestCase
      *
      * @test
      */
-    public function sum_number_never()
+    public function sum_number_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)

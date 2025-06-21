@@ -12,7 +12,7 @@ class SwitchLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchLatest_Data()
+    public function switchLatest_Data(): void
     {
 
         $xs = $this->createHotObservable([
@@ -67,7 +67,7 @@ class SwitchLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchLatest_inner_throws()
+    public function switchLatest_inner_throws(): void
     {
 
         $error = new \Exception();
@@ -120,7 +120,7 @@ class SwitchLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchLatest_outer_throws()
+    public function switchLatest_outer_throws(): void
     {
 
         $error = new \Exception();
@@ -166,7 +166,7 @@ class SwitchLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchLatest_no_inner()
+    public function switchLatest_no_inner(): void
     {
 
         $xs = $this->createHotObservable([
@@ -188,7 +188,7 @@ class SwitchLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchLatest_inner_completes()
+    public function switchLatest_inner_completes(): void
     {
 
         $xs = $this->createHotObservable([
@@ -226,7 +226,7 @@ class SwitchLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function switchLatest_Dispose()
+    public function switchLatest_Dispose(): void
     {
 
         $xs = $this->createHotObservable([

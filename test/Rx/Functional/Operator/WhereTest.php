@@ -13,7 +13,7 @@ class WhereTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_filters_all_on_false()
+    public function it_filters_all_on_false(): void
     {
         $xs = $this->createHotObservableWithData();
 
@@ -30,7 +30,7 @@ class WhereTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_all_on_true() 
+    public function it_passes_all_on_true(): void 
     {
         $xs = $this->createHotObservableWithData();
 
@@ -50,7 +50,7 @@ class WhereTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_error()
+    public function it_passes_on_error(): void
     {
         $exception = new Exception();
         $xs = $this->createHotObservable([
@@ -71,7 +71,7 @@ class WhereTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function calls_on_error_if_predicate_throws_an_exception()
+    public function calls_on_error_if_predicate_throws_an_exception(): void
     {
         $xs = $this->createHotObservable([
             onNext(500, 42),

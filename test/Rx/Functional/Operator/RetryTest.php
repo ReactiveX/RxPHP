@@ -14,7 +14,7 @@ use Rx\Testing\TestScheduler;
 
 class RetryTest extends FunctionalTestCase
 {
-    public function testRetryObservableBasic()
+    public function testRetryObservableBasic(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -45,7 +45,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryObservableInfinite()
+    public function testRetryObservableInfinite(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -74,7 +74,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryObservableError()
+    public function testRetryObservableError(): void
     {
         $error = new \Exception();
 
@@ -118,7 +118,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryObservableThrows()
+    public function testRetryObservableThrows(): void
     {
         $scheduler1 = new TestScheduler();
 
@@ -185,7 +185,7 @@ class RetryTest extends FunctionalTestCase
         $this->assertNotNull($exception);
     }
 
-    public function testRetryObservableRetryCountBasic()
+    public function testRetryObservableRetryCountBasic(): void
     {
         $error = new \Exception();
 
@@ -228,7 +228,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryObservableRetryCountDispose()
+    public function testRetryObservableRetryCountDispose(): void
     {
         $error = new \Exception();
 
@@ -265,7 +265,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryRetryCountDispose()
+    public function testRetryRetryCountDispose(): void
     {
         $xs = $this->createColdObservable(
             [
@@ -296,7 +296,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryObservableCompletes()
+    public function testRetryObservableCompletes(): void
     {
         $xs = $this->createColdObservable(
             [
@@ -329,7 +329,7 @@ class RetryTest extends FunctionalTestCase
         );
     }
 
-    public function testRetryObservableRetryCountThrows()
+    public function testRetryObservableRetryCountThrows(): void
     {
         $scheduler1 = new TestScheduler();
 
@@ -390,7 +390,7 @@ class RetryTest extends FunctionalTestCase
         $this->assertNotNull($exception);
     }
 
-    public function testWithImmediateSchedulerWithRecursion()
+    public function testWithImmediateSchedulerWithRecursion(): void
     {
         $completed = false;
         $emitted   = null;

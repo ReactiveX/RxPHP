@@ -11,7 +11,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountpartialwindow()
+    public function bufferWithCountpartialwindow(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -35,7 +35,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountfullwindows()
+    public function bufferWithCountfullwindows(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -60,7 +60,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountfullandpartialwindows()
+    public function bufferWithCountfullandpartialwindows(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -85,7 +85,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountError()
+    public function bufferWithCountError(): void
     {
         $error = new \Exception();
 
@@ -110,7 +110,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountskipless()
+    public function bufferWithCountskipless(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -137,7 +137,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountskipmore()
+    public function bufferWithCountskipmore(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -162,7 +162,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountbasic()
+    public function bufferWithCountbasic(): void
     {
         $xs = $this->createHotObservable([
             onNext(100, 1),
@@ -197,7 +197,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCountdisposed()
+    public function bufferWithCountdisposed(): void
     {
         $xs = $this->createHotObservable([
             onNext(100, 1),
@@ -229,7 +229,7 @@ class BufferWithCountTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function bufferWithCount_invalid_skip()
+    public function bufferWithCount_invalid_skip(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([
@@ -247,7 +247,7 @@ class BufferWithCountTest extends FunctionalTestCase
      * @test
      *
      */
-    public function bufferWithCount_invalid_count()
+    public function bufferWithCount_invalid_count(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([

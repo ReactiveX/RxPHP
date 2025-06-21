@@ -15,7 +15,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilWithKeyComparer()
+    public function groupByUntilWithKeyComparer(): void
     {
         $keyInvoked = 0;
 
@@ -85,7 +85,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilWithKeyComparerDefaultDurationSelector()
+    public function groupByUntilWithKeyComparerDefaultDurationSelector(): void
     {
         $keyInvoked = 0;
 
@@ -159,7 +159,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilOuterComplete()
+    public function groupByUntilOuterComplete(): void
     {
         $keyInvoked = 0;
         $eleInvoked = 0;
@@ -232,7 +232,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilOuterError()
+    public function groupByUntilOuterError(): void
     {
         $error = new \Exception();
 
@@ -307,7 +307,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilOuterDispose()
+    public function groupByUntilOuterDispose(): void
     {
         $keyInvoked = 0;
         $eleInvoked = 0;
@@ -381,7 +381,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilOuterKeyThrow()
+    public function groupByUntilOuterKeyThrow(): void
     {
         $error = new \Exception();
 
@@ -456,7 +456,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilOuterEleThrow()
+    public function groupByUntilOuterEleThrow(): void
     {
         $error = new \Exception();
 
@@ -522,7 +522,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerComplete()
+    public function groupByUntilInnerComplete(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, new \Exception()),
@@ -621,7 +621,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerCompleteAll()
+    public function groupByUntilInnerCompleteAll(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, new \Exception()),
@@ -726,7 +726,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerError()
+    public function groupByUntilInnerError(): void
     {
         $error = new \Exception();
 
@@ -836,7 +836,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerDispose()
+    public function groupByUntilInnerDispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, new \Exception()),
@@ -933,7 +933,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerKeyThrow()
+    public function groupByUntilInnerKeyThrow(): void
     {
         $error      = new \Exception();
         $keyInvoked = 0;
@@ -1041,7 +1041,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerEleThrow()
+    public function groupByUntilInnerEleThrow(): void
     {
         $error      = new \Exception();
         $eleInvoked = 0;
@@ -1153,7 +1153,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilOuterIndependence()
+    public function groupByUntilOuterIndependence(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, new \Exception()),
@@ -1264,7 +1264,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerIndependence()
+    public function groupByUntilInnerIndependence(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, new \Exception()),
@@ -1381,7 +1381,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerMultipleIndependence()
+    public function groupByUntilInnerMultipleIndependence(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, new \Exception()),
@@ -1503,7 +1503,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerEscapeComplete()
+    public function groupByUntilInnerEscapeComplete(): void
     {
         $xs = $this->createHotObservable([
             onNext(220, '  foo'),
@@ -1565,7 +1565,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerEscapeError()
+    public function groupByUntilInnerEscapeError(): void
     {
         $error = new \Exception();
 
@@ -1630,7 +1630,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilInnerEscapeDispose()
+    public function groupByUntilInnerEscapeDispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(220, '  foo'),
@@ -1690,7 +1690,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilDefault()
+    public function groupByUntilDefault(): void
     {
         $keyInvoked = 0;
         $eleInvoked = 0;
@@ -1751,7 +1751,7 @@ class GroupByUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function groupByUntilDurationSelectorThrows()
+    public function groupByUntilDurationSelectorThrows(): void
     {
         $error = new \Exception();
         $xs    = $this->createHotObservable([onNext(210, 'foo')]);

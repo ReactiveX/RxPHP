@@ -14,7 +14,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function calls_on_error_if_selector_throws_an_exception()
+    public function calls_on_error_if_selector_throws_an_exception(): void
     {
         $xs = $this->createHotObservable([
             onNext(500, 42),
@@ -32,7 +32,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function select_calls_on_completed()
+    public function select_calls_on_completed(): void
     {
         $xs = $this->createHotObservable([
             onCompleted(500),
@@ -48,7 +48,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function select_calls_on_error()
+    public function select_calls_on_error(): void
     {
         $xs = $this->createHotObservable([
             onError(500, new Exception()),
@@ -64,7 +64,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function select_calls_selector()
+    public function select_calls_selector(): void
     {
         $xs = $this->createHotObservable([
             onNext(100, 2),
@@ -92,7 +92,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function map_with_index_dispose_inside_selector()
+    public function map_with_index_dispose_inside_selector(): void
     {
         $xs = $this->createHotObservable([
             onNext(100, 4),
@@ -140,7 +140,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function map_with_index_completed()
+    public function map_with_index_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -182,7 +182,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function map_with_index_not_completed()
+    public function map_with_index_not_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 5),
@@ -219,7 +219,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function map_with_index_error()
+    public function map_with_index_error(): void
     {
         $error = new Exception();
 
@@ -263,7 +263,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function map_with_index_throws()
+    public function map_with_index_throws(): void
     {
         $error = new Exception();
 
@@ -307,7 +307,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function mapTo_value()
+    public function mapTo_value(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -334,7 +334,7 @@ class SelectTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function map_and_map_Optimization()
+    public function map_and_map_Optimization(): void
     {
 
         $invoked1 = 0;

@@ -12,7 +12,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_holds_a_reference_to_one_disposable()
+    public function it_holds_a_reference_to_one_disposable(): void
     {
         $d = new BooleanDisposable();
         $r = new RefCountDisposable($d);
@@ -26,7 +26,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_all_references_are_disposed()
+    public function it_disposes_if_all_references_are_disposed(): void
     {
         $d = new BooleanDisposable();
         $r = new RefCountDisposable($d);
@@ -47,7 +47,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_after_last_reference_is_disposed()
+    public function it_disposes_after_last_reference_is_disposed(): void
     {
         $d = new BooleanDisposable();
         $r = new RefCountDisposable($d);
@@ -68,7 +68,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_dispose_the_primary_if_refcount_inner_disposable_is_disposed_multiple_times()
+    public function it_does_not_dispose_the_primary_if_refcount_inner_disposable_is_disposed_multiple_times(): void
     {
         $d = new BooleanDisposable();
         $r = new RefCountDisposable($d);
@@ -92,7 +92,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_dispose_the_primary_if_already_disposed_via_refcount()
+    public function it_does_not_dispose_the_primary_if_already_disposed_via_refcount(): void
     {
         $called = 0;
         $d = new CallbackDisposable(function() use (&$called): void { $called++; });
@@ -107,7 +107,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_dispose_the_primary_if_already_disposed()
+    public function it_does_not_dispose_the_primary_if_already_disposed(): void
     {
         $called = 0;
         $d = new CallbackDisposable(function() use (&$called): void { $called++; });
@@ -126,7 +126,7 @@ class RefCountDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_a_noop_disposable_if_primary_is_already_disposed()
+    public function it_returns_a_noop_disposable_if_primary_is_already_disposed(): void
     {
         $called = 0;
         $d = new CallbackDisposable(function() use (&$called): void { $called++; });

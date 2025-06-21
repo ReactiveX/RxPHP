@@ -14,7 +14,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_complete()
+    public function it_passes_on_complete(): void
     {
         $xs         = $this->createHotObservableWithData();
         $keyInvoked = 0;
@@ -42,7 +42,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_error()
+    public function it_passes_on_error(): void
     {
         $xs         = $this->createHotObservableWithData(true);
         $keyInvoked = 0;
@@ -70,7 +70,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_disposes_the_outer_subscription()
+    public function it_disposes_the_outer_subscription(): void
     {
         $xs         = $this->createHotObservableWithData(true);
         $keyInvoked = 0;
@@ -96,7 +96,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_on_error_if_keyselector_throws()
+    public function it_calls_on_error_if_keyselector_throws(): void
     {
         $xs         = $this->createHotObservableWithData(true);
         $keyInvoked = 0;
@@ -129,7 +129,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_on_error_if_elementselector_throws()
+    public function it_calls_on_error_if_elementselector_throws(): void
     {
         $xs             = $this->createHotObservableWithData(true);
         $elementInvoked = 0;
@@ -164,7 +164,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_on_error_if_durationselector_throws()
+    public function it_calls_on_error_if_durationselector_throws(): void
     {
         $xs             = $this->createHotObservableWithData(true);
 
@@ -186,7 +186,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_error_if_duration_observable_calls_on_error()
+    public function it_passes_on_error_if_duration_observable_calls_on_error(): void
     {
         $xs = $this->createHotObservableWithData();
 
@@ -212,7 +212,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_on_completed_on_inner_subscription_if_subscription_expires_otherwise_it_passes()
+    public function it_calls_on_completed_on_inner_subscription_if_subscription_expires_otherwise_it_passes(): void
     {
         $xs = $this->createHotObservableWithData();
 

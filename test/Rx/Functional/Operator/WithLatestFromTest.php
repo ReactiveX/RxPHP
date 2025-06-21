@@ -17,7 +17,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_never_never()
+    public function withLatestFrom_never_never(): void
     {
         $e1 = new NeverObservable();
         $e2 = new NeverObservable();
@@ -32,7 +32,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_never_empty()
+    public function withLatestFrom_never_empty(): void
     {
         $e1 = new NeverObservable();
         $e2 = $this->createHotObservable(
@@ -52,7 +52,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_empty_never()
+    public function withLatestFrom_empty_never(): void
     {
         $e1 = new NeverObservable();
         $e2 = $this->createHotObservable(
@@ -72,7 +72,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_empty_empty()
+    public function withLatestFrom_empty_empty(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -107,7 +107,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_empty_return()
+    public function withLatestFrom_empty_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -142,7 +142,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_return_empty()
+    public function withLatestFrom_return_empty(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -177,7 +177,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_never_return()
+    public function withLatestFrom_never_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -203,7 +203,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_return_never()
+    public function withLatestFrom_return_never(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -225,7 +225,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_return_return()
+    public function withLatestFrom_return_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -267,7 +267,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_return_return_no_selector()
+    public function withLatestFrom_return_return_no_selector(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -309,7 +309,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_empty_error()
+    public function withLatestFrom_empty_error(): void
     {
         $error = new \Exception();
 
@@ -350,7 +350,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_error_empty()
+    public function withLatestFrom_error_empty(): void
     {
         $error = new \Exception();
 
@@ -391,7 +391,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_return_throw()
+    public function withLatestFrom_return_throw(): void
     {
         $error = new \Exception();
 
@@ -433,7 +433,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_return()
+    public function withLatestFrom_throw_return(): void
     {
         $error = new \Exception();
 
@@ -475,7 +475,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_throw()
+    public function withLatestFrom_throw_throw(): void
     {
         $error1 = new \Exception('first');
         $error2 = new \Exception('second');
@@ -517,7 +517,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_error_throw()
+    public function withLatestFrom_error_throw(): void
     {
         $error1 = new \Exception();
         $error2 = new \Exception();
@@ -560,7 +560,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_error()
+    public function withLatestFrom_throw_error(): void
     {
         $error1 = new \Exception();
         $error2 = new \Exception();
@@ -603,7 +603,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_never_throw()
+    public function withLatestFrom_never_throw(): void
     {
         $error = new \Exception();
 
@@ -631,7 +631,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_never()
+    public function withLatestFrom_throw_never(): void
     {
         $error = new \Exception();
 
@@ -659,7 +659,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_some_throw()
+    public function withLatestFrom_some_throw(): void
     {
         $error = new \Exception();
 
@@ -701,7 +701,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_some()
+    public function withLatestFrom_throw_some(): void
     {
         $error = new \Exception();
 
@@ -743,7 +743,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_after_complete_left()
+    public function withLatestFrom_throw_after_complete_left(): void
     {
         $error = new \Exception();
 
@@ -785,7 +785,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_throw_after_complete_right()
+    public function withLatestFrom_throw_after_complete_right(): void
     {
         $error = new \Exception();
 
@@ -819,7 +819,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_interleaved_with_tail()
+    public function withLatestFrom_interleaved_with_tail(): void
     {
 
         $e1 = $this->createHotObservable(
@@ -866,7 +866,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_consecutive()
+    public function withLatestFrom_consecutive(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -910,7 +910,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_consecutive_array()
+    public function withLatestFrom_consecutive_array(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -954,7 +954,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_consecutive_end_with_error_left()
+    public function withLatestFrom_consecutive_end_with_error_left(): void
     {
         $error = new \Exception();
 
@@ -999,7 +999,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_consecutive_end_with_error_right()
+    public function withLatestFrom_consecutive_end_with_error_right(): void
     {
         $error = new \Exception();
 
@@ -1038,7 +1038,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_selector_throws()
+    public function withLatestFrom_selector_throws(): void
     {
         $error = new \Exception();
 
@@ -1083,7 +1083,7 @@ class WithLatestFromTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function withLatestFrom_return_return_dispose()
+    public function withLatestFrom_return_return_dispose(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -1121,7 +1121,7 @@ class WithLatestFromTest extends FunctionalTestCase
         ], $e2->getSubscriptions());
     }
 
-    public function testWithLatestFrom_multiple_dispose_no_selector()
+    public function testWithLatestFrom_multiple_dispose_no_selector(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -1171,7 +1171,7 @@ class WithLatestFromTest extends FunctionalTestCase
         ], $e3->getSubscriptions());
     }
 
-    public function testWithLatestFrom_multiple_dispose_with_selector()
+    public function testWithLatestFrom_multiple_dispose_with_selector(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -1223,7 +1223,7 @@ class WithLatestFromTest extends FunctionalTestCase
         ], $e3->getSubscriptions());
     }
 
-    public function testWithLatestFrom_multiple_with_selector()
+    public function testWithLatestFrom_multiple_with_selector(): void
     {
         $e1 = $this->createHotObservable(
             [

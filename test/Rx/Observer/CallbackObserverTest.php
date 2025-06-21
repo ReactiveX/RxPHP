@@ -12,7 +12,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_given_callable_on_next()
+    public function it_calls_the_given_callable_on_next(): void
     {
         $called = false;
         $observer = new CallbackObserver(function() use (&$called): void { $called = true; });
@@ -24,7 +24,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_given_callable_on_error()
+    public function it_calls_the_given_callable_on_error(): void
     {
         $called = false;
         $observer = new CallbackObserver(function(): void{}, function() use (&$called): void { $called = true; });
@@ -36,7 +36,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_given_callable_on_complete()
+    public function it_calls_the_given_callable_on_complete(): void
     {
         $called = false;
         $observer = new CallbackObserver(function(): void{}, function(): void{}, function() use (&$called): void { $called = true; });
@@ -48,7 +48,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function default_on_error_callable_rethrows_exception()
+    public function default_on_error_callable_rethrows_exception(): void
     {
         $this->expectException(\Rx\Observer\TestException::class);
         $observer = new CallbackObserver();
@@ -59,7 +59,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_on_next_with_the_given_value()
+    public function it_calls_on_next_with_the_given_value(): void
     {
         $called = null;
         $observer = new CallbackObserver(function($value) use (&$called): void { $called = $value; });
@@ -72,7 +72,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_next_after_an_error()
+    public function it_does_not_call_on_next_after_an_error(): void
     {
         $called = false;
         $record = function() use (&$called): void { $called = true; };
@@ -89,7 +89,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_completed_after_an_error()
+    public function it_does_not_call_on_completed_after_an_error(): void
     {
         $called = false;
         $record = function() use (&$called): void { $called = true; };
@@ -106,7 +106,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_error_after_an_error()
+    public function it_does_not_call_on_error_after_an_error(): void
     {
         $called = false;
         $record = function() use (&$called): void { $called = true; };
@@ -123,7 +123,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_next_after_completion()
+    public function it_does_not_call_on_next_after_completion(): void
     {
         $called = false;
         $record = function() use (&$called): void { $called = true; };
@@ -140,7 +140,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_completed_after_completion()
+    public function it_does_not_call_on_completed_after_completion(): void
     {
         $called = false;
         $record = function() use (&$called): void { $called = true; };
@@ -157,7 +157,7 @@ class CallbackObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_error_after_completion()
+    public function it_does_not_call_on_error_after_completion(): void
     {
         $called = false;
         $record = function() use (&$called): void { $called = true; };

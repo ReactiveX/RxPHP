@@ -19,7 +19,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_basic()
+    public function publishLast_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -109,7 +109,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_error()
+    public function publishValue_error(): void
     {
 
         $error = new \Exception();
@@ -194,7 +194,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_complete()
+    public function publishValue_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -278,7 +278,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_dispose()
+    public function publishValue_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -362,7 +362,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_multiple_connections()
+    public function publishValue_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->publishValue(1979);
@@ -384,7 +384,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_complete()
+    public function publishValue_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -438,7 +438,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_error()
+    public function publishValue_zip_error(): void
     {
 
         $error = new \Exception();
@@ -494,7 +494,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_dispose()
+    public function publishValue_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([

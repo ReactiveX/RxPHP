@@ -25,7 +25,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_1()
+    public function multicast_hot_1(): void
     {
 
         $xs = $this->createHotObservable([
@@ -84,7 +84,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_2()
+    public function multicast_hot_2(): void
     {
 
         $xs = $this->createHotObservable([
@@ -144,7 +144,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_3()
+    public function multicast_hot_3(): void
     {
 
         $xs = $this->createHotObservable([
@@ -208,7 +208,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_error_1()
+    public function multicast_hot_error_1(): void
     {
         $error = new \Exception();
 
@@ -275,7 +275,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_error_2()
+    public function multicast_hot_error_2(): void
     {
         $error = new \Exception();
 
@@ -328,7 +328,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_completed()
+    public function multicast_hot_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -379,7 +379,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_completed()
+    public function multicast_cold_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -426,7 +426,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_error()
+    public function multicast_cold_error(): void
     {
         $error = new \Exception();
 
@@ -473,7 +473,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_dispose()
+    public function multicast_cold_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -517,7 +517,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_zip()
+    public function multicast_cold_zip(): void
     {
 
         $xs = $this->createHotObservable([

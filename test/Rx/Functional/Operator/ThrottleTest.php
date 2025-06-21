@@ -15,7 +15,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_completed()
+    public function throttle_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -47,7 +47,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_never()
+    public function throttle_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)
@@ -67,7 +67,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_empty()
+    public function throttle_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -90,7 +90,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_error()
+    public function throttle_error(): void
     {
         $error = new \Exception();
 
@@ -122,7 +122,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_no_end()
+    public function throttle_no_end(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -152,7 +152,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_dispose()
+    public function throttle_dispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -181,7 +181,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_dispose_with_value_waiting()
+    public function throttle_dispose_with_value_waiting(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -210,7 +210,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_quiet_observable_emits_immediately()
+    public function throttle_quiet_observable_emits_immediately(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -235,7 +235,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_noisy_observable_drops_items()
+    public function throttle_noisy_observable_drops_items(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -270,7 +270,7 @@ class ThrottleTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function throttle_scheduler_overrides_subscribe_scheduler()
+    public function throttle_scheduler_overrides_subscribe_scheduler(): void
     {
         $scheduler = $this->createMock(SchedulerInterface::class);
         $scheduler->expects($this->exactly(2))

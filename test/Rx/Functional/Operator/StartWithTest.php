@@ -13,7 +13,7 @@ class StartWithTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function startWith_never()
+    public function startWith_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)
@@ -31,7 +31,7 @@ class StartWithTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function startWith_empty()
+    public function startWith_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -51,7 +51,7 @@ class StartWithTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function startWith_one()
+    public function startWith_one(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -73,7 +73,7 @@ class StartWithTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function startWith_multiple()
+    public function startWith_multiple(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -97,7 +97,7 @@ class StartWithTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function startWith_multiple_before()
+    public function startWith_multiple_before(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -120,7 +120,7 @@ class StartWithTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function startWith_error()
+    public function startWith_error(): void
     {
 
         $error = new \Exception();

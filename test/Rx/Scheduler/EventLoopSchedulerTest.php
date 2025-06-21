@@ -14,7 +14,7 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function now_returns_time_since_epoch_in_ms()
+    public function now_returns_time_since_epoch_in_ms(): void
     {
         $scheduler = new EventLoopScheduler(function () { return new EmptyDisposable(); });
 
@@ -24,7 +24,7 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function eventloop_schedule()
+    public function eventloop_schedule(): void
     {
         $loop = Factory::create();
 
@@ -54,7 +54,7 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function eventloop_schedule_recursive()
+    public function eventloop_schedule_recursive(): void
     {
 
         $loop = Factory::create();
@@ -84,7 +84,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertTrue($actionCalled);
     }
 
-    public function testDisposedEventDoesNotCauseSkip()
+    public function testDisposedEventDoesNotCauseSkip(): void
     {
         // create a scheduler - timing is not important for this test
         // so we can just use an empty callable
@@ -117,7 +117,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals([2], $calls);
     }
 
-    public function testSchedulerWorkedWithScheduledEventOutsideItself()
+    public function testSchedulerWorkedWithScheduledEventOutsideItself(): void
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);
@@ -136,7 +136,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertNotNull($called);
     }
 
-    public function testScheduledItemsFromOutsideOfSchedulerDontCreateExtraTimers()
+    public function testScheduledItemsFromOutsideOfSchedulerDontCreateExtraTimers(): void
     {
         $timersCreated   = 0;
         $timersExecuted = 0;
@@ -165,7 +165,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertLessThanOrEqual(3, $timersExecuted);
     }
 
-    public function testMultipleSchedulesFromOutsideInSameTickDontCreateExtraTimers()
+    public function testMultipleSchedulesFromOutsideInSameTickDontCreateExtraTimers(): void
     {
         $timersCreated   = 0;
         $timersExecuted = 0;
@@ -197,7 +197,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals(3, $timersExecuted);
     }
 
-    public function testThatStuffScheduledWayInTheFutureDoesntKeepTheLoopRunningIfDisposed()
+    public function testThatStuffScheduledWayInTheFutureDoesntKeepTheLoopRunningIfDisposed(): void
     {
         $loop           = Factory::create();
         $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
@@ -225,7 +225,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertLessThan(2, $loopTime);
     }
 
-    public function testThatDisposalOfSingleScheduledItemOutsideOfInvokeCancelsTimer()
+    public function testThatDisposalOfSingleScheduledItemOutsideOfInvokeCancelsTimer(): void
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);
@@ -243,7 +243,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertLessThan(2, $endTime - $startTime);
     }
 
-    public function testScheduledItemPastNextScheduledItemKillsItOwnTimerIfItBecomesTheNextOneAndIsDisposed()
+    public function testScheduledItemPastNextScheduledItemKillsItOwnTimerIfItBecomesTheNextOneAndIsDisposed(): void
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);

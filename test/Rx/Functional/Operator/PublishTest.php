@@ -23,7 +23,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_cold_zip()
+    public function publish_cold_zip(): void
     {
 
         $xs = $this->createHotObservable([
@@ -66,7 +66,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function refCount_connects_on_first()
+    public function refCount_connects_on_first(): void
     {
 
         $xs = $this->createHotObservable([
@@ -100,7 +100,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function refCount_not_connected()
+    public function refCount_not_connected(): void
     {
 
         $disconnected = false;
@@ -156,7 +156,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function refCount_publish_basic()
+    public function refCount_publish_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -246,7 +246,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_error()
+    public function publish_error(): void
     {
 
         $error = new \Exception();
@@ -330,7 +330,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_complete()
+    public function publish_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -413,7 +413,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_dispose()
+    public function publish_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -498,7 +498,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_lambda_zip_complete()
+    public function publish_lambda_zip_complete(): void
     {
         $xs = $this->createHotObservable([
           onNext(110, 7),
@@ -550,7 +550,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_lambda_zip_error()
+    public function publish_lambda_zip_error(): void
     {
 
         $error = new \Exception();
@@ -605,7 +605,7 @@ class PublishTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publish_lambda_zip_dispose()
+    public function publish_lambda_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([

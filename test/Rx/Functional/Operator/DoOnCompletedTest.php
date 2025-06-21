@@ -11,7 +11,7 @@ class DoOnCompletedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnCompleted_should_be_called()
+    public function doOnCompleted_should_be_called(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -34,7 +34,7 @@ class DoOnCompletedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnCompleted_should_call_after_resubscription()
+    public function doOnCompleted_should_call_after_resubscription(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),

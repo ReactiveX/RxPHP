@@ -15,7 +15,7 @@ class TakeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_throws_an_exception_on_negative_amounts()
+    public function it_throws_an_exception_on_negative_amounts(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $observable = new ReturnObservable(42, $this->scheduler);
@@ -27,7 +27,7 @@ class TakeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_complete()
+    public function it_passes_on_complete(): void
     {
         $xs = $this->createHotObservable([
             onNext(300, 21),
@@ -51,7 +51,7 @@ class TakeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_on_complete_after_last_value()
+    public function it_calls_on_complete_after_last_value(): void
     {
         $scheduler = $this->createTestScheduler();
         $xs        = $this->createHotObservable([
@@ -75,7 +75,7 @@ class TakeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function take_zero_calls_on_completed()
+    public function take_zero_calls_on_completed(): void
     {
 
         $xs = $this->createHotObservable([

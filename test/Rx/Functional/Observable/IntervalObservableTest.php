@@ -13,7 +13,7 @@ class IntervalObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function interval_relative_time_basic()
+    public function interval_relative_time_basic(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return new IntervalObservable(100, $this->scheduler);
@@ -36,7 +36,7 @@ class IntervalObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function interval_relative_time_zero()
+    public function interval_relative_time_zero(): void
     {
         $results = $this->scheduler->startWithDispose(function () {
             return new IntervalObservable(0, $this->scheduler);
@@ -61,7 +61,7 @@ class IntervalObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function interval_relative_time_Negative()
+    public function interval_relative_time_Negative(): void
     {
         $results = $this->scheduler->startWithDispose(function () {
             return new IntervalObservable(-1, $this->scheduler);
@@ -86,7 +86,7 @@ class IntervalObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function interval_relative_time_disposed()
+    public function interval_relative_time_disposed(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return new IntervalObservable(1000, $this->scheduler);
@@ -98,7 +98,7 @@ class IntervalObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function interval_relative_time_observer_throws()
+    public function interval_relative_time_observer_throws(): void
     {
         $this->expectException(\Exception::class);
         $xs = new IntervalObservable(1, $this->scheduler);

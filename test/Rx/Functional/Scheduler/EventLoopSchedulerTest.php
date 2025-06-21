@@ -12,7 +12,7 @@ use Rx\Scheduler\EventLoopScheduler;
 
 class EventLoopSchedulerTest extends FunctionalTestCase
 {
-    public function testDisposeInsideFirstSchedulePeriodicAction()
+    public function testDisposeInsideFirstSchedulePeriodicAction(): void
     {
         $completed = false;
         $nextCount = 0;

@@ -11,7 +11,7 @@ use Rx\Testing\MockObserver;
 
 class ToArrayTest extends FunctionalTestCase
 {
-    public function testToArrayCompleted()
+    public function testToArrayCompleted(): void
     {
 
         $xs = $this->createHotObservable(
@@ -39,7 +39,7 @@ class ToArrayTest extends FunctionalTestCase
 
     }
 
-    public function testToArrayError()
+    public function testToArrayError(): void
     {
         $error = new \Exception();
 
@@ -74,7 +74,7 @@ class ToArrayTest extends FunctionalTestCase
         );
     }
 
-    public function testToArrayDisposed()
+    public function testToArrayDisposed(): void
     {
 
         $xs = $this->createHotObservable(

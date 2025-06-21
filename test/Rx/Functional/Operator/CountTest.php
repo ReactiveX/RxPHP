@@ -9,7 +9,7 @@ use Rx\Observable;
 
 class CountTest extends FunctionalTestCase
 {
-    public function testCountEmpty()
+    public function testCountEmpty(): void
     {
 
         $xs = $this->createHotObservable(
@@ -32,7 +32,7 @@ class CountTest extends FunctionalTestCase
         );
     }
 
-    public function testCountSome()
+    public function testCountSome(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -57,7 +57,7 @@ class CountTest extends FunctionalTestCase
         );
     }
 
-    public function testCountThrow()
+    public function testCountThrow(): void
     {
 
         $xs = $this->createHotObservable(
@@ -74,7 +74,7 @@ class CountTest extends FunctionalTestCase
         $this->assertMessages([onError(210, new \Exception())], $results->getMessages());
     }
 
-    public function testCountNever()
+    public function testCountNever(): void
     {
 
         $xs = $this->createHotObservable(
@@ -89,7 +89,7 @@ class CountTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testCountPredicateEmptyTrue()
+    public function testCountPredicateEmptyTrue(): void
     {
 
         $xs = $this->createHotObservable(
@@ -114,7 +114,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateEmptyFalse()
+    public function testCountPredicateEmptyFalse(): void
     {
 
         $xs = $this->createHotObservable(
@@ -140,7 +140,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateReturnTrue()
+    public function testCountPredicateReturnTrue(): void
     {
 
         $xs = $this->createHotObservable([onNext(150, 1), onNext(210, 2), onCompleted(250)]);
@@ -153,7 +153,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateReturnFalse()
+    public function testCountPredicateReturnFalse(): void
     {
 
         $xs = $this->createHotObservable(
@@ -179,7 +179,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateAllMatched()
+    public function testCountPredicateAllMatched(): void
     {
 
         $xs = $this->createHotObservable(
@@ -207,7 +207,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateNoneMatched()
+    public function testCountPredicateNoneMatched(): void
     {
 
         $xs = $this->createHotObservable(
@@ -235,7 +235,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateSomeEven()
+    public function testCountPredicateSomeEven(): void
     {
 
         $xs = $this->createHotObservable(
@@ -261,7 +261,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 250)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateThrowTrue()
+    public function testCountPredicateThrowTrue(): void
     {
 
         $xs = $this->createHotObservable(
@@ -281,7 +281,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 210)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateThrowFalse()
+    public function testCountPredicateThrowFalse(): void
     {
 
         $xs = $this->createHotObservable(
@@ -301,7 +301,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 210)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateNever()
+    public function testCountPredicateNever(): void
     {
 
         $xs = $this->createHotObservable(
@@ -321,7 +321,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 1000)], $xs->getSubscriptions());
     }
 
-    public function testCountPredicateThrowsError()
+    public function testCountPredicateThrowsError(): void
     {
 
         $xs = $this->createHotObservable(
@@ -346,7 +346,7 @@ class CountTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 230)], $xs->getSubscriptions());
     }
 
-    public function testCountAfterRange()
+    public function testCountAfterRange(): void
     {
 
         $xs = Observable::fromArray(range(1, 10), $this->scheduler);

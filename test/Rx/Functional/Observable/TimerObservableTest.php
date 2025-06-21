@@ -14,7 +14,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_basic()
+    public function timer_one_shot_relative_time_basic(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return new TimerObservable(300, $this->scheduler);
@@ -32,7 +32,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_zero()
+    public function timer_one_shot_relative_time_zero(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return new TimerObservable(0, $this->scheduler);
@@ -50,7 +50,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_zero_non_int()
+    public function timer_one_shot_relative_time_zero_non_int(): void
     {
         $this->expectException(\TypeError::class);
         $this->scheduler->startWithCreate(function () {
@@ -61,7 +61,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_negative()
+    public function timer_one_shot_relative_time_negative(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return new TimerObservable(-1, $this->scheduler);
@@ -79,7 +79,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_disposed()
+    public function timer_one_shot_relative_time_disposed(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return new TimerObservable(1000, $this->scheduler);
@@ -91,7 +91,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_dispose_before_dueTime()
+    public function timer_one_shot_relative_time_dispose_before_dueTime(): void
     {
         $results = $this->scheduler->startWithDispose(function () {
             return new TimerObservable(500, $this->scheduler);
@@ -103,7 +103,7 @@ class TimerObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timer_one_shot_relative_time_throws()
+    public function timer_one_shot_relative_time_throws(): void
     {
 
         $scheduler1 = new TestScheduler();

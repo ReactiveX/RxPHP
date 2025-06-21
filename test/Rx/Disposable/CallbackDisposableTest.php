@@ -11,7 +11,7 @@ class CallbackDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_callback_on_dispose()
+    public function it_calls_the_callback_on_dispose(): void
     {
         $disposed   = false;
         $disposable = new CallbackDisposable(function() use (&$disposed): void { $disposed = true; });
@@ -26,7 +26,7 @@ class CallbackDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_only_disposes_once()
+    public function it_only_disposes_once(): void
     {
         $disposed    = false;
         $invocations = 0;

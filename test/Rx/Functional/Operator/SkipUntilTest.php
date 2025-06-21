@@ -12,7 +12,7 @@ use Rx\Testing\MockObserver;
 
 class SkipUntilTest extends FunctionalTestCase
 {
-    public function testSkipUntilSomeDataNext()
+    public function testSkipUntilSomeDataNext(): void
     {
 
         $l = $this->createHotObservable(
@@ -49,7 +49,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilSomeDataError()
+    public function testSkipUntilSomeDataError(): void
     {
 
         $error = new \Exception();
@@ -83,7 +83,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilSomeDataEmpty()
+    public function testSkipUntilSomeDataEmpty(): void
     {
 
         $l = $this->createHotObservable(
@@ -117,7 +117,7 @@ class SkipUntilTest extends FunctionalTestCase
 
     }
 
-    public function testSkipUntilNeverNext()
+    public function testSkipUntilNeverNext(): void
     {
 
         $l = Observable::never();
@@ -142,7 +142,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilNeverError()
+    public function testSkipUntilNeverError(): void
     {
 
         $error = new \Exception();
@@ -168,7 +168,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilSomeDataNever()
+    public function testSkipUntilSomeDataNever(): void
     {
 
         $l = $this->createHotObservable(
@@ -194,7 +194,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilNeverEmpty()
+    public function testSkipUntilNeverEmpty(): void
     {
 
         $l = Observable::never();
@@ -216,7 +216,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilNeverNever()
+    public function testSkipUntilNeverNever(): void
     {
 
         $l = Observable::never();
@@ -233,7 +233,7 @@ class SkipUntilTest extends FunctionalTestCase
         );
     }
 
-    public function testSkipUntilHasCompletedCausesDisposal()
+    public function testSkipUntilHasCompletedCausesDisposal(): void
     {
 
         $disposed = false;
@@ -268,7 +268,7 @@ class SkipUntilTest extends FunctionalTestCase
 
     }
 
-    public function testCanCompleteInSubscribeAction()
+    public function testCanCompleteInSubscribeAction(): void
     {
         $completed = false;
         $emitted   = null;

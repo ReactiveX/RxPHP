@@ -10,7 +10,7 @@ use Rx\Observable\EmptyObservable;
 
 class ConcatTest extends FunctionalTestCase
 {
-    public function testConcatEmptyEmpty()
+    public function testConcatEmptyEmpty(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -26,7 +26,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onCompleted(250)], $results->getMessages());
     }
 
-    public function testConcatEmptyNever()
+    public function testConcatEmptyNever(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -39,7 +39,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testConcatNeverEmpty()
+    public function testConcatNeverEmpty(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -52,7 +52,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testConcatNeverNever()
+    public function testConcatNeverNever(): void
     {
         $e1      = Observable::never();
         $e2      = Observable::never();
@@ -62,7 +62,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testConcatEmptyThrow()
+    public function testConcatEmptyThrow(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -78,7 +78,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onError(250, new \Exception('error'))], $results->getMessages());
     }
 
-    public function testConcatThrowEmpty()
+    public function testConcatThrowEmpty(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -94,7 +94,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onError(230, new \Exception('error'))], $results->getMessages());
     }
 
-    public function testConcatThrowThrow()
+    public function testConcatThrowThrow(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -110,7 +110,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onError(230, new \ErrorException())], $results->getMessages());
     }
 
-    public function testConcatReturnEmpty()
+    public function testConcatReturnEmpty(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -127,7 +127,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onNext(210, 2), onCompleted(250)], $results->getMessages());
     }
 
-    public function testConcatEmptyReturn()
+    public function testConcatEmptyReturn(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -144,7 +144,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onNext(240, 2), onCompleted(250)], $results->getMessages());
     }
 
-    public function testConcatReturnNever()
+    public function testConcatReturnNever(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -158,7 +158,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onNext(210, 2)], $results->getMessages());
     }
 
-    public function testConcatNeverReturn()
+    public function testConcatNeverReturn(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -172,7 +172,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testConcatReturnReturn()
+    public function testConcatReturnReturn(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -190,7 +190,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onNext(220, 2), onNext(240, 3), onCompleted(250)], $results->getMessages());
     }
 
-    public function testConcatThrowReturn()
+    public function testConcatThrowReturn(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -207,7 +207,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onError(220, new \Exception())], $results->getMessages());
     }
 
-    public function testConcatReturnThrow()
+    public function testConcatReturnThrow(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -224,7 +224,7 @@ class ConcatTest extends FunctionalTestCase
         $this->assertMessages([onNext(220, 2), onError(250, new \Exception())], $results->getMessages());
     }
 
-    public function testConcatSomeDataOnBothSides()
+    public function testConcatSomeDataOnBothSides(): void
     {
         $e1      = $this->createHotObservable([
             onNext(150, 1),
@@ -251,7 +251,7 @@ class ConcatTest extends FunctionalTestCase
             $results->getMessages());
     }
 
-    public function testConcatAsArguments()
+    public function testConcatAsArguments(): void
     {
         $xs1     = $this->createColdObservable([
             onNext(10, 1),
@@ -299,7 +299,7 @@ class ConcatTest extends FunctionalTestCase
 
     }
 
-    public function testConcatAll()
+    public function testConcatAll(): void
     {
 
         $sources = Observable::fromArray([
@@ -329,7 +329,7 @@ class ConcatTest extends FunctionalTestCase
     }
 
 
-    public function testConcatAllError()
+    public function testConcatAllError(): void
     {
 
         $sources = Observable::fromArray([
@@ -361,7 +361,7 @@ class ConcatTest extends FunctionalTestCase
 
     }
 
-    public function testConcatDispose()
+    public function testConcatDispose(): void
     {
         $o1 = $this->createHotObservable([
             onNext(250, 1),

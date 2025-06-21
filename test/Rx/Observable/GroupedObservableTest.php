@@ -14,7 +14,7 @@ class GroupedObservableTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_the_disposable_of_the_underlying_disposable()
+    public function it_returns_the_disposable_of_the_underlying_disposable(): void
     {
         $disposable = $this->createMock(\Rx\DisposableInterface::class);
         
@@ -33,7 +33,7 @@ class GroupedObservableTest extends TestCase
     /**
      * @test
      */
-    public function it_exposes_its_key()
+    public function it_exposes_its_key(): void
     {
         $observable = new AnonymousObservable(function(): void{});
 

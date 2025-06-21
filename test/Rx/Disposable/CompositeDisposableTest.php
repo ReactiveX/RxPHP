@@ -11,7 +11,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_exposes_the_amount_of_disposables_composed()
+    public function it_exposes_the_amount_of_disposables_composed(): void
     {
         $d1 = new CallbackDisposable(function(): void{});
         $d2 = new CallbackDisposable(function(): void{});
@@ -23,7 +23,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_can_be_checked_if_it_contains_a_disposable()
+    public function it_can_be_checked_if_it_contains_a_disposable(): void
     {
         $d1 = new CallbackDisposable(function(): void{});
         $d2 = new CallbackDisposable(function(): void{});
@@ -38,7 +38,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function a_disposable_can_be_added_after_creation()
+    public function a_disposable_can_be_added_after_creation(): void
     {
         $d1 = new CallbackDisposable(function(): void{});
         $d2 = new CallbackDisposable(function(): void{});
@@ -55,7 +55,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function disposing_disposes_all_disposables()
+    public function disposing_disposes_all_disposables(): void
     {
         $disposed1 = false;
         $disposed2 = false;
@@ -72,7 +72,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function disposing_disposes_all_disposables_only_once()
+    public function disposing_disposes_all_disposables_only_once(): void
     {
         $disposed1 = 0;
         $disposed2 = 0;
@@ -97,7 +97,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_newly_added_disposables_when_already_disposed()
+    public function it_disposes_newly_added_disposables_when_already_disposed(): void
     {
         $disposed1 = false;
         $disposed2 = false;
@@ -114,7 +114,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function a_disposable_can_be_removed()
+    public function a_disposable_can_be_removed(): void
     {
         $disposed2 = false;
         $d1 = new CallbackDisposable(function(): void{});
@@ -129,7 +129,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function a_removed_disposable_is_disposed()
+    public function a_removed_disposable_is_disposed(): void
     {
         $disposed2 = false;
         $d1 = new CallbackDisposable(function(): void{});
@@ -143,7 +143,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function removing_when_disposed_has_no_effect()
+    public function removing_when_disposed_has_no_effect(): void
     {
         $disposable = new CompositeDisposable([]);
         $disposable->dispose();
@@ -161,7 +161,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function removing_a_disposable_that_is_not_contained_has_no_effect()
+    public function removing_a_disposable_that_is_not_contained_has_no_effect(): void
     {
         $disposable = new CompositeDisposable([]);
 
@@ -178,7 +178,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function clear_disposes_all_contained_disposables_but_not_the_composite_disposable()
+    public function clear_disposes_all_contained_disposables_but_not_the_composite_disposable(): void
     {
         $disposed1 = false;
         $disposed2 = false;
@@ -202,7 +202,7 @@ class CompositeDisposableTest extends TestCase
      * @test
      * @doesNotPerformAssertions
      */
-    public function it_can_be_disposed_multiple_times()
+    public function it_can_be_disposed_multiple_times(): void
     {
         $d1 = new CallbackDisposable(function(): void{});
         $d2 = new CallbackDisposable(function(): void{});
@@ -217,7 +217,7 @@ class CompositeDisposableTest extends TestCase
      *
      * see https://github.com/ReactiveX/RxPHP/issues/107
      */
-    public function it_can_distinguish_and_dispose_of_correct_disposable()
+    public function it_can_distinguish_and_dispose_of_correct_disposable(): void
     {
         // factory to create 2 disposables that evaluate the same with ==
         $getSimilarDisposables = function () {
@@ -256,7 +256,7 @@ class CompositeDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_knows_what_it_contains()
+    public function it_knows_what_it_contains(): void
     {
         // factory to create 2 disposables that evaluate the same with ==
         $getSimilarDisposables = function () {

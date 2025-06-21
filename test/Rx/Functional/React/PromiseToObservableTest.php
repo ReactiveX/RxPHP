@@ -16,7 +16,7 @@ class PromiseToObservableTest extends FunctionalTestCase
      * @test
      *
      */
-    public function from_promise_success()
+    public function from_promise_success(): void
     {
         $p = Promise::resolved(42);
 
@@ -38,7 +38,7 @@ class PromiseToObservableTest extends FunctionalTestCase
      * @test
      *
      */
-    public function from_promise_failure()
+    public function from_promise_failure(): void
     {
         $p = new ReactPromise(function (): void {
             1 / 0;
@@ -63,7 +63,7 @@ class PromiseToObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function to_observable_cancels_on_dispose()
+    public function to_observable_cancels_on_dispose(): void
     {
         $canceled = false;
 
@@ -93,7 +93,7 @@ class PromiseToObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function two_observables_one_delayed()
+    public function two_observables_one_delayed(): void
     {
         $canceled = false;
         
@@ -131,7 +131,7 @@ class PromiseToObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function two_observables_one_disposed_before_resolve()
+    public function two_observables_one_disposed_before_resolve(): void
     {
         $canceled = false;
 
@@ -174,7 +174,7 @@ class PromiseToObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function observable_dispose_after_complete()
+    public function observable_dispose_after_complete(): void
     {
         $canceled = false;
 

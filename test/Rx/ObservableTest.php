@@ -14,7 +14,7 @@ use Rx\Testing\TestScheduler;
 
 class ObservableTest extends TestCase
 {
-    public function testJustIsAliasForOf()
+    public function testJustIsAliasForOf(): void
     {
         $o = new class extends Observable {
             private static $ofCalled = false;
@@ -42,7 +42,7 @@ class ObservableTest extends TestCase
         $this->assertTrue($o::ofWasCalled());
     }
 
-    public function testEmptyObservableIsAliasForEmpty()
+    public function testEmptyObservableIsAliasForEmpty(): void
     {
         $o = new class extends Observable {
             private static $emptyCalled = false;
@@ -70,7 +70,7 @@ class ObservableTest extends TestCase
         $this->assertTrue($o::emptyWasCalled());
     }
 
-    public function testShareCallsPublishRefCount()
+    public function testShareCallsPublishRefCount(): void
     {
         $o        = $this->getMockBuilder(Observable::class)
             ->setMethods(['publish'])
@@ -93,7 +93,7 @@ class ObservableTest extends TestCase
         $o->share();
     }
 
-    public function testShareValueCallsPublishValueRefCount()
+    public function testShareValueCallsPublishValueRefCount(): void
     {
         $o        = $this->getMockBuilder(Observable::class)
             ->setMethods(['publishValue'])
@@ -117,7 +117,7 @@ class ObservableTest extends TestCase
         $o->shareValue(1);
     }
 
-    public function testShareReplayCallsReplayRefCount()
+    public function testShareReplayCallsReplayRefCount(): void
     {
         $o        = $this->getMockBuilder(Observable::class)
             ->setMethods(['replay'])
@@ -146,7 +146,7 @@ class ObservableTest extends TestCase
         $o->shareReplay(123, 456);
     }
 
-    public function testCatchErrorCallsCatch()
+    public function testCatchErrorCallsCatch(): void
     {
         $o = $this->getMockBuilder(Observable::class)
             ->setMethods(['catch'])
@@ -167,7 +167,7 @@ class ObservableTest extends TestCase
         $o->catchError($callable);
     }
 
-    public function testSwitchLatestCallsSwitch()
+    public function testSwitchLatestCallsSwitch(): void
     {
         $o = $this->getMockBuilder(Observable::class)
             ->setMethods(['switch'])
@@ -184,7 +184,7 @@ class ObservableTest extends TestCase
     /**
      * @test
      */
-    public function it_sends_throwables_in_onnext_to_onerror()
+    public function it_sends_throwables_in_onnext_to_onerror(): void
     {
         $onNext = function ($x): void {
             throw new TestException();

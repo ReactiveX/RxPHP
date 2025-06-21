@@ -13,7 +13,7 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_dispose_on_completed()
+    public function it_calls_dispose_on_completed(): void
     {
         $disposed   = false;
         $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
@@ -28,7 +28,7 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_dispose_on_error()
+    public function it_calls_dispose_on_error(): void
     {
         $disposed   = false;
         $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
@@ -43,7 +43,7 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_observer_on_completed_throws()
+    public function it_disposes_if_observer_on_completed_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('fail');
@@ -60,7 +60,7 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_observer_on_error_throws()
+    public function it_disposes_if_observer_on_error_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('fail');
@@ -77,7 +77,7 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_observer_on_next_throws()
+    public function it_disposes_if_observer_on_next_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('fail');

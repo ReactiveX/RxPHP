@@ -8,7 +8,7 @@ use Rx\TestCase;
 
 class SubscriptionTest extends TestCase
 {
-    public function testSubscriptionGetters()
+    public function testSubscriptionGetters(): void
     {
         $sub = new Subscription(1, 2);
 
@@ -16,7 +16,7 @@ class SubscriptionTest extends TestCase
         $this->assertEquals(2, $sub->getUnsubscribed());
     }
 
-    public function testSubscriptionToString()
+    public function testSubscriptionToString(): void
     {
         $this->assertEquals(new Subscription(1, 2), "Subscription(1, 2)");
     }

@@ -9,7 +9,7 @@ class ColdObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_relative_to_subscribe_time()
+    public function it_calls_relative_to_subscribe_time(): void
     {
         $xs = $this->createColdObservable([
             onNext(50, "foo"),
