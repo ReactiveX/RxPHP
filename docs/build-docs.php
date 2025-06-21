@@ -10,12 +10,12 @@ require_once __DIR__ . '/doc-loader.php';
 require_once __DIR__ . '/doc-writer.php';
 require_once __DIR__ . '/utils.php';
 
-function println($line) {
+function println($line): void {
     $args = func_get_args();
     echo call_user_func_array('sprintf', $args) . "\n";
 }
 
-function run_lint() {
+function run_lint(): void {
     $docs = load_all_docs();
     println("Successfully loaded documentation for %d observables/operators\n",
         count($docs)
@@ -33,7 +33,7 @@ function run_lint() {
     exit(0);
 }
 
-function run_reactivex() {
+function run_reactivex(): void {
     $allDocs = load_all_docs();
 
     $docs = array_filter($allDocs, function ($doc) {
@@ -74,14 +74,14 @@ function run_reactivex() {
     exit(0);
 }
 
-function run_usage() {
+function run_usage(): void {
     println("Usage: $argv[0] <command>");
     println("  lint      Verifies that documentation can be loaded");
     println("  reactivex Updates the reactivex documentation");
     exit(1);
 }
 
-function main($argv) {
+function main($argv): void {
     if (count($argv) !== 2) {
         run_usage();
     }
