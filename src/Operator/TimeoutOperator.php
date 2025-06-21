@@ -13,6 +13,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\AsyncSchedulerInterface;
 use Rx\Exception\TimeoutException;
+use Rx\Scheduler;
 
 final class TimeoutOperator implements OperatorInterface
 {
@@ -22,14 +23,14 @@ final class TimeoutOperator implements OperatorInterface
 
     private $timeoutObservable;
 
-    public function __construct(int $timeout, ?ObservableInterface $timeoutObservable = null, AsyncSchedulerInterface $scheduler)
+    public function __construct(int $timeout, ?ObservableInterface $timeoutObservable = null, ?AsyncSchedulerInterface $scheduler = null)
     {
         $this->timeout           = $timeout;
-        $this->scheduler         = $scheduler;
+        $this->scheduler         = $scheduler ?: Scheduler::getAsync();
         $this->timeoutObservable = $timeoutObservable;
 
         if ($this->timeoutObservable === null) {
-            $this->timeoutObservable = new ErrorObservable(new TimeoutException('timeout'), $scheduler);
+            $this->timeoutObservable = new ErrorObservable(new TimeoutException('timeout'), $this->scheduler);
         }
     }
 
