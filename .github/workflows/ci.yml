@@ -9,24 +9,23 @@ jobs:
     name: PHPUnit (PHP ${{ matrix.php }} on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         os:
-          - ubuntu-20.04
-          - windows-2019
+          - ubuntu-latest
+          - windows-latest
         php:
+          - 8.4
           - 8.3
           - 8.2
           - 8.1
-          - 8.0
-          - 7.4
-          - 7.3
-          - 7.2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
-      - run: composer install
+          tools: composer
+          cache: composer
+      - run: composer install --prefer-dist --no-interaction --no-progress
       - run: vendor/bin/phpunit --coverage-text
