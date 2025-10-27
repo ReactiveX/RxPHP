@@ -1,3 +1,9 @@
+# 2.1.0
+
+### Update
+* Implement inclusive takeWhile by @mbonneau in https://github.com/ReactiveX/RxPHP/pull/223
+* PHP 8.4 by @makomweb in https://github.com/ReactiveX/RxPHP/pull/225
+
 # 2.0.13
 
 - Fix `pluck` to correctly handle null values when an index or property exists but is null. #216
