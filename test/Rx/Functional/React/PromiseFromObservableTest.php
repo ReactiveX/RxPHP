@@ -15,17 +15,17 @@ class PromiseFromObservableTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_success()
+    public function promise_success(): void
     {
         $source = Observable::of(42);
 
         $promise = Promise::fromObservable($source);
 
         $promise->then(
-          function ($value) {
+          function ($value): void {
               $this->assertEquals(42, $value);
           },
-          function () {
+          function (): void {
               $this->assertTrue(false);
           });
     }
@@ -34,7 +34,7 @@ class PromiseFromObservableTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_failure()
+    public function promise_failure(): void
     {
         $source = (new Subject());
         $source->onError(new Exception("some error"));
@@ -42,10 +42,10 @@ class PromiseFromObservableTest extends FunctionalTestCase
         $promise = Promise::fromObservable($source);
 
         $promise->then(
-          function ($value) {
+          function ($value): void {
               $this->assertTrue(false);
           },
-          function ($error) {
+          function ($error): void {
               $this->assertEquals($error, new Exception("some error"));
           });
     }

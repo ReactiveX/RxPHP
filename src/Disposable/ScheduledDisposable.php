@@ -32,7 +32,7 @@ class ScheduledDisposable implements DisposableInterface
 
         $this->isDisposed = true;
 
-        $this->scheduler->schedule(function () {
+        $this->scheduler->schedule(function (): void {
             $this->disposable->dispose();
         });
     }

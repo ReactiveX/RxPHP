@@ -28,7 +28,7 @@ final class SkipLastOperator implements OperatorInterface
     {
         $this->q    = [];
         $cbObserver = new CallbackObserver(
-            function ($x) use ($observer) {
+            function ($x) use ($observer): void {
                 $this->q[] = $x;
                 if (count($this->q) > $this->count) {
                     $observer->onNext(array_shift($this->q));

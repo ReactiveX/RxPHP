@@ -12,7 +12,7 @@ class EmptyDisposableTest extends TestCase
      * @test
      * @doesNotPerformAssertions
      */
-    public function it_can_be_disposed()
+    public function it_can_be_disposed(): void
     {
         $disposable = new EmptyDisposable();
 

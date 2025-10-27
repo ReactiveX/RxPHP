@@ -37,11 +37,11 @@ final class RaceOperator implements OperatorInterface
     {
 
         $callbackObserver = new CallbackObserver(
-            function (Observable $innerObservable) {
+            function (Observable $innerObservable): void {
                 $this->observables[] = $innerObservable;
             },
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer): void {
 
                 if (count($this->observables) === 0) {
                     $observer->onCompleted();
@@ -68,7 +68,7 @@ final class RaceOperator implements OperatorInterface
     private function subscribeToResult(ObservableInterface $observable, ObserverInterface $observer, $outerIndex)
     {
         return $observable->subscribe(new CallbackObserver(
-            function ($value) use ($observer, $outerIndex) {
+            function ($value) use ($observer, $outerIndex): void {
 
                 if (!$this->hasFirst) {
                     $this->hasFirst = true;

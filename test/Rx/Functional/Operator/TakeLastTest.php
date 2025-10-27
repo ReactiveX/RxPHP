@@ -12,7 +12,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_zero_completed()
+    public function takeLast_zero_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 1),
@@ -43,7 +43,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_zero_error()
+    public function takeLast_zero_error(): void
     {
 
         $error = new Exception('error');
@@ -77,7 +77,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_zero_disposed()
+    public function takeLast_zero_disposed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 1),
@@ -105,7 +105,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_one_completed()
+    public function takeLast_one_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 1),
@@ -137,7 +137,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_one_error()
+    public function takeLast_one_error(): void
     {
 
         $error = new Exception('error');
@@ -172,7 +172,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_one_disposed()
+    public function takeLast_one_disposed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 1),
@@ -200,7 +200,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_three_completed()
+    public function takeLast_three_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 1),
@@ -234,7 +234,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_three_error()
+    public function takeLast_three_error(): void
     {
 
         $error = new Exception('error');
@@ -269,7 +269,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_three_disposed()
+    public function takeLast_three_disposed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, 1),
@@ -297,7 +297,7 @@ class TakeLastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeLast_invalid_count()
+    public function takeLast_invalid_count(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([

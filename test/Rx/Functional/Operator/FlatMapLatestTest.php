@@ -12,7 +12,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_empty()
+    public function flatMapLatest_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -42,7 +42,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_inner_empty()
+    public function flatMapLatest_inner_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -73,7 +73,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_many()
+    public function flatMapLatest_many(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -120,7 +120,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_errors()
+    public function flatMapLatest_errors(): void
     {
         $error = new \Exception();
 
@@ -163,7 +163,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_inner_errors()
+    public function flatMapLatest_inner_errors(): void
     {
         $error = new \Exception();
 
@@ -207,7 +207,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_throws()
+    public function flatMapLatest_throws(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -226,7 +226,7 @@ class FlatMapLatestTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ys) {
-            return $xs->flatMapLatest(function () use ($ys) {
+            return $xs->flatMapLatest(function () use ($ys): void {
                 throw new \Exception('error');
             });
         });
@@ -242,7 +242,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_returns_invalid_string()
+    public function flatMapLatest_returns_invalid_string(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -277,7 +277,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_dispose()
+    public function flatMapLatest_dispose(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),
@@ -322,7 +322,7 @@ class FlatMapLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function flatMapLatest_dispose_before_outer_completes()
+    public function flatMapLatest_dispose_before_outer_completes(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 4),

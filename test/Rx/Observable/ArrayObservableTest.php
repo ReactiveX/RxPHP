@@ -13,7 +13,7 @@ class ArrayObservableTest extends TestCase
     /**
      * @test
      */
-    public function it_starts_again_if_you_subscribe_again()
+    public function it_starts_again_if_you_subscribe_again(): void
     {
         $a = [1,2,3];
 
@@ -22,14 +22,14 @@ class ArrayObservableTest extends TestCase
         $goodCount = 0;
 
         $o->toArray()->subscribe(new CallbackObserver(
-            function ($x) use ($a, &$goodCount) {
+            function ($x) use ($a, &$goodCount): void {
                 $goodCount++;
                 $this->assertEquals($a, $x);
             }
         ));
 
         $o->toArray()->subscribe(new CallbackObserver(
-            function ($x) use ($a, &$goodCount) {
+            function ($x) use ($a, &$goodCount): void {
                 $goodCount++;
                 $this->assertEquals($a, $x);
             }
@@ -38,24 +38,24 @@ class ArrayObservableTest extends TestCase
         $this->assertEquals(2, $goodCount);
     }
 
-    public function testRange()
+    public function testRange(): void
     {
         //todo: refactor
         $observable = new ArrayObservable(range(1, 10), Scheduler::getDefault());
 
-        $record = array();
-        $observable->subscribe(function($v) use (&$record) {$record[] = $v; });
+        $record = [];
+        $observable->subscribe(function($v) use (&$record): void {$record[] = $v; });
 
         $this->assertEquals(range(1, 10), $record);
     }
 
-    public function testOnCompleteIsCalled()
+    public function testOnCompleteIsCalled(): void
     {
         //todo: refactor
-        $observable = new ArrayObservable(array(), Scheduler::getDefault());
+        $observable = new ArrayObservable([], Scheduler::getDefault());
 
         $isCalled = false;
-        $observable->subscribe(null, null, function() use (&$isCalled) { $isCalled = true; });
+        $observable->subscribe(null, null, function() use (&$isCalled): void { $isCalled = true; });
 
         $this->assertTrue($isCalled, 'onComplete should be called.');
     }

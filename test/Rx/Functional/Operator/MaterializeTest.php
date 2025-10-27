@@ -20,7 +20,7 @@ class MaterializeTest extends FunctionalTestCase
         }
 
         $value = null;
-        $valueGrabber = function ($v) use (&$value) {
+        $valueGrabber = function ($v) use (&$value): void {
             $value = $v;
         };
 
@@ -52,7 +52,7 @@ class MaterializeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function materialize_never()
+    public function materialize_never(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::never()->materialize();
@@ -64,7 +64,7 @@ class MaterializeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function materialize_empty()
+    public function materialize_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -84,7 +84,7 @@ class MaterializeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function materialize_return()
+    public function materialize_return(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -106,7 +106,7 @@ class MaterializeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function materialize_throw()
+    public function materialize_throw(): void
     {
         $error = new \Exception();
 
@@ -129,7 +129,7 @@ class MaterializeTest extends FunctionalTestCase
      * @test
      * @requires function Rx\Observable::dematerialize
      */
-    public function materialize_dematerialize_never()
+    public function materialize_dematerialize_never(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::never()->materialize()->dematerialize();
@@ -142,7 +142,7 @@ class MaterializeTest extends FunctionalTestCase
      * @test
      * @requires function Rx\Observable::dematerialize
      */
-    public function materialize_dematerialize_empty()
+    public function materialize_dematerialize_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -162,7 +162,7 @@ class MaterializeTest extends FunctionalTestCase
      * @test
      * @requires function Rx\Observable::dematerialize
      */
-    public function materialize_dematerialize_return()
+    public function materialize_dematerialize_return(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -184,7 +184,7 @@ class MaterializeTest extends FunctionalTestCase
      * @test
      * @requires function Rx\Observable::dematerialize
      */
-    public function materialize_dematerialize_throw()
+    public function materialize_dematerialize_throw(): void
     {
         $error = new \Exception();
 
@@ -205,7 +205,7 @@ class MaterializeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function materialize_dispose()
+    public function materialize_dispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -228,7 +228,7 @@ class MaterializeTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function materialize_dematerialize_dispose()
+    public function materialize_dematerialize_dispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),

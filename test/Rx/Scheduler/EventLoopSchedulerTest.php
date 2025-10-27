@@ -14,7 +14,7 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function now_returns_time_since_epoch_in_ms()
+    public function now_returns_time_since_epoch_in_ms(): void
     {
         $scheduler = new EventLoopScheduler(function () { return new EmptyDisposable(); });
 
@@ -24,7 +24,7 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function eventloop_schedule()
+    public function eventloop_schedule(): void
     {
         $loop = Factory::create();
 
@@ -38,10 +38,10 @@ class EventLoopSchedulerTest extends TestCase
 
         $disposable = $scheduler->schedule($action);
 
-        $this->assertInstanceOf('Rx\DisposableInterface', $disposable);
+        $this->assertInstanceOf(\Rx\DisposableInterface::class, $disposable);
         $this->assertFalse($actionCalled);
 
-        $loop->futureTick(function () use ($loop) {
+        $loop->futureTick(function () use ($loop): void {
             $loop->stop();
         });
 
@@ -54,7 +54,7 @@ class EventLoopSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function eventloop_schedule_recursive()
+    public function eventloop_schedule_recursive(): void
     {
 
         $loop = Factory::create();
@@ -62,7 +62,7 @@ class EventLoopSchedulerTest extends TestCase
         $actionCalled = false;
         $count        = 0;
 
-        $action = function ($reschedule) use (&$actionCalled, &$count, $loop) {
+        $action = function ($reschedule) use (&$actionCalled, &$count, $loop): void {
             $actionCalled = true;
             $count++;
             if ($count < 5) {
@@ -74,7 +74,7 @@ class EventLoopSchedulerTest extends TestCase
 
         $disposable = $scheduler->scheduleRecursive($action);
 
-        $this->assertInstanceOf('Rx\DisposableInterface', $disposable);
+        $this->assertInstanceOf(\Rx\DisposableInterface::class, $disposable);
         $this->assertFalse($actionCalled);
         $this->assertEquals(0, $count);
 
@@ -84,7 +84,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertTrue($actionCalled);
     }
 
-    public function testDisposedEventDoesNotCauseSkip()
+    public function testDisposedEventDoesNotCauseSkip(): void
     {
         // create a scheduler - timing is not important for this test
         // so we can just use an empty callable
@@ -96,15 +96,15 @@ class EventLoopSchedulerTest extends TestCase
 
         // the way that these are scheduled, if the scheduler runs (by calling start a few times),
         // calls should be [2] because 0 is disposed and 1 shouldn't be called for 10s
-        $disposable = $scheduler->schedule(function () use (&$calls) {
+        $disposable = $scheduler->schedule(function () use (&$calls): void {
             $calls[] = 0;
         }, 0);
 
-        $scheduler->schedule(function () use (&$calls) {
+        $scheduler->schedule(function () use (&$calls): void {
             $calls[] = 1;
         }, 10000);
 
-        $scheduler->schedule(function () use (&$calls) {
+        $scheduler->schedule(function () use (&$calls): void {
             $calls[] = 2;
         }, 0);
 
@@ -117,7 +117,7 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals([2], $calls);
     }
 
-    public function testSchedulerWorkedWithScheduledEventOutsideItself()
+    public function testSchedulerWorkedWithScheduledEventOutsideItself(): void
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);
@@ -125,8 +125,8 @@ class EventLoopSchedulerTest extends TestCase
         $scheduler->start();
         $called = null;
 
-        $loop->addTimer(0.100, function () use ($scheduler, &$called) {
-            $scheduler->schedule(function () use (&$called) {
+        $loop->addTimer(0.100, function () use ($scheduler, &$called): void {
+            $scheduler->schedule(function () use (&$called): void {
                 $called = microtime(true);
             }, 100);
         });
@@ -136,28 +136,28 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertNotNull($called);
     }
 
-    public function testScheduledItemsFromOutsideOfSchedulerDontCreateExtraTimers()
+    public function testScheduledItemsFromOutsideOfSchedulerDontCreateExtraTimers(): void
     {
         $timersCreated   = 0;
         $timersExecuted = 0;
         $loop           = Factory::create();
         $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
             $timersCreated++;
-            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted) {
+            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted): void {
                 $timersExecuted++;
                 $action();
             });
-            return new CallbackDisposable(function () use ($loop, $timer) {
+            return new CallbackDisposable(function () use ($loop, $timer): void {
                 $loop->cancelTimer($timer);
             });
         });
 
-        $scheduler->schedule(function () {}, 40);
+        $scheduler->schedule(function (): void {}, 40);
 
-        $scheduler->schedule(function () {}, 35)->dispose();
-        $scheduler->schedule(function () {}, 34)->dispose();
+        $scheduler->schedule(function (): void {}, 35)->dispose();
+        $scheduler->schedule(function (): void {}, 34)->dispose();
 
-        $scheduler->schedule(function () {}, 20);
+        $scheduler->schedule(function (): void {}, 20);
 
         $loop->run();
 
@@ -165,30 +165,30 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertLessThanOrEqual(3, $timersExecuted);
     }
 
-    public function testMultipleSchedulesFromOutsideInSameTickDontCreateExtraTimers()
+    public function testMultipleSchedulesFromOutsideInSameTickDontCreateExtraTimers(): void
     {
         $timersCreated   = 0;
         $timersExecuted = 0;
         $loop           = Factory::create();
         $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
             $timersCreated++;
-            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted) {
+            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted): void {
                 $timersExecuted++;
                 $action();
             });
-            return new CallbackDisposable(function () use ($loop, $timer) {
+            return new CallbackDisposable(function () use ($loop, $timer): void {
                 $loop->cancelTimer($timer);
             });
         });
 
-        $scheduler->schedule(function () {}, 20);
-        $loop->addTimer(0.01, function () use ($scheduler) {
-            $scheduler->schedule(function () {}, 30);
+        $scheduler->schedule(function (): void {}, 20);
+        $loop->addTimer(0.01, function () use ($scheduler): void {
+            $scheduler->schedule(function (): void {}, 30);
 
-            $scheduler->schedule(function () {}, 25)->dispose();
-            $scheduler->schedule(function () {}, 24)->dispose();
-            $scheduler->schedule(function () {}, 23)->dispose();
-            $scheduler->schedule(function () {}, 25)->dispose();
+            $scheduler->schedule(function (): void {}, 25)->dispose();
+            $scheduler->schedule(function (): void {}, 24)->dispose();
+            $scheduler->schedule(function (): void {}, 23)->dispose();
+            $scheduler->schedule(function (): void {}, 25)->dispose();
         });
 
         $loop->run();
@@ -197,23 +197,23 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertEquals(3, $timersExecuted);
     }
 
-    public function testThatStuffScheduledWayInTheFutureDoesntKeepTheLoopRunningIfDisposed()
+    public function testThatStuffScheduledWayInTheFutureDoesntKeepTheLoopRunningIfDisposed(): void
     {
         $loop           = Factory::create();
         $scheduler      = new EventLoopScheduler(function ($delay, $action) use ($loop, &$timersCreated, &$timersExecuted) {
             $timersCreated++;
-            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted) {
+            $timer = $loop->addTimer($delay * 0.001, function () use ($action, &$timersExecuted): void {
                 $timersExecuted++;
                 $action();
             });
-            return new CallbackDisposable(function () use ($loop, $timer) {
+            return new CallbackDisposable(function () use ($loop, $timer): void {
                 $loop->cancelTimer($timer);
             });
         });
 
-        $disp = $scheduler->schedule(function () {}, 3000);
-        $loop->addTimer(0.01, function () use ($scheduler, $disp) {
-            $scheduler->schedule(function () use ($disp) {
+        $disp = $scheduler->schedule(function (): void {}, 3000);
+        $loop->addTimer(0.01, function () use ($scheduler, $disp): void {
+            $scheduler->schedule(function () use ($disp): void {
                 $disp->dispose();
             });
         });
@@ -225,15 +225,15 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertLessThan(2, $loopTime);
     }
 
-    public function testThatDisposalOfSingleScheduledItemOutsideOfInvokeCancelsTimer()
+    public function testThatDisposalOfSingleScheduledItemOutsideOfInvokeCancelsTimer(): void
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);
 
         $startTime = microtime(true);
 
-        $disp = $scheduler->schedule(function () {}, 3000);
-        $loop->addTimer(0.01, function () use ($disp) {
+        $disp = $scheduler->schedule(function (): void {}, 3000);
+        $loop->addTimer(0.01, function () use ($disp): void {
             $disp->dispose();
         });
 
@@ -243,16 +243,16 @@ class EventLoopSchedulerTest extends TestCase
         $this->assertLessThan(2, $endTime - $startTime);
     }
 
-    public function testScheduledItemPastNextScheduledItemKillsItOwnTimerIfItBecomesTheNextOneAndIsDisposed()
+    public function testScheduledItemPastNextScheduledItemKillsItOwnTimerIfItBecomesTheNextOneAndIsDisposed(): void
     {
         $loop      = Factory::create();
         $scheduler = new EventLoopScheduler($loop);
 
         $startTime = microtime(true);
 
-        $scheduler->schedule(function () {}, 30);
-        $disp  = $scheduler->schedule(function () {}, 3000);
-        $loop->addTimer(0.050, function () use ($disp) {
+        $scheduler->schedule(function (): void {}, 30);
+        $disp  = $scheduler->schedule(function (): void {}, 3000);
+        $loop->addTimer(0.050, function () use ($disp): void {
             $disp->dispose();
         });
 

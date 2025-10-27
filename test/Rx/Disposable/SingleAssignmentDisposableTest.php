@@ -11,10 +11,10 @@ class SingleAssignmentDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_the_assigned_disposable()
+    public function it_disposes_the_assigned_disposable(): void
     {
         $disposed1   = false;
-        $d1         = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
+        $d1         = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
         $disposable = new SingleAssignmentDisposable();
 
         $disposable->setDisposable($d1);
@@ -29,11 +29,11 @@ class SingleAssignmentDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_newly_set_disposable_if_already_disposed()
+    public function it_disposes_newly_set_disposable_if_already_disposed(): void
     {
         $disposed1   = false;
-        $d1         = new CallbackDisposable(function() use (&$disposed1){ $disposed1 = true; });
-        $d2         = new CallbackDisposable(function(){});
+        $d1         = new CallbackDisposable(function() use (&$disposed1): void{ $disposed1 = true; });
+        $d2         = new CallbackDisposable(function(): void{});
         $disposable = new SingleAssignmentDisposable();
 
         $disposable->setDisposable($d2);
@@ -49,11 +49,11 @@ class SingleAssignmentDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_cannot_be_assignmed_multiple_times()
+    public function it_cannot_be_assignmed_multiple_times(): void
     {
         $this->expectException(\RuntimeException::class);
-        $d1         = new CallbackDisposable(function(){});
-        $d2         = new CallbackDisposable(function(){});
+        $d1         = new CallbackDisposable(function(): void{});
+        $d2         = new CallbackDisposable(function(): void{});
         $disposable = new SingleAssignmentDisposable();
 
         $disposable->setDisposable($d1);

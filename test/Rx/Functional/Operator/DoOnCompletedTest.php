@@ -11,7 +11,7 @@ class DoOnCompletedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnCompleted_should_be_called()
+    public function doOnCompleted_should_be_called(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -23,7 +23,7 @@ class DoOnCompletedTest extends FunctionalTestCase
         $called = 0;
 
         $this->scheduler->startWithCreate(function () use ($xs, &$called) {
-            return $xs->doOnCompleted(function () use (&$called) {
+            return $xs->doOnCompleted(function () use (&$called): void {
                 $called++;
             });
         });
@@ -34,7 +34,7 @@ class DoOnCompletedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnCompleted_should_call_after_resubscription()
+    public function doOnCompleted_should_call_after_resubscription(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -44,7 +44,7 @@ class DoOnCompletedTest extends FunctionalTestCase
         $messages = [];
 
         $xs
-            ->doOnCompleted(function () use (&$messages) {
+            ->doOnCompleted(function () use (&$messages): void {
                 $messages[] = onCompleted($this->scheduler->getClock());
             })
             ->repeat(2)

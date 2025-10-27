@@ -12,12 +12,12 @@ class StartTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function start_action()
+    public function start_action(): void
     {
         $done = false;
 
         $results = $this->scheduler->startWithCreate(function () use (&$done) {
-            return Observable::start(function () use (&$done) {
+            return Observable::start(function () use (&$done): void {
                 $done = true;
             }, $this->scheduler);
         });
@@ -36,7 +36,7 @@ class StartTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function start_action_number()
+    public function start_action_number(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::start(function () {
@@ -56,11 +56,11 @@ class StartTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function start_with_error()
+    public function start_with_error(): void
     {
         $error   = new \Exception();
         $results = $this->scheduler->startWithCreate(function () use ($error) {
-            return Observable::start(function () use ($error) {
+            return Observable::start(function () use ($error): void {
                 throw $error;
             }, $this->scheduler);
         });

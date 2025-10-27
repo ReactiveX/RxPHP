@@ -11,7 +11,7 @@ use Rx\Scheduler\ImmediateScheduler;
 
 class ErrorObservableTest extends FunctionalTestCase
 {
-    public function testErrorObservableWillAcceptThrowable()
+    public function testErrorObservableWillAcceptThrowable(): void
     {
         $throwable = null;
 

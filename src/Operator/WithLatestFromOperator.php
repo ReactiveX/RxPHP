@@ -18,7 +18,7 @@ final class WithLatestFromOperator implements OperatorInterface
     /** @var callable */
     private $resultSelector;
 
-    public function __construct(array $observables, callable $resultSelector = null)
+    public function __construct(array $observables, ?callable $resultSelector = null)
     {
         if (null === $resultSelector) {
             $resultSelector = function () {
@@ -49,12 +49,12 @@ final class WithLatestFromOperator implements OperatorInterface
             $sad = new SingleAssignmentDisposable();
 
             $subscription = $o->subscribe(
-                function ($value) use ($key, &$values, $count, &$hasAllValues) {
+                function ($value) use ($key, &$values, $count, &$hasAllValues): void {
                     $values[$key] = $value;
                     $hasAllValues = $count === count($values);
                 },
                 [$observer, 'onError'],
-                function () {
+                function (): void {
                     //noop
                 });
 
@@ -64,7 +64,7 @@ final class WithLatestFromOperator implements OperatorInterface
 
         $outerSad = new SingleAssignmentDisposable();
         $outerSad->setDisposable($source->subscribe(
-            function ($value) use ($observer, &$values, &$hasAllValues) {
+            function ($value) use ($observer, &$values, &$hasAllValues): void {
                 ksort($values);
                 $allValues = array_merge([$value], $values);
 

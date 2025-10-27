@@ -22,7 +22,7 @@ final class TakeWhileOperator implements OperatorInterface
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $onNext = function ($value) use ($observer) {
+        $onNext = function ($value) use ($observer): void {
             try {
                 if (($this->predicate)($value)) {
                     $observer->onNext($value);

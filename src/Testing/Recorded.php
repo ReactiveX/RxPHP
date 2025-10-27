@@ -10,7 +10,7 @@ class Recorded
     private $value;
     private $comparer;
 
-    public function __construct(int $time, $value, callable $comparer = null)
+    public function __construct(int $time, $value, ?callable $comparer = null)
     {
         $this->time     = $time;
         $this->value    = $value;

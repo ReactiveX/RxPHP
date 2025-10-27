@@ -13,7 +13,7 @@ class AverageTest extends FunctionalTestCase
      *
      * @test
      */
-    public function average_Number_Empty()
+    public function average_Number_Empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -34,7 +34,7 @@ class AverageTest extends FunctionalTestCase
      *
      * @test
      */
-    public function average_Number_Return()
+    public function average_Number_Return(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -57,7 +57,7 @@ class AverageTest extends FunctionalTestCase
      *
      * @test
      */
-    public function average_Number_Some()
+    public function average_Number_Some(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -81,7 +81,7 @@ class AverageTest extends FunctionalTestCase
      *
      * @test
      */
-    public function average_Number_Throw()
+    public function average_Number_Throw(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -102,7 +102,7 @@ class AverageTest extends FunctionalTestCase
      *
      * @test
      */
-    public function average_Number_Never()
+    public function average_Number_Never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)

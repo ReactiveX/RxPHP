@@ -44,9 +44,9 @@ class VirtualTimeScheduler implements AsyncSchedulerInterface
         $goAgain    = true;
         $disposable = new SerialDisposable();
 
-        $recursiveAction = function () use ($action, &$goAgain, $disposable, &$recursiveAction) {
-            $disposable->setDisposable($this->schedule(function () use ($action, &$recursiveAction) {
-                $action(function () use (&$recursiveAction) {
+        $recursiveAction = function () use ($action, &$goAgain, $disposable, &$recursiveAction): void {
+            $disposable->setDisposable($this->schedule(function () use ($action, &$recursiveAction): void {
+                $action(function () use (&$recursiveAction): void {
                     $recursiveAction();
                 });
             }));
@@ -88,7 +88,7 @@ class VirtualTimeScheduler implements AsyncSchedulerInterface
 
         $this->queue->enqueue($scheduledItem);
 
-        return new CallbackDisposable(function () use ($scheduledItem) {
+        return new CallbackDisposable(function () use ($scheduledItem): void {
             $scheduledItem->getDisposable()->dispose();
             $this->queue->remove($scheduledItem);
         });
@@ -112,7 +112,7 @@ class VirtualTimeScheduler implements AsyncSchedulerInterface
 
         $disposable = new SerialDisposable();
 
-        $doActionAndReschedule = function () use (&$nextTime, $period, $disposable, $action, &$doActionAndReschedule) {
+        $doActionAndReschedule = function () use (&$nextTime, $period, $disposable, $action, &$doActionAndReschedule): void {
             $action();
             $nextTime += $period;
             $delay = $nextTime - $this->now();

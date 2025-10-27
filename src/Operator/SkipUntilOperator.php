@@ -28,28 +28,28 @@ final class SkipUntilOperator implements OperatorInterface
 
         /** @var DisposableInterface $otherDisposable */
         $otherDisposable = $this->other->subscribe(new CallbackObserver(
-            function ($x) use (&$isOpen, &$otherDisposable) {
+            function ($x) use (&$isOpen, &$otherDisposable): void {
                 $isOpen = true;
                 $otherDisposable->dispose();
             },
-            function ($e) use ($observer) {
+            function ($e) use ($observer): void {
                 $observer->onError($e);
             },
-            function () use (&$otherDisposable) {
+            function () use (&$otherDisposable): void {
                 $otherDisposable->dispose();
             }
         ));
 
         $sourceDisposable = $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer, &$isOpen) {
+            function ($x) use ($observer, &$isOpen): void {
                 if ($isOpen) {
                     $observer->onNext($x);
                 }
             },
-            function ($e) use ($observer) {
+            function ($e) use ($observer): void {
                 $observer->onError($e);
             },
-            function () use ($observer, &$isOpen) {
+            function () use ($observer, &$isOpen): void {
                 if ($isOpen) {
                     $observer->onCompleted();
                 }

@@ -25,7 +25,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_1()
+    public function multicast_hot_1(): void
     {
 
         $xs = $this->createHotObservable([
@@ -46,19 +46,19 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d1) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d1): void {
             $d1->dispose();
         });
 
@@ -84,7 +84,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_2()
+    public function multicast_hot_2(): void
     {
 
         $xs = $this->createHotObservable([
@@ -105,20 +105,20 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d1) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d1): void {
             $d1->dispose();
         });
 
@@ -144,7 +144,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_3()
+    public function multicast_hot_3(): void
     {
 
         $xs = $this->createHotObservable([
@@ -165,23 +165,23 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d2) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d2): void {
             $d2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
@@ -208,7 +208,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_error_1()
+    public function multicast_hot_error_1(): void
     {
         $error = new \Exception();
 
@@ -230,23 +230,23 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$d2) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$d2): void {
             $d2->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(335, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
@@ -275,7 +275,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_error_2()
+    public function multicast_hot_error_2(): void
     {
         $error = new \Exception();
 
@@ -297,15 +297,15 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
@@ -328,7 +328,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_hot_completed()
+    public function multicast_hot_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -349,15 +349,15 @@ class MulticastTest extends FunctionalTestCase
         $d2       = null;
         $subject  = new Subject();
 
-        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject) {
+        $this->scheduler->scheduleAbsolute(50, function () use (&$ys, $xs, $subject): void {
             $ys = $xs->multicast($subject);
         });
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$d2, &$ys): void {
             $d2 = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$d1, &$ys, $observer): void {
             $d1 = $ys->subscribe($observer);
         });
 
@@ -379,7 +379,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_completed()
+    public function multicast_cold_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -426,7 +426,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_error()
+    public function multicast_cold_error(): void
     {
         $error = new \Exception();
 
@@ -473,7 +473,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_dispose()
+    public function multicast_cold_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -517,7 +517,7 @@ class MulticastTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function multicast_cold_zip()
+    public function multicast_cold_zip(): void
     {
 
         $xs = $this->createHotObservable([

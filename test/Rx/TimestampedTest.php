@@ -6,7 +6,7 @@ namespace Rx;
 
 class TimestampedTest extends TestCase
 {
-    public function testEqualWithScalar()
+    public function testEqualWithScalar(): void
     {
         $ts1 = new Timestamped(123, "Hello");
         $ts2 = new Timestamped(123, "Hello");
@@ -14,7 +14,7 @@ class TimestampedTest extends TestCase
         $this->assertTrue($ts1->equals($ts2));
     }
 
-    public function testNotEqualWithScalar()
+    public function testNotEqualWithScalar(): void
     {
         $ts1 = new Timestamped(123, "Hi");
         $ts2 = new Timestamped(123, "Hello");
@@ -22,7 +22,7 @@ class TimestampedTest extends TestCase
         $this->assertTrue(!$ts1->equals($ts2));
     }
 
-    public function testNotEqualInTime()
+    public function testNotEqualInTime(): void
     {
         $ts1 = new Timestamped(124, "Hello");
         $ts2 = new Timestamped(123, "Hello");
@@ -30,21 +30,21 @@ class TimestampedTest extends TestCase
         $this->assertTrue(!$ts1->equals($ts2));
     }
 
-    public function testEqualNotATimestamp()
+    public function testEqualNotATimestamp(): void
     {
         $ts1 = new Timestamped(123, "Hello");
 
         $this->assertTrue(!$ts1->equals("Hello"));
     }
 
-    public function testEqualSameTimestamp()
+    public function testEqualSameTimestamp(): void
     {
         $ts1 = new Timestamped(123, "Hello");
 
         $this->assertTrue($ts1->equals($ts1));
     }
 
-    public function testEqualObjectSameInstance()
+    public function testEqualObjectSameInstance(): void
     {
         $o1 = new \stdClass();
         $o1->x = "y";
@@ -56,7 +56,7 @@ class TimestampedTest extends TestCase
         $this->assertTrue($ts1->equals($ts2));
     }
 
-    public function testNotEqualObjectDiffentInstance()
+    public function testNotEqualObjectDiffentInstance(): void
     {
         $o1 = new \stdClass();
         $o1->x = "y";
@@ -69,7 +69,7 @@ class TimestampedTest extends TestCase
         $this->assertTrue(!$ts1->equals($ts2));
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $ts1 = new Timestamped(123, "Hello");
 

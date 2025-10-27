@@ -12,7 +12,7 @@ function load_all_reactivex_docs($docsPath) {
     return $docsPerId;
 }
 
-function update_documentation($path, $docs) {
+function update_documentation($path, $docs): void {
     $htmlDocs = build_documentation($docs);
     $currentDocumentation = file_get_contents($path);
     $currentLines = explode("\n", $currentDocumentation);
@@ -67,7 +67,7 @@ function get_replace_position($lines) {
             break;
         }
     }
-    return array($start, $end - $start + 1);
+    return [$start, $end - $start + 1];
 }
 
 function build_documentation($docs) {

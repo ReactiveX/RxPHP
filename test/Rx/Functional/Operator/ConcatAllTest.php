@@ -12,7 +12,7 @@ class ConcatAllTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatAll_timer_missing_item()
+    public function concatAll_timer_missing_item(): void
     {
         $xs = $this->createHotObservable([
             onNext(201, 0),
@@ -38,9 +38,9 @@ class ConcatAllTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function concatAll_errors_when_exception_during_inner_subscribe()
+    public function concatAll_errors_when_exception_during_inner_subscribe(): void
     {
-        $o1 = Observable::create(function () {
+        $o1 = Observable::create(function (): void {
             throw new \Exception("Exception in inner subscribe");
         });
 

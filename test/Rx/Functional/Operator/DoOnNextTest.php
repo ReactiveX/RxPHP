@@ -11,7 +11,7 @@ class DoOnNextTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnNext_should_see_all_values()
+    public function doOnNext_should_see_all_values(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -40,7 +40,7 @@ class DoOnNextTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnNext_should_call_after_resubscription()
+    public function doOnNext_should_call_after_resubscription(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -50,7 +50,7 @@ class DoOnNextTest extends FunctionalTestCase
         $messages = [];
         
         $xs
-            ->doOnNext(function ($x) use (&$messages) {
+            ->doOnNext(function ($x) use (&$messages): void {
                 $messages[] = onNext($this->scheduler->getClock(), $x);
             })
             ->repeat(2)

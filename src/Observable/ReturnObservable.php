@@ -25,11 +25,11 @@ class ReturnObservable extends Observable
     {
         $disposable = new CompositeDisposable();
 
-        $disposable->add($this->scheduler->schedule(function () use ($observer) {
+        $disposable->add($this->scheduler->schedule(function () use ($observer): void {
             $observer->onNext($this->value);
         }));
 
-        $disposable->add($this->scheduler->schedule(function () use ($observer) {
+        $disposable->add($this->scheduler->schedule(function () use ($observer): void {
             $observer->onCompleted();
         }));
 

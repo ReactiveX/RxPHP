@@ -12,7 +12,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_relative_time_simple_1()
+    public function delay_relative_time_simple_1(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -47,7 +47,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_relative_time_simple_2_implementation()
+    public function delay_relative_time_simple_2_implementation(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -82,7 +82,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_relative_time_simple_3_implementation()
+    public function delay_relative_time_simple_3_implementation(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -117,7 +117,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_relative_time_error_1_implementation()
+    public function delay_relative_time_error_1_implementation(): void
     {
         $error = new \Exception();
 
@@ -154,7 +154,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_relative_time_error_2_implementation()
+    public function delay_relative_time_error_2_implementation(): void
     {
         $error = new \Exception();
 
@@ -190,7 +190,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_empty()
+    public function delay_empty(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -219,7 +219,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_error()
+    public function delay_error(): void
     {
         $error = new \Exception();
 
@@ -250,7 +250,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_never()
+    public function delay_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)
@@ -277,16 +277,16 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_completes_during_subscribe_without_throwing()
+    public function delay_completes_during_subscribe_without_throwing(): void
     {
         $completes = false;
 
-        Observable::create(function ($observer) {
+        Observable::create(function ($observer): void {
             $observer->onCompleted();
         })->delay(1, $this->scheduler)->subscribe(
             null,
             null,
-            function () use (&$completes) {
+            function () use (&$completes): void {
                 $completes = true;
             }
         );
@@ -299,7 +299,7 @@ class DelayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function delay_disposed_after_emit()
+    public function delay_disposed_after_emit(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),

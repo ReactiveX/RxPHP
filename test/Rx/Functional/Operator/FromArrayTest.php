@@ -11,7 +11,7 @@ class FromArrayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_schedules_all_elements_from_the_array()
+    public function it_schedules_all_elements_from_the_array(): void
     {
         $xs = Observable::fromArray(['foo', 'bar', 'baz'], $this->scheduler);
 
@@ -30,7 +30,7 @@ class FromArrayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_calls_on_complete_when_the_array_is_empty()
+    public function it_calls_on_complete_when_the_array_is_empty(): void
     {
         $xs = Observable::fromArray([], $this->scheduler);
 
@@ -46,7 +46,7 @@ class FromArrayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function fromArray_one()
+    public function fromArray_one(): void
     {
         $xs = Observable::fromArray([1], $this->scheduler);
 
@@ -63,7 +63,7 @@ class FromArrayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function fromArray_dispose()
+    public function fromArray_dispose(): void
     {
         $xs = Observable::fromArray(['foo', 'bar', 'baz'], $this->scheduler);
 

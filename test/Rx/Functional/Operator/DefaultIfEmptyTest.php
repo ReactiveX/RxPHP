@@ -14,7 +14,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function defaultIfEmpty_nonEmpty_1()
+    public function defaultIfEmpty_nonEmpty_1(): void
     {
 
         $xs = $this->createHotObservable([
@@ -40,7 +40,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function defaultIfEmpty_nonEmpty_2()
+    public function defaultIfEmpty_nonEmpty_2(): void
     {
 
         $xs = $this->createHotObservable([
@@ -66,7 +66,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function defaultIfEmpty_empty_1()
+    public function defaultIfEmpty_empty_1(): void
     {
 
         $xs = $this->createHotObservable([
@@ -93,7 +93,7 @@ class DefaultIfEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function defaultIfEmpty_empty_2()
+    public function defaultIfEmpty_empty_2(): void
     {
 
         $xs = $this->createHotObservable([

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../bootstrap.php';
 //With Share
 $source = \Rx\Observable::interval(1000)
     ->take(2)
-    ->doOnNext(function ($x) {
+    ->doOnNext(function ($x): void {
         echo "Side effect\n";
     });
 

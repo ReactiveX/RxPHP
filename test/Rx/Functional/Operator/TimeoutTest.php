@@ -13,7 +13,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_in_time()
+    public function timeout_in_time(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -45,7 +45,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_relative_time_timeout_occurs_with_default_error()
+    public function timeout_relative_time_timeout_occurs_with_default_error(): void
     {
         $xs = $this->createHotObservable([
             onNext(410, 1)
@@ -73,7 +73,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_relative_time_timeout_occurs_with_custom_error()
+    public function timeout_relative_time_timeout_occurs_with_custom_error(): void
     {
         $errObs = new ErrorObservable(new \Exception(), $this->scheduler);
 
@@ -107,7 +107,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_out_of_time()
+    public function timeout_out_of_time(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -146,7 +146,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_occurs_1()
+    public function timeout_timeout_occurs_1(): void
     {
         $xs = $this->createHotObservable([
             onNext(70, 1),
@@ -195,7 +195,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_occurs_2()
+    public function timeout_timeout_occurs_2(): void
     {
         $xs = $this->createHotObservable([
             onNext(70, 1),
@@ -247,7 +247,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_occurs_never()
+    public function timeout_timeout_occurs_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(70, 1),
@@ -290,7 +290,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_occurs_completed()
+    public function timeout_timeout_occurs_completed(): void
     {
         $xs = $this->createHotObservable([
             onCompleted(500)
@@ -329,7 +329,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_occurs_Error()
+    public function timeout_timeout_occurs_Error(): void
     {
         $xs = $this->createHotObservable([
             onError(500, new \Exception())
@@ -368,7 +368,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_does_not_occur_completed()
+    public function timeout_timeout_does_not_occur_completed(): void
     {
         $xs = $this->createHotObservable([
             onCompleted(250)
@@ -406,7 +406,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_does_not_occur_Error()
+    public function timeout_timeout_does_not_occur_Error(): void
     {
         $xs = $this->createHotObservable([
             onError(250, new \Exception())
@@ -444,7 +444,7 @@ class TimeoutTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function timeout_timeout_does_not_occur()
+    public function timeout_timeout_does_not_occur(): void
     {
         $xs = $this->createHotObservable([
             onNext(70, 1),

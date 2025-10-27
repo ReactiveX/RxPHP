@@ -16,7 +16,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_basic()
+    public function repeat_Observable_basic(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -58,7 +58,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_infinite()
+    public function repeat_Observable_infinite(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -90,7 +90,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_error()
+    public function repeat_Observable_error(): void
     {
         $error = new \Exception();
 
@@ -126,7 +126,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_throws_1()
+    public function repeat_Observable_throws_1(): void
     {
         $this->expectException(\Exception::class);
         $scheduler1 = new TestScheduler();
@@ -134,7 +134,7 @@ class RepeatTest extends FunctionalTestCase
         $xs = (new ReturnObservable(1, $scheduler1))->repeat();
 
         $xs->subscribe(new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 throw new \Exception();
             }
         ));
@@ -145,7 +145,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_throws_2()
+    public function repeat_Observable_throws_2(): void
     {
         $this->expectException(\Exception::class);
         $scheduler2 = new TestScheduler();
@@ -154,7 +154,7 @@ class RepeatTest extends FunctionalTestCase
 
         $xs->subscribe(new CallbackObserver(
             null,
-            function ($x) {
+            function ($x): void {
                 throw new \Exception();
             }
         ));
@@ -166,7 +166,7 @@ class RepeatTest extends FunctionalTestCase
      * @test
      * @doesNotPerformAssertions
      */
-    public function repeat_Observable_throws_3()
+    public function repeat_Observable_throws_3(): void
     {
         $scheduler3 = new TestScheduler();
         $xs         = (new ReturnObservable(1, $scheduler3))->repeat();
@@ -174,12 +174,12 @@ class RepeatTest extends FunctionalTestCase
         $disp = $xs->subscribe(new CallbackObserver(
             null,
             null,
-            function () {
+            function (): void {
                 throw new \Exception;
             }
         ));
 
-        $scheduler3->scheduleAbsolute(210, function () use ($disp) {
+        $scheduler3->scheduleAbsolute(210, function () use ($disp): void {
             $disp->dispose();
         });
 
@@ -189,10 +189,10 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_throws_4()
+    public function repeat_Observable_throws_4(): void
     {
         $this->expectException(\Exception::class);
-        $xs = (new AnonymousObservable(function () {
+        $xs = (new AnonymousObservable(function (): void {
             throw new \Exception;
         }))->repeat();
 
@@ -202,7 +202,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_basic()
+    public function repeat_Observable_repeat_count_basic(): void
     {
         $xs = $this->createColdObservable([
             onNext(5, 1),
@@ -244,7 +244,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_dispose()
+    public function repeat_Observable_repeat_count_dispose(): void
     {
         $xs = $this->createColdObservable([
             onNext(5, 1),
@@ -280,7 +280,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_infinite()
+    public function repeat_Observable_repeat_count_infinite(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -312,7 +312,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_error()
+    public function repeat_Observable_repeat_count_error(): void
     {
         $error = new \Exception();
 
@@ -348,7 +348,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_throws_1()
+    public function repeat_Observable_repeat_count_throws_1(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('from onNext');
@@ -356,7 +356,7 @@ class RepeatTest extends FunctionalTestCase
         $xs         = (new ReturnObservable(1, $scheduler1))->repeat(3);
 
         $xs->subscribe(new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 throw new \Exception('from onNext');
             }
         ));
@@ -367,7 +367,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_throws_2()
+    public function repeat_Observable_repeat_count_throws_2(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('from onError');
@@ -377,7 +377,7 @@ class RepeatTest extends FunctionalTestCase
 
         $xs->subscribe(new CallbackObserver(
             null,
-            function ($x) {
+            function ($x): void {
                 throw new \Exception('from onError');
             }
         ));
@@ -388,7 +388,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_throws_3()
+    public function repeat_Observable_repeat_count_throws_3(): void
     {
         $this->expectException(\Exception::class);
         $scheduler3 = new TestScheduler();
@@ -398,7 +398,7 @@ class RepeatTest extends FunctionalTestCase
         $xs->subscribe(new CallbackObserver(
             null,
             null,
-            function () {
+            function (): void {
                 throw new \Exception('from onCompleted');
             }
         ));
@@ -409,11 +409,11 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_Observable_repeat_count_throws_4()
+    public function repeat_Observable_repeat_count_throws_4(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('from Anon');
-        $xss = (new AnonymousObservable(function () {
+        $xss = (new AnonymousObservable(function (): void {
             throw new \Exception('from Anon');
         }))->repeat(3);
 
@@ -423,7 +423,7 @@ class RepeatTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeat_returns_empty_when_count_is_zero()
+    public function repeat_returns_empty_when_count_is_zero(): void
     {
         $xs = $this->createColdObservable([
             onNext(5, 1),

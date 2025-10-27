@@ -30,9 +30,9 @@ function asString($value) {
 
 $createStdoutObserver = function ($prefix = '') {
     return new Rx\Observer\CallbackObserver(
-        function ($value) use ($prefix) { echo $prefix . "Next value: " . asString($value) . "\n"; },
-        function ($error) use ($prefix) { echo $prefix . "Exception: " . $error->getMessage() . "\n"; },
-        function ()       use ($prefix) { echo $prefix . "Complete!\n"; }
+        function ($value) use ($prefix): void { echo $prefix . "Next value: " . asString($value) . "\n"; },
+        function ($error) use ($prefix): void { echo $prefix . "Exception: " . $error->getMessage() . "\n"; },
+        function ()       use ($prefix): void { echo $prefix . "Complete!\n"; }
     );
 };
 
@@ -42,6 +42,6 @@ $loop = Factory::create();
 Scheduler::setDefaultFactory(function () use ($loop) {
     return new Scheduler\EventLoopScheduler($loop);
 });
-register_shutdown_function(function () use ($loop) {
+register_shutdown_function(function () use ($loop): void {
     $loop->run();
 });

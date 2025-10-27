@@ -16,7 +16,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_never()
+    public function distinct_until_changed_never(): void
     {
 
         $results = $this->scheduler->startWithCreate(function () {
@@ -32,7 +32,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_empty()
+    public function distinct_until_changed_empty(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -52,7 +52,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_return()
+    public function distinct_until_changed_return(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -77,7 +77,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_throw()
+    public function distinct_until_changed_throw(): void
     {
         $ex = new \Exception('ex');
         $xs = $this->createHotObservable([
@@ -95,7 +95,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_all_changes()
+    public function distinct_until_changed_all_changes(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -136,7 +136,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_all_same()
+    public function distinct_until_changed_all_same(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -165,7 +165,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_some_changes()
+    public function distinct_until_changed_some_changes(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -214,7 +214,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_comparer_all_different()
+    public function distinct_until_changed_comparer_all_different(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -255,7 +255,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_keyselector_div2()
+    public function distinct_until_changed_keyselector_div2(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -290,7 +290,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_key_selector_throws()
+    public function distinct_until_changed_key_selector_throws(): void
     {
 
         $xs = $this->createHotObservable([
@@ -300,7 +300,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->distinctUntilKeyChanged(function ($x) {
+            return $xs->distinctUntilKeyChanged(function ($x): void {
                 throw new \Exception('ex');
             });
         });
@@ -311,7 +311,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function distinct_until_changed_comparer_throws()
+    public function distinct_until_changed_comparer_throws(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -321,7 +321,7 @@ class DistinctUntilChangedTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->distinctUntilChanged(function ($x, $y) {
+            return $xs->distinctUntilChanged(function ($x, $y): void {
                 throw new \Exception('ex');
             });
         });

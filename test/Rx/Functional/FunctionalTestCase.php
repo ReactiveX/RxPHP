@@ -122,12 +122,12 @@ abstract class FunctionalTestCase extends TestCase
         return new ColdObservable($this->scheduler, $events);
     }
 
-    protected function createCold(string $events, array $eventMap = [], \Exception $customError = null)
+    protected function createCold(string $events, array $eventMap = [], ?\Exception $customError = null)
     {
         return new ColdObservable($this->scheduler, $this->convertMarblesToMessages($events, $eventMap, $customError));
     }
 
-    protected function createHot(string $events, array $eventMap = [], \Exception $customError = null)
+    protected function createHot(string $events, array $eventMap = [], ?\Exception $customError = null)
     {
         return new HotObservable($this->scheduler, $this->convertMarblesToMessages($events, $eventMap, $customError, 200));
     }
@@ -142,7 +142,7 @@ abstract class FunctionalTestCase extends TestCase
         return new TestScheduler();
     }
 
-    protected function convertMarblesToMessages(string $marbles, array $eventMap = [], \Exception $customError = null, $subscribePoint = 0)
+    protected function convertMarblesToMessages(string $marbles, array $eventMap = [], ?\Exception $customError = null, $subscribePoint = 0)
     {
         /** @var Recorded $events */
         $events = [];
@@ -183,7 +183,7 @@ abstract class FunctionalTestCase extends TestCase
                     continue 2;
                 default:
                     $eventKey = $marbles[$i];
-                    $events[] = onNext($now, isset($eventMap[$eventKey]) ? $eventMap[$eventKey] : $marbles[$i]);
+                    $events[] = onNext($now, $eventMap[$eventKey] ?? $marbles[$i]);
                     continue 2;
             }
         }
@@ -206,13 +206,13 @@ abstract class FunctionalTestCase extends TestCase
             $lastTime = $time;
 
             $value->accept(
-                function ($x) use (&$output) {
+                function ($x) use (&$output): void {
                     $output .= $x;
                 },
-                function (\Exception $e) use (&$output) {
+                function (\Exception $e) use (&$output): void {
                     $output .= '#';
                 },
-                function () use (&$output) {
+                function () use (&$output): void {
                     $output .= '|';
                 }
             );
@@ -291,7 +291,7 @@ abstract class FunctionalTestCase extends TestCase
         return $disposeAt;
     }
 
-    public function expectObservable(Observable $observable, string $disposeMarble = null): ExpectObservableToBe
+    public function expectObservable(Observable $observable, ?string $disposeMarble = null): ExpectObservableToBe
     {
         if ($disposeMarble) {
             $disposeAt = $this->convertMarblesToDisposeTime($disposeMarble, 200);
@@ -317,7 +317,7 @@ abstract class FunctionalTestCase extends TestCase
                 $this->messages = $messages;
             }
 
-            public function toBe(string $expected, array $values = [], string $errorMessage = null)
+            public function toBe(string $expected, array $values = [], ?string $errorMessage = null)
             {
                 $error = $errorMessage ? new \Exception($errorMessage) : null;
 
@@ -359,5 +359,5 @@ interface ExpectSubscriptionsToBe
 
 interface ExpectObservableToBe
 {
-    public function toBe(string $expected, array $values = [], string $errorMessage = null);
+    public function toBe(string $expected, array $values = [], ?string $errorMessage = null);
 }

@@ -13,5 +13,5 @@ interface ObservableInterface
      * @return DisposableInterface
      * @throws \InvalidArgumentException
      */
-    public function subscribe($onNextOrObserver = null, callable  $onError = null, callable $onCompleted = null): DisposableInterface;
+    public function subscribe($onNextOrObserver = null, ?callable  $onError = null, ?callable $onCompleted = null): DisposableInterface;
 }

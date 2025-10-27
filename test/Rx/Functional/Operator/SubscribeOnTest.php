@@ -11,7 +11,7 @@ class SubscribeOnTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function subscribeOn_normal()
+    public function subscribeOn_normal(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -39,7 +39,7 @@ class SubscribeOnTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function subscribeOn_error()
+    public function subscribeOn_error(): void
     {
 
         $error = new \Exception();
@@ -68,7 +68,7 @@ class SubscribeOnTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function subscribeOn_empty()
+    public function subscribeOn_empty(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -94,7 +94,7 @@ class SubscribeOnTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function subscribeOn_never()
+    public function subscribeOn_never(): void
     {
         $xs = $this->createHotObservable([onNext(150, 1)]);
 

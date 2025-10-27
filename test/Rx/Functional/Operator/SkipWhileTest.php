@@ -12,7 +12,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_complete_before()
+    public function skipWhile_complete_before(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -62,7 +62,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_complete_after()
+    public function skipWhile_complete_after(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -115,7 +115,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_error_before()
+    public function skipWhile_error_before(): void
     {
         $error = new \Exception();
 
@@ -167,7 +167,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_error_after()
+    public function skipWhile_error_after(): void
     {
         $error = new \Exception();
 
@@ -222,7 +222,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_dispose_before()
+    public function skipWhile_dispose_before(): void
     {
 
         $xs = $this->createHotObservable(
@@ -270,7 +270,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_dispose_after()
+    public function skipWhile_dispose_after(): void
     {
 
         $xs = $this->createHotObservable(
@@ -322,7 +322,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_zero()
+    public function skipWhile_zero(): void
     {
 
         $xs = $this->createHotObservable(
@@ -383,7 +383,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_throw()
+    public function skipWhile_throw(): void
     {
 
         $xs = $this->createHotObservable(
@@ -437,7 +437,7 @@ class SkipWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function skipWhile_index()
+    public function skipWhile_index(): void
     {
 
         $xs = $this->createHotObservable(
@@ -506,7 +506,7 @@ class SkipWhileTest extends FunctionalTestCase
          * The sqrt can be an aproximation, hence just for the sake of
          * security, one rounds it to the next highest integer value.
          */
-        for ($i = 3; $i <= ceil(sqrt($num)); $i = $i + 2) {
+        for ($i = 3; $i <= ceil(sqrt($num)); $i += 2) {
             if ($num % $i == 0)
                 return false;
         }

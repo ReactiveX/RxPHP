@@ -10,7 +10,7 @@ $observer = $createStdoutObserver();
 
 $subscription = $source->toArray()
     ->subscribe(new CallbackObserver(
-        function ($array) use ($observer) {
+        function ($array) use ($observer): void {
             $observer->onNext(json_encode($array));
         },
         [$observer, "onError"],

@@ -28,7 +28,7 @@ final class SubscribeOnOperator implements OperatorInterface
         $disposable->setDisposable($singleDisposable);
 
         $singleDisposable->setDisposable(
-            $this->scheduler->schedule(function () use ($disposable, $observer, $observable) {
+            $this->scheduler->schedule(function () use ($disposable, $observer, $observable): void {
                 $subscription = $observable->subscribe($observer);
                 $disposable->setDisposable(new ScheduledDisposable($this->scheduler, $subscription));
             })

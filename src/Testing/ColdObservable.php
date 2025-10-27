@@ -38,7 +38,7 @@ class ColdObservable extends Observable
             $notification = $message->getValue();
             $time         = $message->getTime();
 
-            $schedule = function (Notification $innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed) {
+            $schedule = function (Notification $innerNotification) use (&$disposable, &$currentObservable, $observer, $scheduler, $time, &$isDisposed): void {
                 $disposable->add($scheduler->scheduleRelativeWithState(null, $time, function () use ($observer, $innerNotification, &$isDisposed) {
                     if (!$isDisposed) {
                         $innerNotification->accept($observer);
@@ -52,7 +52,7 @@ class ColdObservable extends Observable
 
         $subscriptions = &$this->subscriptions;
 
-        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed) {
+        return new CallbackDisposable(function () use (&$currentObservable, $index, $observer, $scheduler, &$subscriptions, &$isDisposed): void {
             $isDisposed            = true;
             $subscriptions[$index] = new Subscription($subscriptions[$index]->getSubscribed(), $scheduler->getClock());
         });

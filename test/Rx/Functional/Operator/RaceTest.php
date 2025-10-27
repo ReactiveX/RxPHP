@@ -12,7 +12,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_never_2()
+    public function race_never_2(): void
     {
         $n1 = Observable::never();
         $n2 = Observable::never();
@@ -30,7 +30,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_never_3()
+    public function race_never_3(): void
     {
         $n1 = Observable::never();
         $n2 = Observable::never();
@@ -49,7 +49,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_never_empty()
+    public function race_never_empty(): void
     {
         $n1 = Observable::never();
         $e  = $this->createHotObservable([
@@ -72,7 +72,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_empty_never()
+    public function race_empty_never(): void
     {
         $n1 = Observable::never();
         $e  = $this->createHotObservable([
@@ -95,7 +95,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_regular_should_dispose_loser()
+    public function race_regular_should_dispose_loser(): void
     {
         $sourceNotDisposed = false;
 
@@ -105,7 +105,7 @@ class RaceTest extends FunctionalTestCase
             onNext(150, 1),
             onNext(220, 2),
             onError(230, $error)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -133,7 +133,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_throws_before_election()
+    public function race_throws_before_election(): void
     {
         $sourceNotDisposed = false;
 
@@ -148,7 +148,7 @@ class RaceTest extends FunctionalTestCase
             onNext(150, 1),
             onNext(220, 3),
             onCompleted(250)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -169,7 +169,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_none()
+    public function race_none(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::race([], $this->scheduler);
@@ -181,7 +181,7 @@ class RaceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function race_one()
+    public function race_one(): void
     {
         $e = $this->createHotObservable([
             onNext(150, 1),

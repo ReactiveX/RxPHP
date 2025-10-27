@@ -28,7 +28,7 @@ class RangeObservable extends Observable
     {
         $i = 0;
 
-        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i) {
+        return $this->scheduler->scheduleRecursive(function ($reschedule) use (&$observer, &$i): void {
             if ($i < $this->count) {
                 $observer->onNext($this->start + $i);
                 $i++;

@@ -27,7 +27,7 @@ final class SkipOperator implements OperatorInterface
         $remaining = $this->count;
 
         $cbObserver = new CallbackObserver(
-            function ($nextValue) use ($observer, &$remaining) {
+            function ($nextValue) use ($observer, &$remaining): void {
                 if ($remaining <= 0) {
                     $observer->onNext($nextValue);
                 } else {

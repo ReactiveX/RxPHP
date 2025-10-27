@@ -12,7 +12,7 @@ use Rx\Scheduler\ImmediateScheduler;
 
 class ZipTest extends FunctionalTestCase
 {
-    public function testZipNArySymmetric()
+    public function testZipNArySymmetric(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -55,7 +55,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
     }
 
-    public function testZipNArySymmetricSelector()
+    public function testZipNArySymmetricSelector(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -100,7 +100,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertSubscriptions([subscribe(200, 420)], $e0->getSubscriptions());
     }
 
-    public function testZipNeverNever()
+    public function testZipNeverNever(): void
     {
         $o1 = new NeverObservable();
         $o2 = new NeverObservable();
@@ -112,7 +112,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testZipNeverEmpty()
+    public function testZipNeverEmpty(): void
     {
         $o1 = new NeverObservable();
         $o2 = $this->createHotObservable([
@@ -127,7 +127,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testZipEmptyEmpty()
+    public function testZipEmptyEmpty(): void
     {
         $o1 = $this->createHotObservable([
             onNext(150, 1),
@@ -145,7 +145,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([onCompleted(210)], $results->getMessages());
     }
 
-    public function testZipEmptyNonEmpty()
+    public function testZipEmptyNonEmpty(): void
     {
         $o1 = $this->createHotObservable([
             onNext(150, 1),
@@ -164,7 +164,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([onCompleted(215)], $results->getMessages());
     }
 
-    public function testZipNonEmptyEmpty()
+    public function testZipNonEmptyEmpty(): void
     {
         $e1 = $this->createHotObservable([
             onNext(150, 1),
@@ -183,7 +183,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([onCompleted(215)], $results->getMessages());
     }
 
-    public function testZipNeverNonEmpty()
+    public function testZipNeverNonEmpty(): void
     {
         $e1 = $this->createHotObservable([
             onNext(150, 1),
@@ -199,7 +199,7 @@ class ZipTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testZipEmptyError()
+    public function testZipEmptyError(): void
     {
         $error = new \Exception();
 
@@ -221,7 +221,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipNeverError()
+    public function testZipNeverError(): void
     {
         $error = new \Exception();
 
@@ -240,7 +240,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipErrorError()
+    public function testZipErrorError(): void
     {
         $error1 = new \Exception("error1");
         $error2 = new \Exception("error2");
@@ -263,7 +263,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipSomeError()
+    public function testZipSomeError(): void
     {
         $error = new \Exception();
 
@@ -286,7 +286,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipSomeDataAsymmetric()
+    public function testZipSomeDataAsymmetric(): void
     {
         $msgs1 = [
             onNext(205, 0),
@@ -316,7 +316,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipSomeDataSymmetric()
+    public function testZipSomeDataSymmetric(): void
     {
         $msgs1 = [
             onNext(205, 0),
@@ -344,7 +344,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipSelectorThrows()
+    public function testZipSelectorThrows(): void
     {
         $error = new \Exception();
 
@@ -377,7 +377,7 @@ class ZipTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testZipRightCompletesFirst()
+    public function testZipRightCompletesFirst(): void
     {
         $o = $this->createHotObservable([
             onNext(150, 1),
@@ -414,7 +414,7 @@ class ZipTest extends FunctionalTestCase
         return $x + $y;
     }
 
-    public function testZipWithImmediateScheduler()
+    public function testZipWithImmediateScheduler(): void
     {
         $scheduler = new ImmediateScheduler();
 
@@ -429,7 +429,7 @@ class ZipTest extends FunctionalTestCase
         $result = null;
 
         $source->toArray()->subscribe(new CallbackObserver(
-            function ($x) use (&$result) {
+            function ($x) use (&$result): void {
                 $result = $x;
             }
         ));
@@ -446,7 +446,7 @@ class ZipTest extends FunctionalTestCase
         $result = null;
 
         $source->count()->subscribe(new CallbackObserver(
-            function ($x) use (&$result) {
+            function ($x) use (&$result): void {
                 $result = $x;
             }
         ));

@@ -19,7 +19,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishLast_basic()
+    public function publishLast_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -46,39 +46,39 @@ class PublishValueTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publishValue(1979);
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -109,7 +109,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_error()
+    public function publishValue_error(): void
     {
 
         $error = new \Exception();
@@ -138,31 +138,31 @@ class PublishValueTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publishValue(1979);
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -194,7 +194,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_complete()
+    public function publishValue_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -221,31 +221,31 @@ class PublishValueTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publishValue(1979);
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -278,7 +278,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_dispose()
+    public function publishValue_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -305,39 +305,39 @@ class PublishValueTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->publishValue(1979);
         });
 
-        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(200, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(350, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(350, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -362,7 +362,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_multiple_connections()
+    public function publishValue_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->publishValue(1979);
@@ -384,7 +384,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_complete()
+    public function publishValue_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -438,7 +438,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_error()
+    public function publishValue_zip_error(): void
     {
 
         $error = new \Exception();
@@ -494,7 +494,7 @@ class PublishValueTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function publishValue_zip_dispose()
+    public function publishValue_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([

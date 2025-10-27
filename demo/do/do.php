@@ -4,13 +4,13 @@ require_once __DIR__ . '/../bootstrap.php';
 
 $source = \Rx\Observable::range(0, 3)
     ->do(
-        function ($x) {
+        function ($x): void {
             echo 'Do Next:', $x, PHP_EOL;
         },
-        function (Throwable $err) {
+        function (Throwable $err): void {
             echo 'Do Error:', $err->getMessage(), PHP_EOL;
         },
-        function () {
+        function (): void {
             echo 'Do Completed', PHP_EOL;
         }
     );

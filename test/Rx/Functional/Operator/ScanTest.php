@@ -9,7 +9,7 @@ use Rx\Observable;
 
 class ScanTest extends FunctionalTestCase
 {
-    public function testScanSeedNever()
+    public function testScanSeedNever(): void
     {
         $seed = 42;
 
@@ -22,7 +22,7 @@ class ScanTest extends FunctionalTestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testScanSeedEmpty()
+    public function testScanSeedEmpty(): void
     {
         $seed = 42;
 
@@ -48,7 +48,7 @@ class ScanTest extends FunctionalTestCase
 
     }
 
-    public function testScanSeedReturn()
+    public function testScanSeedReturn(): void
     {
         $seed = 42;
 
@@ -75,7 +75,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanSeedThrow()
+    public function testScanSeedThrow(): void
     {
         $ex = new \Exception('ex');
 
@@ -102,7 +102,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanSeedSomeData()
+    public function testScanSeedSomeData(): void
 
     {
         $seed = 1;
@@ -136,7 +136,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanNoSeedNever()
+    public function testScanNoSeedNever(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::never()->scan(function ($acc, $x) {
@@ -150,7 +150,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanNoSeedEmpty()
+    public function testScanNoSeedEmpty(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -173,7 +173,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanNoSeedReturn()
+    public function testScanNoSeedReturn(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -198,7 +198,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanNoSeedThrow()
+    public function testScanNoSeedThrow(): void
     {
         $ex = new \Exception('ex');
 
@@ -223,7 +223,7 @@ class ScanTest extends FunctionalTestCase
         );
     }
 
-    public function testScanNoSeedSomeData()
+    public function testScanNoSeedSomeData(): void
     {
         $xs = $this->createHotObservable(
             [
@@ -258,7 +258,7 @@ class ScanTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function scan_accumulator_throws()
+    public function scan_accumulator_throws(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -269,7 +269,7 @@ class ScanTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->scan(function () {
+            return $xs->scan(function (): void {
                 throw new \Exception();
             });
         });
@@ -280,7 +280,7 @@ class ScanTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function scan_accumulator_throws_with_seed()
+    public function scan_accumulator_throws_with_seed(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -291,7 +291,7 @@ class ScanTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->scan(function () {
+            return $xs->scan(function (): void {
                 throw new \Exception();
             }, 42);
         });

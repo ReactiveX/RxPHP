@@ -28,11 +28,11 @@ class ImmediateScheduler implements SchedulerInterface
         $goAgain    = true;
         $disposable = new CompositeDisposable();
 
-        $recursiveAction = function () use ($action, &$goAgain, $disposable) {
+        $recursiveAction = function () use ($action, &$goAgain, $disposable): void {
             while ($goAgain) {
                 $goAgain = false;
                 $disposable->add($this->schedule(function () use ($action, &$goAgain) {
-                    return $action(function () use (&$goAgain) {
+                    return $action(function () use (&$goAgain): void {
                         $goAgain = true;
                     });
                 }));

@@ -13,7 +13,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_never()
+    public function repeatWhen_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -38,7 +38,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_never()
+    public function repeatWhen_Observable_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -70,7 +70,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_empty()
+    public function repeatWhen_Observable_empty(): void
     {
         $xs = $this->createColdObservable([
             onNext(100, 1),
@@ -100,7 +100,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_next_error()
+    public function repeatWhen_next_error(): void
     {
 
         $error = new Exception("test");
@@ -137,7 +137,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_complete()
+    public function repeatWhen_Observable_complete(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -165,7 +165,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_next_complete()
+    public function repeatWhen_Observable_next_complete(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -202,7 +202,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_infinite()
+    public function repeatWhen_Observable_infinite(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -229,7 +229,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_dispose()
+    public function repeatWhen_Observable_dispose(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),
@@ -259,7 +259,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_dispose_second()
+    public function repeatWhen_Observable_dispose_second(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -294,7 +294,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_Observable_dispose_between()
+    public function repeatWhen_Observable_dispose_between(): void
     {
         $xs = $this->createColdObservable([
             onNext(10, 1),
@@ -327,7 +327,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_notifier_throws()
+    public function repeatWhen_notifier_throws(): void
     {
         $xs = $this->createColdObservable([
             onNext(150, 1),
@@ -339,7 +339,7 @@ class RepeatWhenTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->repeatWhen(function (Observable $attempts) {
+            return $xs->repeatWhen(function (Observable $attempts): void {
                 throw new Exception('error');
             });
         });
@@ -354,7 +354,7 @@ class RepeatWhenTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function repeatWhen_notifier_returns_invalid_string()
+    public function repeatWhen_notifier_returns_invalid_string(): void
     {
         $xs = $this->createColdObservable([
             onNext(150, 1),

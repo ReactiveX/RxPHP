@@ -12,7 +12,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_should_see_all_values()
+    public function doOnEach_should_see_all_values(): void
     {
 
         $xs = $this->createHotObservable([
@@ -42,7 +42,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_plain_action()
+    public function doOnEach_plain_action(): void
     {
 
         $xs = $this->createHotObservable([
@@ -68,7 +68,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_completed()
+    public function doOnEach_next_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -92,7 +92,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -107,7 +107,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_completed_never()
+    public function doOnEach_next_completed_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1)
@@ -118,12 +118,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i) {
+                function ($x) use (&$i): void {
                     $i++;
 
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -137,7 +137,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error()
+    public function doOnEach_next_error(): void
     {
 
         $ex = new \Exception();
@@ -163,7 +163,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
 
-                function ($e) use (&$sawError, $ex) {
+                function ($e) use (&$sawError, $ex): void {
                     $sawError = $e === $ex;
                 }
             ));
@@ -178,7 +178,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_not()
+    public function doOnEach_next_error_not(): void
     {
 
         $ex = new \Exception();
@@ -204,7 +204,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
 
-                function ($e) use (&$sawError, $ex) {
+                function ($e) use (&$sawError, $ex): void {
                     $sawError = $e === $ex;
                 }
             ));
@@ -219,7 +219,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_completed()
+    public function doOnEach_next_error_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -238,14 +238,14 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i, &$sum) {
+                function ($x) use (&$i, &$sum): void {
                     $i++;
                     $sum -= $x;
                 },
-                function () use (&$sawError) {
+                function () use (&$sawError): void {
                     $sawError = true;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -261,7 +261,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_completed_error()
+    public function doOnEach_next_error_completed_error(): void
     {
         $ex = new \Exception();
 
@@ -281,14 +281,14 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$sum, &$completed, &$sawError) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i, &$sum) {
+                function ($x) use (&$i, &$sum): void {
                     $i++;
                     $sum -= $x;
                 },
-                function () use (&$sawError) {
+                function () use (&$sawError): void {
                     $sawError = true;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -305,7 +305,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_completed_never()
+    public function doOnEach_next_error_completed_never(): void
     {
 
         $xs = $this->createHotObservable([
@@ -318,13 +318,13 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $this->scheduler->startWithCreate(function () use ($xs, &$i, &$completed, &$sawError) {
             return $xs->do(new CallbackObserver(
-                function ($x) use (&$i, &$sum) {
+                function ($x) use (&$i, &$sum): void {
                     $i++;
                 },
-                function () use (&$sawError) {
+                function () use (&$sawError): void {
                     $sawError = true;
                 },
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             ));
@@ -339,7 +339,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_next_throws()
+    public function doOnEach_next_next_throws(): void
     {
         $ex = new \Exception();
 
@@ -350,7 +350,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
-            return $xs->do(new CallbackObserver(function () use ($ex) {
+            return $xs->do(new CallbackObserver(function () use ($ex): void {
                 throw $ex;
             }));
         });
@@ -362,7 +362,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_completed_next_throws()
+    public function doOnEach_next_completed_next_throws(): void
     {
         $ex = new \Exception();
 
@@ -374,11 +374,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
                 null,
-                function () {
+                function (): void {
                 }));
         });
 
@@ -389,7 +389,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_completed_completed_throws()
+    public function doOnEach_next_completed_completed_throws(): void
     {
         $ex = new \Exception();
 
@@ -401,10 +401,10 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
                 null,
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 }));
         });
@@ -416,7 +416,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_next_throws()
+    public function doOnEach_next_error_next_throws(): void
     {
         $ex = new \Exception();
 
@@ -428,10 +428,10 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -443,7 +443,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_error_throws()
+    public function doOnEach_next_error_error_throws(): void
     {
         $ex1 = new \Exception("error1");
         $ex2 = new \Exception("error2");
@@ -455,9 +455,9 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
-                function () use ($ex2) {
+                function () use ($ex2): void {
                     throw $ex2;
                 }
             ));
@@ -471,7 +471,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_completed_next_throws()
+    public function doOnEach_next_error_completed_next_throws(): void
     {
         $ex = new \Exception();
 
@@ -483,12 +483,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
-                function () {
+                function (): void {
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -500,7 +500,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_completed_error_throws()
+    public function doOnEach_next_error_completed_error_throws(): void
     {
         $ex1 = new \Exception("error1");
         $ex2 = new \Exception("error2");
@@ -512,12 +512,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
-                function () use ($ex2) {
+                function () use ($ex2): void {
                     throw $ex2;
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -529,7 +529,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_next_error_completed_completed_throws()
+    public function doOnEach_next_error_completed_completed_throws(): void
     {
         $ex = new \Exception();
 
@@ -542,11 +542,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
 
-                function () {
+                function (): void {
                 },
-                function () {
+                function (): void {
                 },
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 }
             ));
@@ -559,7 +559,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_observer_next_throws()
+    public function doOnEach_observer_next_throws(): void
     {
         $ex = new \Exception();
 
@@ -572,12 +572,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
 
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 },
-                function () {
+                function (): void {
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -589,7 +589,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_observer_error_throws()
+    public function doOnEach_observer_error_throws(): void
     {
         $ex1 = new \Exception("error1");
         $ex2 = new \Exception("error2");
@@ -601,12 +601,12 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex2) {
             return $xs->do(new CallbackObserver(
-                function () {
+                function (): void {
                 },
-                function () use ($ex2) {
+                function () use ($ex2): void {
                     throw $ex2;
                 },
-                function () {
+                function (): void {
                 }
             ));
         });
@@ -618,7 +618,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function doOnEach_observer_completed_throws()
+    public function doOnEach_observer_completed_throws(): void
     {
         $ex = new \Exception();
 
@@ -630,11 +630,11 @@ class DoOnEachOperatorTest extends FunctionalTestCase
 
         $results = $this->scheduler->startWithCreate(function () use ($xs, $ex) {
             return $xs->do(new CallbackObserver(
-                function () { //noop
+                function (): void { //noop
                 },
-                function () { //noop
+                function (): void { //noop
                 },
-                function () use ($ex) {
+                function () use ($ex): void {
                     throw $ex;
                 }
             ));
@@ -647,7 +647,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function do_plain_action()
+    public function do_plain_action(): void
     {
 
         $xs = $this->createHotObservable([
@@ -673,7 +673,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function do_next_completed()
+    public function do_next_completed(): void
     {
 
         $xs = $this->createHotObservable([
@@ -697,7 +697,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
                 null,
-                function () use (&$completed) {
+                function () use (&$completed): void {
                     $completed = true;
                 }
             );
@@ -712,7 +712,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function do_next_error()
+    public function do_next_error(): void
     {
 
         $ex = new \Exception();
@@ -738,7 +738,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
                     return $sum -= $x;
                 },
 
-                function ($e) use (&$sawError, $ex) {
+                function ($e) use (&$sawError, $ex): void {
                     $sawError = $e === $ex;
                 }
             );
@@ -752,7 +752,7 @@ class DoOnEachOperatorTest extends FunctionalTestCase
      * @test
      *
      */
-    public function do_throws_when_args_invalid()
+    public function do_throws_when_args_invalid(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $xs = $this->createHotObservable([

@@ -36,7 +36,7 @@ final class SwitchLatestOperator implements OperatorInterface
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
-        $onNext = function ($innerSource) use ($observer) {
+        $onNext = function ($innerSource) use ($observer): void {
             $innerDisposable = new SingleAssignmentDisposable();
 
             $id = ++$this->latest;
@@ -45,17 +45,17 @@ final class SwitchLatestOperator implements OperatorInterface
             $this->innerSubscription->setDisposable($innerDisposable);
 
             $innerCallbackObserver = new CallbackObserver(
-                function ($x) use ($id, $observer) {
+                function ($x) use ($id, $observer): void {
                     if ($this->latest === $id) {
                         $observer->onNext($x);
                     }
                 },
-                function ($e) use ($id, $observer) {
+                function ($e) use ($id, $observer): void {
                     if ($this->latest === $id) {
                         $observer->onError($e);
                     }
                 },
-                function () use ($id, $observer) {
+                function () use ($id, $observer): void {
                     if ($this->latest === $id) {
                         $this->hasLatest = false;
                         if ($this->isStopped) {
@@ -72,7 +72,7 @@ final class SwitchLatestOperator implements OperatorInterface
         $callbackObserver = new CallbackObserver(
             $onNext,
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer): void {
                 $this->isStopped = true;
                 if (!$this->hasLatest) {
                     $observer->onCompleted();

@@ -20,13 +20,14 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "react/promise": "^3 || ~2.2"
     },
     "require-dev": {
         "satooshi/php-coveralls": "~1.0",
         "phpunit/phpunit": "^8.5 || ^9",
-        "react/event-loop": "^1.0 || ^0.5 || ^0.4.2"
+        "react/event-loop": "^1.0 || ^0.5 || ^0.4.2",
+        "rector/rector": "^2.0"
     },
     "suggest": {
         "react/event-loop": "Used for scheduling async operations"

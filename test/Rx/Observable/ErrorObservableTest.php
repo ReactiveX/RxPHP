@@ -11,19 +11,19 @@ use Rx\TestCase;
 class ErrorObservableTest extends TestCase
 {
     /** @test */
-    public function it_calls_observers_with_error()
+    public function it_calls_observers_with_error(): void
     {
         $ex         = new RuntimeException('boom!');
         $observable = new ErrorObservable($ex, Scheduler::getDefault());
 
         $recordedException = null;
         $observable->subscribe(
-            function () {
+            function (): void {
             },
-            function ($ex) use (&$recordedException) {
+            function ($ex) use (&$recordedException): void {
                 $recordedException = $ex;
             },
-            function () {
+            function (): void {
             }
         );
 

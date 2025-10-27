@@ -16,7 +16,7 @@ final class ConcatMapOperator implements OperatorInterface
     /** @var callable */
     private $resultSelector;
 
-    public function __construct(callable $selector, callable $resultSelector = null)
+    public function __construct(callable $selector, ?callable $resultSelector = null)
     {
         $this->selector       = $selector;
         $this->resultSelector = $resultSelector;

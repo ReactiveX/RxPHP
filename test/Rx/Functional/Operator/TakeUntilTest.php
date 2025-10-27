@@ -15,7 +15,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_some_data_next()
+    public function takeUntil_preempt_some_data_next(): void
     {
         $l = $this->createHotObservable([
             onNext(150, 1),
@@ -57,7 +57,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_some_data_error()
+    public function takeUntil_preempt_some_data_error(): void
     {
         $error = new \Exception();
 
@@ -93,7 +93,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_some_data_empty()
+    public function takeUntil_preempt_some_data_empty(): void
     {
         $l = $this->createHotObservable([
             onNext(150, 1),
@@ -130,7 +130,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_some_data_never()
+    public function takeUntil_preempt_some_data_never(): void
     {
         $l = $this->createHotObservable([
             onNext(150, 1),
@@ -163,7 +163,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_never_next()
+    public function takeUntil_preempt_never_next(): void
     {
         $l = Observable::never();
 
@@ -188,7 +188,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_never_error()
+    public function takeUntil_preempt_never_error(): void
     {
 
         $error = new \Exception();
@@ -216,7 +216,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_never_empty()
+    public function takeUntil_preempt_never_empty(): void
     {
         $l = Observable::never();
 
@@ -235,7 +235,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_preempt_never_never()
+    public function takeUntil_preempt_never_never(): void
     {
         $l = Observable::never();
 
@@ -251,7 +251,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_before_first_produced()
+    public function takeUntil_before_first_produced(): void
     {
         $l = $this->createHotObservable([
             onNext(150, 1),
@@ -281,7 +281,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_before_first_produced_remain_silent_and_proper_disposed()
+    public function takeUntil_before_first_produced_remain_silent_and_proper_disposed(): void
     {
 
         $sourceNotDisposed = false;
@@ -290,7 +290,7 @@ class TakeUntilTest extends FunctionalTestCase
             onNext(150, 1),
             onError(215, new \Exception()),
             onCompleted(240)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -319,7 +319,7 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_no_preempt_after_last_produced_proper_disposed_signal()
+    public function takeUntil_no_preempt_after_last_produced_proper_disposed_signal(): void
     {
 
         $sourceNotDisposed = false;
@@ -334,7 +334,7 @@ class TakeUntilTest extends FunctionalTestCase
             onNext(150, 1),
             onNext(250, 2),
             onCompleted(260)
-        ])->doOnNext(function () use (&$sourceNotDisposed) {
+        ])->doOnNext(function () use (&$sourceNotDisposed): void {
             $sourceNotDisposed = true;
         });
 
@@ -357,13 +357,13 @@ class TakeUntilTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeUntil_should_subscribe_to_the_notifier_first_with_immediate_scheduler()
+    public function takeUntil_should_subscribe_to_the_notifier_first_with_immediate_scheduler(): void
     {
         $emissions = 0;
         $source = Observable::range(1, 10);
         $notification = new Subject();
         $source->takeUntil($notification)
-            ->subscribe(new CallbackObserver(function($value) use (&$emissions, $notification) {
+            ->subscribe(new CallbackObserver(function($value) use (&$emissions, $notification): void {
                 if ($value === 5) {
                     $notification->onNext(true);
                 }

@@ -45,14 +45,14 @@ final class DelayOperator implements OperatorInterface
                 return new Timestamped($x->getTimestampMillis() + $this->delayTime, $x->getValue());
             })
             ->subscribe(new CallbackObserver(
-                function (Timestamped $x) use ($observer) {
+                function (Timestamped $x) use ($observer): void {
                     if ($x->getValue() instanceof Notification\OnErrorNotification) {
                         $x->getValue()->accept($observer);
                         return;
                     }
                     $this->queue->enqueue($x);
                     if ($this->schedulerDisposable === null) {
-                        $doScheduledStuff = function () use ($observer, &$doScheduledStuff) {
+                        $doScheduledStuff = function () use ($observer, &$doScheduledStuff): void {
                             while ((!$this->queue->isEmpty()) && $this->scheduler->now() >= $this->queue->bottom()->getTimestampMillis()) {
                                 /** @var Timestamped $item */
                                 $item = $this->queue->dequeue();
@@ -77,7 +77,7 @@ final class DelayOperator implements OperatorInterface
                 [$observer, 'onError']
             ));
 
-        return new CallbackDisposable(function () use ($disp) {
+        return new CallbackDisposable(function () use ($disp): void {
             if ($this->schedulerDisposable) {
                 $this->schedulerDisposable->dispose();
             }

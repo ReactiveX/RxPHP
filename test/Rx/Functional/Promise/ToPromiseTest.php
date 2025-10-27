@@ -14,13 +14,13 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_success()
+    public function promise_success(): void
     {
         $promise = Observable::of(42)->toPromise();
 
         $result = null;
 
-        $promise->then(function ($value) use (&$result) {
+        $promise->then(function ($value) use (&$result): void {
             $result = $value;
         });
 
@@ -31,16 +31,16 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_failure()
+    public function promise_failure(): void
     {
         $promise = Observable::error(new Exception('some error'))->toPromise();
 
         $error = null;
 
         $promise->then(
-            function () {
+            function (): void {
             },
-            function ($ex) use (&$error) {
+            function ($ex) use (&$error): void {
                 $error = $ex;
             });
 
@@ -51,7 +51,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_within_promise_success()
+    public function promise_within_promise_success(): void
     {
         $promise1 = \React\Promise\resolve(42);
 
@@ -59,7 +59,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $result = null;
 
-        $promise2->then(function ($value) use (&$result) {
+        $promise2->then(function ($value) use (&$result): void {
             $result = $value;
         });
 
@@ -70,7 +70,7 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_within_promise_failure()
+    public function promise_within_promise_failure(): void
     {
         $promise1 = \React\Promise\reject(new Exception('some error'));
 
@@ -79,9 +79,9 @@ class ToPromiseTest extends FunctionalTestCase
         $error = null;
 
         $promise2->then(
-            function () {
+            function (): void {
             },
-            function (Exception $ex) use (&$error) {
+            function (Exception $ex) use (&$error): void {
                 $error = $ex;
             });
 
@@ -92,13 +92,13 @@ class ToPromiseTest extends FunctionalTestCase
      * @test
      *
      */
-    public function promise_cancel()
+    public function promise_cancel(): void
     {
         $disposed = false;
 
         $promise = Observable::timer(1000)
             ->mapTo(42)
-            ->finally(function () use (&$disposed) {
+            ->finally(function () use (&$disposed): void {
                 $disposed = true;
             })
             ->toPromise();
@@ -107,7 +107,7 @@ class ToPromiseTest extends FunctionalTestCase
 
         $promise->cancel();
 
-        $promise->then(function ($value) use (&$result) {
+        $promise->then(function ($value) use (&$result): void {
             $result = $value;
         });
 

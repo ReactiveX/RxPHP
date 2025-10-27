@@ -13,11 +13,11 @@ class ScheduledDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_the_scheduled_disposable()
+    public function it_disposes_the_scheduled_disposable(): void
     {
         $disposed1 = false;
 
-        $d1 = new CallbackDisposable(function () use (&$disposed1) {
+        $d1 = new CallbackDisposable(function () use (&$disposed1): void {
             $disposed1 = true;
         });
 
@@ -39,11 +39,11 @@ class ScheduledDisposableTest extends TestCase
     /**
      * @test
      */
-    public function it_does_nothing_if_disposed_twice()
+    public function it_does_nothing_if_disposed_twice(): void
     {
         $disposed1 = 0;
 
-        $d1 = new CallbackDisposable(function () use (&$disposed1) {
+        $d1 = new CallbackDisposable(function () use (&$disposed1): void {
             $disposed1++;
         });
 

@@ -11,21 +11,21 @@ use Rx\Scheduler;
 
 class ReturnObservableTest extends FunctionalTestCase
 {
-    public function testReturnObservableSubscribeTwice()
+    public function testReturnObservableSubscribeTwice(): void
     {
         $o = new ReturnObservable('The Value', Scheduler::getImmediate());
 
         $goodCount = 0;
 
         $o->subscribe(new CallbackObserver(
-            function ($x) use (&$goodCount) {
+            function ($x) use (&$goodCount): void {
                 $this->assertEquals('The Value', $x);
                 $goodCount++;
             }
         ));
 
         $o->subscribe(new CallbackObserver(
-            function ($x) use (&$goodCount) {
+            function ($x) use (&$goodCount): void {
                 $this->assertEquals('The Value', $x);
                 $goodCount++;
             }

@@ -15,7 +15,7 @@ class IteratorObservable extends Observable
 
     private $scheduler;
 
-    public function __construct(\Iterator $items, SchedulerInterface $scheduler = null)
+    public function __construct(\Iterator $items, ?SchedulerInterface $scheduler = null)
     {
         $this->items     = $items;
         $this->scheduler = $scheduler;
@@ -25,7 +25,7 @@ class IteratorObservable extends Observable
     {
         $key = 0;
 
-        $action = function ($reschedule) use (&$observer, &$key) {
+        $action = function ($reschedule) use (&$observer, &$key): void {
             try {
                 if (null === $key || !$this->items->valid()) {
 

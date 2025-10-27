@@ -11,7 +11,7 @@ class ImmediateSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function now_returns_the_time()
+    public function now_returns_the_time(): void
     {
         $scheduler = new ImmediateScheduler();
 
@@ -21,12 +21,12 @@ class ImmediateSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function non_zero_delay_throws()
+    public function non_zero_delay_throws(): void
     {
         $this->expectException(\Exception::class);
         $scheduler = new ImmediateScheduler();
 
-        $scheduler->schedule(function () {
+        $scheduler->schedule(function (): void {
             $this->fail("This should never get called");
         }, 1);
     }
@@ -34,13 +34,13 @@ class ImmediateSchedulerTest extends TestCase
     /**
      * @test
      */
-    public function schedule_periodic_throws()
+    public function schedule_periodic_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('ImmediateScheduler does not support a non-zero delay.');
         $scheduler = new ImmediateScheduler();
 
-        $scheduler->schedulePeriodic(function () {
+        $scheduler->schedulePeriodic(function (): void {
             $this->fail("This should never get called");
         }, 1, 1);
     }

@@ -41,7 +41,7 @@ class RefCountObservable extends Observable
             $this->connectableSubscription = $this->source->connect();
         }
 
-        return new CallbackDisposable(function () use ($subscription) {
+        return new CallbackDisposable(function () use ($subscription): void {
             $subscription->dispose();
 
             $this->count--;

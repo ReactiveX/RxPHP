@@ -13,6 +13,7 @@ use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 use Rx\AsyncSchedulerInterface;
 use Rx\Exception\TimeoutException;
+use Rx\Scheduler;
 
 final class TimeoutOperator implements OperatorInterface
 {
@@ -22,14 +23,14 @@ final class TimeoutOperator implements OperatorInterface
 
     private $timeoutObservable;
 
-    public function __construct(int $timeout, ObservableInterface $timeoutObservable = null, AsyncSchedulerInterface $scheduler)
+    public function __construct(int $timeout, ?ObservableInterface $timeoutObservable = null, ?AsyncSchedulerInterface $scheduler = null)
     {
         $this->timeout           = $timeout;
-        $this->scheduler         = $scheduler;
+        $this->scheduler         = $scheduler ?: Scheduler::getAsync();
         $this->timeoutObservable = $timeoutObservable;
 
         if ($this->timeoutObservable === null) {
-            $this->timeoutObservable = new ErrorObservable(new TimeoutException('timeout'), $scheduler);
+            $this->timeoutObservable = new ErrorObservable(new TimeoutException('timeout'), $this->scheduler);
         }
     }
 
@@ -42,7 +43,7 @@ final class TimeoutOperator implements OperatorInterface
 
         $sourceDisposable = new EmptyDisposable();
 
-        $doTimeout = function () use ($observer, $disposable, &$sourceDisposable) {
+        $doTimeout = function () use ($observer, $disposable, &$sourceDisposable): void {
             $disposable->remove($sourceDisposable);
             $sourceDisposable->dispose();
             $disposable->add($this->timeoutObservable->subscribe($observer));
@@ -51,7 +52,7 @@ final class TimeoutOperator implements OperatorInterface
         $doTimeoutDisposable = $this->scheduler->schedule($doTimeout, $this->timeout);
         $disposable->add($doTimeoutDisposable);
 
-        $rescheduleTimeout = function () use ($disposable, &$doTimeoutDisposable, $doTimeout) {
+        $rescheduleTimeout = function () use ($disposable, &$doTimeoutDisposable, $doTimeout): void {
             $disposable->remove($doTimeoutDisposable);
             $doTimeoutDisposable->dispose();
 
@@ -60,15 +61,15 @@ final class TimeoutOperator implements OperatorInterface
         };
 
         $sourceDisposable = $observable->subscribe(new CallbackObserver(
-            function ($x) use ($observer, $rescheduleTimeout) {
+            function ($x) use ($observer, $rescheduleTimeout): void {
                 $rescheduleTimeout();
                 $observer->onNext($x);
             },
-            function ($err) use ($observer, $rescheduleTimeout) {
+            function ($err) use ($observer, $rescheduleTimeout): void {
                 $rescheduleTimeout();
                 $observer->onError($err);
             },
-            function () use ($observer, $rescheduleTimeout) {
+            function () use ($observer, $rescheduleTimeout): void {
                 $rescheduleTimeout();
                 $observer->onCompleted();
             }

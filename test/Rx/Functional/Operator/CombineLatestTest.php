@@ -19,7 +19,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_never_never()
+    public function combineLatest_never_never(): void
     {
 
         $e1 = new NeverObservable();
@@ -36,7 +36,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_never_empty()
+    public function combineLatest_never_empty(): void
     {
 
         $e1 = new NeverObservable();
@@ -58,7 +58,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_empty_never()
+    public function combineLatest_empty_never(): void
     {
         $e1 = new NeverObservable();
         $e2 = $this->createHotObservable(
@@ -80,7 +80,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_empty_empty()
+    public function combineLatest_empty_empty(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -108,7 +108,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_empty_return()
+    public function combineLatest_empty_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -135,7 +135,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_never_return()
+    public function combineLatest_never_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -157,7 +157,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_return_return()
+    public function combineLatest_return_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -192,7 +192,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_return_return_return()
+    public function combineLatest_return_return_return(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -234,7 +234,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_return_return_no_selector()
+    public function combineLatest_return_return_no_selector(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -269,7 +269,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_empty_error()
+    public function combineLatest_empty_error(): void
     {
         $error = new \Exception();
 
@@ -302,7 +302,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_error_empty()
+    public function combineLatest_error_empty(): void
     {
         $error = new \Exception();
 
@@ -335,7 +335,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_return_throw()
+    public function combineLatest_return_throw(): void
     {
         $error = new \Exception();
 
@@ -370,7 +370,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_return()
+    public function combineLatest_throw_return(): void
     {
         $error = new \Exception();
 
@@ -405,7 +405,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_throw()
+    public function combineLatest_throw_throw(): void
     {
         $error1 = new \Exception('first');
         $error2 = new \Exception('second');
@@ -439,7 +439,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_error_throw()
+    public function combineLatest_error_throw(): void
     {
         $error1 = new \Exception();
         $error2 = new \Exception();
@@ -474,7 +474,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_error()
+    public function combineLatest_throw_error(): void
     {
         $error1 = new \Exception();
         $error2 = new \Exception();
@@ -510,7 +510,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_never_throw()
+    public function combineLatest_never_throw(): void
     {
         $error = new \Exception();
 
@@ -538,7 +538,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_never()
+    public function combineLatest_throw_never(): void
     {
         $error = new \Exception();
 
@@ -566,7 +566,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_some_throw()
+    public function combineLatest_some_throw(): void
     {
         $error = new \Exception();
 
@@ -600,7 +600,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_some()
+    public function combineLatest_throw_some(): void
     {
         $error = new \Exception();
 
@@ -634,7 +634,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_after_complete_left()
+    public function combineLatest_throw_after_complete_left(): void
     {
         $error = new \Exception();
 
@@ -668,7 +668,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_throw_after_complete_right()
+    public function combineLatest_throw_after_complete_right(): void
     {
         $error = new \Exception();
 
@@ -702,7 +702,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_interleaved_with_tail()
+    public function combineLatest_interleaved_with_tail(): void
     {
 
         $e1 = $this->createHotObservable(
@@ -746,7 +746,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_consecutive()
+    public function combineLatest_consecutive(): void
     {
         $e1 = $this->createHotObservable(
             [
@@ -783,7 +783,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_consecutive_end_with_error_left()
+    public function combineLatest_consecutive_end_with_error_left(): void
     {
         $error = new \Exception();
 
@@ -820,7 +820,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_consecutive_end_with_error_right()
+    public function combineLatest_consecutive_end_with_error_right(): void
     {
         $error = new \Exception();
 
@@ -859,7 +859,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_selector_throws()
+    public function combineLatest_selector_throws(): void
     {
         $error = new \Exception();
 
@@ -880,7 +880,7 @@ class CombineLatestTest extends FunctionalTestCase
         );
 
         $results = $this->scheduler->startWithCreate(function () use ($e1, $e2) {
-            return $e1->combineLatest([$e2], function () {
+            return $e1->combineLatest([$e2], function (): void {
                 throw new \Exception();
             });
         });
@@ -896,7 +896,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_delay()
+    public function combineLatest_delay(): void
     {
         $source1 = Observable::timer(100, $this->scheduler);
         $source2 = Observable::timer(120, $this->scheduler);
@@ -917,7 +917,7 @@ class CombineLatestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function combineLatest_args_order()
+    public function combineLatest_args_order(): void
     {
 
         $e1 = $this->createHotObservable(

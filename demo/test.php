@@ -8,7 +8,7 @@ function run_cmd($file) {
         $output,
         $exit_code
     );
-    return array($exit_code, implode("\n", $output));
+    return [$exit_code, implode("\n", $output)];
 }
 
 function run_demo($file) {
@@ -38,7 +38,7 @@ function has_expect($file) {
 }
 
 function strip_cwd($cwd, $absolute_path) {
-    $is_prefix = 0 === strpos($absolute_path, $cwd);
+    $is_prefix = str_starts_with($absolute_path, $cwd);
     if (!$is_prefix) {
         return $absolute_path;
     }

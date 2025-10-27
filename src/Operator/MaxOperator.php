@@ -13,7 +13,7 @@ final class MaxOperator implements OperatorInterface
 {
     private $comparer;
 
-    public function __construct(callable $comparer = null)
+    public function __construct(?callable $comparer = null)
     {
         if ($comparer === null) {
             $comparer = function ($x, $y) {
@@ -30,7 +30,7 @@ final class MaxOperator implements OperatorInterface
         $comparing   = false;
 
         return $observable->subscribe(new CallbackObserver(
-            function ($x) use (&$comparing, &$previousMax, $observer) {
+            function ($x) use (&$comparing, &$previousMax, $observer): void {
                 if (!$comparing) {
                     $comparing   = true;
                     $previousMax = $x;
@@ -48,7 +48,7 @@ final class MaxOperator implements OperatorInterface
                 }
             },
             [$observer, 'onError'],
-            function () use (&$comparing, &$previousMax, $observer) {
+            function () use (&$comparing, &$previousMax, $observer): void {
                 if ($comparing) {
                     $observer->onNext($previousMax);
                     $observer->onCompleted();

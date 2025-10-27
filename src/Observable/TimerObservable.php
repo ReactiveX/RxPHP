@@ -24,7 +24,7 @@ class TimerObservable extends Observable
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->scheduler->schedule(
-            function () use ($observer) {
+            function () use ($observer): void {
                 $observer->onNext(0);
                 $observer->onCompleted();
             },

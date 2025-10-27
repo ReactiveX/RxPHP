@@ -13,11 +13,11 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_given_callable_on_next()
+    public function it_calls_the_given_callable_on_next(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
-        $observer  = new CallbackObserver(function () use (&$called) {
+        $observer  = new CallbackObserver(function () use (&$called): void {
             $called = true;
         });
 
@@ -39,14 +39,14 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_given_callable_on_error()
+    public function it_calls_the_given_callable_on_error(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             });
 
@@ -68,16 +68,16 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_the_given_callable_on_complete()
+    public function it_calls_the_given_callable_on_complete(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             });
 
@@ -100,15 +100,15 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_next_after_an_error()
+    public function it_does_not_call_on_next_after_an_error(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -138,16 +138,16 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_completed_after_an_error()
+    public function it_does_not_call_on_completed_after_an_error(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             }
         );
@@ -178,17 +178,17 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_error_after_an_error()
+    public function it_does_not_call_on_error_after_an_error(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -220,17 +220,17 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_next_after_completion()
+    public function it_does_not_call_on_next_after_completion(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -262,16 +262,16 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_completed_after_completion()
+    public function it_does_not_call_on_completed_after_completion(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             }
         );
@@ -304,17 +304,17 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_does_not_call_on_error_after_completion()
+    public function it_does_not_call_on_error_after_completion(): void
     {
         $called    = false;
         $scheduler = new TestScheduler();
         $observer  = new CallbackObserver(
-            function () {
+            function (): void {
             },
-            function () use (&$called) {
+            function () use (&$called): void {
                 $called = true;
             },
-            function () {
+            function (): void {
             }
         );
 
@@ -346,7 +346,7 @@ class ScheduledObserverTest extends TestCase
     /**
      * @test
      */
-    public function throw_inside_onnext_throws()
+    public function throw_inside_onnext_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('onNext(0) exception');
@@ -355,7 +355,7 @@ class ScheduledObserverTest extends TestCase
         $scheduledObserver = new ScheduledObserver(
             $scheduler,
             new CallbackObserver(
-                function ($x) {
+                function ($x): void {
                     throw new Exception("onNext($x) exception");
                 }
             )

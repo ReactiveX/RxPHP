@@ -21,7 +21,7 @@ final class FilterOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $selectObserver = new CallbackObserver(
-            function ($nextValue) use ($observer) {
+            function ($nextValue) use ($observer): void {
                 $shouldFire = false;
                 try {
                     $shouldFire = ($this->predicate)($nextValue);

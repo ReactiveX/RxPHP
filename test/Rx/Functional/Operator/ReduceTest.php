@@ -16,7 +16,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_with_seed_empty()
+    public function reduce_with_seed_empty(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -36,7 +36,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_with_seed_return()
+    public function reduce_with_seed_return(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -56,7 +56,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_with_seed_throw()
+    public function reduce_with_seed_throw(): void
     {
         $ex = new \Exception('ex');
         $xs = $this->createHotObservable([
@@ -76,7 +76,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_with_seed_never()
+    public function reduce_with_seed_never(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1)
@@ -94,7 +94,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_with_seed_range()
+    public function reduce_with_seed_range(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -118,7 +118,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_without_seed_empty()
+    public function reduce_without_seed_empty(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -142,7 +142,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_without_seed_return()
+    public function reduce_without_seed_return(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -162,7 +162,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_without_seed_throw()
+    public function reduce_without_seed_throw(): void
     {
         $ex = new \Exception('ex');
         $xs = $this->createHotObservable([
@@ -182,7 +182,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_without_seed_never()
+    public function reduce_without_seed_never(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1)
@@ -200,7 +200,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_without_seed_range()
+    public function reduce_without_seed_range(): void
     {
         $xs = $this->createHotObservable([
           onNext(150, 1),
@@ -224,7 +224,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_accumulator_throws()
+    public function reduce_accumulator_throws(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -235,7 +235,7 @@ class ReduceTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->reduce(function () {
+            return $xs->reduce(function (): void {
                 throw new \Exception();
             });
         });
@@ -246,7 +246,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_accumulator_throws_with_seed()
+    public function reduce_accumulator_throws_with_seed(): void
     {
         $xs = $this->createHotObservable(
           [
@@ -257,7 +257,7 @@ class ReduceTest extends FunctionalTestCase
           ]);
 
         $results = $this->scheduler->startWithCreate(function () use ($xs) {
-            return $xs->reduce(function () {
+            return $xs->reduce(function (): void {
                 throw new \Exception();
             }, 42);
         });
@@ -268,7 +268,7 @@ class ReduceTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function reduce_with_falsy_seed_range()
+    public function reduce_with_falsy_seed_range(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 1),

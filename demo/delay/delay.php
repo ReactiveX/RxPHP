@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 \Rx\Observable::interval(1000)
-    ->doOnNext(function ($x) {
+    ->doOnNext(function ($x): void {
         echo 'Side effect: ' . $x . "\n";
     })
     ->delay(500)

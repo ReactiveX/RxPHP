@@ -29,7 +29,7 @@ final class TakeLastOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $callbackObserver = new CallbackObserver(
-            function ($nextValue) use ($observer) {
+            function ($nextValue) use ($observer): void {
                 $this->items[] = $nextValue;
 
                 if (count($this->items) > $this->count) {
@@ -37,7 +37,7 @@ final class TakeLastOperator implements OperatorInterface
                 }
             },
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer): void {
 
                 while (count($this->items) > 0) {
                     $observer->onNext(array_shift($this->items));

@@ -2,7 +2,7 @@
 
 abstract class Str {
     public static function contains($haystack, $needle) {
-        return false !== strpos($haystack, $needle);
+        return str_contains($haystack, $needle);
     }
 
     public static function containsAny($haystack, $needles) {
@@ -20,7 +20,7 @@ abstract class Str {
     }
 
     public static function startsWith($haystack, $needle) {
-        return 0 === strpos($haystack, $needle);
+        return str_starts_with($haystack, $needle);
     }
 
     public static function substringAfter($haystack, $needle) {
@@ -62,5 +62,5 @@ function run_cmd($cmd) {
     $output = [];
     $exitCode = 0;
     exec($cmd, $output, $exitCode);
-    return array($exitCode, $output);
+    return [$exitCode, $output];
 }

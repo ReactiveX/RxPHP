@@ -9,33 +9,33 @@ use function React\Promise\resolve;
 
 class ObservableFactoryWrapperTest extends TestCase
 {
-    public function testPromiseIsConvertedToObservable()
+    public function testPromiseIsConvertedToObservable(): void
     {
         $afw = new ObservableFactoryWrapper(static function (): PromiseInterface {
             return resolve(true);
         });
         $true = null;
-        $afw()->subscribe(function ($v) use (&$true) {
+        $afw()->subscribe(function ($v) use (&$true): void {
             $true = $v;
         });
 
         self::assertTrue($true);
     }
 
-    public function testObservable()
+    public function testObservable(): void
     {
         $afw = new ObservableFactoryWrapper(static function (): Observable {
             return Observable::fromArray([true], Scheduler::getImmediate());
         });
         $true = null;
-        $afw()->subscribe(function ($v) use (&$true) {
+        $afw()->subscribe(function ($v) use (&$true): void {
             $true = $v;
         });
 
         self::assertTrue($true);
     }
 
-    public function testNotAnObservableOrPromise()
+    public function testNotAnObservableOrPromise(): void
     {
         self::expectException(\Exception::class);
         self::expectExceptionMessageMatches('/You must return an Observable or Promise in/');

@@ -13,7 +13,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_joins_last_values()
+    public function forkjoin_joins_last_values(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 'a'),
@@ -50,7 +50,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_allows_null()
+    public function forkjoin_allows_null(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 'a'),
@@ -87,7 +87,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_joins_last_values_with_selector()
+    public function forkjoin_joins_last_values_with_selector(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 'a'),
@@ -126,7 +126,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_accepts_single_observable()
+    public function forkjoin_accepts_single_observable(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 'a'),
@@ -151,7 +151,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_accepts_single_observable_with_selector()
+    public function forkjoin_accepts_single_observable_with_selector(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 'a'),
@@ -178,7 +178,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_wont_emit_with_empty_observable()
+    public function forkjoin_wont_emit_with_empty_observable(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -212,7 +212,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_empty_empty()
+    public function forkjoin_empty_empty(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -240,7 +240,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_none()
+    public function forkjoin_none(): void
     {
         $xs = Observable::forkJoin();
 
@@ -256,7 +256,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_empty_return()
+    public function forkjoin_empty_return(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -285,7 +285,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_return_empty()
+    public function forkjoin_return_empty(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -314,7 +314,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_return_return()
+    public function forkjoin_return_return(): void
     {
         $e0 = $this->createHotObservable([
             onNext(150, 1),
@@ -345,7 +345,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_empty_throw()
+    public function forkjoin_empty_throw(): void
     {
         $error = new \Exception();
 
@@ -376,7 +376,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_throw_empty()
+    public function forkjoin_throw_empty(): void
     {
         $error = new \Exception();
 
@@ -407,7 +407,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_return_throw()
+    public function forkjoin_return_throw(): void
     {
         $error = new \Exception();
 
@@ -439,7 +439,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_throw_return()
+    public function forkjoin_throw_return(): void
     {
         $error = new \Exception();
 
@@ -471,7 +471,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_throw_inside_selector()
+    public function forkjoin_throw_inside_selector(): void
     {
         $error = new \Exception();
 
@@ -480,7 +480,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
             onCompleted(230),
         ]);
 
-        $xs = Observable::forkJoin([$e0], function () use ($error) {
+        $xs = Observable::forkJoin([$e0], function () use ($error): void {
             throw $error;
         });
 
@@ -496,7 +496,7 @@ class ForkJoinObservableTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function forkjoin_disposed_after_emit()
+    public function forkjoin_disposed_after_emit(): void
     {
         $e0 = $this->createHotObservable([
             onNext(250, 1),

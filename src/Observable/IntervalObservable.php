@@ -32,7 +32,7 @@ class IntervalObservable extends Observable
         $counter = 0;
 
         return $this->scheduler->schedulePeriodic(
-            function () use (&$counter, $observer) {
+            function () use (&$counter, $observer): void {
                 $observer->onNext($counter++);
             },
             $this->interval, // this is to match RxJS behavior which delays the first item by the interval

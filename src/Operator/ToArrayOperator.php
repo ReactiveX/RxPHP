@@ -17,11 +17,11 @@ final class ToArrayOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $cbObserver = new CallbackObserver(
-            function ($x) {
+            function ($x): void {
                 $this->arr[] = $x;
             },
             [$observer, 'onError'],
-            function () use ($observer) {
+            function () use ($observer): void {
                 $observer->onNext($this->arr);
                 $observer->onCompleted();
             }

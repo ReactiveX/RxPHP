@@ -11,7 +11,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_completed()
+    public function pluck_completed(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, (object)['prop' => 1]),
@@ -45,7 +45,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_error()
+    public function pluck_error(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, ['prop' => 1]),
@@ -76,7 +76,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_completed_array()
+    public function pluck_completed_array(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, ['prop' => 1]),
@@ -107,7 +107,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_array_index_missing()
+    public function pluck_array_index_missing(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, ['prop' => 1]),
@@ -136,7 +136,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_object_property_missing()
+    public function pluck_object_property_missing(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, (object)['prop' => 1]),
@@ -165,7 +165,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_array_numeric_index()
+    public function pluck_array_numeric_index(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, [-1,-1,-1,-1]),
@@ -196,7 +196,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_nested()
+    public function pluck_nested(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, [-1,-1,-1,-1]),
@@ -227,7 +227,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_nested_numeric_key_with_object_properties()
+    public function pluck_nested_numeric_key_with_object_properties(): void
     {
         $xs = $this->createHotObservable([
             onNext(180, [-1,-1,-1,-1]),
@@ -258,7 +258,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_object_property_null()
+    public function pluck_object_property_null(): void
     {
         $xs = $this->createHotObservable([
                                              onNext(180, (object)['prop' => 1]),
@@ -289,7 +289,7 @@ class PluckTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function pluck_array_assoc_null()
+    public function pluck_array_assoc_null(): void
     {
         $xs = $this->createHotObservable([
                                              onNext(180, ['prop' => 1]),

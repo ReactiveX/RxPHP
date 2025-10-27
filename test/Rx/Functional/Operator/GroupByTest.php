@@ -14,7 +14,7 @@ class GroupByTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_complete()
+    public function it_passes_on_complete(): void
     {
         $xs         = $this->createHotObservableWithData();
         $keyInvoked = 0;
@@ -30,19 +30,19 @@ class GroupByTest extends FunctionalTestCase
 
         $this->assertEquals(12, $keyInvoked);
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, "foo"),
             onNext(270, "bar"),
             onNext(350, "baz"),
             onNext(360, "qux"),
             onCompleted(570),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_passes_on_error()
+    public function it_passes_on_error(): void
     {
         $xs         = $this->createHotObservableWithData(true);
         $keyInvoked = 0;
@@ -58,19 +58,19 @@ class GroupByTest extends FunctionalTestCase
 
         $this->assertEquals(12, $keyInvoked);
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, "foo"),
             onNext(270, "bar"),
             onNext(350, "baz"),
             onNext(360, "qux"),
             onError(570, new Exception()),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_disposes_the_outer_subscription()
+    public function it_disposes_the_outer_subscription(): void
     {
         $xs         = $this->createHotObservableWithData(true);
         $keyInvoked = 0;
@@ -86,17 +86,17 @@ class GroupByTest extends FunctionalTestCase
 
         $this->assertEquals(5, $keyInvoked);
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, "foo"),
             onNext(270, "bar"),
             onNext(350, "baz"),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_calls_on_error_if_keyselector_throws()
+    public function it_calls_on_error_if_keyselector_throws(): void
     {
         $xs         = $this->createHotObservableWithData(true);
         $keyInvoked = 0;
@@ -117,19 +117,19 @@ class GroupByTest extends FunctionalTestCase
 
         $this->assertEquals(10, $keyInvoked);
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, "foo"),
             onNext(270, "bar"),
             onNext(350, "baz"),
             onNext(360, "qux"),
             onError(480, new Exception()),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_calls_on_error_if_elementselector_throws()
+    public function it_calls_on_error_if_elementselector_throws(): void
     {
         $xs             = $this->createHotObservableWithData(true);
         $elementInvoked = 0;
@@ -152,41 +152,41 @@ class GroupByTest extends FunctionalTestCase
 
         $this->assertEquals(10, $elementInvoked);
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, "foo"),
             onNext(270, "bar"),
             onNext(350, "baz"),
             onNext(360, "qux"),
             onError(480, new Exception()),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_calls_on_error_if_durationselector_throws()
+    public function it_calls_on_error_if_durationselector_throws(): void
     {
         $xs             = $this->createHotObservableWithData(true);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->groupByUntil(function($elem) { return $elem; },
                 null,
-                function() { throw new Exception(''); }
+                function(): void { throw new Exception(''); }
             )->select(function(GroupedObservable $observable) {
                 return $observable->getKey();
             });
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onError(220, new Exception()),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
 
     /**
      * @test
      */
-    public function it_passes_on_error_if_duration_observable_calls_on_error()
+    public function it_passes_on_error_if_duration_observable_calls_on_error(): void
     {
         $xs = $this->createHotObservableWithData();
 
@@ -196,23 +196,23 @@ class GroupByTest extends FunctionalTestCase
                 },
                 null,
                 function(GroupedObservable $observable) {
-                    return $observable->select(function() { throw new Exception('meh.'); });
+                    return $observable->select(function(): void { throw new Exception('meh.'); });
             })->select(function(GroupedObservable $observable) {
                 return $observable->getKey();
             });
         });
 
         $this->scheduler->start();
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, 'foo'),
             onError(220, new Exception()),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_calls_on_completed_on_inner_subscription_if_subscription_expires_otherwise_it_passes()
+    public function it_calls_on_completed_on_inner_subscription_if_subscription_expires_otherwise_it_passes(): void
     {
         $xs = $this->createHotObservableWithData();
 
@@ -225,71 +225,71 @@ class GroupByTest extends FunctionalTestCase
             }
         );
 
-        $innerSubscriptions = array();
+        $innerSubscriptions = [];
         $scheduler = $this->scheduler;
-        $observable->subscribe(function(GroupedObservable $observable) use (&$innerSubscriptions, $scheduler) {
+        $observable->subscribe(function(GroupedObservable $observable) use (&$innerSubscriptions, $scheduler): void {
             $observer = new MockObserver($scheduler);
             $observable->subscribe($observer);
 
-            $innerSubscriptions[] = array(
+            $innerSubscriptions[] = [
                 'key'      => $observable->getKey(),
                 'observer' => $observer,
-            );
+            ];
         });
 
         $this->scheduler->start();
 
         // on complete gets called after duration is "over"
         $this->assertCount(4, $innerSubscriptions[0]['observer']->getMessages());
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(90, "error"),
             onNext(110, "error"),
             onNext(130, "error"),
             onCompleted(130),
-        ), $innerSubscriptions[0]['observer']->getMessages());
+        ], $innerSubscriptions[0]['observer']->getMessages());
 
         $this->assertCount(4, $innerSubscriptions[1]['observer']->getMessages());
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(220, "  foo"),
             onNext(240, " FoO "),
             onNext(310, "foO "),
             onCompleted(310),
-        ), $innerSubscriptions[1]['observer']->getMessages());
+        ], $innerSubscriptions[1]['observer']->getMessages());
 
         $this->assertCount(4, $innerSubscriptions[2]['observer']->getMessages());
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(270, "baR  "),
             onNext(390, "   bar"),
             onNext(420, " BAR  "),
             onCompleted(420),
-        ), $innerSubscriptions[2]['observer']->getMessages());
+        ], $innerSubscriptions[2]['observer']->getMessages());
 
         $this->assertCount(4, $innerSubscriptions[3]['observer']->getMessages());
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(350, " Baz   "),
             onNext(480, "baz  "),
             onNext(510, " bAZ "),
             onCompleted(510),
-        ), $innerSubscriptions[3]['observer']->getMessages());
+        ], $innerSubscriptions[3]['observer']->getMessages());
 
         // Otherwise the original on complete is passed
         $this->assertCount(2, $innerSubscriptions[4]['observer']->getMessages());
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(360, "  qux "),
             onCompleted(570),
-        ), $innerSubscriptions[4]['observer']->getMessages());
+        ], $innerSubscriptions[4]['observer']->getMessages());
 
         $this->assertCount(3, $innerSubscriptions[5]['observer']->getMessages());
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(470, "FOO "),
             onNext(530, "    fOo    "),
             onCompleted(570),
-        ), $innerSubscriptions[5]['observer']->getMessages());
+        ], $innerSubscriptions[5]['observer']->getMessages());
     }
 
     protected function createHotObservableWithData($error = false)
     {
-        return $this->createHotObservable(array(
+        return $this->createHotObservable([
             onNext(90, "error"),
             onNext(110, "error"),
             onNext(130, "error"),
@@ -309,6 +309,6 @@ class GroupByTest extends FunctionalTestCase
             onNext(580, "error"),
             onCompleted(600),
             onError(650, new Exception()),
-        ));
+        ]);
     }
 }

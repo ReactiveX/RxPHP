@@ -13,7 +13,7 @@ class NeverTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function never_basic()
+    public function never_basic(): void
     {
         $xs = Observable::never();
 

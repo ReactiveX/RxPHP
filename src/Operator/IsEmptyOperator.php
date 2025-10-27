@@ -12,12 +12,12 @@ final class IsEmptyOperator implements OperatorInterface
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         return $observable->subscribe(
-            function() use ($observer) {
+            function() use ($observer): void {
                 $observer->onNext(false);
                 $observer->onCompleted();
             },
             [$observer, 'onError'],
-            function() use ($observer) {
+            function() use ($observer): void {
                 $observer->onNext(true);
                 $observer->onCompleted();
             }

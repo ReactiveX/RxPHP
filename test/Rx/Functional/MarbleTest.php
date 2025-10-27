@@ -7,7 +7,7 @@ use Rx\Testing\Subscription;
 
 class MarbleTest extends FunctionalTestCase
 {
-    public function testColdMarble()
+    public function testColdMarble(): void
     {
         $c = $this->createCold('----1----3---|');
 
@@ -22,7 +22,7 @@ class MarbleTest extends FunctionalTestCase
         ], $result->getMessages());
     }
 
-    public function testHotMarble()
+    public function testHotMarble(): void
     {
         $h = $this->createHot('-1-^--a--b---|');
 
@@ -37,7 +37,7 @@ class MarbleTest extends FunctionalTestCase
         ], $result->getMessages());
     }
 
-    public function testColdMarbleWithEqualMessages()
+    public function testColdMarbleWithEqualMessages(): void
     {
         $marbles1 = '----1-^--a--b---|   ';
         $marbles2 = '    1-^--a--b---|---';
@@ -48,7 +48,7 @@ class MarbleTest extends FunctionalTestCase
         );
     }
 
-    public function testMessageConversion()
+    public function testMessageConversion(): void
     {
         $messages = [
             onNext(230, 'a'),
@@ -59,7 +59,7 @@ class MarbleTest extends FunctionalTestCase
         $this->assertEquals('---a--b---|', $this->convertMessagesToMarbles($messages));
     }
 
-    public function testSomethingElse()
+    public function testSomethingElse(): void
     {
         $cold     = '--1--2--|';
         $expected = '--2--3--|';
@@ -71,7 +71,7 @@ class MarbleTest extends FunctionalTestCase
         $this->assertEquals($expected, $this->convertMessagesToMarbles($results->getMessages()));
     }
 
-    public function testMarbleValues()
+    public function testMarbleValues(): void
     {
         $marbles = '--a--b--c--|';
         $values = [
@@ -90,7 +90,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testMarbleValuesDontMatch()
+    public function testMarbleValuesDontMatch(): void
     {
         $marbles = '--a--b--c--|';
         $values = [
@@ -109,7 +109,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testMarbleWithMissingValues()
+    public function testMarbleWithMissingValues(): void
     {
         $marbles = '--a--b--c--|';
         $values = [
@@ -126,7 +126,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testGroupedMarbleValues()
+    public function testGroupedMarbleValues(): void
     {
         $marbles = '---(abc)--|';
 
@@ -140,7 +140,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testMultipleGroupedMarbleValues()
+    public function testMultipleGroupedMarbleValues(): void
     {
         $marbles = '--(abc)---(dfa)--|';
         $values = [
@@ -160,7 +160,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testGroupedMarkerAndComplete()
+    public function testGroupedMarkerAndComplete(): void
     {
         $marbles = '--a---b--(c|)';
 
@@ -174,7 +174,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testGroupedMarkerAndError()
+    public function testGroupedMarkerAndError(): void
     {
         $marbles = '--a---(b#)--c--|';
 
@@ -189,7 +189,7 @@ class MarbleTest extends FunctionalTestCase
         ], $messages);
     }
 
-    public function testSubscriptions()
+    public function testSubscriptions(): void
     {
         $marbles = '--^-----!---^!--';
 
@@ -200,7 +200,7 @@ class MarbleTest extends FunctionalTestCase
         ], $subscriptions);
     }
 
-    public function testSubscriptionsMissingUnsubscribeMarker()
+    public function testSubscriptionsMissingUnsubscribeMarker(): void
     {
         $marbles = '--^--';
 
@@ -210,7 +210,7 @@ class MarbleTest extends FunctionalTestCase
         ], $subscriptions);
     }
 
-    public function testSubscriptionsGroup()
+    public function testSubscriptionsGroup(): void
     {
         $marbles = '--(^!)';
 
@@ -223,7 +223,7 @@ class MarbleTest extends FunctionalTestCase
 
     /**
      */
-    public function testSubscriptionsInvalidMarkers()
+    public function testSubscriptionsInvalidMarkers(): void
     {
         $this->expectException(\Rx\MarbleDiagramException::class);
         $marbles = '--^--a--!-';
@@ -232,7 +232,7 @@ class MarbleTest extends FunctionalTestCase
 
     /**
      */
-    public function testSubscriptionsMultipleSubscribeMarkers()
+    public function testSubscriptionsMultipleSubscribeMarkers(): void
     {
         $this->expectException(\Rx\MarbleDiagramException::class);
         $marbles = '--^-^---!-';
@@ -241,14 +241,14 @@ class MarbleTest extends FunctionalTestCase
 
     /**
      */
-    public function testSubscriptionsMultipleUnsubscribeMarkers()
+    public function testSubscriptionsMultipleUnsubscribeMarkers(): void
     {
         $this->expectException(\Rx\MarbleDiagramException::class);
         $marbles = '--^---!-!-';
         $this->convertMarblesToSubscriptions($marbles);
     }
 
-    public function testMapMarble()
+    public function testMapMarble(): void
     {
         $cold     = '--1--2--|';
         $subs     = '^       !';
@@ -264,7 +264,7 @@ class MarbleTest extends FunctionalTestCase
         $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
     }
 
-    public function testMapErrorMarble()
+    public function testMapErrorMarble(): void
     {
         $cold     = '--x--|';
         $subs     = '^ !   ';
@@ -272,7 +272,7 @@ class MarbleTest extends FunctionalTestCase
 
         $e1 = $this->createCold($cold, ['x' => 42]);
 
-        $r = $e1->map(function ($x) {
+        $r = $e1->map(function ($x): void {
             throw new \Exception('too bad');
         });
 
@@ -280,7 +280,7 @@ class MarbleTest extends FunctionalTestCase
         $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
     }
 
-    public function testMapDisposeMarble()
+    public function testMapDisposeMarble(): void
     {
         $cold     = '--1--2--3--|';
         $unsub    = '      !     ';
@@ -297,7 +297,7 @@ class MarbleTest extends FunctionalTestCase
         $this->expectSubscriptions($e1->getSubscriptions())->toBe($subs);
     }
 
-    public function testCountMarble()
+    public function testCountMarble(): void
     {
         $cold     = '--a--b--c--|';
         $subs     = '^          !';

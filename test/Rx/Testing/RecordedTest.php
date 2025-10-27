@@ -8,7 +8,7 @@ use Rx\TestCase;
 
 class RecordedTest extends TestCase
 {
-    public function testRecordedWillUseStrictCompareIfNoEqualsMethod()
+    public function testRecordedWillUseStrictCompareIfNoEqualsMethod(): void
     {
         $recorded1 = new Recorded(1, 5);
         $recorded2 = new Recorded(1, "5");
@@ -18,7 +18,7 @@ class RecordedTest extends TestCase
         $this->assertTrue($recorded1->equals($recorded3));
     }
 
-    public function testRecordedToString()
+    public function testRecordedToString(): void
     {
         $recorded = new Recorded(1, 5);
 

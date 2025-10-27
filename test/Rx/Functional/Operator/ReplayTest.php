@@ -13,7 +13,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_basic()
+    public function replay_count_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -40,39 +40,39 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, 3, null, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -102,7 +102,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_error()
+    public function replay_count_error(): void
     {
 
         $error = new \Exception();
@@ -131,31 +131,31 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, 3, null, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -185,7 +185,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_complete()
+    public function replay_count_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -212,31 +212,31 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, 3, null, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -267,7 +267,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_dispose()
+    public function replay_count_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -294,39 +294,39 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, 3, null, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(475, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(475, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -353,7 +353,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_multiple_connections()
+    public function replay_count_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->replay(null, 3);
@@ -375,7 +375,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_complete()
+    public function replay_count_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -443,7 +443,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_error()
+    public function replay_count_zip_error(): void
     {
 
         $error = new \Exception();
@@ -508,7 +508,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_count_zip_dispose()
+    public function replay_count_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -563,7 +563,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_basic()
+    public function replay_time_basic(): void
     {
 
         $xs = $this->createHotObservable([
@@ -590,39 +590,39 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, null, 150, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -652,7 +652,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_error()
+    public function replay_time_error(): void
     {
 
         $error = new \Exception();
@@ -681,31 +681,31 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, null, 75, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -733,7 +733,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_complete()
+    public function replay_time_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -760,31 +760,31 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, null, 85, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(1000, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -812,7 +812,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_dispose()
+    public function replay_time_dispose(): void
     {
 
         $xs = $this->createHotObservable([
@@ -839,39 +839,39 @@ class ReplayTest extends FunctionalTestCase
 
         $results = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs) {
+        $this->scheduler->scheduleAbsolute(100, function () use (&$ys, $xs): void {
             $ys = $xs->replay(null, null, 100, $this->scheduler);
         });
 
-        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription) {
+        $this->scheduler->scheduleAbsolute(450, function () use (&$ys, $xs, $results, &$subscription): void {
             $subscription = $ys->subscribe($results);
         });
 
-        $this->scheduler->scheduleAbsolute(475, function () use (&$subscription) {
+        $this->scheduler->scheduleAbsolute(475, function () use (&$subscription): void {
             $subscription->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(300, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(400, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(400, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(500, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(550, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(550, function () use (&$connection): void {
             $connection->dispose();
         });
 
-        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys) {
+        $this->scheduler->scheduleAbsolute(650, function () use (&$connection, &$ys): void {
             $connection = $ys->connect();
         });
 
-        $this->scheduler->scheduleAbsolute(800, function () use (&$connection) {
+        $this->scheduler->scheduleAbsolute(800, function () use (&$connection): void {
             $connection->dispose();
         });
 
@@ -898,7 +898,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_multiple_connections()
+    public function replay_time_multiple_connections(): void
     {
         $xs = new NeverObservable();
         $ys = $xs->replay(null, null, 100);
@@ -920,7 +920,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_zip_complete()
+    public function replay_time_zip_complete(): void
     {
 
         $xs = $this->createHotObservable([
@@ -985,7 +985,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_zip_errorr()
+    public function replay_time_zip_errorr(): void
     {
 
         $error = new \Exception();
@@ -1049,7 +1049,7 @@ class ReplayTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function replay_time_zip_dispose()
+    public function replay_time_zip_dispose(): void
     {
 
         $xs = $this->createHotObservable([

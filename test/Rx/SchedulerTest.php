@@ -28,7 +28,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testGetDefaultThrowsIfNotSet()
+    public function testGetDefaultThrowsIfNotSet(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Please set a default scheduler factory');
@@ -37,7 +37,7 @@ class SchedulerTest extends TestCase
         $this->assertInstanceOf(EventLoopScheduler::class, $scheduler);
     }
 
-    public function testSetDefault()
+    public function testSetDefault(): void
     {
         $scheduler = new TestScheduler();
 
@@ -48,7 +48,7 @@ class SchedulerTest extends TestCase
         $this->assertSame($scheduler, Scheduler::getDefault());
     }
 
-    public function testSetDefaultTwiceBeforeGet()
+    public function testSetDefaultTwiceBeforeGet(): void
     {
         $scheduler = new TestScheduler();
 
@@ -65,7 +65,7 @@ class SchedulerTest extends TestCase
         $this->assertSame($scheduler2, Scheduler::getDefault());
     }
 
-    public function testSetAsync()
+    public function testSetAsync(): void
     {
         $scheduler = new TestScheduler();
 
@@ -76,7 +76,7 @@ class SchedulerTest extends TestCase
         $this->assertSame($scheduler, Scheduler::getAsync());
     }
 
-    public function testSetAsyncTwiceBeforeGet()
+    public function testSetAsyncTwiceBeforeGet(): void
     {
         $scheduler = new TestScheduler();
 
@@ -95,7 +95,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testSetDefaultTwiceThrowsException()
+    public function testSetDefaultTwiceThrowsException(): void
     {
         $this->expectException(\Exception::class);
         $scheduler = new TestScheduler();
@@ -114,7 +114,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testSetAsyncTwiceThrowsException()
+    public function testSetAsyncTwiceThrowsException(): void
     {
         $this->expectException(\Exception::class);
         $scheduler = new TestScheduler();
@@ -132,7 +132,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testGetAsyncBeforeSet()
+    public function testGetAsyncBeforeSet(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Please set a default scheduler factory');
@@ -140,9 +140,9 @@ class SchedulerTest extends TestCase
         Scheduler::getAsync();
     }
 
-    public function testGetAsyncAfterSettingDefaultToAsync()
+    public function testGetAsyncAfterSettingDefaultToAsync(): void
     {
-        $asyncScheduler = new EventLoopScheduler(function () {
+        $asyncScheduler = new EventLoopScheduler(function (): void {
         });
 
         Scheduler::setDefaultFactory(function () use ($asyncScheduler) {
@@ -154,7 +154,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testAsyncSchedulerFactorReturnsNonAsyncScheduler()
+    public function testAsyncSchedulerFactorReturnsNonAsyncScheduler(): void
     {
         $this->expectException(\Throwable::class);
         if (phpversion() < '8.0.0') {
@@ -172,7 +172,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testDefaultSchedulerFactorReturnsNonScheduler()
+    public function testDefaultSchedulerFactorReturnsNonScheduler(): void
     {
         $this->expectException(\Throwable::class);
         if (phpversion() < '8.0.0') {
@@ -189,7 +189,7 @@ class SchedulerTest extends TestCase
 
     /**
      */
-    public function testAsyncSchedulerFactorThrowsNonAsyncDefaultScheduler()
+    public function testAsyncSchedulerFactorThrowsNonAsyncDefaultScheduler(): void
     {
         $this->expectException(\Throwable::class);
         $this->expectExceptionMessage('Please set an async scheduler factory');

@@ -17,14 +17,14 @@ class DoObserver implements ObserverInterface
     /** @var callable|null */
     private $onCompleted;
 
-    public function __construct(callable $onNext = null, callable $onError = null, callable $onCompleted = null)
+    public function __construct(?callable $onNext = null, ?callable $onError = null, ?callable $onCompleted = null)
     {
-        $default = function () {
+        $default = function (): void {
         };
 
         $this->onNext = $this->getOrDefault($onNext, $default);
 
-        $this->onError = $this->getOrDefault($onError, function ($e) {
+        $this->onError = $this->getOrDefault($onError, function ($e): void {
             throw $e;
         });
 
@@ -46,7 +46,7 @@ class DoObserver implements ObserverInterface
         ($this->onNext)($value);
     }
 
-    private function getOrDefault(callable $callback = null, $default = null): callable
+    private function getOrDefault(?callable $callback = null, $default = null): callable
     {
         if (null === $callback) {
             return $default;

@@ -12,7 +12,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_never()
+    public function takeWhile_never(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, -1),
@@ -57,7 +57,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_complete_after()
+    public function takeWhile_complete_after(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, -1),
@@ -102,7 +102,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_error_before()
+    public function takeWhile_error_before(): void
     {
         $error = new \Exception();
 
@@ -146,7 +146,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_error_after()
+    public function takeWhile_error_after(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, -1),
@@ -191,7 +191,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_dispose_before()
+    public function takeWhile_dispose_before(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, -1),
@@ -233,7 +233,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_dispose_after()
+    public function takeWhile_dispose_after(): void
     {
 
         $xs = $this->createHotObservable([
@@ -279,7 +279,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_zero()
+    public function takeWhile_zero(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, -1),
@@ -321,7 +321,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_throw()
+    public function takeWhile_throw(): void
     {
         $error = new \Exception();
 
@@ -368,7 +368,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_index()
+    public function takeWhile_index(): void
     {
         $xs = $this->createHotObservable([
             onNext(90, -1),
@@ -432,7 +432,7 @@ class TakeWhileTest extends FunctionalTestCase
          * The sqrt can be an aproximation, hence just for the sake of
          * security, one rounds it to the next highest integer value.
          */
-        for ($i = 3; $i <= ceil(sqrt($num)); $i = $i + 2) {
+        for ($i = 3; $i <= ceil(sqrt($num)); $i += 2) {
             if ($num % $i === 0) {
                 return false;
             }
@@ -444,7 +444,7 @@ class TakeWhileTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function takeWhile_inclusive()
+    public function takeWhile_inclusive(): void
     {
         $error = new \Exception();
 

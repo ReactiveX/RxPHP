@@ -27,7 +27,7 @@ final class TakeOperator implements OperatorInterface
         $remaining = $this->count;
 
         $callbackObserver = new CallbackObserver(
-            function ($nextValue) use ($observer, &$remaining) {
+            function ($nextValue) use ($observer, &$remaining): void {
                 if ($remaining > 0) {
                     $remaining--;
                     $observer->onNext($nextValue);

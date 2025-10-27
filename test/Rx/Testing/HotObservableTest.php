@@ -6,7 +6,7 @@ use Rx\TestCase;
 
 class HotObservableTest extends TestCase
 {
-    public function testRemovingObserverThatNeverSubscribed()
+    public function testRemovingObserverThatNeverSubscribed(): void
     {
         $scheduler = new TestScheduler();
 

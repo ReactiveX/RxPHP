@@ -13,10 +13,10 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_dispose_on_completed()
+    public function it_calls_dispose_on_completed(): void
     {
         $disposed   = false;
-        $disposable = new CallbackDisposable(function() use (&$disposed){ $disposed = true; });
+        $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
 
         $observer   = new AutoDetachObserver(new CallbackObserver());
         $observer->setDisposable($disposable);
@@ -28,12 +28,12 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_calls_dispose_on_error()
+    public function it_calls_dispose_on_error(): void
     {
         $disposed   = false;
-        $disposable = new CallbackDisposable(function() use (&$disposed){ $disposed = true; });
+        $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
 
-        $observer   = new AutoDetachObserver(new CallbackObserver(null, function(){}));
+        $observer   = new AutoDetachObserver(new CallbackObserver(null, function(): void{}));
         $observer->setDisposable($disposable);
 
         $observer->onError(new Exception());
@@ -43,14 +43,14 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_observer_on_completed_throws()
+    public function it_disposes_if_observer_on_completed_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('fail');
         $disposed   = false;
-        $disposable = new CallbackDisposable(function() use (&$disposed){ $disposed = true; });
+        $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
 
-        $observer   = new AutoDetachObserver(new CallbackObserver(null, null, function() { throw new Exception('fail'); }));
+        $observer   = new AutoDetachObserver(new CallbackObserver(null, null, function(): void { throw new Exception('fail'); }));
         $observer->setDisposable($disposable);
 
         $observer->onCompleted();
@@ -60,14 +60,14 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_observer_on_error_throws()
+    public function it_disposes_if_observer_on_error_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('fail');
         $disposed   = false;
-        $disposable = new CallbackDisposable(function() use (&$disposed){ $disposed = true; });
+        $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
 
-        $observer   = new AutoDetachObserver(new CallbackObserver(null, function() { throw new Exception('fail'); }));
+        $observer   = new AutoDetachObserver(new CallbackObserver(null, function(): void { throw new Exception('fail'); }));
         $observer->setDisposable($disposable);
 
         $observer->onError(new Exception());
@@ -77,14 +77,14 @@ class AutoDetachObserverTest extends TestCase
     /**
      * @test
      */
-    public function it_disposes_if_observer_on_next_throws()
+    public function it_disposes_if_observer_on_next_throws(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('fail');
         $disposed   = false;
-        $disposable = new CallbackDisposable(function() use (&$disposed){ $disposed = true; });
+        $disposable = new CallbackDisposable(function() use (&$disposed): void{ $disposed = true; });
 
-        $observer   = new AutoDetachObserver(new CallbackObserver(function() { throw new Exception('fail'); }));
+        $observer   = new AutoDetachObserver(new CallbackObserver(function(): void { throw new Exception('fail'); }));
         $observer->setDisposable($disposable);
 
         $observer->onNext(42);

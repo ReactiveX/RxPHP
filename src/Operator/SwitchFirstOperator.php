@@ -25,7 +25,7 @@ final class SwitchFirstOperator implements OperatorInterface
         $disposable->add($singleDisposable);
 
         $callbackObserver = new CallbackObserver(
-            function (Observable $x) use ($disposable, $observer) {
+            function (Observable $x) use ($disposable, $observer): void {
                 if ($this->hasCurrent) {
                     return;
                 }
@@ -37,7 +37,7 @@ final class SwitchFirstOperator implements OperatorInterface
                 $innerSub = $x->subscribe(new CallbackObserver(
                     [$observer, 'onNext'],
                     [$observer, 'onError'],
-                    function () use ($disposable, $inner, $observer) {
+                    function () use ($disposable, $inner, $observer): void {
                         $disposable->remove($inner);
                         $this->hasCurrent = false;
 
@@ -50,7 +50,7 @@ final class SwitchFirstOperator implements OperatorInterface
                 $inner->setDisposable($innerSub);
             },
             [$observer, 'onError'],
-            function () use ($disposable, $observer) {
+            function () use ($disposable, $observer): void {
                 $this->isStopped = true;
                 if (!$this->hasCurrent && $disposable->count() === 1) {
                     $observer->onCompleted();

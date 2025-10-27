@@ -9,7 +9,7 @@ use Rx\Observable;
 
 class CustomTest extends FunctionalTestCase
 {
-    public function testCustomOperator()
+    public function testCustomOperator(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::of(1, $this->scheduler)
@@ -22,7 +22,7 @@ class CustomTest extends FunctionalTestCase
         ], $results->getMessages());
     }
 
-    public function testExternalNamespacedOperator()
+    public function testExternalNamespacedOperator(): void
     {
         $results = $this->scheduler->startWithCreate(function () {
             return Observable::of(1, $this->scheduler)

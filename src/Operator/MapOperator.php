@@ -26,7 +26,7 @@ final class MapOperator implements OperatorInterface
         $disposable = new CompositeDisposable();
 
         $selectObserver = new CallbackObserver(
-            function ($nextValue) use ($observer, &$disposed) {
+            function ($nextValue) use ($observer, &$disposed): void {
 
                 $value = null;
                 try {
@@ -42,7 +42,7 @@ final class MapOperator implements OperatorInterface
             [$observer, 'onCompleted']
         );
 
-        $disposable->add(new CallbackDisposable(function () use (&$disposed) {
+        $disposable->add(new CallbackDisposable(function () use (&$disposed): void {
             $disposed = true;
         }));
 

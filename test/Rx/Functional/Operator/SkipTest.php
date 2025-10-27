@@ -15,7 +15,7 @@ class SkipTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_throws_an_exception_on_negative_amounts()
+    public function it_throws_an_exception_on_negative_amounts(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $observable = new ReturnObservable(42, $this->scheduler);
@@ -27,73 +27,73 @@ class SkipTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function it_passes_on_complete()
+    public function it_passes_on_complete(): void
     {
-        $xs = $this->createHotObservable(array(
+        $xs = $this->createHotObservable([
             onNext(300, 21),
             onNext(500, 42),
             onNext(800, 84),
             onCompleted(820),
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->skip(0);
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(300, 21),
             onNext(500, 42),
             onNext(800, 84),
             onCompleted(820),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_skips_one_value()
+    public function it_skips_one_value(): void
     {
         $scheduler = $this->createTestScheduler();
-        $xs        = $this->createHotObservable(array(
+        $xs        = $this->createHotObservable([
             onNext(300, 21),
             onNext(500, 42),
             onNext(800, 84),
             onCompleted(820),
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->skip(1);
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(500, 42),
             onNext(800, 84),
             onCompleted(820),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 
     /**
      * @test
      */
-    public function it_skips_multiple_values()
+    public function it_skips_multiple_values(): void
     {
         $scheduler = $this->createTestScheduler();
-        $xs        = $this->createHotObservable(array(
+        $xs        = $this->createHotObservable([
             onNext(300, 21),
             onNext(500, 42),
             onNext(800, 84),
             onNext(850, 168),
             onCompleted(870),
-        ));
+        ]);
 
         $results = $this->scheduler->startWithCreate(function() use ($xs) {
             return $xs->skip(2);
         });
 
-        $this->assertMessages(array(
+        $this->assertMessages([
             onNext(800, 84),
             onNext(850, 168),
             onCompleted(870),
-        ), $results->getMessages());
+        ], $results->getMessages());
     }
 }

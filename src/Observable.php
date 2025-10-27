@@ -90,7 +90,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex subscribe
      */
-    public function subscribe($onNextOrObserver = null, callable $onError = null, callable $onCompleted = null): DisposableInterface
+    public function subscribe($onNextOrObserver = null, ?callable $onError = null, ?callable $onCompleted = null): DisposableInterface
     {
         if ($onNextOrObserver instanceof ObserverInterface) {
             return $this->_subscribe($onNextOrObserver);
@@ -103,7 +103,7 @@ abstract class Observable implements ObservableInterface
         $observer = new CallbackObserver(
             $onNextOrObserver === null
                 ? null
-                : function ($value) use ($onNextOrObserver, &$observer, &$disposable) {
+                : function ($value) use ($onNextOrObserver, &$observer, &$disposable): void {
                     try {
                         $onNextOrObserver($value);
                     } catch (\Throwable $throwable) {
@@ -134,7 +134,7 @@ abstract class Observable implements ObservableInterface
      * @param callable|null $onCompleted
      * @return DisposableInterface
      */
-    public function subscribeCallback(callable $onNext = null, callable $onError = null, callable $onCompleted = null): DisposableInterface
+    public function subscribeCallback(?callable $onNext = null, ?callable $onError = null, ?callable $onCompleted = null): DisposableInterface
     {
         $observer = new CallbackObserver($onNext, $onError, $onCompleted);
 
@@ -167,7 +167,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex interval
      */
-    public static function interval(int $interval, AsyncSchedulerInterface $scheduler = null): IntervalObservable
+    public static function interval(int $interval, ?AsyncSchedulerInterface $scheduler = null): IntervalObservable
     {
         return new IntervalObservable($interval, $scheduler ?: Scheduler::getAsync());
     }
@@ -183,7 +183,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex just
      */
-    public static function of($value, SchedulerInterface $scheduler = null): ReturnObservable
+    public static function of($value, ?SchedulerInterface $scheduler = null): ReturnObservable
     {
         return new ReturnObservable($value, $scheduler ?: Scheduler::getDefault());
     }
@@ -196,7 +196,7 @@ abstract class Observable implements ObservableInterface
      * @param SchedulerInterface|null $scheduler
      * @return ReturnObservable
      */
-    public static function just($value, SchedulerInterface $scheduler = null): ReturnObservable
+    public static function just($value, ?SchedulerInterface $scheduler = null): ReturnObservable
     {
         return static::of($value, $scheduler);
     }
@@ -211,7 +211,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex empty-never-throw
      */
-    public static function empty(SchedulerInterface $scheduler = null): EmptyObservable
+    public static function empty(?SchedulerInterface $scheduler = null): EmptyObservable
     {
         return new EmptyObservable($scheduler ?: Scheduler::getDefault());
     }
@@ -223,7 +223,7 @@ abstract class Observable implements ObservableInterface
      * @param SchedulerInterface|null $scheduler
      * @return EmptyObservable
      */
-    public static function emptyObservable(SchedulerInterface $scheduler = null): EmptyObservable
+    public static function emptyObservable(?SchedulerInterface $scheduler = null): EmptyObservable
     {
         return static::empty($scheduler);
     }
@@ -253,7 +253,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex empty-never-throw
      */
-    public static function error(\Throwable $error, SchedulerInterface $scheduler = null): ErrorObservable
+    public static function error(\Throwable $error, ?SchedulerInterface $scheduler = null): ErrorObservable
     {
         return new ErrorObservable($error, $scheduler ?: Scheduler::getImmediate());
     }
@@ -270,7 +270,7 @@ abstract class Observable implements ObservableInterface
      */
     public function merge(ObservableInterface $otherObservable): Observable
     {
-        return (new AnonymousObservable(function (ObserverInterface $observer) use ($otherObservable) {
+        return (new AnonymousObservable(function (ObserverInterface $observer) use ($otherObservable): void {
             $observer->onNext($this);
             $observer->onNext($otherObservable);
             $observer->onCompleted();
@@ -304,7 +304,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex from
      */
-    public static function fromArray(array $array, SchedulerInterface $scheduler = null): ArrayObservable
+    public static function fromArray(array $array, ?SchedulerInterface $scheduler = null): ArrayObservable
     {
         return new ArrayObservable($array, $scheduler ?: Scheduler::getDefault());
     }
@@ -320,7 +320,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex from
      */
-    public static function fromIterator(\Iterator $iterator, SchedulerInterface $scheduler = null): IteratorObservable
+    public static function fromIterator(\Iterator $iterator, ?SchedulerInterface $scheduler = null): IteratorObservable
     {
         return new IteratorObservable($iterator, $scheduler ?: Scheduler::getDefault());
     }
@@ -336,7 +336,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex defer
      */
-    public static function defer(callable $factory, SchedulerInterface $scheduler = null): Observable
+    public static function defer(callable $factory, ?SchedulerInterface $scheduler = null): Observable
     {
         return static::empty($scheduler)
             ->lift(function () use ($factory) {
@@ -358,7 +358,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex range
      */
-    public static function range(int $start, int $count, SchedulerInterface $scheduler = null): RangeObservable
+    public static function range(int $start, int $count, ?SchedulerInterface $scheduler = null): RangeObservable
     {
         return new RangeObservable($start, $count, $scheduler ?: Scheduler::getDefault());
     }
@@ -375,12 +375,12 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex start
      */
-    public static function start(callable $action, SchedulerInterface $scheduler = null): Observable
+    public static function start(callable $action, ?SchedulerInterface $scheduler = null): Observable
     {
         $scheduler = $scheduler ?? Scheduler::getDefault();
         $subject   = new AsyncSubject();
 
-        $scheduler->schedule(function () use ($subject, $action) {
+        $scheduler->schedule(function () use ($subject, $action): void {
             $result = null;
             try {
                 $result = $action();
@@ -731,7 +731,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex groupBy
      */
-    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $keySerializer = null): Observable
+    public function groupBy(callable $keySelector, ?callable $elementSelector = null, ?callable $keySerializer = null): Observable
     {
         return $this->groupByUntil($keySelector, $elementSelector, function () {
             return static::never();
@@ -751,7 +751,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex groupBy
      */
-    public function groupByUntil(callable $keySelector, callable $elementSelector = null, callable $durationSelector = null, callable $keySerializer = null): Observable
+    public function groupByUntil(callable $keySelector, ?callable $elementSelector = null, ?callable $durationSelector = null, ?callable $keySerializer = null): Observable
     {
         return $this->lift(function () use ($keySelector, $elementSelector, $durationSelector, $keySerializer) {
             return new GroupByUntilOperator($keySelector, $elementSelector, $durationSelector, $keySerializer);
@@ -835,7 +835,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinct(callable $comparer = null): Observable
+    public function distinct(?callable $comparer = null): Observable
     {
         return $this->lift(function () use ($comparer) {
             return new DistinctOperator(null, $comparer);
@@ -853,7 +853,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinctKey(callable $keySelector, callable $comparer = null): Observable
+    public function distinctKey(callable $keySelector, ?callable $comparer = null): Observable
     {
         return $this->lift(function () use ($keySelector, $comparer) {
             return new DistinctOperator($keySelector, $comparer);
@@ -870,7 +870,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinctUntilChanged(callable $comparer = null): Observable
+    public function distinctUntilChanged(?callable $comparer = null): Observable
     {
         return $this->lift(function () use ($comparer) {
             return new DistinctUntilChangedOperator(null, $comparer);
@@ -889,7 +889,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex distinct
      */
-    public function distinctUntilKeyChanged(callable $keySelector = null, callable $comparer = null): Observable
+    public function distinctUntilKeyChanged(?callable $keySelector = null, ?callable $comparer = null): Observable
     {
         return $this->lift(function () use ($keySelector, $comparer) {
             return new DistinctUntilChangedOperator($keySelector, $comparer);
@@ -920,7 +920,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex do
      */
-    public function do($onNextOrObserver = null, callable $onError = null, callable $onCompleted = null): Observable
+    public function do($onNextOrObserver = null, ?callable $onError = null, ?callable $onCompleted = null): Observable
     {
         if ($onNextOrObserver instanceof ObserverInterface) {
             $observer = $onNextOrObserver;
@@ -1084,7 +1084,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex timer
      */
-    public static function timer(int $dueTime, AsyncSchedulerInterface $scheduler = null): TimerObservable
+    public static function timer(int $dueTime, ?AsyncSchedulerInterface $scheduler = null): TimerObservable
     {
         return new TimerObservable($dueTime, $scheduler ?: Scheduler::getAsync());
     }
@@ -1147,7 +1147,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function concatMap(callable $selector, callable $resultSelector = null): Observable
+    public function concatMap(callable $selector, ?callable $resultSelector = null): Observable
     {
         return $this->lift(function () use ($selector, $resultSelector) {
             return new ConcatMapOperator(new ObservableFactoryWrapper($selector), $resultSelector);
@@ -1176,7 +1176,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex flatMap
      */
-    public function concatMapTo(ObservableInterface $observable, callable $resultSelector = null): Observable
+    public function concatMapTo(ObservableInterface $observable, ?callable $resultSelector = null): Observable
     {
         return $this->concatMap(function () use ($observable) {
             return $observable;
@@ -1210,7 +1210,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex count
      */
-    public function count(callable $predicate = null): Observable
+    public function count(?callable $predicate = null): Observable
     {
         return $this->lift(function () use ($predicate) {
             return new CountOperator($predicate);
@@ -1231,7 +1231,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function multicast(Subject $subject, callable $selector = null): Observable
+    public function multicast(Subject $subject, ?callable $selector = null): Observable
     {
         return $selector ?
             new MulticastObservable($this, function () use ($subject) {
@@ -1253,7 +1253,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function multicastWithSelector(callable $subjectSelector, callable $selector = null): MulticastObservable
+    public function multicastWithSelector(callable $subjectSelector, ?callable $selector = null): MulticastObservable
     {
         return new MulticastObservable($this, $subjectSelector, $selector);
     }
@@ -1270,7 +1270,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function publish(callable $selector = null): Observable
+    public function publish(?callable $selector = null): Observable
     {
         return $this->multicast(new Subject(), $selector);
     }
@@ -1287,7 +1287,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function publishLast(callable $selector = null): Observable
+    public function publishLast(?callable $selector = null): Observable
     {
         return $this->multicast(new AsyncSubject(), $selector);
     }
@@ -1305,7 +1305,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex publish
      */
-    public function publishValue($initialValue, callable $selector = null): Observable
+    public function publishValue($initialValue, ?callable $selector = null): Observable
     {
         return $this->multicast(new BehaviorSubject($initialValue), $selector);
     }
@@ -1352,7 +1352,7 @@ abstract class Observable implements ObservableInterface
             if (!$hasObservable) {
                 $hasObservable = true;
                 $observable = $source
-                    ->finally(function () use (&$hasObservable) {
+                    ->finally(function () use (&$hasObservable): void {
                         $hasObservable = false;
                     })
                     ->publish()
@@ -1403,7 +1403,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex replay
      */
-    public function replay(callable $selector = null, int $bufferSize = null, int $windowSize = null, SchedulerInterface $scheduler = null): Observable
+    public function replay(?callable $selector = null, ?int $bufferSize = null, ?int $windowSize = null, ?SchedulerInterface $scheduler = null): Observable
     {
         return $this->multicast(new ReplaySubject($bufferSize, $windowSize, $scheduler ?: Scheduler::getDefault()), $selector);
     }
@@ -1425,7 +1425,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex replay
      */
-    public function shareReplay(int $bufferSize, int $windowSize = null, SchedulerInterface $scheduler = null): RefCountObservable
+    public function shareReplay(int $bufferSize, ?int $windowSize = null, ?SchedulerInterface $scheduler = null): RefCountObservable
     {
         return $this->replay(null, $bufferSize, $windowSize, $scheduler)->refCount();
     }
@@ -1445,7 +1445,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex zip
      */
-    public function zip(array $observables, callable $selector = null): Observable
+    public function zip(array $observables, ?callable $selector = null): Observable
     {
         return $this->lift(function () use ($observables, $selector) {
             return new ZipOperator($observables, $selector);
@@ -1463,7 +1463,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex zip
      */
-    public static function forkJoin(array $observables = [], callable $resultSelector = null): ForkJoinObservable
+    public static function forkJoin(array $observables = [], ?callable $resultSelector = null): ForkJoinObservable
     {
         return new ForkJoinObservable($observables, $resultSelector);
     }
@@ -1518,7 +1518,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex combinelatest
      */
-    public function combineLatest(array $observables, callable $selector = null): Observable
+    public function combineLatest(array $observables, ?callable $selector = null): Observable
     {
         return $this->lift(function () use ($observables, $selector) {
             return new CombineLatestOperator($observables, $selector);
@@ -1536,7 +1536,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex combinelatest
      */
-    public function withLatestFrom(array $observables, callable $selector = null): Observable
+    public function withLatestFrom(array $observables, ?callable $selector = null): Observable
     {
         return $this->lift(function () use ($observables, $selector) {
             return new WithLatestFromOperator($observables, $selector);
@@ -1626,7 +1626,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex delay
      */
-    public function delay(int $delay, AsyncSchedulerInterface $scheduler = null): Observable
+    public function delay(int $delay, ?AsyncSchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($delay, $scheduler) {
             return new DelayOperator($delay, $scheduler ?: Scheduler::getAsync());
@@ -1646,7 +1646,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex timeout
      */
-    public function timeout(int $timeout, ObservableInterface $timeoutObservable = null, AsyncSchedulerInterface $scheduler = null): Observable
+    public function timeout(int $timeout, ?ObservableInterface $timeoutObservable = null, ?AsyncSchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($timeout, $timeoutObservable, $scheduler) {
             return new TimeoutOperator($timeout, $timeoutObservable, $scheduler ?: Scheduler::getAsync());
@@ -1667,7 +1667,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex buffer
      */
-    public function bufferWithCount(int $count, int $skip = null): Observable
+    public function bufferWithCount(int $count, ?int $skip = null): Observable
     {
         return $this->lift(function () use ($count, $skip) {
             return new BufferWithCountOperator($count, $skip);
@@ -1714,7 +1714,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex startwith
      */
-    public function startWith($startValue, SchedulerInterface $scheduler = null): Observable
+    public function startWith($startValue, ?SchedulerInterface $scheduler = null): Observable
     {
         return $this->startWithArray([$startValue], $scheduler);
     }
@@ -1730,7 +1730,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex startwith
      */
-    public function startWithArray(array $startArray, SchedulerInterface $scheduler = null): Observable
+    public function startWithArray(array $startArray, ?SchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($startArray, $scheduler) {
             return new StartWithArrayOperator($startArray, $scheduler ?: Scheduler::getDefault());
@@ -1748,7 +1748,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex min
      */
-    public function min(callable $comparer = null): Observable
+    public function min(?callable $comparer = null): Observable
     {
         return $this->lift(function () use ($comparer) {
             return new MinOperator($comparer);
@@ -1766,7 +1766,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex max
      */
-    public function max(callable $comparer = null): Observable
+    public function max(?callable $comparer = null): Observable
     {
         return $this->lift(function () use ($comparer) {
             return new MaxOperator($comparer);
@@ -1813,7 +1813,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex timestamp
      */
-    public function timestamp(SchedulerInterface $scheduler = null): Observable
+    public function timestamp(?SchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($scheduler) {
             return new TimestampOperator($scheduler ?: Scheduler::getDefault());
@@ -1907,7 +1907,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex amb
      */
-    public static function race(array $observables, SchedulerInterface $scheduler = null): Observable
+    public static function race(array $observables, ?SchedulerInterface $scheduler = null): Observable
     {
         if (count($observables) === 1) {
             return $observables[0];
@@ -2004,7 +2004,7 @@ abstract class Observable implements ObservableInterface
      * @operator
      * @reactivex debounce
      */
-    public function throttle(int $throttleDuration, SchedulerInterface $scheduler = null): Observable
+    public function throttle(int $throttleDuration, ?SchedulerInterface $scheduler = null): Observable
     {
         return $this->lift(function () use ($throttleDuration, $scheduler) {
             return new ThrottleOperator($throttleDuration, $scheduler ?: Scheduler::getDefault());
@@ -2069,7 +2069,7 @@ abstract class Observable implements ObservableInterface
      * @return PromiseInterface
      * @throws \InvalidArgumentException
      */
-    public function toPromise(Deferred $deferred = null): PromiseInterface
+    public function toPromise(?Deferred $deferred = null): PromiseInterface
     {
         return Promise::fromObservable($this, $deferred);
     }

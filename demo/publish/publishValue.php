@@ -6,7 +6,7 @@ $range = \Rx\Observable::fromArray(range(0, 1000));
 
 $source = $range
     ->take(2)
-    ->doOnNext(function ($x) {
+    ->doOnNext(function ($x): void {
         echo "Side effect\n";
     });
 

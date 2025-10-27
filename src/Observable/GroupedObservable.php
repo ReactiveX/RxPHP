@@ -16,7 +16,7 @@ class GroupedObservable extends Observable
     private $key;
     private $underlyingObservable;
 
-    public function __construct($key, ObservableInterface $underlyingObservable, RefCountDisposable $mergedDisposable = null)
+    public function __construct($key, ObservableInterface $underlyingObservable, ?RefCountDisposable $mergedDisposable = null)
     {
         $this->key = $key;
 

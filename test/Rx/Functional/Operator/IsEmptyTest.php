@@ -10,7 +10,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_return_true_if_source_is_empty()
+    public function should_return_true_if_source_is_empty(): void
     {
         $xs = $this->createHotObservable([
             onCompleted(300)
@@ -33,7 +33,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_return_false_if_source_emits_element()
+    public function should_return_false_if_source_emits_element(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 'a'),
@@ -58,7 +58,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_return_true_if_source_emits_before_subscription()
+    public function should_return_true_if_source_emits_before_subscription(): void
     {
         $xs = $this->createHotObservable([
             onNext(150, 'a'),
@@ -82,7 +82,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_raise_error_if_source_raise_error()
+    public function should_raise_error_if_source_raise_error(): void
     {
         $e = new \Exception();
 
@@ -106,7 +106,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_not_complete_if_source_never_emits()
+    public function should_not_complete_if_source_never_emits(): void
     {
         $xs = $this->createHotObservable([]);
 
@@ -123,7 +123,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_return_true_if_source_completes_immediately()
+    public function should_return_true_if_source_completes_immediately(): void
     {
         $xs = $this->createHotObservable([
             onCompleted(201),
@@ -145,7 +145,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_allow_unsubscribing_explicitly_and_early()
+    public function should_allow_unsubscribing_explicitly_and_early(): void
     {
         $xs = $this->createHotObservable([
             onNext(600, 'a'),
@@ -166,7 +166,7 @@ class IsEmptyTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function should_not_break_unsubscription_chains_when_result_is_unsubscribed_explicitly()
+    public function should_not_break_unsubscription_chains_when_result_is_unsubscribed_explicitly(): void
     {
         $xs = $this->createHotObservable([
             onNext(600, 'a'),

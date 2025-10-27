@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 $source = \Rx\Observable::empty()
-    ->doOnCompleted(function () {
+    ->doOnCompleted(function (): void {
         echo 'Do Completed', PHP_EOL;
     });
 

@@ -27,7 +27,7 @@ class SingleAssignmentDisposable implements DisposableInterface
         }
     }
 
-    public function setDisposable(DisposableInterface $disposable = null)
+    public function setDisposable(?DisposableInterface $disposable = null)
     {
         if ($this->current) {
             throw new RuntimeException('Disposable has already been assigned.');
