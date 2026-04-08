@@ -5,26 +5,34 @@ on:
   pull_request:
 
 jobs:
+  supported-versions-matrix:
+    name: Supported Versions Matrix
+    runs-on: ubuntu-latest
+    outputs:
+      extensions: ${{ steps.supported-versions-matrix.outputs.extensions }}
+      version: ${{ steps.supported-versions-matrix.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: supported-versions-matrix
+        uses: WyriHaximus/github-action-composer-php-versions-in-range@v1
   PHPUnit:
     name: PHPUnit (PHP ${{ matrix.php }} on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    needs:
+      - supported-versions-matrix
     strategy:
       fail-fast: true
       matrix:
         os:
           - ubuntu-latest
           - windows-latest
-        php:
-          - 8.5
-          - 8.4
-          - 8.3
-          - 8.2
-          - 8.1
+        php: ${{ fromJson(needs.supported-versions-matrix.outputs.version) }}
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          extensions: ${{ join(fromJson(needs.supported-versions-matrix.outputs.extensions), ',') }}
           coverage: xdebug
           tools: composer
           cache: composer
