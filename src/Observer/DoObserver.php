@@ -8,7 +8,10 @@ use Rx\ObserverInterface;
 
 class DoObserver implements ObserverInterface
 {
-    /** @var callable|null */
+    /**
+     * @template T
+     * @var callable(T)|null
+     */
     private $onNext;
 
     /** @var callable|null */
@@ -41,6 +44,7 @@ class DoObserver implements ObserverInterface
         ($this->onError)($error);
     }
 
+    /** @template T */
     public function onNext($value)
     {
         ($this->onNext)($value);

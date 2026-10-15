@@ -6,12 +6,16 @@ namespace Rx\Subject;
 
 use Rx\Disposable\CallbackDisposable;
 use Rx\DisposableInterface;
+use Rx\Observable;
+use Rx\ObservableInterface;
 use Rx\Observer\ScheduledObserver;
 use Rx\ObserverInterface;
 use Rx\Scheduler;
 use Rx\SchedulerInterface;
 
 /**
+ * @template T
+ * @template-extends Subject<T>
  * Represents an object that is both an observable sequence as well as an observer.
  * Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.
  */
@@ -23,7 +27,7 @@ class ReplaySubject extends Subject
     /** @var int */
     private $windowSize;
 
-    /** @var array */
+    /** @var array<array{interval: int|mixed, value: T}> */
     private $queue = [];
 
     /** @var int */
@@ -144,6 +148,7 @@ class ReplaySubject extends Subject
         $this->observers = [];
     }
 
+    /** @param Subject<T> $subject */
     private function createRemovableDisposable($subject, $observer): DisposableInterface
     {
         return new CallbackDisposable(function () use ($observer, $subject): void {

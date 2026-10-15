@@ -9,6 +9,10 @@ use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class NeverObservable extends Observable
 {
     protected function _subscribe(ObserverInterface $observer): DisposableInterface

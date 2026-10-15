@@ -50,6 +50,7 @@ class AutoDetachObserver extends AbstractObserver
         }
     }
 
+    /** @template T */
     protected function next($value)
     {
         try {

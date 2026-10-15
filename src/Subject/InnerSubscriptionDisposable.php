@@ -7,11 +7,14 @@ namespace Rx\Subject;
 use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
+/** @template T */
 class InnerSubscriptionDisposable implements DisposableInterface
 {
     private $observer;
+    /** @var Subject<T> */
     private $subject;
 
+    /** @param Subject<T> $subject */
     public function __construct(Subject $subject, ObserverInterface $observer)
     {
         $this->subject  = $subject;

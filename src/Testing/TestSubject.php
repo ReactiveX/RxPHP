@@ -10,6 +10,8 @@ use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
 /**
+ * @template T
+ * @template-extends Subject<T>
  * Class TestSubject
  * @package Rx\Testing
  */
@@ -18,10 +20,10 @@ class TestSubject extends Subject
     /** @var int */
     private $subscribeCount;
 
-    /** @var  ObserverInterface */
+    /** @var ObserverInterface */
     private $observer;
 
-    /* @var DisposableInterface[] */
+    /** @var array<DisposableInterface> */
     private $disposeOnMap;
 
     public function __construct()
@@ -61,9 +63,7 @@ class TestSubject extends Subject
         }
     }
 
-    /**
-     * @param \Throwable $exception
-     */
+    /** @param \Throwable $exception */
     public function onError(\Throwable $exception)
     {
         $this->observer->onError($exception);

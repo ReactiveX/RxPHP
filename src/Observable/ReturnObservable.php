@@ -7,9 +7,14 @@ namespace Rx\Observable;
 use Rx\Disposable\CompositeDisposable;
 use Rx\DisposableInterface;
 use Rx\Observable;
+use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class ReturnObservable extends Observable
 {
     private $value;

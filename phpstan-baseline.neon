@@ -1,0 +1,3840 @@
+parameters:
+	excludePaths:
+		- test/types/observable-from-array.php
+		- test/types/observable-of.php
+		- test/types/observable-to-promise.php
+
+	ignoreErrors:
+		-
+			message: '#^Method Rx\\Disposable\\BinaryDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/BinaryDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\BinaryDisposable\:\:\$first \(Rx\\DisposableInterface\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Disposable/BinaryDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\BinaryDisposable\:\:\$second \(Rx\\DisposableInterface\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Disposable/BinaryDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\CallbackDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/CallbackDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\CallbackDisposable\:\:\$action has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/CallbackDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\CallbackDisposable\:\:\$disposed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/CallbackDisposable.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Disposable/CallbackDisposable.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 2
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\CompositeDisposable\:\:__construct\(\) has parameter \$disposables with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\CompositeDisposable\:\:add\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\CompositeDisposable\:\:clear\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\CompositeDisposable\:\:count\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\CompositeDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function array_search expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\CompositeDisposable\:\:\$disposables has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\CompositeDisposable\:\:\$isDisposed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/CompositeDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\EmptyDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/EmptyDisposable.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Cannot use \+\+ on mixed\.$#'
+			identifier: postInc.type
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: postDec.type
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\RefCountDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\RefCountDisposable\:\:getDisposable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\RefCountDisposable\:\:isDisposed\(\) should return bool but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\RefCountDisposable\:\:isPrimaryDisposed\(\) should return bool but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\RefCountDisposable\:\:\$count has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\RefCountDisposable\:\:\$disposable has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\RefCountDisposable\:\:\$isDisposed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\RefCountDisposable\:\:\$isPrimaryDisposed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/RefCountDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\ScheduledDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/ScheduledDisposable.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 2
+			path: src/Disposable/SerialDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\SerialDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/SerialDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\SerialDisposable\:\:setDisposable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/SerialDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\SerialDisposable\:\:\$disposable \(Rx\\DisposableInterface\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Disposable/SerialDisposable.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\SingleAssignmentDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\SingleAssignmentDisposable\:\:getDisposable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\SingleAssignmentDisposable\:\:isDisposed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Method Rx\\Disposable\\SingleAssignmentDisposable\:\:setDisposable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\SingleAssignmentDisposable\:\:\$current has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Property Rx\\Disposable\\SingleAssignmentDisposable\:\:\$isDisposed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Disposable/SingleAssignmentDisposable.php
+
+		-
+			message: '#^Method Rx\\DisposableInterface\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/DisposableInterface.php
+
+		-
+			message: '#^Cannot cast \$this\(Rx\\Notification\) to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:accept\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:accept\(\) has parameter \$observerOrOnNext with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:accept\(\) has parameter \$onCompleted with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:accept\(\) has parameter \$onError with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:doAccept\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:doAccept\(\) has parameter \$onCompleted with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:doAccept\(\) has parameter \$onError with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:doAccept\(\) has parameter \$onNext with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:doAcceptObservable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\:\:equals\(\) has parameter \$other with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Property Rx\\Notification\:\:\$kind has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Property Rx\\Notification\:\:\$kind is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Template type T of method Rx\\Notification\:\:accept\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Template type T of method Rx\\Notification\:\:doAccept\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Notification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnCompletedNotification\:\:doAccept\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification/OnCompletedNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnCompletedNotification\:\:doAccept\(\) has parameter \$onCompleted with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnCompletedNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnCompletedNotification\:\:doAccept\(\) has parameter \$onError with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnCompletedNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnCompletedNotification\:\:doAccept\(\) has parameter \$onNext with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnCompletedNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnCompletedNotification\:\:doAcceptObservable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification/OnCompletedNotification.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Notification/OnCompletedNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnErrorNotification\:\:doAccept\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnErrorNotification\:\:doAccept\(\) has parameter \$onCompleted with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnErrorNotification\:\:doAccept\(\) has parameter \$onError with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnErrorNotification\:\:doAccept\(\) has parameter \$onNext with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnErrorNotification\:\:doAcceptObservable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Parameter \#1 \$object of function get_class expects object, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Property Rx\\Notification\\OnErrorNotification\:\:\$exception has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Notification/OnErrorNotification.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:__construct\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:doAccept\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:doAccept\(\) has parameter \$onCompleted with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:doAccept\(\) has parameter \$onError with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:doAccept\(\) has parameter \$onNext with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:doAcceptObservable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:equals\(\) has parameter \$other with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Method Rx\\Notification\\OnNextNotification\:\:equals\(\) should return bool but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Property Rx\\Notification\\OnNextNotification\:\:\$value has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Notification/OnNextNotification.php
+
+		-
+			message: '#^Anonymous function should return Rx\\Observable but returns Rx\\Observable\\RefCountObservable\<T\>\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Binary operation "\+" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Binary operation "\+\=" between mixed and mixed results in an error\.$#'
+			identifier: assignOp.invalid
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Binary operation "\." between ''Unable to pluck "'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Call to function is_callable\(\) with callable\(\)\: mixed will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Call to method Rx\\Disposable\\EmptyDisposable\:\:dispose\(\) on a separate line has no effect\.$#'
+			identifier: method.resultUnused
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Cannot call method onError\(\) on Rx\\Observer\\CallbackObserver\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Cannot use \+\+ on mixed\.$#'
+			identifier: postInc.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Class Rx\\Operator\\MergeAllOperator does not have a constructor and must be instantiated without any parameters\.$#'
+			identifier: new.noConstructor
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:__call\(\) has parameter \$name with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:compose\(\) should return Rx\\Observable\<T\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:create\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\\AnonymousObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:empty\(\) should return Rx\\Observable\\EmptyObservable\<T\> but returns Rx\\Observable\\EmptyObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:error\(\) should return Rx\\Observable\\ErrorObservable\<T\> but returns Rx\\Observable\\ErrorObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:fromArray\(\) return type with generic class Rx\\Observable\\ArrayObservable does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:fromIterator\(\) return type with generic class Rx\\Observable\\IteratorObservable does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:interval\(\) should return Rx\\Observable\\IntervalObservable\<T\> but returns Rx\\Observable\\IntervalObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:just\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:lift\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\\AnonymousObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:mapTo\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:merge\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:never\(\) should return Rx\\Observable\\NeverObservable\<T\> but returns Rx\\Observable\\NeverObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:of\(\) return type with generic class Rx\\Observable\\ReturnObservable does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:pluck\(\) should return Rx\\Observable\<T\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:publishValue\(\) has parameter \$initialValue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:race\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:range\(\) should return Rx\\Observable\\RangeObservable\<T\> but returns Rx\\Observable\\RangeObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:shareValue\(\) has parameter \$initialValue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:singleInstance\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\\AnonymousObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:start\(\) should return Rx\\Observable\<X\> but returns Rx\\Observable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Method Rx\\Observable\:\:timer\(\) should return Rx\\Observable\\TimerObservable\<T\> but returns Rx\\Observable\\TimerObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$keySelector with type \(callable\)\|null is not subtype of native type callable\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$scheduler with type Rx\\SchedulerInterface\|null is not subtype of native type Rx\\AsyncSchedulerInterface\|null\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^PHPDoc tag @return with type Rx\\Observable\<T\> is not subtype of native type Rx\\Observable\\IteratorObservable\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^PHPDoc tag @return with type Rx\\Observable\<X\> is not subtype of native type Rx\\Observable\\ArrayObservable\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^PHPDoc tag @return with type Rx\\Observable\<X\> is not subtype of native type Rx\\Observable\\ReturnObservable\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$key of function array_key_exists expects int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string\<T of object\>\|T of object, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$string of function ucfirst expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Rx\\Observable\<T\>\:\:multicast\(\) expects Rx\\Subject\\Subject\<T\>, Rx\\Subject\\AsyncSubject\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Rx\\Observable\<T\>\:\:multicast\(\) expects Rx\\Subject\\Subject\<T\>, Rx\\Subject\\BehaviorSubject\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Rx\\Observable\<T\>\:\:multicast\(\) expects Rx\\Subject\\Subject\<T\>, Rx\\Subject\\ReplaySubject\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Rx\\Observable\<T\>\:\:multicast\(\) expects Rx\\Subject\\Subject\<T\>, Rx\\Subject\\Subject\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#2 \$property of function property_exists expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#3 \$fn2 of class Rx\\Observable\\MulticastObservable constructor expects callable\(\)\: mixed, \(callable\(\)\: mixed\)\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Template type X of method Rx\\Observable\:\:just\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Template type X of method Rx\\Observable\:\:of\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Template type X of method Rx\\Observable\:\:start\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observable.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Observer\\AutoDetachObserver\:\:setDisposable\(\) expects Rx\\DisposableInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/AnonymousObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\AnonymousObservable\:\:\$subscribeAction has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/AnonymousObservable.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observable/AnonymousObservable.php
+
+		-
+			message: '#^Cannot call method scheduleRecursive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/ArrayObservable.php
+
+		-
+			message: '#^Comparison operation "\>\=" between int\<1, max\> and 1 is always true\.$#'
+			identifier: greaterOrEqual.alwaysTrue
+			count: 1
+			path: src/Observable/ArrayObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\ArrayObservable\:\:_subscribe\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/ArrayObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ArrayObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ArrayObservable.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observable/ArrayObservable.php
+
+		-
+			message: '#^Cannot call method schedule\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/EmptyObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\EmptyObservable\:\:_subscribe\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/EmptyObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\EmptyObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/EmptyObservable.php
+
+		-
+			message: '#^Cannot call method schedule\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/ErrorObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\ErrorObservable\:\:_subscribe\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/ErrorObservable.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/ErrorObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ErrorObservable\:\:\$error has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ErrorObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ErrorObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ErrorObservable.php
+
+		-
+			message: '#^Cannot use \+\+ on mixed\.$#'
+			identifier: postInc.type
+			count: 1
+			path: src/Observable/ForkJoinObservable.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/ForkJoinObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ForkJoinObservable\:\:\$completed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ForkJoinObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ForkJoinObservable\:\:\$resultSelector has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ForkJoinObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\GroupedObservable\:\:__construct\(\) has parameter \$key with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable/GroupedObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\GroupedObservable\:\:getKey\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observable/GroupedObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\GroupedObservable\:\:newUnderlyingObservable\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\\AnonymousObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/GroupedObservable.php
+
+		-
+			message: '#^Parameter \#1 \$first of class Rx\\Disposable\\BinaryDisposable constructor expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/GroupedObservable.php
+
+		-
+			message: '#^Parameter \#1 \$onNextOrObserver of method Rx\\ObservableInterface\<T\>\:\:subscribe\(\) expects \(callable\(\)\: mixed\)\|Rx\\ObserverInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/GroupedObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\GroupedObservable\:\:\$key has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/GroupedObservable.php
+
+		-
+			message: '#^Parameter \#2 \$delay of method Rx\\SchedulerInterface\:\:schedulePeriodic\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/IntervalObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\IntervalObservable\:\:\$interval has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/IntervalObservable.php
+
+		-
+			message: '#^Cannot call method current\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Cannot call method key\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Cannot call method next\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Cannot call method scheduleRecursive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Cannot call method valid\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\IteratorObservable\:\:_subscribe\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\IteratorObservable\:\:\$items has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\IteratorObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observable/IteratorObservable.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/MulticastObservable.php
+
+		-
+			message: '#^Parameter \#1 \$first of class Rx\\Disposable\\BinaryDisposable constructor expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/MulticastObservable.php
+
+		-
+			message: '#^Parameter \#1 \$subject of method Rx\\Observable\<T\>\:\:multicast\(\) expects Rx\\Subject\\Subject\<T\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Observable/MulticastObservable.php
+
+		-
+			message: '#^Binary operation "\+" between mixed and int\<0, max\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Cannot call method scheduleRecursive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\RangeObservable\:\:_subscribe\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\RangeObservable\:\:\$count has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\RangeObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\RangeObservable\:\:\$start has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observable/RangeObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\RefCountObservable\<T\>\:\:\$connectableSubscription \(Rx\\Disposable\\BinaryDisposable\) does not accept Rx\\DisposableInterface\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Observable/RefCountObservable.php
+
+		-
+			message: '#^Cannot call method schedule\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Observable/ReturnObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\ReturnObservable\:\:__construct\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observable/ReturnObservable.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Observable/ReturnObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ReturnObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ReturnObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\ReturnObservable\:\:\$value has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/ReturnObservable.php
+
+		-
+			message: '#^Cannot call method schedule\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observable/TimerObservable.php
+
+		-
+			message: '#^Method Rx\\Observable\\TimerObservable\:\:_subscribe\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observable/TimerObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\TimerObservable\:\:\$dueTime has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/TimerObservable.php
+
+		-
+			message: '#^Property Rx\\Observable\\TimerObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observable/TimerObservable.php
+
+		-
+			message: '#^Method Rx\\ObservableFactoryWrapper\:\:__invoke\(\) should return Rx\\Observable\<T\> but returns Rx\\ObservableInterface\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ObservableFactoryWrapper.php
+
+		-
+			message: '#^Parameter \#1 \$function of class ReflectionFunction constructor expects Closure\|string, callable\(\)\: \(React\\Promise\\PromiseInterface\<T\>\|Rx\\ObservableInterface\<T\>\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/ObservableFactoryWrapper.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:completed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:error\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:next\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:next\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AbstractObserver\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Property Rx\\Observer\\AbstractObserver\:\:\$isStopped has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Template type T of method Rx\\Observer\\AbstractObserver\:\:next\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observer/AbstractObserver.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Cannot call method onCompleted\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Cannot call method onError\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Cannot call method onNext\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Cannot call method setDisposable\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AutoDetachObserver\:\:completed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AutoDetachObserver\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AutoDetachObserver\:\:error\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AutoDetachObserver\:\:next\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AutoDetachObserver\:\:next\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\AutoDetachObserver\:\:setDisposable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Property Rx\\Observer\\AutoDetachObserver\:\:\$disposable has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Property Rx\\Observer\\AutoDetachObserver\:\:\$observer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Template type T of method Rx\\Observer\\AutoDetachObserver\:\:next\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observer/AutoDetachObserver.php
+
+		-
+			message: '#^Invalid type mixed to throw\.$#'
+			identifier: throw.notThrowable
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\CallbackObserver\:\:completed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\CallbackObserver\:\:error\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\CallbackObserver\:\:getOrDefault\(\) has parameter \$default with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\CallbackObserver\:\:getOrDefault\(\) should return callable\(\)\: mixed but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\CallbackObserver\:\:next\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\CallbackObserver\:\:next\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(callable\(T\)\|null\)\: Unexpected token "\(", expected TOKEN_HORIZONTAL_WS at offset 43 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Property Rx\\Observer\\CallbackObserver\:\:\$onNext has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Template type T of method Rx\\Observer\\CallbackObserver\:\:next\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Trying to invoke \(callable\(\)\: mixed\)\|null but it might not be a callable\.$#'
+			identifier: callable.nonCallable
+			count: 2
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observer/CallbackObserver.php
+
+		-
+			message: '#^Invalid type mixed to throw\.$#'
+			identifier: throw.notThrowable
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\DoObserver\:\:getOrDefault\(\) has parameter \$default with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\DoObserver\:\:getOrDefault\(\) should return callable\(\)\: mixed but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\DoObserver\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\DoObserver\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\DoObserver\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\DoObserver\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(callable\(T\)\|null\)\: Unexpected token "\(", expected TOKEN_HORIZONTAL_WS at offset 43 on line 3$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Property Rx\\Observer\\DoObserver\:\:\$onNext has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Template type T of method Rx\\Observer\\DoObserver\:\:onNext\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Trying to invoke \(callable\(\)\: mixed\)\|null but it might not be a callable\.$#'
+			identifier: callable.nonCallable
+			count: 2
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observer/DoObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\ScheduledObserver\:\:completed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\ScheduledObserver\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\ScheduledObserver\:\:ensureActive\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\ScheduledObserver\:\:error\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\ScheduledObserver\:\:next\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Method Rx\\Observer\\ScheduledObserver\:\:next\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Template type T of method Rx\\Observer\\ScheduledObserver\:\:next\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Observer/ScheduledObserver.php
+
+		-
+			message: '#^Method Rx\\ObserverInterface\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ObserverInterface.php
+
+		-
+			message: '#^Method Rx\\ObserverInterface\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ObserverInterface.php
+
+		-
+			message: '#^Method Rx\\ObserverInterface\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ObserverInterface.php
+
+		-
+			message: '#^Method Rx\\ObserverInterface\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ObserverInterface.php
+
+		-
+			message: '#^Template type T of method Rx\\ObserverInterface\:\:onNext\(\) is not referenced in a parameter\.$#'
+			identifier: method.templateTypeNotInParameter
+			count: 1
+			path: src/ObserverInterface.php
+
+		-
+			message: '#^Binary operation "%%" between int and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Operator/BufferWithCountOperator.php
+
+		-
+			message: '#^Empty array passed to foreach\.$#'
+			identifier: foreach.emptyArray
+			count: 1
+			path: src/Operator/BufferWithCountOperator.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\)\: Unexpected token "\*/", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/Operator/BufferWithCountOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/BufferWithCountOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\BufferWithCountOperator\:\:\$skip has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/BufferWithCountOperator.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Operator/CatchErrorOperator.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$result contains generic class Rx\\Observable but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Operator/CatchErrorOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$count\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/CombineLatestOperator.php
+
+		-
+			message: '#^Instanceof between Rx\\ObservableInterface\<T\> and Rx\\ObservableInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Operator/CombineLatestOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\CombineLatestOperator\<T\>\:\:\$observables \(array\<Rx\\ObservableInterface\<T\>\>\) does not accept array\<Rx\\ObservableInterface\<T\>\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/CombineLatestOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$observable\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/ConcatAllOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/ConcatAllOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/ConcatAllOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ConcatAllOperator\<T\>\:\:\$innerDisposable \(Rx\\Disposable\\SerialDisposable\) does not accept Rx\\Disposable\\EmptyDisposable\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/ConcatAllOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ConcatAllOperator\<T\>\:\:\$innerDisposable \(Rx\\Disposable\\SerialDisposable\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/ConcatAllOperator.php
+
+		-
+			message: '#^Trying to invoke null but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/ConcatAllOperator.php
+
+		-
+			message: '#^Call to an undefined method Rx\\ObservableInterface\<T\>\:\:mapWithIndex\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Cannot call method concatAll\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Cannot call method mapWithIndex\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\ConcatMapOperator\:\:__invoke\(\) should return Rx\\DisposableInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ConcatMapOperator\:\:\$resultSelector \(callable\(\)\: mixed\) does not accept \(callable\(\)\: mixed\)\|null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Operator/ConcatMapOperator.php
+
+		-
+			message: '#^Cannot use \+\+ on mixed\.$#'
+			identifier: postInc.type
+			count: 2
+			path: src/Operator/CountOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\CountOperator\:\:\$count has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/CountOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\CountOperator\:\:\$predicate has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/CountOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/CountOperator.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: src/Operator/DelayOperator.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$observable contains generic class Rx\\Observable\\AnonymousObservable but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Operator/DelayOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\DelayOperator\<T\>\:\:\$schedulerDisposable \(Rx\\DisposableInterface\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/DelayOperator.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: src/Operator/DistinctOperator.php
+
+		-
+			message: '#^Parameter \#1 \$key of function array_key_exists expects int\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/DistinctOperator.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 1
+			path: src/Operator/DistinctOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\DistinctOperator\:\:\$comparer \(callable\(\)\: mixed\) does not accept \(callable\(\)\: mixed\)\|null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/DistinctOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\DistinctOperator\:\:\$keySelector \(callable\(\)\: mixed\) does not accept \(callable\(\)\: mixed\)\|null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/DistinctOperator.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: src/Operator/DistinctOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\DistinctUntilChangedOperator\:\:\$comparer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/DistinctUntilChangedOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\DistinctUntilChangedOperator\:\:\$keySelector has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/DistinctUntilChangedOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 2
+			path: src/Operator/DistinctUntilChangedOperator.php
+
+		-
+			message: '#^Cannot call method onCompleted\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/DoOnEachOperator.php
+
+		-
+			message: '#^Cannot call method onError\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/DoOnEachOperator.php
+
+		-
+			message: '#^Cannot call method onNext\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/DoOnEachOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/DoOnEachOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\DoOnEachOperator\:\:\$onEachObserver has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/DoOnEachOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\FilterOperator\:\:\$predicate has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/FilterOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/FilterOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Cannot call method take\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 2
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\SingleAssignmentDisposable\:\:setDisposable\(\) expects Rx\\DisposableInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 5
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\GroupByUntilOperator\:\:\$durationSelector has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\GroupByUntilOperator\:\:\$elementSelector has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\GroupByUntilOperator\:\:\$keySelector has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\GroupByUntilOperator\:\:\$keySerializer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: src/Operator/GroupByUntilOperator.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: src/Operator/MapOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\MapOperator\:\:\$selector has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/MapOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/MapOperator.php
+
+		-
+			message: '#^Parameter \#1 \$exception of class Rx\\Notification\\OnErrorNotification constructor expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/MaterializeOperator.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Operator/MaxOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\MaxOperator\:\:\$comparer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/MaxOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/MaxOperator.php
+
+		-
+			message: '#^Left side of && is always false\.$#'
+			identifier: booleanAnd.leftAlwaysFalse
+			count: 1
+			path: src/Operator/MergeAllOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/MergeAllOperator.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Operator/MinOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\MinOperator\:\:\$comparer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/MinOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/MinOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\RaceOperator\:\:subscribeToResult\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Operator/RaceOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\RaceOperator\:\:subscribeToResult\(\) has parameter \$outerIndex with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Operator/RaceOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/RaceOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\RaceOperator\<T\>\:\:\$observables \(array\<Rx\\Observable\<T\>\>\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/RaceOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\RaceOperator\<T\>\:\:\$subscriptions \(array\<Rx\\DisposableInterface\>\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/RaceOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$hasAccumulation\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\ReduceOperator\:\:__construct\(\) has parameter \$seed with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ReduceOperator\:\:\$hasSeed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ReduceOperator\:\:\$seed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ReduceOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$disposable\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/RepeatOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$observable\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/RepeatOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\RepeatOperator\:\:\$repeatCount has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/RepeatOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$subscribe\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/RepeatWhenOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/RepeatWhenOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/RepeatWhenOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/RepeatWhenOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\RepeatWhenOperator\:\:\$completions with generic class Rx\\Subject\\Subject does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Operator/RepeatWhenOperator.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: postDec.type
+			count: 1
+			path: src/Operator/RetryOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/RetryOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\RetryOperator\:\:\$retryCount has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/RetryOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/RetryWhenOperator.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Operator/RetryWhenOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/RetryWhenOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\RetryWhenOperator\:\:\$notificationHandler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/RetryWhenOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/RetryWhenOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\ScanOperator\:\:__construct\(\) has parameter \$seed with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\ScanOperator\:\:tryCatch\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Method Rx\\Operator\\ScanOperator\:\:tryCatch\(\) has parameter \$functionToWrap with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ScanOperator\:\:\$accumulator has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ScanOperator\:\:\$seed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 3
+			path: src/Operator/ScanOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\SkipLastOperator\:\:\$count has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/SkipLastOperator.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: postDec.type
+			count: 1
+			path: src/Operator/SkipOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\SkipOperator\:\:\$count has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/SkipOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Operator/SkipUntilOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\SkipWhileOperator\:\:\$isSkipping \(bool\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/SkipWhileOperator.php
+
+		-
+			message: '#^Parameter \#2 \$scheduler of static method Rx\\Observable\<mixed\>\:\:fromArray\(\) expects Rx\\SchedulerInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/StartWithArrayOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\StartWithArrayOperator\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/StartWithArrayOperator.php
+
+		-
+			message: '#^Cannot call method schedule\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/SubscribeOnOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\SingleAssignmentDisposable\:\:setDisposable\(\) expects Rx\\DisposableInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/SubscribeOnOperator.php
+
+		-
+			message: '#^Parameter \#1 \$scheduler of class Rx\\Disposable\\ScheduledDisposable constructor expects Rx\\SchedulerInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/SubscribeOnOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\SubscribeOnOperator\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/SubscribeOnOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\SwitchFirstOperator\:\:\$hasCurrent has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/SwitchFirstOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\SwitchFirstOperator\:\:\$isStopped has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/SwitchFirstOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/SwitchLatestOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\SingleAssignmentDisposable\:\:setDisposable\(\) expects Rx\\DisposableInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/SwitchLatestOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/SwitchLatestOperator.php
+
+		-
+			message: '#^Anonymous function has an unused use \$observer\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Operator/TakeLastOperator.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: postDec.type
+			count: 1
+			path: src/Operator/TakeOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TakeOperator\:\:\$count has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TakeOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TakeWhileOperator\:\:\$inclusive has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TakeWhileOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TakeWhileOperator\:\:\$predicate has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TakeWhileOperator.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Operator/TakeWhileOperator.php
+
+		-
+			message: '#^Binary operation "\+" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Binary operation "\-" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Cannot call method now\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Parameter \#2 \$scheduler of method Rx\\Observable\<mixed\>\:\:delay\(\) expects Rx\\AsyncSchedulerInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Parameter \#2 \$scheduler of static method Rx\\Observable\<mixed\>\:\:of\(\) expects Rx\\SchedulerInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ThrottleOperator\:\:\$completed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ThrottleOperator\:\:\$nextSend has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ThrottleOperator\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ThrottleOperator\:\:\$throttleTime has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/ThrottleOperator.php
+
+		-
+			message: '#^Call to method Rx\\Disposable\\EmptyDisposable\:\:dispose\(\) on a separate line has no effect\.$#'
+			identifier: method.resultUnused
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Cannot call method schedule\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(ObservableInterface\<T\>\>\)\: Unexpected token "\>", expected TOKEN_HORIZONTAL_WS at offset 31 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:remove\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TimeoutOperator\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TimeoutOperator\:\:\$timeout has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TimeoutOperator\:\:\$timeoutObservable has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TimeoutOperator.php
+
+		-
+			message: '#^Cannot call method now\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Operator/TimestampOperator.php
+
+		-
+			message: '#^Parameter \#1 \$timestampMillis of class Rx\\Timestamped constructor expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/TimestampOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\TimestampOperator\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Operator/TimestampOperator.php
+
+		-
+			message: '#^Instanceof between Rx\\ObservableInterface\<T\> and Rx\\ObservableInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Operator/WithLatestFromOperator.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Operator/ZipOperator.php
+
+		-
+			message: '#^Property Rx\\Operator\\ZipOperator\<T,TValue\>\:\:\$sources \(array\<Rx\\ObservableInterface\<T\>\>\) does not accept array\<Rx\\ObservableInterface\<T\>\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Operator/ZipOperator.php
+
+		-
+			message: '#^Call to function method_exists\(\) with React\\Promise\\PromiseInterface\<void\> and ''cancel'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Instanceof between Throwable and Throwable will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:fromObservable\(\) return type with generic class React\\Promise\\Promise does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:fromObservable\(\) should return React\\Promise\\Promise but returns React\\Promise\\PromiseInterface\<X\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:rejected\(\) return type with generic class React\\Promise\\Promise does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:rejected\(\) should return React\\Promise\\Promise but returns React\\Promise\\PromiseInterface\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:resolved\(\) return type with generic class React\\Promise\\Promise does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:resolved\(\) should return React\\Promise\\Promise but returns React\\Promise\\PromiseInterface\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\Promise\:\:toObservable\(\) should return Rx\\Observable\<X\> but returns Rx\\Observable\\AnonymousObservable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^PHPDoc tag @return with type React\\Promise\\PromiseInterface\<X\> is not subtype of native type React\\Promise\\Promise\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^PHPDoc tag @return with type React\\Promise\\PromiseInterface\<never\> is not subtype of native type React\\Promise\\Promise\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Parameter \#1 \$onNextOrObserver of method Rx\\Observable\<mixed\>\:\:subscribe\(\) expects \(callable\(\)\: mixed\)\|Rx\\ObserverInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Parameter \#1 \$reason of method React\\Promise\\Deferred\<X\>\:\:reject\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Parameter \#1 \$value of method React\\Promise\\Deferred\<X\>\:\:resolve\(\) expects X, null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/React/Promise.php
+
+		-
+			message: '#^Method Rx\\React\\PromiseFactory\:\:toObservable\(\) should return Rx\\Observable\<T\> but returns Rx\\Observable\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/React/PromiseFactory.php
+
+		-
+			message: '#^Method Rx\\React\\RejectedPromiseException\:\:__construct\(\) has parameter \$rejectValue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/React/RejectedPromiseException.php
+
+		-
+			message: '#^Method Rx\\React\\RejectedPromiseException\:\:getRejectValue\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/React/RejectedPromiseException.php
+
+		-
+			message: '#^Property Rx\\React\\RejectedPromiseException\:\:\$rejectValue has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/React/RejectedPromiseException.php
+
+		-
+			message: '#^Method Rx\\Scheduler\:\:getAsync\(\) should return Rx\\AsyncSchedulerInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 3
+			path: src/Scheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\:\:getDefault\(\) should return Rx\\SchedulerInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 2
+			path: src/Scheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\:\:getImmediate\(\) should return Rx\\Scheduler\\ImmediateScheduler but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\:\:setAsyncFactory\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\:\:setDefaultFactory\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Scheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\:\:\$async has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\:\:\$asyncFactory has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\:\:\$default has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\:\:\$defaultFactory has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\:\:\$immediate has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler.php
+
+		-
+			message: '#^Binary operation "\-" between mixed and int results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Binary operation "\-" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Binary operation "/" between mixed and 1000 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Cannot call method getDueTime\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Cannot call method inVoke\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\EventLoopScheduler\:\:scheduleAbsoluteWithState\(\) has parameter \$state with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\EventLoopScheduler\:\:scheduleStartup\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\EventLoopScheduler\:\:start\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Parameter \#2 \$callback of method React\\EventLoop\\LoopInterface\:\:addTimer\(\) expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\EventLoopScheduler\:\:\$currentTimer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\EventLoopScheduler\:\:\$delayCallback has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\EventLoopScheduler\:\:\$insideInvoke has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\EventLoopScheduler\:\:\$nextTimer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/EventLoopScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ImmediateScheduler\:\:schedule\(\) has parameter \$delay with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ImmediateScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ImmediateScheduler\:\:schedulePeriodic\(\) has parameter \$period with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ImmediateScheduler.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: postDec.type
+			count: 1
+			path: src/Scheduler/InternalPriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\InternalPriorityQueue\:\:compare\(\) should return int but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Scheduler/InternalPriorityQueue.php
+
+		-
+			message: '#^Parameter \#2 \$priority of method SplPriorityQueue\<array\<int, int\|Rx\\Scheduler\\ScheduledItem\>,Rx\\Scheduler\\ScheduledItem\>\:\:insert\(\) expects array\{Rx\\Scheduler\\ScheduledItem, int\}, array\{Rx\\Scheduler\\ScheduledItem, mixed\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Scheduler/InternalPriorityQueue.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\InternalPriorityQueue\:\:\$serial has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/InternalPriorityQueue.php
+
+		-
+			message: '#^Argument of an invalid type mixed supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot access offset 1 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot call method compareTo\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot call method extract\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot call method insert\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot call method top\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Cannot use \-\- on mixed\.$#'
+			identifier: postDec.type
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Class Rx\\Scheduler\\InternalPriorityQueue extends generic class SplPriorityQueue but does not specify its types\: TPriority, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\InternalPriorityQueue\:\:compare\(\) should return int but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\InternalPriorityQueue\:\:insert\(\) should return true but return statement is missing\.$#'
+			identifier: return.missing
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\PriorityQueue\:\:count\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\PriorityQueue\:\:dequeue\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\PriorityQueue\:\:enqueue\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\PriorityQueue\:\:peek\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\PriorityQueue\:\:remove\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\PriorityQueue\:\:remove\(\) has parameter \$item with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\InternalPriorityQueue\:\:\$serial has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\PriorityQueue\:\:\$queue has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/PriorityQueue.php
+
+		-
+			message: '#^Binary operation "\-" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Cannot call method isDisposed\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Cannot call method setDisposable\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:__construct\(\) has parameter \$action with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:__construct\(\) has parameter \$comparer with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:__construct\(\) has parameter \$dueTime with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:__construct\(\) has parameter \$scheduler with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:__construct\(\) has parameter \$state with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:compareTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:getDisposable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:getDueTime\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:invoke\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:invokeCore\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\ScheduledItem\:\:isCancelled\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\ScheduledItem\:\:\$action has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\ScheduledItem\:\:\$comparer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\ScheduledItem\:\:\$disposable has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\ScheduledItem\:\:\$dueTime has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\ScheduledItem\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\ScheduledItem\:\:\$state has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 2
+			path: src/Scheduler/ScheduledItem.php
+
+		-
+			message: '#^Anonymous function has an unused use \$goAgain\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Binary operation "\+" between int and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 2
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Binary operation "\+\=" between \(float\|int\) and mixed results in an error\.$#'
+			identifier: assignOp.invalid
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method count\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method dequeue\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method enqueue\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method getDueTime\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method inVoke\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method isCancelled\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method peek\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Cannot call method remove\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:getClock\(\) should return int but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:getNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:now\(\) should return int but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:schedule\(\) has parameter \$delay with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleAbsolute\(\) has parameter \$action with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleAbsoluteWithState\(\) has parameter \$state with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:schedulePeriodic\(\) has parameter \$period with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleRelativeWithState\(\) has parameter \$action with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleRelativeWithState\(\) has parameter \$dueTime with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleRelativeWithState\(\) has parameter \$state with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\Scheduler\\VirtualTimeScheduler\:\:start\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Parameter \#3 \$action of method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleAbsoluteWithState\(\) expects callable\(\)\: mixed, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\VirtualTimeScheduler\:\:\$clock has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\VirtualTimeScheduler\:\:\$comparer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\VirtualTimeScheduler\:\:\$isEnabled has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Property Rx\\Scheduler\\VirtualTimeScheduler\:\:\$queue has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 3
+			path: src/Scheduler/VirtualTimeScheduler.php
+
+		-
+			message: '#^Method Rx\\SchedulerInterface\:\:schedule\(\) has parameter \$delay with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/SchedulerInterface.php
+
+		-
+			message: '#^Method Rx\\SchedulerInterface\:\:schedulePeriodic\(\) has parameter \$period with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/SchedulerInterface.php
+
+		-
+			message: '#^PHPDoc tag @return with type mixed is not subtype of native type Rx\\DisposableInterface\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/SchedulerInterface.php
+
+		-
+			message: '#^PHPDoc tag @return with type mixed is not subtype of native type int\.$#'
+			identifier: return.phpDocType
+			count: 1
+			path: src/SchedulerInterface.php
+
+		-
+			message: '#^Method Rx\\Subject\\AsyncSubject\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\AsyncSubject\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\AsyncSubject\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\AsyncSubject\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\)\: Unexpected token "\\n     ", expected type at offset 15 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^Property Rx\\Subject\\AsyncSubject\:\:\$value has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Subject/AsyncSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\BehaviorSubject\:\:__construct\(\) has parameter \$initValue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Subject/BehaviorSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\BehaviorSubject\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/BehaviorSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\BehaviorSubject\:\:getValue\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/BehaviorSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\BehaviorSubject\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/BehaviorSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\BehaviorSubject\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Subject/BehaviorSubject.php
+
+		-
+			message: '#^Property Rx\\Subject\\BehaviorSubject\:\:\$value has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Subject/BehaviorSubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\InnerSubscriptionDisposable\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/InnerSubscriptionDisposable.php
+
+		-
+			message: '#^Parameter \#1 \$observer of method Rx\\Subject\\Subject\<T\>\:\:removeObserver\(\) expects Rx\\ObserverInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Subject/InnerSubscriptionDisposable.php
+
+		-
+			message: '#^Property Rx\\Subject\\InnerSubscriptionDisposable\:\:\$observer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Subject/InnerSubscriptionDisposable.php
+
+		-
+			message: '#^Binary operation "\-" between int and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\ReplaySubject\:\:createRemovableDisposable\(\) has parameter \$observer with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\ReplaySubject\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\ReplaySubject\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\ReplaySubject\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\ReplaySubject\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\ReplaySubject\:\:trim\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\Observer\\AbstractObserver\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Subject/ReplaySubject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:assertNotDisposed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:dispose\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:hasObservers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:isDisposed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Method Rx\\Subject\\Subject\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Parameter \#1 \$error of method Rx\\ObserverInterface\:\:onError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Property Rx\\Subject\\Subject\:\:\$exception has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Property Rx\\Subject\\Subject\:\:\$isDisposed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Property Rx\\Subject\\Subject\:\:\$isStopped has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Subject/Subject.php
+
+		-
+			message: '#^Anonymous function has an unused use \$currentObservable\.$#'
+			identifier: closure.unusedUse
+			count: 2
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Anonymous function has an unused use \$observer\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Cannot call method getClock\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Cannot call method scheduleRelativeWithState\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Parameter \#1 \$disposable of method Rx\\Disposable\\CompositeDisposable\:\:add\(\) expects Rx\\DisposableInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Parameter \#1 \$innerNotification of closure expects Rx\\Notification, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Parameter \#1 \$start of class Rx\\Testing\\Subscription constructor expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Parameter \#2 \$end of class Rx\\Testing\\Subscription constructor expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Property Rx\\Testing\\ColdObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/ColdObservable.php
+
+		-
+			message: '#^Cannot call method getClock\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Parameter \#1 \$dueTime of method Rx\\Scheduler\\VirtualTimeScheduler\:\:scheduleAbsolute\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Parameter \#1 \$innerNotification of closure expects Rx\\Notification, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Parameter \#1 \$start of class Rx\\Testing\\Subscription constructor expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Parameter \#2 \$end of class Rx\\Testing\\Subscription constructor expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Property Rx\\Testing\\HotObservable\:\:\$messages has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Property Rx\\Testing\\HotObservable\:\:\$messages is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Property Rx\\Testing\\HotObservable\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/HotObservable.php
+
+		-
+			message: '#^Cannot call method getClock\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Method Rx\\Testing\\MockObserver\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Method Rx\\Testing\\MockObserver\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Method Rx\\Testing\\MockObserver\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Method Rx\\Testing\\MockObserver\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Parameter \#1 \$time of class Rx\\Testing\\Recorded constructor expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Property Rx\\Testing\\MockObserver\:\:\$scheduler has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/MockObserver.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''@'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Method Rx\\Testing\\Recorded\:\:__construct\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Method Rx\\Testing\\Recorded\:\:equals\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Method Rx\\Testing\\Recorded\:\:getTime\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Method Rx\\Testing\\Recorded\:\:getValue\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Property Rx\\Testing\\Recorded\:\:\$comparer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Property Rx\\Testing\\Recorded\:\:\$time has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Property Rx\\Testing\\Recorded\:\:\$value has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Trying to invoke mixed but it''s not a callable\.$#'
+			identifier: callable.nonCallable
+			count: 1
+			path: src/Testing/Recorded.php
+
+		-
+			message: '#^Method Rx\\Testing\\Subscription\:\:equals\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Method Rx\\Testing\\Subscription\:\:getSubscribed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Method Rx\\Testing\\Subscription\:\:getUnsubscribed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Part \$end \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Part \$this\-\>subscribed \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Property Rx\\Testing\\Subscription\:\:\$subscribed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Property Rx\\Testing\\Subscription\:\:\$unsubscribed has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Testing/Subscription.php
+
+		-
+			message: '#^Binary operation "\+" between mixed and 1 results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Binary operation "\-" between mixed and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Cannot call method dispose\(\) on Rx\\DisposableInterface\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Cannot call method subscribe\(\) on Rx\\ObservableInterface\<T\>\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:createObserver\(\) return type with generic class Rx\\Testing\\MockObserver does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:scheduleAbsoluteWithState\(\) has parameter \$state with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:startWithDispose\(\) has parameter \$disposed with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:startWithTiming\(\) has parameter \$created with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:startWithTiming\(\) has parameter \$disposed with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:startWithTiming\(\) has parameter \$subscribed with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestScheduler\:\:startWithTiming\(\) should return Rx\\Testing\\MockObserver\<T\> but returns Rx\\Testing\\MockObserver\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Parameter \#2 \$dueTime of method Rx\\Testing\\TestScheduler\:\:scheduleAbsoluteWithState\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Testing/TestScheduler.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestSubject\:\:disposeOn\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestSubject\:\:disposeOn\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestSubject\:\:onCompleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestSubject\:\:onError\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestSubject\:\:onNext\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Method Rx\\Testing\\TestSubject\:\:onNext\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Possibly invalid array key type mixed\.$#'
+			identifier: offsetAccess.invalidOffset
+			count: 3
+			path: src/Testing/TestSubject.php
+
+		-
+			message: '#^Method Rx\\Timestamped\:\:equals\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Timestamped.php
+
+		-
+			message: '#^Method Rx\\Timestamped\:\:equals\(\) has parameter \$other with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Timestamped.php

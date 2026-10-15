@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Rx;
 
+/** @template-covariant T */
 interface ObservableInterface
 {
     /**

@@ -9,12 +9,13 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/** @template T */
 final class TakeLastOperator implements OperatorInterface
 {
     /** @var integer */
     private $count;
 
-    /** @var array */
+    /** @var array<T> */
     private $items = [];
 
     public function __construct(int $count)

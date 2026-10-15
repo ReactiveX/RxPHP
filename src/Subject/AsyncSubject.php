@@ -9,6 +9,8 @@ use Rx\DisposableInterface;
 use Rx\ObserverInterface;
 
 /**
+ * @template T
+ * @template-extends Subject<T>
  * Class AsyncSubject
  * @package Rx\Subject
  */
@@ -18,7 +20,6 @@ class AsyncSubject extends Subject
      * @var
      */
     private $value;
-
 
     /**
      * @var bool

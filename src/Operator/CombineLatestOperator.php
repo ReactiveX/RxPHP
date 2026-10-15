@@ -10,14 +10,16 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/** @template T */
 final class CombineLatestOperator implements OperatorInterface
 {
-    /** @var ObservableInterface[] */
+    /** @var array<ObservableInterface<T>> */
     private $observables;
 
     /** @var callable */
     private $resultSelector;
 
+    /** @param array<ObservableInterface<T>> $observables */
     public function __construct(array $observables, ?callable $resultSelector = null)
     {
         if (null === $resultSelector) {

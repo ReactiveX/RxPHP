@@ -11,12 +11,14 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 
 /**
+ * @template T
+ * @template-extends Observable<T>
  * Class RefCountObservable
  * @package Rx\Observable
  */
 class RefCountObservable extends Observable
 {
-    /** @var \Rx\Observable\ConnectableObservable */
+    /** @var \Rx\Observable\ConnectableObservable<T> */
     protected $source;
 
     /** @var int */
@@ -25,6 +27,7 @@ class RefCountObservable extends Observable
     /** @var  BinaryDisposable */
     protected $connectableSubscription;
 
+    /** @param ConnectableObservable<T> $source */
     public function __construct(ConnectableObservable $source)
     {
         $this->source = $source;
