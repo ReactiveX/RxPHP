@@ -10,12 +10,14 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 
 /**
+ * @template T
+ * @template-extends Observable<T>
  * Class MulticastObservable
  * @package Rx\Observable
  */
 class MulticastObservable extends Observable
 {
-    /** @var \Rx\Observable */
+    /** @var \Rx\Observable<T> */
     private $source;
 
     /** @var  callable */
@@ -26,7 +28,7 @@ class MulticastObservable extends Observable
 
     /**
      * MulticastObservable constructor.
-     * @param $source
+     * @param Observable<T> $source
      * @param $fn1
      * @param $fn2
      */

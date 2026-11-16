@@ -13,6 +13,7 @@ use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Subject\Subject;
 
+/** @template T */
 final class RepeatWhenOperator implements OperatorInterface
 {
     /** @var callable */
@@ -21,7 +22,7 @@ final class RepeatWhenOperator implements OperatorInterface
     /** @var Subject */
     private $completions;
 
-    /** @var Subject */
+    /** @var Subject<T> */
     private $notifier;
 
     /** @var CompositeDisposable */

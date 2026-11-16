@@ -48,6 +48,7 @@ final class ScheduledObserver extends AbstractObserver
         };
     }
 
+    /** @template T */
     protected function next($value)
     {
         $this->queue[] = function () use ($value): void {

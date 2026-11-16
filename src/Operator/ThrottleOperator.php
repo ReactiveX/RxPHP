@@ -30,6 +30,10 @@ final class ThrottleOperator implements OperatorInterface
         $this->scheduler    = $scheduler;
     }
 
+    /**
+     * @template T
+     * @param ObservableInterface<T> $observable
+     */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface
     {
         $innerDisp = new SerialDisposable();

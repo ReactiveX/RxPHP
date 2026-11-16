@@ -12,6 +12,7 @@ use Rx\Subject\AsyncSubject;
 use React\Promise\Deferred;
 use Throwable;
 
+/** @template T */
 final class Promise
 {
     /**
@@ -27,7 +28,7 @@ final class Promise
 
     /**
      * @param mixed $exception
-     * @return ReactPromise A promise rejected with $exception
+     * @return PromiseInterface<never> A promise rejected with $exception
      */
     public static function rejected($exception): ReactPromise
     {
@@ -38,10 +39,10 @@ final class Promise
 
     /**
      * Converts an existing observable sequence to React Promise
-     *
-     * @param ObservableInterface $observable
-     * @param Deferred $deferred
-     * @return ReactPromise
+     * @template X
+     * @param ObservableInterface<X> $observable
+     * @param ?Deferred<X> $deferred
+     * @return PromiseInterface<X>
      * @throws \InvalidArgumentException
      */
     public static function fromObservable(ObservableInterface $observable, ?Deferred $deferred = null): ReactPromise
@@ -70,9 +71,9 @@ final class Promise
 
     /**
      * Converts a Promise to an Observable sequence
-     *
-     * @param PromiseInterface $promise
-     * @return Observable
+     * @template X
+     * @param PromiseInterface<X> $promise
+     * @return Observable<X>
      * @throws \InvalidArgumentException
      */
     public static function toObservable(PromiseInterface $promise): Observable

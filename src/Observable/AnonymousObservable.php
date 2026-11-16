@@ -7,9 +7,14 @@ namespace Rx\Observable;
 use Rx\Disposable\CallbackDisposable;
 use Rx\DisposableInterface;
 use Rx\Observable;
+use Rx\ObservableInterface;
 use Rx\ObserverInterface;
 use Rx\Observer\AutoDetachObserver;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class AnonymousObservable extends Observable
 {
     private $subscribeAction;

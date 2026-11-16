@@ -11,11 +11,18 @@ use Rx\ObservableInterface;
 use Rx\Disposable\RefCountDisposable;
 use Rx\DisposableInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class GroupedObservable extends Observable
 {
     private $key;
+
+    /** @var ObservableInterface<T> */
     private $underlyingObservable;
 
+    /** @param ObservableInterface<T> $underlyingObservable */
     public function __construct($key, ObservableInterface $underlyingObservable, ?RefCountDisposable $mergedDisposable = null)
     {
         $this->key = $key;
@@ -35,6 +42,10 @@ class GroupedObservable extends Observable
         return $this->underlyingObservable->subscribe($observer);
     }
 
+    /**
+     * @param ObservableInterface<T> $underlyingObservable
+     * @return Observable<T>
+     */
     private function newUnderlyingObservable(RefCountDisposable $mergedDisposable, ObservableInterface $underlyingObservable): Observable
     {
         return new AnonymousObservable(

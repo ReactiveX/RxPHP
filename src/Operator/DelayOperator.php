@@ -14,12 +14,13 @@ use Rx\ObserverInterface;
 use Rx\AsyncSchedulerInterface;
 use Rx\Timestamped;
 
+/** @template T */
 final class DelayOperator implements OperatorInterface
 {
     /** @var int */
     private $delayTime;
 
-    /** @var \SplQueue */
+    /** @var \SplQueue<Timestamped> */
     private $queue;
 
     /** @var DisposableInterface */

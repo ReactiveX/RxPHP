@@ -9,9 +9,10 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/** @template T */
 final class ToArrayOperator implements OperatorInterface
 {
-    /** @var array */
+    /** @var array<T> */
     private $arr = [];
 
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface

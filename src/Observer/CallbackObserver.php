@@ -6,7 +6,10 @@ namespace Rx\Observer;
 
 class CallbackObserver extends AbstractObserver
 {
-    /** @var callable|null */
+    /**
+     * @template T
+     * @var callable(T)|null
+     */
     private $onNext;
 
     /** @var callable|null */
@@ -40,6 +43,7 @@ class CallbackObserver extends AbstractObserver
         ($this->onError)($error);
     }
 
+    /** @template T */
     protected function next($value)
     {
         ($this->onNext)($value);

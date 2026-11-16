@@ -10,5 +10,6 @@ interface ObserverInterface
 
     public function onError(\Throwable $error);
 
+    /** @template T */
     public function onNext($value);
 }

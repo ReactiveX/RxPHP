@@ -10,5 +10,9 @@ use Rx\ObserverInterface;
 
 interface OperatorInterface
 {
+    /**
+     * @template T
+     * @param ObservableInterface<T> $observable
+     */
     public function __invoke(ObservableInterface $observable, ObserverInterface $observer): DisposableInterface;
 }

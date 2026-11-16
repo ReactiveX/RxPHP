@@ -41,6 +41,7 @@ abstract class AbstractObserver implements ObserverInterface
 
     abstract protected function completed();
 
+    /** @template T */
     abstract protected function next($value);
 
     abstract protected function error(\Throwable $error);

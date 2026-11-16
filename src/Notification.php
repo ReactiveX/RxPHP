@@ -19,6 +19,7 @@ abstract class Notification
         $this->kind = $kind;
     }
 
+    /** @template T */
     public function accept($observerOrOnNext, $onError = null, $onCompleted = null)
     {
         if (null === $onError && null === $onCompleted && $observerOrOnNext instanceof ObserverInterface) {
@@ -37,5 +38,6 @@ abstract class Notification
 
     abstract protected function doAcceptObservable(ObserverInterface $observer);
 
+    /** @template T */
     abstract protected function doAccept($onNext, $onError, $onCompleted);
 }

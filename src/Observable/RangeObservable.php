@@ -9,6 +9,10 @@ use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\SchedulerInterface;
 
+/**
+ * @template T
+ * @template-extends Observable<T>
+ */
 class RangeObservable extends Observable
 {
     private $start;

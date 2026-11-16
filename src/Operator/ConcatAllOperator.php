@@ -12,9 +12,10 @@ use Rx\ObservableInterface;
 use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
 
+/** @template T */
 final class ConcatAllOperator implements OperatorInterface
 {
-    /** @var  array */
+    /** @var array<ObservableInterface<T>> */
     private $buffer;
 
     /** @var CompositeDisposable */
