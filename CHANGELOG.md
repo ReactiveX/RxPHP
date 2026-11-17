@@ -1,3 +1,12 @@
+# 2.2.0
+
+### Update
+* Add support for template types by @WyriHaximus in https://github.com/ReactiveX/RxPHP/pull/218
+* Resolve PHP 8.5 deprecation errors by @WyriHaximus in https://github.com/ReactiveX/RxPHP/pull/226
+
+### Note for static analysis users
+Observables, subjects, and operators now carry generic type information (`@template`), so PHPStan and Psalm can infer the type of emitted values. Projects with strict analysis settings may see new findings after upgrading. There are no runtime changes.
+
 # 2.1.0
 
 ### Update
